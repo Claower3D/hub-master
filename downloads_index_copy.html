@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1️⃣ Мультисервис услуг и товаров «HUB MASTER» | Алматы</title>
+<meta name="description" content="Все виды услуг в одном месте ⭐️ Проверка специалистов по 3 критериям ⭐️ Цены до 25% ниже, чем у частных компаний ⭐️ 50 000+ выполненных заказов ⭐️ 4.9★ средняя оценка">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #2ecc71;
+    --green-dark: #27ae60;
+    --green-light: #d5f5e3;
+    --blue: #3498db;
+    --dark: #1a1a2e;
+    --text: #333;
+    --text-light: #666;
+    --border: #e0e0e0;
+    --bg: #f7f9fc;
+    --white: #fff;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow-hover: 0 6px 24px rgba(46,204,113,0.18);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    color: var(--text);
+    background: var(--white);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--dark);
+    color: #ccc;
+    font-size: 12px;
+    padding: 6px 0;
+  }
+  .topbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .topbar a { color: #ccc; }
+  .topbar a:hover { color: var(--green); }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--white);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 70px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--dark);
+    white-space: nowrap;
+  }
+  .logo-icon {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    font-weight: 900;
+  }
+  .logo span { color: var(--green-dark); }
+  .city-badge {
+    background: var(--green-light);
+    color: var(--green-dark);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .header-search {
+    flex: 1;
+    max-width: 420px;
+    position: relative;
+  }
+  .header-search input {
+    width: 100%;
+    padding: 10px 44px 10px 14px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color .2s;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .header-search input:focus { border-color: var(--green); }
+  .header-search button {
+    position: absolute;
+    right: 4px; top: 50%;
+    transform: translateY(-50%);
+    background: var(--green);
+    border: none;
+    border-radius: 6px;
+    width: 34px; height: 34px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+  }
+  .header-phone {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .phone-number {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--dark);
+  }
+  .btn-request {
+    background: var(--green);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 13px;
+    font-family: 'Montserrat', sans-serif;
+    transition: background .2s, transform .15s;
+    cursor: pointer;
+    border: none;
+    white-space: nowrap;
+  }
+  .btn-request:hover {
+    background: var(--green-dark);
+    transform: translateY(-1px);
+  }
+  .btn-login {
+    background: transparent;
+    border: 2px solid var(--border);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    transition: border-color .2s;
+  }
+  .btn-login:hover { border-color: var(--green); color: var(--green-dark); }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--green-dark);
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+    display: flex;
+    align-items: stretch;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-item {
+    position: relative;
+  }
+  .nav-item > a {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 16px;
+    height: 48px;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+    transition: background .2s;
+  }
+  .nav-item > a:hover, .nav-item:hover > a {
+    background: rgba(255,255,255,0.15);
+  }
+  .nav-item > a .arrow {
+    font-size: 10px;
+    opacity: .8;
+    transition: transform .2s;
+  }
+  .nav-item:hover > a .arrow { transform: rotate(180deg); }
+
+  .dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    min-width: 240px;
+    z-index: 999;
+    padding: 8px 0;
+    animation: fadeDown .15s ease;
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .nav-item:hover .dropdown { display: block; }
+  .dropdown a {
+    display: block;
+    padding: 8px 18px;
+    color: var(--text);
+    font-size: 13px;
+    transition: background .15s, color .15s;
+    border-left: 3px solid transparent;
+  }
+  .dropdown a:hover {
+    background: var(--green-light);
+    color: var(--green-dark);
+    border-left-color: var(--green);
+  }
+
+  /* ── HERO BANNER ── */
+  .hero {
+    background: linear-gradient(135deg, #0f3d2e 0%, #1a5c42 40%, #27ae60 100%);
+    padding: 60px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+  .hero-content { flex: 1; }
+  .hero h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 38px;
+    font-weight: 800;
+    color: white;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: #a8f0c8; }
+  .hero p {
+    color: rgba(255,255,255,0.85);
+    font-size: 16px;
+    margin-bottom: 28px;
+    max-width: 500px;
+  }
+  .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-hero {
+    background: white;
+    color: var(--green-dark);
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    border: none;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+  .btn-hero:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.25); }
+  .btn-hero-outline {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255,255,255,0.6);
+    padding: 12px 26px;
+    border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+  }
+  .btn-hero-outline:hover { border-color: white; background: rgba(255,255,255,0.1); }
+
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    margin-top: 36px;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: white;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    margin-top: 2px;
+  }
+
+  /* ── SECTION ── */
+  section { padding: 56px 16px; }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+  .section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+  .section-sub {
+    color: var(--text-light);
+    margin-bottom: 36px;
+    font-size: 15px;
+  }
+
+  /* ── SERVICES GRID ── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .service-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: box-shadow .2s, transform .2s, border-color .2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .service-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+    border-color: var(--green);
+  }
+  .service-icon {
+    width: 56px; height: 56px;
+    background: var(--green-light);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+  }
+  .service-name {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--dark);
+    line-height: 1.3;
+  }
+  .service-count {
+    font-size: 11px;
+    color: var(--text-light);
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how-bg { background: var(--bg); }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    position: relative;
+  }
+  .step {
+    text-align: center;
+    padding: 28px 20px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+  .step-num {
+    width: 50px; height: 50px;
+    background: var(--green);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0 auto 16px;
+  }
+  .step h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: var(--dark);
+  }
+  .step p { font-size: 13px; color: var(--text-light); }
+
+  /* ── ADVANTAGES ── */
+  .advantages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+  .adv-card {
+    background: white;
+    border-radius: 14px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    transition: box-shadow .2s;
+  }
+  .adv-card:hover { box-shadow: var(--shadow-hover); }
+  .adv-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+  }
+  .adv-card h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: var(--dark);
+  }
+  .adv-card p { font-size: 13px; color: var(--text-light); line-height: 1.5; }
+
+  /* ── REVIEWS ── */
+  .reviews-bg { background: linear-gradient(135deg, #f0faf5 0%, #e8f8ef 100%); }
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .review-card {
+    background: white;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+  }
+  .review-header {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .review-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .review-name {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--dark);
+  }
+  .review-service { font-size: 12px; color: var(--text-light); }
+  .stars { color: #f39c12; font-size: 14px; margin-bottom: 4px; }
+  .review-text { font-size: 13px; color: var(--text); line-height: 1.6; }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: linear-gradient(135deg, var(--green-dark) 0%, #1a6b40 100%);
+    text-align: center;
+    padding: 70px 16px;
+  }
+  .cta-section h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 12px;
+  }
+  .cta-section p {
+    color: rgba(255,255,255,0.85);
+    font-size: 16px;
+    margin-bottom: 28px;
+  }
+  .cta-form {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  .cta-form input {
+    flex: 1;
+    min-width: 220px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    border: none;
+    font-size: 15px;
+    outline: none;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .btn-cta {
+    background: white;
+    color: var(--green-dark);
+    padding: 14px 24px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform .2s;
+  }
+  .btn-cta:hover { transform: scale(1.03); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark);
+    color: #aaa;
+    padding: 48px 16px 24px;
+  }
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 40px;
+  }
+  .footer-logo {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: white;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .footer-logo-icon {
+    width: 36px; height: 36px;
+    background: var(--green);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 16px; font-weight: 900;
+  }
+  .footer-desc { font-size: 13px; line-height: 1.7; margin-bottom: 18px; }
+  .footer-phone {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .footer-col h4 {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--green);
+    display: inline-block;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 8px; }
+  .footer-col ul li a {
+    color: #aaa;
+    font-size: 13px;
+    transition: color .15s;
+  }
+  .footer-col ul li a:hover { color: var(--green); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .footer-bottom a { color: #aaa; }
+  .footer-bottom a:hover { color: var(--green); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 16px;
+    padding: 36px;
+    max-width: 420px;
+    width: 100%;
+    position: relative;
+    animation: modalIn .2s ease;
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .modal-close {
+    position: absolute;
+    top: 14px; right: 16px;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--text-light);
+    background: none; border: none;
+    line-height: 1;
+  }
+  .modal h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 6px;
+  }
+  .modal p { color: var(--text-light); margin-bottom: 20px; font-size: 13px; }
+  .modal input, .modal select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 12px;
+    outline: none;
+    font-family: 'Open Sans', sans-serif;
+    transition: border-color .2s;
+  }
+  .modal input:focus, .modal select:focus { border-color: var(--green); }
+  .modal .btn-request { width: 100%; padding: 13px; font-size: 15px; }
+  .modal-note { font-size: 11px; color: var(--text-light); text-align: center; margin-top: 10px; }
+
+  /* ── POPULAR SERVICES ── */
+  .pop-services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .pop-tag {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .15s;
+    color: var(--text);
+  }
+  .pop-tag:hover {
+    background: var(--green-light);
+    border-color: var(--green);
+    color: var(--green-dark);
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) {
+    .hero h1 { font-size: 26px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .header-inner { height: auto; padding: 12px 16px; flex-wrap: wrap; gap: 10px; }
+    .header-search { order: 3; width: 100%; max-width: 100%; }
+    .header-phone { margin-left: 0; }
+    .hero { padding: 40px 16px; }
+    .hero h1 { font-size: 22px; }
+    .hero-stats { gap: 18px; }
+    .stat-num { font-size: 22px; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <span>Алматы, Казахстан</span>
+    <div style="display:flex;gap:16px;">
+      <a href="#">О нас</a>
+      <a href="#">Стать партнёром</a>
+      <a href="#">Блог</a>
+      <a href="#">Контакты</a>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">H</div>
+      HUB <span>MASTER</span>
+    </a>
+    <div class="city-badge">📍 Алматы</div>
+    <div class="header-search">
+      <input type="text" placeholder="Поиск услуг...">
+      <button>🔍</button>
+    </div>
+    <div class="header-phone">
+      <a href="tel:+77780211316" class="phone-number">+7 (778) 021-13-16</a>
+      <button class="btn-request" onclick="openModal()">Оставить заявку</button>
+      <button class="btn-login">Войти</button>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+
+    <div class="nav-item">
+      <a href="#">Ремонт техники <span class="arrow">▼</span></a>
+      <div class="dropdown">
+        <a href="#">Ремонт аудиотехники</a>
+        <a href="#">Ремонт бытовой техники</a>
+        <a href="#">Ремонт климатической техники</a>
+        <a href="#">Ремонт компьютерной техники</a>
+        <a href="#">Ремонт крупнобытовой техники</a>
+        <a href="#">Ремонт кухонной техники</a>
+        <a href="#">Ремонт офисной техники</a>
+        <a href="#">Ремонт садовой техники</a>
+        <a href="#">Ремонт строительной техники</a>
+        <a href="#">Ремонт цифровой техники</a>
+        <a href="#">Ремонт часов</a>
+        <a href="#">Ремонт электротранспорта</a>
+        <a href="#">Сервисный центр</a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <a href="#">Транспорт <span class="arrow">▼</span></a>
+      <div class="dropdown">
+        <a href="#">Автомойка</a>
+        <a href="#">Автоэлектрик</a>
+        <a href="#">Аренда транспорта</a>
+        <a href="#">Выкуп авто</a>
+        <a href="#">Детейлинг</a>
+        <a href="#">Перевозка авто</a>
+        <a href="#">СТО</a>
+        <a href="#">Шиномонтаж</a>
+        <a href="#">Трансфер</a>
+        <a href="#">Эвакуатор</a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <a href="#">Бытовые услуги <span class="arrow">▼</span></a>
+      <div class="dropdown">
+        <a href="#">Ассенизатор</a>
+        <a href="#">Видеонаблюдение</a>
+        <a href="#">Вывоз мусора</a>
+        <a href="#">Дезинсекция</a>
+        <a href="#">Дезинфекция</a>
+        <a href="#">Дератизация</a>
+        <a href="#">Доставка воды</a>
+        <a href="#">Клининг</a>
+        <a href="#">Муж на час</a>
+        <a href="#">Прачечная</a>
+        <a href="#">Сварщик</a>
+        <a href="#">Сигнализация</a>
+        <a href="#">Услуги сантехника</a>
+        <a href="#">Услуги электрика</a>
+        <a href="#">Химчистка</a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <a href="#">Специалисты <span class="arrow">▼</span></a>
+      <div class="dropdown">
+        <a href="#">Адвокат</a>
+        <a href="#">Астролог</a>
+        <a href="#">Бухгалтер</a>
+        <a href="#">Грузчики</a>
+        <a href="#">Косметолог</a>
+        <a href="#">Маникюр</a>
+        <a href="#">Нотариус</a>
+        <a href="#">Няня</a>
+        <a href="#">Психолог</a>
+        <a href="#">Репетитор</a>
+        <a href="#">Трезвый водитель</a>
+        <a href="#">Юрист</a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <a href="#">Строительство <span class="arrow">▼</span></a>
+      <div class="dropdown">
+        <a href="#">Алмазное бурение</a>
+        <a href="#">Аренда инструментов</a>
+        <a href="#">Асфальтирование</a>
+        <a href="#">Жалюзи</a>
+        <a href="#">Москитные сетки</a>
+        <a href="#">Пластиковые окна</a>
+        <a href="#">Ремонт квартир</a>
+        <a href="#">Натяжные потолки</a>
+        <a href="#">Утепление стен</a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <a href="#">Туры <span class="arrow">▼</span></a>
+      <div class="dropdown">
+        <a href="#">Туры на Алаколь</a>
+        <a href="#">Туры на Алтай</a>
+        <a href="#">Туры на Иссык-Куль</a>
+        <a href="#">Туры на Чарынский каньон</a>
+        <a href="#">Горнолыжные туры</a>
+        <a href="#">Активный отдых</a>
+        <a href="#">Походы</a>
+        <a href="#">Рафтинг</a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <a href="#">Другое <span class="arrow">▼</span></a>
+      <div class="dropdown">
+        <a href="#">Локальные сети</a>
+        <a href="#">Мебель на заказ</a>
+        <a href="#">Скупка техники</a>
+        <a href="#">Студия звукозаписи</a>
+        <a href="#">Типография</a>
+        <a href="#">Ремонт ювелирных изделий</a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <a href="#">Магазин <span class="arrow">▼</span></a>
+      <div class="dropdown">
+        <a href="#">Интернет-магазин запчастей</a>
+        <a href="#">Запчасти для кофемашин</a>
+        <a href="#">Запчасти для пылесосов</a>
+        <a href="#">Запчасти для ноутбуков</a>
+        <a href="#">Запчасти для мясорубок</a>
+        <a href="#">Запчасти для техники Dyson</a>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <h1>Мультисервис услуг<br>и товаров <span>«HUB MASTER»</span></h1>
+      <p>Все виды услуг в одном месте. Проверенные специалисты, цены до 25% ниже рынка, гарантия качества на каждый заказ.</p>
+      <div class="hero-btns">
+        <button class="btn-hero" onclick="openModal()">Оставить заявку</button>
+        <button class="btn-hero-outline">Все услуги</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">50 000+</div>
+          <div class="stat-label">выполненных заказов</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">4.9★</div>
+          <div class="stat-label">средняя оценка</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">−25%</div>
+          <div class="stat-label">цены ниже рынка</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">500+</div>
+          <div class="stat-label">видов услуг</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POPULAR SERVICES TAGS -->
+<section style="padding: 28px 16px; background: var(--bg); border-bottom: 1px solid var(--border);">
+  <div class="section-inner">
+    <p style="font-size:12px;color:var(--text-light);margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">Популярные услуги:</p>
+    <div class="pop-services">
+      <span class="pop-tag">🔧 Ремонт стиральных машин</span>
+      <span class="pop-tag">❄️ Ремонт холодильников</span>
+      <span class="pop-tag">💻 Ремонт ноутбуков</span>
+      <span class="pop-tag">🚗 СТО</span>
+      <span class="pop-tag">🧹 Клининг</span>
+      <span class="pop-tag">💧 Сантехник</span>
+      <span class="pop-tag">⚡ Электрик</span>
+      <span class="pop-tag">📱 Ремонт телефонов</span>
+      <span class="pop-tag">❄️ Ремонт кондиционеров</span>
+      <span class="pop-tag">🔩 Муж на час</span>
+      <span class="pop-tag">🚿 Вывоз мусора</span>
+      <span class="pop-tag">🪟 Пластиковые окна</span>
+    </div>
+  </div>
+</section>
+
+<!-- ALL SERVICES -->
+<section>
+  <div class="section-inner">
+    <h2 class="section-title">Все категории услуг</h2>
+    <p class="section-sub">Выберите нужную категорию и получите профессиональную помощь уже сегодня</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🔧</div>
+        <div class="service-name">Ремонт бытовой техники</div>
+        <div class="service-count">120+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">💻</div>
+        <div class="service-name">Ремонт компьютерной техники</div>
+        <div class="service-count">35+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">❄️</div>
+        <div class="service-name">Ремонт климатической техники</div>
+        <div class="service-count">18+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🍳</div>
+        <div class="service-name">Ремонт кухонной техники</div>
+        <div class="service-count">40+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🖨️</div>
+        <div class="service-name">Ремонт офисной техники</div>
+        <div class="service-count">15+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📱</div>
+        <div class="service-name">Ремонт цифровой техники</div>
+        <div class="service-count">20+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🚗</div>
+        <div class="service-name">Транспорт и авто</div>
+        <div class="service-count">25+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🧹</div>
+        <div class="service-name">Клининг и уборка</div>
+        <div class="service-count">30+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">💧</div>
+        <div class="service-name">Сантехника</div>
+        <div class="service-count">50+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">⚡</div>
+        <div class="service-name">Электрика</div>
+        <div class="service-count">30+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🏠</div>
+        <div class="service-name">Ремонт квартир</div>
+        <div class="service-count">10+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🛁</div>
+        <div class="service-name">Химчистка</div>
+        <div class="service-count">15+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🪟</div>
+        <div class="service-name">Пластиковые окна</div>
+        <div class="service-count">5+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🗑️</div>
+        <div class="service-name">Вывоз мусора</div>
+        <div class="service-count">5+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🐀</div>
+        <div class="service-name">Дезинфекция / Дератизация</div>
+        <div class="service-count">10+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">⌚</div>
+        <div class="service-name">Ремонт часов</div>
+        <div class="service-count">5+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🛵</div>
+        <div class="service-name">Ремонт электротранспорта</div>
+        <div class="service-count">10+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">⚖️</div>
+        <div class="service-name">Юридические услуги</div>
+        <div class="service-count">5+ услуг</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎒</div>
+        <div class="service-name">Туры и отдых</div>
+        <div class="service-count">40+ туров</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🛋️</div>
+        <div class="service-name">Мебель на заказ</div>
+        <div class="service-count">15+ услуг</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-bg">
+  <div class="section-inner">
+    <h2 class="section-title">Как мы работаем?</h2>
+    <p class="section-sub">Три простых шага до выполненного заказа</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Оставьте заявку</h3>
+        <p>Опишите проблему на сайте, по телефону или в WhatsApp — это займёт не более 1 минуты</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Мы подберём специалиста</h3>
+        <p>Проверяем каждого мастера по 3 критериям: опыт, отзывы, сертификаты. Свяжемся с вами в течение 30 минут</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Получите результат</h3>
+        <p>Специалист выполнит работу в удобное для вас время. Гарантия на все услуги</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Оцените качество</h3>
+        <p>После выполнения оставьте отзыв. Ваша оценка помогает нам поддерживать высокий стандарт сервиса</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ADVANTAGES -->
+<section>
+  <div class="section-inner">
+    <h2 class="section-title">Почему выбирают HUB MASTER?</h2>
+    <p class="section-sub">Мы заботимся о качестве каждой услуги</p>
+    <div class="advantages">
+      <div class="adv-card">
+        <div class="adv-icon">✅</div>
+        <div>
+          <h3>Проверенные специалисты</h3>
+          <p>Каждый мастер проходит проверку по 3 критериям: опыт, отзывы клиентов, наличие сертификатов и документов</p>
+        </div>
+      </div>
+      <div class="adv-card">
+        <div class="adv-icon">💰</div>
+        <div>
+          <h3>Цены до 25% ниже</h3>
+          <p>Мы работаем напрямую со специалистами без посредников, поэтому наши цены выгоднее частных компаний</p>
+        </div>
+      </div>
+      <div class="adv-card">
+        <div class="adv-icon">🛡️</div>
+        <div>
+          <h3>Гарантия на услуги</h3>
+          <p>Все выполненные работы имеют гарантию. Если что-то пойдёт не так — решим проблему бесплатно</p>
+        </div>
+      </div>
+      <div class="adv-card">
+        <div class="adv-icon">⚡</div>
+        <div>
+          <h3>Быстрый ответ</h3>
+          <p>Принимаем заявки 24/7. Специалист свяжется с вами в течение 30 минут после оформления заявки</p>
+        </div>
+      </div>
+      <div class="adv-card">
+        <div class="adv-icon">⭐</div>
+        <div>
+          <h3>Рейтинг 4.9 / 5</h3>
+          <p>Более 50 000 выполненных заказов. Средняя оценка наших мастеров — 4.9 звезды по отзывам реальных клиентов</p>
+        </div>
+      </div>
+      <div class="adv-card">
+        <div class="adv-icon">📍</div>
+        <div>
+          <h3>Выезд по всему городу</h3>
+          <p>Специалисты работают во всех районах Алматы и ближайших пригородах. Выезд в день обращения</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews-bg">
+  <div class="section-inner">
+    <h2 class="section-title">Отзывы наших клиентов</h2>
+    <p class="section-sub">Более 50 000 довольных клиентов — лучшее подтверждение нашей работы</p>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">А</div>
+          <div>
+            <div class="review-name">Алина М.</div>
+            <div class="review-service">Ремонт стиральной машины</div>
+          </div>
+        </div>
+        <div class="stars">★★★★★</div>
+        <div class="review-text">Мастер приехал уже через час после заявки. Быстро нашёл проблему, заменил деталь. Машина работает отлично! Цена оказалась значительно ниже, чем мне называли в других местах.</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar" style="background:#3498db;">Д</div>
+          <div>
+            <div class="review-name">Дмитрий К.</div>
+            <div class="review-service">Ремонт ноутбука</div>
+          </div>
+        </div>
+        <div class="stars">★★★★★</div>
+        <div class="review-text">Отнёс ноутбук после того, как залил его водой. Починили за 2 дня, дали гарантию 3 месяца. Всё работает как новый. Рекомендую всем!</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar" style="background:#e74c3c;">З</div>
+          <div>
+            <div class="review-name">Зарина Б.</div>
+            <div class="review-service">Клининг квартиры</div>
+          </div>
+        </div>
+        <div class="stars">★★★★★</div>
+        <div class="review-text">Заказала уборку 3-комнатной квартиры после ремонта. Команда из 3 человек справилась за 4 часа. Результат превзошёл все ожидания, квартира блестит!</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar" style="background:#9b59b6;">Н</div>
+          <div>
+            <div class="review-name">Нурлан А.</div>
+            <div class="review-service">Услуги сантехника</div>
+          </div>
+        </div>
+        <div class="stars">★★★★☆</div>
+        <div class="review-text">Вызвал сантехника в воскресенье — приехал без доплаты за выходной. Прочистил засор, заменил смеситель. Качественно, аккуратно, без мусора.</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar" style="background:#e67e22;">С</div>
+          <div>
+            <div class="review-name">Светлана Т.</div>
+            <div class="review-service">Ремонт холодильника</div>
+          </div>
+        </div>
+        <div class="stars">★★★★★</div>
+        <div class="review-text">Холодильник перестал морозить. Мастер диагностировал неисправность прямо дома, заправил фреон. Работает уже полгода без проблем. Спасибо!</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar" style="background:#1abc9c;">Б</div>
+          <div>
+            <div class="review-name">Бауыржан О.</div>
+            <div class="review-service">Детейлинг авто</div>
+          </div>
+        </div>
+        <div class="stars">★★★★★</div>
+        <div class="review-text">Сделали полный детейлинг моей машины. Результат на фото выглядит как новый автомобиль из салона. Очень доволен качеством работы, буду обращаться ещё!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>Оставьте заявку прямо сейчас</h2>
+  <p>Наш специалист свяжется с вами в течение 30 минут и поможет решить любую проблему</p>
+  <div class="cta-form">
+    <input type="tel" placeholder="Ваш номер телефона">
+    <button class="btn-cta" onclick="openModal()">Получить консультацию</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <div class="footer-logo-icon">H</div>
+          HUB MASTER
+        </div>
+        <div class="footer-desc">
+          Мультисервис услуг и товаров в Алматы. Все виды услуг в одном месте. Проверенные специалисты, гарантия качества, цены ниже рынка.
+        </div>
+        <a href="tel:+77780211316" class="footer-phone">+7 (778) 021-13-16</a>
+      </div>
+      <div class="footer-col">
+        <h4>Услуги</h4>
+        <ul>
+          <li><a href="#">Ремонт техники</a></li>
+          <li><a href="#">Транспорт</a></li>
+          <li><a href="#">Бытовые услуги</a></li>
+          <li><a href="#">Специалисты</a></li>
+          <li><a href="#">Строительство</a></li>
+          <li><a href="#">Туры</a></li>
+          <li><a href="#">Магазин</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Компания</h4>
+        <ul>
+          <li><a href="#">О нас</a></li>
+          <li><a href="#">Как мы работаем</a></li>
+          <li><a href="#">Отзывы</a></li>
+          <li><a href="#">Партнёрам</a></li>
+          <li><a href="#">Блог</a></li>
+          <li><a href="#">Контакты</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Контакты</h4>
+        <ul>
+          <li><a href="#">📍 Алматы, Казахстан</a></li>
+          <li><a href="tel:+77780211316">📞 +7 (778) 021-13-16</a></li>
+          <li><a href="#">✉️ info@hubmaster.kz</a></li>
+          <li><a href="#">💬 WhatsApp</a></li>
+          <li><a href="#">📸 Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 HUB MASTER. Все права защищены.</span>
+      <div style="display:flex;gap:20px;">
+        <a href="#">Политика конфиденциальности</a>
+        <a href="#">Пользовательское соглашение</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2>Оставить заявку</h2>
+    <p>Заполните форму и мы свяжемся с вами в течение 30 минут</p>
+    <select>
+      <option value="">Выберите категорию услуги...</option>
+      <option>Ремонт бытовой техники</option>
+      <option>Ремонт компьютерной техники</option>
+      <option>Транспорт и авто</option>
+      <option>Клининг и уборка</option>
+      <option>Сантехника</option>
+      <option>Электрика</option>
+      <option>Другое</option>
+    </select>
+    <input type="text" placeholder="Ваше имя">
+    <input type="tel" placeholder="Номер телефона *">
+    <input type="text" placeholder="Опишите проблему (необязательно)">
+    <button class="btn-request" onclick="submitForm()">Отправить заявку</button>
+    <div class="modal-note">Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности</div>
+  </div>
+</div>
+
+<script>
+  function openModal() {
+    document.getElementById('modal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('modal')) closeModal();
+  }
+  function submitForm() {
+    alert('✅ Заявка принята! Мы свяжемся с вами в течение 30 минут.');
+    closeModal();
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  // Animate service cards on scroll
+  const cards = document.querySelectorAll('.service-card, .adv-card, .step, .review-card');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  cards.forEach(card => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    card.style.transition = 'opacity 0.4s ease, transform 0.4s ease, box-shadow 0.2s';
+    observer.observe(card);
+  });
+</script>
+
+</body>
+</html>

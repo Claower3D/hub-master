@@ -1,0 +1,33 @@
+.section {
+  padding: 80px 0;
+  background-color: var(--bg-dark);
+  background-image: linear-gradient(var(--border) 1px, transparent 1px),
+                    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+.header { margin-bottom: 40px; }
+.pretitle { font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px; }
+.title { font-family: var(--font-heading); font-weight: 900; font-size: 36px; color: var(--text-white); margin-bottom: 12px; }
+.subtitle { font-size: 15px; color: var(--text); }
+
+.tabs { display: flex; flex-wrap: wrap; gap: 24px; margin-bottom: 32px; border-bottom: 1px solid var(--border); padding-bottom: 2px; }
+.tabBtn { background: none; border: none; color: var(--text); padding: 10px 0; font-weight: 600; font-size: 14px; cursor: pointer; transition: color 0.2s; position: relative; }
+.tabBtn:hover { color: var(--text-white); }
+.tabActive { color: var(--text-white) !important; }
+.tabActive::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px; background: var(--primary); border-radius: 1px; }
+
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.cardImg { height: 180px; background-color: var(--bg-card-hover); background-size: cover; background-position: center; }
+.cardBody { padding: 16px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+.cardTitle { font-size: 15px; font-weight: 700; color: var(--text-white); line-height: 1.4; }
+.cardBottom { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+.price { font-size: 14px; color: var(--text); }
+.price strong { color: var(--text-white); font-weight: 700; }
+.orderBtn { background: var(--primary); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+.orderBtn:hover { background: var(--primary-hover); }
+
+@media (max-width: 1024px) { .grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 600px)  { .grid { grid-template-columns: 1fr; } }

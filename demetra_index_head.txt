@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Demetra-2005 — Ремонт промышленного оборудования</title>
+<meta name="description" content="Ремонт и техническое обслуживание конвейерного, горно-шахтного и металлургического оборудования." />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            bg: '#fafcfa',
+            mint: '#f1f5ea',
+            lime: '#b6ed3a',
+            limeDark: '#9bc830',
+            ink: '#0e1311',
+            muted: '#5a6660',
+            cardBg: '#131917',
+          }
+        }
+      }
+    }
+  }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: #fafcfa;
+    color: #0e1311;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Manrope', sans-serif;
+    letter-spacing: -0.03em;
+  }
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-33.333%); }
+  }
+  .marquee-content {
+    animation: scroll 35s linear infinite;

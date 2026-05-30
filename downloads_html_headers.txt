@@ -1,0 +1,64 @@
+=== C:\Users\SystemX\Downloads\index.html (45776 bytes) ===
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1️⃣ Мультисервис услуг и товаров «HUB MASTER» | Алматы</title>
+<meta name="description" content="Все виды услуг в одном месте ⭐️ Проверка специалистов по 3 критериям ⭐️ Цены до 25% ниже, чем у частных компаний ⭐️ 50 000+ выполненных заказов ⭐️ 4.9★ средняя оценка">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+--green: #2ecc71;
+--green-dark: #27ae60;
+--green-light: #d5f5e3;
+--blue: #3498db;
+--dark: #1a1a2e;
+--text: #333;
+--text-light: #666;
+--border: #e0e0e0;
+--bg: #f7f9fc;
+--white: #fff;
+--shadow: 0 2px 12px rgba(0,0,0,0.08);
+--shadow-hover: 0 6px 24px rgba(46,204,113,0.18);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+font-family: 'Open Sans', sans-serif;
+color: var(--text);
+
+=== C:\Users\SystemX\Downloads\hubmaster_dark.html (13265 bytes) ===
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HUB MASTER — Мультисервис</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0d0d0d; font-family: 'Segoe UI', Arial, sans-serif; color: #fff; }
+
+/* NAVBAR */
+.navbar {
+background: #161616;
+display: flex;
+align-items: center;
+gap: 18px;
+padding: 10px 28px;
+border-bottom: 1px solid #2a2a2a;
+flex-wrap: wrap;
+}
+.logo-wrap { display: flex; align-items: center; gap: 8px; }
+.logo { display: flex; align-items: center; }
+.logo-hub { background: #f0f0f0; color: #111; font-weight: 900; font-size: 14px; padding: 4px 7px; border-radius: 4px 0 0 4px; letter-spacing: 0.5px; }
+.logo-master { background: #e63333; color: #fff; font-weight: 900; font-size: 14px; padding: 4px 8px; border-radius: 0 4px 4px 0; letter-spacing: 0.5px; }
+.logo-sub { font-size: 10px; color: #555; }
+.btn-catalog {
+background: #e63333;
+color: #fff;
+border: none;
+padding: 8px 16px;
+
