@@ -6639,9 +6639,16 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ phone })
         });
-        const data = await res.json();
 
-        if (!res.ok) throw new Error(data || 'Ошибка отправки');
+        let data = {};
+        const text = await res.text();
+        try {
+          data = JSON.parse(text);
+        } catch (parseErr) {}
+
+        if (!res.ok) {
+          throw new Error(data.error || text || 'Ошибка отправки');
+        }
 
         cabVerifiedPhone = phone;
         localStorage.setItem('cab_temp_phone', phone);
@@ -6722,12 +6729,15 @@
           body: JSON.stringify({ phone, code })
         });
 
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(text || 'Неверный код');
-        }
+        let data = {};
+        const text = await res.text();
+        try {
+          data = JSON.parse(text);
+        } catch (parseErr) {}
 
-        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || text || 'Неверный код');
+        }
         if (cabSmsTimerInterval) clearInterval(cabSmsTimerInterval);
 
         if (data.status === 'new_user') {
@@ -6785,12 +6795,15 @@
           })
         });
 
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(text || 'Ошибка регистрации');
-        }
+        let data = {};
+        const text = await res.text();
+        try {
+          data = JSON.parse(text);
+        } catch (parseErr) {}
 
-        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || text || 'Ошибка регистрации');
+        }
         localStorage.setItem('cab_token', data.token);
         localStorage.setItem('cab_user', JSON.stringify(data.user));
         showDashboard(data.user, data.token);
