@@ -285,6 +285,50 @@
     }
     .login-btn:hover { background: var(--primary-hover); }
     .login-error { color: #ff6b6b; font-size: 13px; text-align: center; margin-top: 16px; display: none; }
+  
+    /* Catalog editor modal styles */
+    .admin-modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(9, 9, 11, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2000;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .admin-modal-overlay.active {
+      opacity: 1; pointer-events: all;
+    }
+    .admin-modal-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 30px; width: 500px; max-width: 90%;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+      transform: scale(0.95);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .admin-modal-overlay.active .admin-modal-card {
+      transform: scale(1);
+    }
+    .admin-modal-title {
+      font-family: var(--font-heading); font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 20px;
+    }
+    .admin-form-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .admin-form-group label {
+      display: block; font-size: 12px; font-weight: 600; color: #aaa; margin-bottom: 6px; text-transform: uppercase;
+    }
+    .admin-form-input, .admin-form-select, .admin-form-textarea {
+      width: 100%; background: #16161a; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-size: 14px;
+      transition: border-color 0.2s;
+    }
+    .admin-form-input:focus, .admin-form-select:focus, .admin-form-textarea:focus {
+      border-color: var(--primary); outline: none;
+    }
+    .admin-modal-actions {
+      display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;
+    }
   </style>
 </head>
 <body>
@@ -408,108 +452,31 @@
     </div>
 
     <!-- TAB 2: КАТАЛОГ -->
+        <!-- TAB 2: КАТАЛОГ -->
     <div id="tab-catalog" class="tab-content">
       <div class="catalog-header-area">
         <div>
           <div class="page-title">Управление структурой каталога</div>
           <div class="page-desc">Редактируйте разделы, категории, подкатегории и их подробные описания</div>
         </div>
-        <div class="action-btns">
-          <button class="btn-secondary"><svg width="14" height="14" style="margin-right:6px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><polyline points="3 3 3 8 8 8"/></svg> Сбросить по умолчанию</button>
-          <button class="btn-primary"><svg width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Добавить раздел</button>
+        <div class="action-btns" style="display:flex; gap:8px;">
+          <button class="btn-secondary" onclick="resetCatalogToDefault()"><svg width="14" height="14" style="margin-right:6px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><polyline points="3 3 3 8 8 8"/></svg> Сбросить по умолчанию</button>
+          <button class="btn-primary" id="add-catalog-item-btn"><svg width="14" height="14" style="margin-right:6px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Добавить раздел</button>
+          <button class="btn-primary" onclick="saveCatalogToServer()" style="background:#10b981;"><svg width="14" height="14" style="margin-right:6px"><polyline points="20 6 9 17 4 12"/></svg> Сохранить на сервере</button>
         </div>
       </div>
 
       <div class="list-container" style="padding:0; overflow:hidden;">
         <div style="padding: 20px 24px 0 24px;">
           <div class="cat-tabs">
-            <div class="cat-tab active"><svg width="14" height="14" style="margin-right:6px; vertical-align:-2px"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg> Разделы (7)</div>
-            <div class="cat-tab"><svg width="14" height="14" style="margin-right:6px; vertical-align:-2px"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Категории (20)</div>
-            <div class="cat-tab"><svg width="14" height="14" style="margin-right:6px; vertical-align:-2px"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Подкатегории / Услуги (46)</div>
+            <div class="cat-tab active" onclick="switchCatalogSubTab(0)"><svg width="14" height="14" style="margin-right:6px; vertical-align:-2px"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg> Разделы (0)</div>
+            <div class="cat-tab" onclick="switchCatalogSubTab(1)"><svg width="14" height="14" style="margin-right:6px; vertical-align:-2px"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Категории (0)</div>
+            <div class="cat-tab" onclick="switchCatalogSubTab(2)"><svg width="14" height="14" style="margin-right:6px; vertical-align:-2px"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Подкатегории / Услуги (0)</div>
           </div>
         </div>
-        
-        <table class="table">
-          <thead>
-            <tr>
-              <th style="width: 25%">ID (АНГЛ. КОД)</th>
-              <th style="width: 50%">НАЗВАНИЕ РАЗДЕЛА</th>
-              <th style="width: 25%; text-align: right;">ДЕЙСТВИЯ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="font-family: monospace; color: var(--text);">tech</td>
-              <td style="font-weight: 600;">Ремонт техники</td>
-              <td style="text-align: right;">
-                <div class="td-actions" style="justify-content: flex-end;">
-                  <button class="btn-icon blue"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
-                  <button class="btn-icon red"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="font-family: monospace; color: var(--text);">auto</td>
-              <td style="font-weight: 600;">Автосервис</td>
-              <td style="text-align: right;">
-                <div class="td-actions" style="justify-content: flex-end;">
-                  <button class="btn-icon blue"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
-                  <button class="btn-icon red"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="font-family: monospace; color: var(--text);">household</td>
-              <td style="font-weight: 600;">Бытовые услуги</td>
-              <td style="text-align: right;">
-                <div class="td-actions" style="justify-content: flex-end;">
-                  <button class="btn-icon blue"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
-                  <button class="btn-icon red"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="font-family: monospace; color: var(--text);">specialists</td>
-              <td style="font-weight: 600;">Специалисты</td>
-              <td style="text-align: right;">
-                <div class="td-actions" style="justify-content: flex-end;">
-                  <button class="btn-icon blue"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
-                  <button class="btn-icon red"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="font-family: monospace; color: var(--text);">construction</td>
-              <td style="font-weight: 600;">Строительство и ремонт</td>
-              <td style="text-align: right;">
-                <div class="td-actions" style="justify-content: flex-end;">
-                  <button class="btn-icon blue"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
-                  <button class="btn-icon red"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="font-family: monospace; color: var(--text);">furniture</td>
-              <td style="font-weight: 600;">Мебель на заказ</td>
-              <td style="text-align: right;">
-                <div class="td-actions" style="justify-content: flex-end;">
-                  <button class="btn-icon blue"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
-                  <button class="btn-icon red"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="font-family: monospace; color: var(--text);">other</td>
-              <td style="font-weight: 600;">Другие услуги</td>
-              <td style="text-align: right;">
-                <div class="td-actions" style="justify-content: flex-end;">
-                  <button class="btn-icon blue"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
-                  <button class="btn-icon red"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div style="padding: 20px 24px; text-align:center; color: var(--text-muted);">
+          Загрузка структуры каталога...
+        </div>
       </div>
     </div>
 
@@ -752,6 +719,7 @@
           const data = await res.json();
           // Hide login overlay if authorized
           document.getElementById('login-overlay').style.display = 'none';
+          loadCatalogData();
         } else {
           localStorage.removeItem('admin_token');
           document.getElementById('login-overlay').style.display = 'flex';
@@ -791,6 +759,7 @@
         const data = await res.json();
         localStorage.setItem('admin_token', data.token);
         document.getElementById('login-overlay').style.display = 'none';
+        loadCatalogData();
       } catch (e) {
         err.innerText = e.message;
         err.style.display = 'block';
@@ -812,6 +781,626 @@
       event.currentTarget.classList.add('active');
       document.getElementById('tab-' + tabId).classList.add('active');
     }
-  </script>
+  
+    // Load catalog and manage operations
+    let catalogData = { tabs: [], categories: [], subcategories: {}, details: {} };
+    let currentCatalogSubTab = 0;
+    let editingItemType = null;
+    let editingItemKey = null;
+
+    async function loadCatalogData() {
+      const token = localStorage.getItem('admin_token');
+      try {
+        const res = await fetch(API_BASE + '/api/catalog', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (res.ok) {
+          catalogData = await res.json();
+          if (!catalogData.tabs) catalogData.tabs = [];
+          if (!catalogData.categories) catalogData.categories = [];
+          if (!catalogData.subcategories) catalogData.subcategories = {};
+          if (!catalogData.details) catalogData.details = {};
+          renderCatalogTab();
+        }
+      } catch (e) {
+        console.error("Failed to load catalog data:", e);
+      }
+    }
+
+    function renderCatalogTab() {
+      const tabsCount = catalogData.tabs ? catalogData.tabs.length : 0;
+      const categoriesCount = catalogData.categories ? catalogData.categories.length : 0;
+      let subsCount = 0;
+      if (catalogData.subcategories) {
+        Object.values(catalogData.subcategories).forEach(arr => {
+          if (Array.isArray(arr)) subsCount += arr.length;
+        });
+      }
+
+      const subTabsContainer = document.querySelector('.cat-tabs');
+      if (subTabsContainer) {
+        subTabsContainer.innerHTML = `
+          <div class="cat-tab ${currentCatalogSubTab === 0 ? 'active' : ''}" onclick="switchCatalogSubTab(0)"><svg width="14" height="14" style="margin-right:6px; vertical-align:-2px"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg> Разделы (${tabsCount})</div>
+          <div class="cat-tab ${currentCatalogSubTab === 1 ? 'active' : ''}" onclick="switchCatalogSubTab(1)"><svg width="14" height="14" style="margin-right:6px; vertical-align:-2px"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Категории (${categoriesCount})</div>
+          <div class="cat-tab ${currentCatalogSubTab === 2 ? 'active' : ''}" onclick="switchCatalogSubTab(2)"><svg width="14" height="14" style="margin-right:6px; vertical-align:-2px"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Подкатегории / Услуги (${subsCount})</div>
+        `;
+      }
+
+      const addBtn = document.querySelector('#add-catalog-item-btn');
+      if (addBtn) {
+        if (currentCatalogSubTab === 0) {
+          addBtn.innerHTML = `<svg width="14" height="14" style="margin-right:6px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Добавить раздел`;
+          addBtn.onclick = () => openCatalogEditModal('tab', null);
+        } else if (currentCatalogSubTab === 1) {
+          addBtn.innerHTML = `<svg width="14" height="14" style="margin-right:6px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Добавить категорию`;
+          addBtn.onclick = () => openCatalogEditModal('category', null);
+        } else {
+          addBtn.innerHTML = `<svg width="14" height="14" style="margin-right:6px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Добавить услугу`;
+          addBtn.onclick = () => openCatalogEditModal('subcategory', null);
+        }
+      }
+
+      const listContainer = document.querySelector('#tab-catalog .list-container');
+      let tableHTML = '';
+      if (currentCatalogSubTab === 0) {
+        tableHTML = `
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 25%">ID (АНГЛ. КОД)</th>
+                <th style="width: 50%">НАЗВАНИЕ РАЗДЕЛА</th>
+                <th style="width: 25%; text-align: right;">ДЕЙСТВИЯ</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+        if (catalogData.tabs && catalogData.tabs.length > 0) {
+          catalogData.tabs.forEach((t, index) => {
+            tableHTML += `
+              <tr>
+                <td style="font-family: monospace; color: var(--text);">${t.id}</td>
+                <td style="font-weight: 600;">${t.label}</td>
+                <td style="text-align: right;">
+                  <div class="td-actions" style="justify-content: flex-end;">
+                    <button class="btn-icon blue" onclick="openCatalogEditModal('tab', ${index})"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
+                    <button class="btn-icon red" onclick="deleteCatalogItem('tab', ${index})"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          });
+        } else {
+          tableHTML += `<tr><td colspan="3" style="text-align:center; color: var(--text-muted); padding:30px;">Разделы отсутствуют. Создайте первый раздел!</td></tr>`;
+        }
+        tableHTML += `</tbody></table>`;
+      } else if (currentCatalogSubTab === 1) {
+        tableHTML = `
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 20%">ID (АНГЛ. КОД)</th>
+                <th style="width: 25%">РАЗДЕЛ (TAB)</th>
+                <th style="width: 30%">НАЗВАНИЕ КАТЕГОРИИ</th>
+                <th style="width: 10%">ИКОНКА</th>
+                <th style="width: 15%; text-align: right;">ДЕЙСТВИЯ</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+        if (catalogData.categories && catalogData.categories.length > 0) {
+          catalogData.categories.forEach((c, index) => {
+            const sectionLabel = getTabLabel(c.tab);
+            tableHTML += `
+              <tr>
+                <td style="font-family: monospace; color: var(--text);">${c.id}</td>
+                <td style="color: var(--text-muted);">${sectionLabel} (<span style="font-family: monospace; font-size:11px;">${c.tab}</span>)</td>
+                <td style="font-weight: 600;">${c.title}</td>
+                <td style="font-family: monospace; font-size: 14px; color: var(--primary);"><i class="${c.icon || 'ri-tools-line'}"></i></td>
+                <td style="text-align: right;">
+                  <div class="td-actions" style="justify-content: flex-end;">
+                    <button class="btn-icon blue" onclick="openCatalogEditModal('category', ${index})"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
+                    <button class="btn-icon red" onclick="deleteCatalogItem('category', ${index})"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          });
+        } else {
+          tableHTML += `<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding:30px;">Категории отсутствуют. Создайте первую категорию!</td></tr>`;
+        }
+        tableHTML += `</tbody></table>`;
+      } else {
+        tableHTML = `
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 15%">ID (КОД)</th>
+                <th style="width: 20%">КАТЕГОРИЯ</th>
+                <th style="width: 25%">НАЗВАНИЕ УСЛУГИ</th>
+                <th style="width: 15%">ЦЕНА</th>
+                <th style="width: 10%">СРОК</th>
+                <th style="width: 15%; text-align: right;">ДЕЙСТВИЯ</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+        let rows = [];
+        if (catalogData.subcategories) {
+          Object.keys(catalogData.subcategories).forEach(catId => {
+            const arr = catalogData.subcategories[catId];
+            if (Array.isArray(arr)) {
+              arr.forEach((sub, subIdx) => {
+                rows.push({ catId, sub, subIdx });
+              });
+            }
+          });
+        }
+
+        if (rows.length > 0) {
+          rows.forEach((row, index) => {
+            const catLabel = getCategoryLabel(row.catId);
+            const detail = catalogData.details && catalogData.details[row.sub.id] ? catalogData.details[row.sub.id] : { price: '-', time: '-', warr: '-', desc: '-' };
+            tableHTML += `
+              <tr>
+                <td style="font-family: monospace; color: var(--text);">${row.sub.id}</td>
+                <td style="color: var(--text-muted);">${catLabel}</td>
+                <td style="font-weight: 600;">${row.sub.title}</td>
+                <td style="color: var(--primary); font-weight:600;">${detail.price || '-'}</td>
+                <td>${detail.time || '-'}</td>
+                <td style="text-align: right;">
+                  <div class="td-actions" style="justify-content: flex-end;">
+                    <button class="btn-icon blue" onclick="openCatalogEditModal('subcategory', '${row.catId}:${row.subIdx}')"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
+                    <button class="btn-icon red" onclick="deleteCatalogItem('subcategory', '${row.catId}:${row.subIdx}')"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          });
+        } else {
+          tableHTML += `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding:30px;">Услуги отсутствуют. Создайте первую услугу!</td></tr>`;
+        }
+        tableHTML += `</tbody></table>`;
+      }
+
+      const headerDiv = listContainer.firstElementChild;
+      listContainer.innerHTML = '';
+      listContainer.appendChild(headerDiv);
+      
+      const tableWrapper = document.createElement('div');
+      tableWrapper.innerHTML = tableHTML;
+      listContainer.appendChild(tableWrapper.firstElementChild);
+    }
+
+    function getTabLabel(tabId) {
+      if (!catalogData.tabs) return tabId;
+      const tab = catalogData.tabs.find(t => t.id === tabId);
+      return tab ? tab.label : tabId;
+    }
+
+    function getCategoryLabel(catId) {
+      if (!catalogData.categories) return catId;
+      const cat = catalogData.categories.find(c => c.id === catId);
+      return cat ? cat.title : catId;
+    }
+
+    function switchCatalogSubTab(index) {
+      currentCatalogSubTab = index;
+      renderCatalogTab();
+    }
+
+    function openCatalogEditModal(type, key) {
+      editingItemType = type;
+      editingItemKey = key;
+
+      const modal = document.getElementById('catalog-edit-modal');
+      const titleEl = document.getElementById('modal-catalog-title');
+      const formFields = document.getElementById('modal-catalog-fields');
+
+      modal.classList.add('active');
+
+      if (type === 'tab') {
+        titleEl.innerText = key === null ? 'Добавить раздел' : 'Редактировать раздел';
+        const tabData = key === null ? { id: '', label: '' } : catalogData.tabs[key];
+        formFields.innerHTML = `
+          <div class="admin-form-group">
+            <label>ID / Код раздела (напр. "okna")</label>
+            <input type="text" id="tab-id" class="admin-form-input" value="${tabData.id}" ${key !== null ? 'disabled' : ''}>
+          </div>
+          <div class="admin-form-group">
+            <label>Название раздела</label>
+            <input type="text" id="tab-label" class="admin-form-input" value="${tabData.label}">
+          </div>
+        `;
+      } else if (type === 'category') {
+        titleEl.innerText = key === null ? 'Добавить категорию' : 'Редактировать категорию';
+        const catData = key === null ? { id: '', tab: '', title: '', icon: 'ri-tools-line' } : catalogData.categories[key];
+        
+        let tabOptions = '';
+        if (catalogData.tabs) {
+          catalogData.tabs.forEach(t => {
+            tabOptions += `<option value="${t.id}" ${t.id === catData.tab ? 'selected' : ''}>${t.label}</option>`;
+          });
+        }
+
+        formFields.innerHTML = `
+          <div class="admin-form-group">
+            <label>ID / Код категории (напр. "cat-okna-1")</label>
+            <input type="text" id="cat-id" class="admin-form-input" value="${catData.id}" ${key !== null ? 'disabled' : ''}>
+          </div>
+          <div class="admin-form-group">
+            <label>Раздел (Вкладка)</label>
+            <select id="cat-tab-select" class="admin-form-select">
+              ${tabOptions}
+            </select>
+          </div>
+          <div class="admin-form-group">
+            <label>Название категории</label>
+            <input type="text" id="cat-title" class="admin-form-input" value="${catData.title}">
+          </div>
+          <div class="admin-form-group">
+            <label>Иконка RemixIcon (напр. "ri-window-line")</label>
+            <input type="text" id="cat-icon" class="admin-form-input" value="${catData.icon}">
+          </div>
+        `;
+      } else if (type === 'subcategory') {
+        titleEl.innerText = key === null ? 'Добавить подкатегорию / услугу' : 'Редактировать услугу';
+        
+        let catId = '';
+        let subIdx = null;
+        let subData = { id: '', title: '' };
+        let detailData = { price: '', time: '', warr: '', desc: '' };
+
+        if (key !== null) {
+          const parts = String(key).split(':');
+          catId = parts[0];
+          subIdx = parseInt(parts[1], 10);
+          subData = catalogData.subcategories[catId][subIdx];
+          detailData = catalogData.details && catalogData.details[subData.id] ? catalogData.details[subData.id] : { price: '', time: '', warr: '', desc: '' };
+        }
+
+        let catOptions = '';
+        if (catalogData.categories) {
+          catalogData.categories.forEach(c => {
+            catOptions += `<option value="${c.id}" ${c.id === catId ? 'selected' : ''}>${c.title}</option>`;
+          });
+        }
+
+        formFields.innerHTML = `
+          <div class="admin-form-group">
+            <label>ID / Код услуги (напр. "sub-okna-1-1")</label>
+            <input type="text" id="sub-id" class="admin-form-input" value="${subData.id}" ${key !== null ? 'disabled' : ''}>
+          </div>
+          <div class="admin-form-group">
+            <label>Категория</label>
+            <select id="sub-cat-select" class="admin-form-select">
+              ${catOptions}
+            </select>
+          </div>
+          <div class="admin-form-group">
+            <label>Название услуги</label>
+            <input type="text" id="sub-title" class="admin-form-input" value="${subData.title}">
+          </div>
+          <div class="admin-form-group">
+            <label>Цена (напр. "от 3 000 ₸")</label>
+            <input type="text" id="detail-price" class="admin-form-input" value="${detailData.price || ''}">
+          </div>
+          <div class="admin-form-group">
+            <label>Срок работы (напр. "Срок: 1 час")</label>
+            <input type="text" id="detail-time" class="admin-form-input" value="${detailData.time || ''}">
+          </div>
+          <div class="admin-form-group">
+            <label>Гарантия (напр. "Гарантия: 12 мес")</label>
+            <input type="text" id="detail-warr" class="admin-form-input" value="${detailData.warr || ''}">
+          </div>
+          <div class="admin-form-group">
+            <label>Описание услуги</label>
+            <textarea id="detail-desc" class="admin-form-textarea" rows="3">${detailData.desc || ''}</textarea>
+          </div>
+        `;
+      }
+    }
+
+    function closeCatalogEditModal() {
+      document.getElementById('catalog-edit-modal').classList.remove('active');
+    }
+
+    function saveCatalogItem() {
+      if (editingItemType === 'tab') {
+        const id = document.getElementById('tab-id').value.trim();
+        const label = document.getElementById('tab-label').value.trim();
+        if (!id || !label) { alert('Заполните все поля'); return; }
+
+        if (editingItemKey === null) {
+          if (catalogData.tabs.some(t => t.id === id)) { alert('Раздел с таким кодом уже существует'); return; }
+          catalogData.tabs.push({ id, label });
+        } else {
+          catalogData.tabs[editingItemKey].label = label;
+        }
+      } else if (editingItemType === 'category') {
+        const id = document.getElementById('cat-id').value.trim();
+        const tab = document.getElementById('cat-tab-select').value;
+        const title = document.getElementById('cat-title').value.trim();
+        const icon = document.getElementById('cat-icon').value.trim();
+
+        if (!id || !tab || !title) { alert('Заполните обязательные поля'); return; }
+
+        if (editingItemKey === null) {
+          if (catalogData.categories.some(c => c.id === id)) { alert('Категория с таким кодом уже существует'); return; }
+          catalogData.categories.push({ id, tab, title, icon });
+        } else {
+          catalogData.categories[editingItemKey].tab = tab;
+          catalogData.categories[editingItemKey].title = title;
+          catalogData.categories[editingItemKey].icon = icon;
+        }
+      } else if (editingItemType === 'subcategory') {
+        const id = document.getElementById('sub-id').value.trim();
+        const catId = document.getElementById('sub-cat-select').value;
+        const title = document.getElementById('sub-title').value.trim();
+        const price = document.getElementById('detail-price').value.trim();
+        const time = document.getElementById('detail-time').value.trim();
+        const warr = document.getElementById('detail-warr').value.trim();
+        const desc = document.getElementById('detail-desc').value.trim();
+
+        if (!id || !catId || !title) { alert('Заполните обязательные поля'); return; }
+
+        if (editingItemKey === null) {
+          if (!catalogData.subcategories[catId]) catalogData.subcategories[catId] = [];
+          if (catalogData.subcategories[catId].some(s => s.id === id)) { alert('Услуга с таким кодом уже существует'); return; }
+          catalogData.subcategories[catId].push({ id, title });
+        } else {
+          const parts = String(editingItemKey).split(':');
+          const oldCatId = parts[0];
+          const subIdx = parseInt(parts[1], 10);
+          
+          if (oldCatId !== catId) {
+            catalogData.subcategories[oldCatId].splice(subIdx, 1);
+            if (!catalogData.subcategories[catId]) catalogData.subcategories[catId] = [];
+            catalogData.subcategories[catId].push({ id, title });
+          } else {
+            catalogData.subcategories[catId][subIdx].title = title;
+          }
+        }
+
+        if (!catalogData.details) catalogData.details = {};
+        catalogData.details[id] = { title, desc, price, time, warr };
+      }
+
+      closeCatalogEditModal();
+      renderCatalogTab();
+    }
+
+    function deleteCatalogItem(type, key) {
+      if (!confirm('Вы уверены, что хотите удалить этот элемент?')) return;
+
+      if (type === 'tab') {
+        catalogData.tabs.splice(key, 1);
+      } else if (type === 'category') {
+        catalogData.categories.splice(key, 1);
+      } else if (type === 'subcategory') {
+        const parts = String(key).split(':');
+        const catId = parts[0];
+        const subIdx = parseInt(parts[1], 10);
+        const sub = catalogData.subcategories[catId][subIdx];
+
+        catalogData.subcategories[catId].splice(subIdx, 1);
+        if (catalogData.details && catalogData.details[sub.id]) {
+          delete catalogData.details[sub.id];
+        }
+      }
+      renderCatalogTab();
+    }
+
+    async function saveCatalogToServer() {
+      const token = localStorage.getItem('admin_token');
+      const btn = document.querySelector('#tab-catalog .action-btns button:nth-child(3)');
+      
+      const originalText = btn.innerHTML;
+      btn.innerHTML = `Сохранение...`;
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(API_BASE + '/api/catalog', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify(catalogData)
+        });
+        if (res.ok) {
+          alert('Структура каталога успешно сохранена на сервере!');
+        } else {
+          const errText = await res.text();
+          alert('Ошибка при сохранении: ' + errText);
+        }
+      } catch (e) {
+        console.error(e);
+        alert('Сетевая ошибка при соединении с сервером');
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+        renderCatalogTab();
+      }
+    }
+
+    const defaultCatalogFallback = {
+      "tabs": [
+        { "id": "okna", "label": "Окна" },
+        { "id": "servis", "label": "Сервис" },
+        { "id": "mebel", "label": "Мебель" }
+      ],
+      "categories": [
+        { "id": "cat-okna-1", "tab": "okna", "title": "Москитные сетки", "icon": "ri-window-line" },
+        { "id": "cat-okna-2", "tab": "okna", "title": "Детская защита и решетки", "icon": "ri-shield-check-line" },
+        { "id": "cat-okna-3", "tab": "okna", "title": "Ремонт окон", "icon": "ri-tools-line" },
+        { "id": "cat-okna-4", "tab": "okna", "title": "Изготовление окон", "icon": "ri-building-line" },
+        { "id": "cat-okna-5", "tab": "okna", "title": "Ролл-шторы и жалюзи", "icon": "ri-layout-top-line" },
+        { "id": "cat-srv-1", "tab": "servis", "title": "Ремонт стиральных машин", "icon": "ri-t-shirt-air-line" },
+        { "id": "cat-srv-2", "tab": "servis", "title": "Ремонт холодильников", "icon": "ri-fridge-line" },
+        { "id": "cat-srv-3", "tab": "servis", "title": "Ремонт кондиционеров и посудомоечных машин", "icon": "ri-temp-cold-line" },
+        { "id": "cat-srv-4", "tab": "servis", "title": "Установка/Ремонт вытяжек", "icon": "ri-windy-line" },
+        { "id": "cat-srv-5", "tab": "servis", "title": "Установка/Ремонт кондиционеров", "icon": "ri-temp-cold-line" },
+        { "id": "cat-srv-6", "tab": "servis", "title": "Сварка", "icon": "ri-flashlight-line" },
+        { "id": "cat-srv-7", "tab": "servis", "title": "Металлоконструкции", "icon": "ri-grid-line" },
+        { "id": "cat-srv-8", "tab": "servis", "title": "Электрика", "icon": "ri-lightbulb-flash-line" },
+        { "id": "cat-meb-1", "tab": "mebel", "title": "Мебель на заказ (корпусная, мягкая)", "icon": "ri-sofa-line" }
+      ],
+      "subcategories": {
+        "cat-okna-1": [
+          { "id": "sub-okna-1-1", "title": "Москитные сетки Стандарт" },
+          { "id": "sub-okna-1-2", "title": "Сетки Антикошка" },
+          { "id": "sub-okna-1-3", "title": "Сетки Антипыль" }
+        ],
+        "cat-okna-2": [
+          { "id": "sub-okna-2-1", "title": "Детские замки на окна" },
+          { "id": "sub-okna-2-2", "title": "Металлические решетки" },
+          { "id": "sub-okna-2-3", "title": "Защитные тросики" }
+        ],
+        "cat-okna-3": [
+          { "id": "sub-okna-3-1", "title": "Регулировка окон" },
+          { "id": "sub-okna-3-2", "title": "Замена стеклопакетов" },
+          { "id": "sub-okna-3-3", "title": "Замена уплотнителей" },
+          { "id": "sub-okna-3-4", "title": "Замена ручек и навесов" },
+          { "id": "sub-okna-3-5", "title": "Сложное открывание" },
+          { "id": "sub-okna-3-6", "title": "Детский замок" },
+          { "id": "sub-okna-3-7", "title": "Замок курильщика" }
+        ],
+        "cat-okna-4": [
+          { "id": "sub-okna-4-1", "title": "Пластиковые окна ПВХ" },
+          { "id": "sub-okna-4-2", "title": "Алюминиевые окна" },
+          { "id": "sub-okna-4-3", "title": "Остекление балконов и лоджий" }
+        ],
+        "cat-okna-5": [
+          { "id": "sub-okna-5-1", "title": "Рулонные шторы (Ролл-шторы)" },
+          { "id": "sub-okna-5-2", "title": "Горизонтальные жалюзи" },
+          { "id": "sub-okna-5-3", "title": "Вертикальные жалюзи" }
+        ],
+        "cat-srv-1": [
+          { "id": "sub-srv-1-1", "title": "Замена ТЭНа" },
+          { "id": "sub-srv-1-2", "title": "Замена подшипников" },
+          { "id": "sub-srv-1-3", "title": "Замена сливного насоса (помпы)" },
+          { "id": "sub-srv-1-4", "title": "Ремонт модуля управления" }
+        ],
+        "cat-srv-2": [
+          { "id": "sub-srv-2-1", "title": "Заправка фреоном" },
+          { "id": "sub-srv-2-2", "title": "Замена компрессора" },
+          { "id": "sub-srv-2-3", "title": "Замена термостата" },
+          { "id": "sub-srv-2-4", "title": "Ремонт системы No Frost" }
+        ],
+        "cat-srv-3": [
+          { "id": "sub-srv-3-1", "title": "Ремонт стиральных машин" },
+          { "id": "sub-srv-3-2", "title": "Ремонт холодильников" },
+          { "id": "sub-srv-3-3", "title": "Ремонт посудомоечных машин" }
+        ],
+        "cat-srv-4": [
+          { "id": "sub-srv-4-1", "title": "Установка вытяжки" },
+          { "id": "sub-srv-4-2", "title": "Ремонт вытяжки" }
+        ],
+        "cat-srv-5": [
+          { "id": "sub-srv-5-1", "title": "Установка кондиционеров (сплит-систем)" },
+          { "id": "sub-srv-5-2", "title": "Ремонт сплит-систем" },
+          { "id": "sub-srv-5-3", "title": "Демонтаж кондиционера" }
+        ],
+        "cat-srv-6": [
+          { "id": "sub-srv-6-1", "title": "Сварка труб" },
+          { "id": "sub-srv-6-2", "title": "Сварка петель ворот" },
+          { "id": "sub-srv-6-3", "title": "Сварочные работы любой сложности" }
+        ],
+        "cat-srv-7": [
+          { "id": "sub-srv-7-1", "title": "Изготовление навесов" },
+          { "id": "sub-srv-7-2", "title": "Изготовление заборов" },
+          { "id": "sub-srv-7-3", "title": "Решетки на окна" },
+          { "id": "sub-srv-7-4", "title": "Металлические двери" }
+        ],
+        "cat-srv-8": [
+          { "id": "sub-srv-8-1", "title": "Установка розеток и выключателей" },
+          { "id": "sub-srv-8-2", "title": "Монтаж люстр и светильников" },
+          { "id": "sub-srv-8-3", "title": "Поиск и устранение короткого замыкания" },
+          { "id": "sub-srv-8-4", "title": "Замена автоматических выключателей" }
+        ],
+        "cat-meb-1": [
+          { "id": "sub-meb-1-1", "title": "Кухонные гарнитуры" },
+          { "id": "sub-meb-1-2", "title": "Шкафы-купе и гардеробные" },
+          { "id": "sub-meb-1-3", "title": "Детская мебель" },
+          { "id": "sub-meb-1-4", "title": "Прихожие и комоды" },
+          { "id": "sub-meb-1-5", "title": "Перетяжка и ремонт мягкой мебели" }
+        ]
+      },
+      "details": {
+        "sub-okna-1-1": { "title": "Москитные сетки Стандарт", "desc": "Изготовление и установка классических сеток из качественного стекловолокна на пластиковые крепления.", "price": "от 3 000 ₸", "time": "Срок: 1 час", "warr": "Гарантия: 12 мес" },
+        "sub-okna-1-2": { "title": "Сетки Антикошка", "desc": "Усиленное полотно из нержавеющей стали или прочного полиэстера. Выдерживает когти домашних животных и прыжки.", "price": "от 6 000 ₸", "time": "Срок: 1 час", "warr": "Гарантия: 12 мес" },
+        "sub-okna-1-3": { "title": "Сетки Антипыль", "desc": "Сетка с очень мелкими ячейками, которые задерживают пыль, пыльцу цветов и другие мелкие аллергены.", "price": "от 8 000 ₸", "time": "Срок: 1 час", "warr": "Гарантия: 12 мес" },
+        "sub-okna-2-1": { "title": "Детские замки на окна", "desc": "Замки с ключом на створки окон, предотвращающие открывание створки детьми.", "price": "от 2 000 ₸", "time": "Срок: 30 мин", "warr": "Гарантия: 12 мес" },
+        "sub-okna-2-2": { "title": "Металлические решетки", "desc": "Безопасные открывающиеся или раздвижные решетки на окна для защиты от выпадения и взлома.", "price": "от 5 000 ₸", "time": "Срок: 2-3 часа", "warr": "Гарантия: 12 мес" },
+        "sub-okna-2-3": { "title": "Защитные тросики", "desc": "Стальные прочные тросики-ограничители открывания створки окна.", "price": "от 1 500 ₸", "time": "Срок: 30 мин", "warr": "Гарантия: 12 мес" },
+        "sub-okna-3-1": { "title": "Регулировка окон", "desc": "Устранение продувания, провисания створки, смазка фурнитуры и регулировка прижима.", "price": "от 1 500 ₸", "time": "Срок: 30 мин", "warr": "Гарантия: 12 мес" },
+        "sub-okna-3-2": { "title": "Замена стеклопакетов", "desc": "Срочное изготовление и замена разбитых или треснувших однокамерных, двухкамерных стеклопакетов.", "price": "от 10 000 ₸", "time": "Срок: 2 часа", "warr": "Гарантия: 12 мес" },
+        "sub-okna-3-3": { "title": "Замена уплотнителей", "desc": "Замена изношенного оконного резинового уплотнителя на качественный немецкий (KBE, Rehau) для полной герметизации.", "price": "от 1 000 ₸/п.м", "time": "Срок: 1 час", "warr": "Гарантия: 12 мес" },
+        "sub-okna-3-4": { "title": "Замена ручек и навесов", "desc": "Замена сломанных ручек окон, установка ручек с ключом, замена петель и оконной фурнитуры.", "price": "от 2 000 ₸", "time": "Срок: 20 мин", "warr": "Гарантия: 12 мес" },
+        "sub-okna-3-5": { "title": "Сложное открывание", "desc": "Модернизация поворотной фурнитуры створки в поворотно-откидную для удобного проветривания.", "price": "от 8 000 ₸", "time": "Срок: 2 часа", "warr": "Гарантия: 12 мес" },
+        "sub-okna-3-6": { "title": "Детский замок", "desc": "Установка дополнительных средств защиты створок для предотвращения падения детей.", "price": "от 1 500 ₸", "time": "Срок: 30 мин", "warr": "Гарантия: 12 мес" },
+        "sub-okna-3-7": { "title": "Замок курильщика", "desc": "Установка балконной защелки и наружной ручки (ручка-лепесток) для фиксации балконной двери.", "price": "от 1 500 ₸", "time": "Срок: 20 мин", "warr": "Гарантия: 12 мес" },
+        "sub-okna-4-1": { "title": "Пластиковые окна ПВХ", "desc": "Изготовление и установка металлопластиковых окон из профилей Galwin, Funke, Rehau. Высокое энергосбережение.", "price": "от 25 000 ₸", "time": "Срок: 3-5 дней", "warr": "Гарантия: 36 мес" },
+        "sub-okna-4-2": { "title": "Алюминиевые окна", "desc": "Изготовление и монтаж окон из холодного и теплого алюминия (Alotech, Hoffman) для квартир, офисов и витрин.", "price": "от 40 000 ₸", "time": "Срок: 5-7 дней", "warr": "Гарантия: 36 мес" },
+        "sub-okna-4-3": { "title": "Остекление балконов и лоджий", "desc": "Полное остекление балконов под ключ с установкой козырьков, отливов и последующим утеплением по желанию.", "price": "от 80 000 ₸", "time": "Срок: 4-6 дней", "warr": "Гарантия: 36 мес" },
+        "sub-okna-5-1": { "title": "Рулонные шторы (Ролл-шторы)", "desc": "Большой выбор тканей (блэкаут, день-ночь, принты). Точный замер и качественная установка.", "price": "от 5 000 ₸", "time": "Срок: 2-3 дня", "warr": "Гарантия: 12 мес" },
+        "sub-okna-5-2": { "title": "Горизонтальные жалюзи", "desc": "Классические алюминиевые и пластиковые горизонтальные жалюзи разных цветов для офиса и дома.", "price": "от 4 000 ₸", "time": "Срок: 1-2 дня", "warr": "Гарантия: 12 мес" },
+        "sub-okna-5-3": { "title": "Вертикальные жалюзи", "desc": "Тканевые и пластиковые вертикальные жалюзи любой высоты. Отлично подходят для больших окон.", "price": "от 4 500 ₸", "time": "Срок: 2-3 дня", "warr": "Гарантия: 12 мес" },
+        "sub-srv-1-1": { "title": "Замена ТЭНа", "desc": "Замена сгоревшего нагревательного элемента стиральной машины на новый оригинальный ТЭН.", "price": "от 6 000 ₸", "time": "Срок: 1 час", "warr": "Гарантия: 12 мес" },
+        "sub-srv-1-2": { "title": "Замена подшипников", "desc": "Полный разбор бака стиральной машины и замена изношенных гудящих подшипников и сальника.", "price": "от 12 000 ₸", "time": "Срок: 3 часа", "warr": "Гарантия: 12 мес" },
+        "sub-srv-1-3": { "title": "Замена сливного насоса (помпы)", "desc": "Замена неисправной сливной помпы, если машина не сливает воду или выдает ошибку.", "price": "от 5 000 ₸", "time": "Срок: 45 мин", "warr": "Гарантия: 12 мес" },
+        "sub-srv-1-4": { "title": "Ремонт модуля управления", "desc": "Прошивка процессора, замена сгоревших реле, симисторов и других элементов на электронной плате управления.", "price": "от 8 000 ₸", "time": "Срок: 1-2 дня", "warr": "Гарантия: 12 мес" },
+        "sub-srv-2-1": { "title": "Заправка фреоном", "desc": "Вакуумирование системы и точная заправка хладагентом (R134a, R600a) по весам с устранением утечки.", "price": "от 7 000 ₸", "time": "Срок: 1 час", "warr": "Гарантия: 12 мес" },
+        "sub-srv-2-2": { "title": "Замена компрессора", "desc": "Демонтаж старого мотора, установка нового мотор-компрессора, замена фильтра-осушителя и заправка фреоном.", "price": "от 18 000 ₸", "time": "Срок: 2 часа", "warr": "Гарантия: 12 мес" },
+        "sub-srv-2-3": { "title": "Замена термостата", "desc": "Замена механического терморегулятора или датчика температуры холодильной/морозильной камеры.", "price": "от 6 000 ₸", "time": "Срок: 45 мин", "warr": "Гарантия: 12 мес" },
+        "sub-srv-2-4": { "title": "Ремонт системы No Frost", "desc": "Замена ТЭНа оттайки, плавкого предохранителя, таймера оттайки или вентилятора испарителя.", "price": "от 8 000 ₸", "time": "Срок: 1.5 часа", "warr": "Гарантия: 12 мес" },
+        "sub-srv-3-1": { "title": "Ремонт стиральных машин", "desc": "Диагностика и ремонт стиральных машин на дому. Замена запчастей, устранение течи, ремонт электроники.", "price": "от 5 000 ₸", "time": "Срок: 1-3 часа", "warr": "Гарантия: 12 мес" },
+        "sub-srv-3-2": { "title": "Ремонт холодильников", "desc": "Срочный ремонт бытовых и торговых холодильников. Замена компрессоров, заправка хладагентом, ремонт плат.", "price": "от 6 000 ₸", "time": "Срок: 1-3 часа", "warr": "Гарантия: 12 мес" },
+        "sub-srv-3-3": { "title": "Ремонт посудомоечных машин", "desc": "Устранение засоров, ремонт нагревателей, циркуляционных насосов, замена датчиков уровня воды.", "price": "от 7 000 ₸", "time": "Срок: 1-2 часа", "warr": "Гарантия: 12 мес" },
+        "sub-srv-4-1": { "title": "Установка вытяжки", "desc": "Монтаж кухонной вытяжки на стену или в шкафчик, подключение к вентиляционному каналу воздуховодом.", "price": "от 6 000 ₸", "time": "Срок: 1-1.5 часа", "warr": "Гарантия: 12 мес" },
+        "sub-srv-4-2": { "title": "Ремонт вытяжки", "desc": "Замена мотора вытяжки, ремонт кнопочных переключателей или электронных плат управления, замена подсветки.", "price": "от 5 000 ₸", "time": "Срок: 1 час", "warr": "Гарантия: 12 мес" },
+        "sub-srv-5-1": { "title": "Установка кондиционеров (сплит-систем)", "desc": "Стандартный и нестандартный монтаж сплит-систем любой мощности. Использование качественной медной трубы.", "price": "от 18 000 ₸", "time": "Срок: 2-3 часа", "warr": "Гарантия: 12 мес" },
+        "sub-srv-5-2": { "title": "Ремонт сплит-систем", "desc": "Ремонт компрессора, замена четырехходового клапана, ремонт и пайка медных трасс, устранение утечек фреона.", "price": "от 8 000 ₸", "time": "Срок: 1-2 часа", "warr": "Гарантия: 12 мес" },
+        "sub-srv-5-3": { "title": "Демонтаж кондиционера", "desc": "Аккуратный демонтаж блоков с сохранением фреона в компрессоре кондиционера для последующей установки.", "price": "от 8 000 ₸", "time": "Срок: 45 мин", "warr": "Гарантия: - " },
+        "sub-srv-6-1": { "title": "Сварка труб", "desc": "Сварка водопроводных труб, стояков отопления, газовых труб аттестованными сварщиками. Гарантия прочности шва.", "price": "от 5 000 ₸", "time": "Срок: 1-2 часа", "warr": "Гарантия: 24 мес" },
+        "sub-srv-6-2": { "title": "Сварка петель ворот", "desc": "Ремонт и замена изношенных или сорванных петель гаражных ворот, калиток. Приварка прочных петель с подшипниками.", "price": "от 4 000 ₸", "time": "Срок: 40 мин", "warr": "Гарантия: 12 мес" },
+        "sub-srv-6-3": { "title": "Сварочные работы любой сложности", "desc": "Мелкий и крупный ремонт металлических изделий электросваркой на выезде со своим генератором.", "price": "договорная", "time": "Срок: 1-3 часа", "warr": "Гарантия: 12 мес" },
+        "sub-srv-7-1": { "title": "Изготовление навесов", "desc": "Изготовление металлических навесов для автомобилей, зон отдыха из поликарбоната, профнастила, металлочерепицы.", "price": "от 15 000 ₸/кв.м", "time": "Срок: 3-5 дней", "warr": "Гарантия: 36 мес" },
+        "sub-srv-7-2": { "title": "Изготовление заборов", "desc": "Установка заборов из профлиста, сетки-рабицы, металлического штакетника, 3D-панелей. Быстро и надежно.", "price": "от 5 000 ₸/п.м", "time": "Срок: 2-4 дня", "warr": "Гарантия: 24 мес" },
+        "sub-srv-7-3": { "title": "Решетки на окна", "desc": "Изготовление прочных распашных и глухих оконных решеток, дутых решеток, кованых изделий безопасности.", "price": "от 8 000 ₸/кв.м", "time": "Срок: 2-3 дня", "warr": "Гарантия: 36 мес" },
+        "sub-srv-7-4": { "title": "Металлические двери", "desc": "Изготовление и монтаж качественных металлических дверей для квартир, тамбуров, гаражей. Усиленная конструкция.", "price": "от 45 000 ₸", "time": "Срок: 3-4 дня", "warr": "Гарантия: 24 мес" },
+        "sub-srv-8-1": { "title": "Установка розеток и выключателей", "desc": "Замена старых, монтаж и перенос розеток и выключателей на новые места, штробление стен под кабель.", "price": "от 1 000 ₸/шт", "time": "Срок: 20 мин", "warr": "Гарантия: 12 мес" },
+        "sub-srv-8-2": { "title": "Монтаж люстр и светильников", "desc": "Сборка, надежное крепление и подключение любых люстр, точечных светильников, светодиодных лент, бра.", "price": "от 3 000 ₸/шт", "time": "Срок: 30 мин", "warr": "Гарантия: 12 мес" },
+        "sub-srv-8-3": { "title": "Поиск и устранение короткого замыкания", "desc": "Диагностика электропроводки спецприборами, поиск места обрыва или замыкания кабеля, локальное устранение.", "price": "от 5 000 ₸", "time": "Срок: 1-2 часа", "warr": "Гарантия: 12 мес" },
+        "sub-srv-8-4": { "title": "Замена автоматических выключателей", "desc": "Замена старых пробок, установка автоматов (УЗО), сборка и модернизация электрощитов.", "price": "от 2 000 ₸/шт", "time": "Срок: 30 мин", "warr": "Гарантия: 12 мес" },
+        "sub-meb-1-1": { "title": "Кухонные гарнитуры", "desc": "Изготовление современных стильных кухонь по индивидуальным проектам. Фасады МДФ, ЛДСП, краска, акрил, шпон.", "price": "от 120 000 ₸/п.м", "time": "Срок: 10-15 дней", "warr": "Гарантия: 24 мес" },
+        "sub-meb-1-2": { "title": "Шкафы-купе и гардеробные", "desc": "Встроенные и корпусные шкафы-купе, гардеробные системы с качественной фурнитурой плавного закрывания.", "price": "от 80 000 ₸/п.м", "time": "Срок: 7-10 дней", "warr": "Гарантия: 24 мес" },
+        "sub-meb-1-3": { "title": "Детская мебель", "desc": "Безопасная и экологичная мебель для детских комнат: двухъярусные кровати, рабочие зоны, системы хранения.", "price": "от 65 000 ₸", "time": "Срок: 7-12 дней", "warr": "Гарантия: 24 мес" },
+        "sub-meb-1-4": { "title": "Прихожие и комоды", "desc": "Компактные и функциональные прихожие, тумбы для обуви, вместительные комоды под стиль вашей квартиры.", "price": "от 35 000 ₸", "time": "Срок: 5-8 дней", "warr": "Гарантия: 24 мес" },
+        "sub-meb-1-5": { "title": "Перетяжка и ремонт мягкой мебели", "desc": "Замена обивки диванов, кресел, стульев (ткань, кожа, велюр), ремонт каркаса, замена поролона и пружинных блоков.", "price": "от 15 000 ₸", "time": "Срок: 2-5 дней", "warr": "Гарантия: 12 мес" }
+      }
+    };
+
+    function resetCatalogToDefault() {
+      if (confirm('Вы действительно хотите сбросить структуру каталога к исходным настройкам? Все ваши текущие разделы и услуги будут заменены.')) {
+        catalogData = JSON.parse(JSON.stringify(defaultCatalogFallback));
+        renderCatalogTab();
+      }
+    }
+</script>
+
+  <!-- CATALOG EDIT MODAL -->
+  <div class="admin-modal-overlay" id="catalog-edit-modal">
+    <div class="admin-modal-card">
+      <div class="admin-modal-title" id="modal-catalog-title">Редактировать элемент</div>
+      <div id="modal-catalog-fields">
+        <!-- Fields dynamic content -->
+      </div>
+      <div class="admin-modal-actions">
+        <button class="btn-secondary" style="padding:10px 20px;" onclick="closeCatalogEditModal()">Отмена</button>
+        <button class="btn-primary" style="padding:10px 20px;" onclick="saveCatalogItem()">Сохранить</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
