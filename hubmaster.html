@@ -3184,6 +3184,25 @@
     [data-theme="light"] .form-card-right {
       border-left-color: var(--border);
     }
+    
+    /* Hero bottom form card overrides for light theme */
+    [data-theme="light"] .hero-bottom-form-card {
+      background: rgba(255, 255, 255, 0.85) !important;
+      border-color: rgba(0, 0, 0, 0.08) !important;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05) !important;
+    }
+    [data-theme="light"] .card-input-field:focus,
+    [data-theme="light"] .card-select-field:focus,
+    [data-theme="light"] .phone-input-wrap:focus-within {
+      background: rgba(255, 255, 255, 1) !important;
+      border-color: var(--primary) !important;
+    }
+    [data-theme="light"] .phone-prefix {
+      color: #71717a !important;
+    }
+    [data-theme="light"] .time-label {
+      color: #71717a !important;
+    }
 
     /* Hero bottom form right divider in responsive */
     @media (max-width: 991px) {
@@ -3663,6 +3682,115 @@
       background: rgba(0, 0, 0, 0.05);
     }
   </style>
+<style>
+    /* Floating Contact Widget Styles */
+    .floating-widget-container {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+    }
+
+    .floating-sub-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      opacity: 0;
+      transform: translateY(20px) scale(0.8);
+      pointer-events: none;
+      text-decoration: none;
+      position: relative;
+    }
+
+    .floating-sub-btn::before {
+      content: attr(data-tooltip);
+      position: absolute;
+      right: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(15, 15, 18, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .floating-sub-btn:hover::before {
+      opacity: 1;
+    }
+
+    .floating-sub-btn.wa {
+      background: #25d366;
+    }
+    .floating-sub-btn.reviews {
+      background: #3b82f6;
+    }
+    .floating-sub-btn.assistant {
+      background: #f59e0b;
+    }
+
+    .floating-sub-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .floating-main-btn {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(230, 51, 51, 0.4);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: none;
+      outline: none;
+    }
+
+    .floating-main-btn:hover {
+      transform: scale(1.05) rotate(90deg);
+    }
+
+    .floating-main-btn svg {
+      width: 24px;
+      height: 24px;
+      transition: transform 0.3s;
+    }
+
+    .floating-widget-container.active .floating-sub-btn {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .floating-widget-container.active .floating-main-btn {
+      background: #222226;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+    </style>
 </head>
 <body>
 
@@ -6200,9 +6328,9 @@
     //  PERSONAL CABINET — REAL API LOGIC
     // ═══════════════════════════════════════════════════════════════
 
-    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-      ? 'http://localhost:3030'
-      : '';  // same origin in production
+    const API_BASE = window.location.hostname && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1') && window.location.protocol !== 'file:'
+      ? ''
+      : 'http://localhost:3030';
 
     let cabSmsTimerInterval = null;
     let cabSmsTimerSeconds  = 60;
@@ -6612,7 +6740,12 @@
       document.getElementById('cab-user-phone').innerText = user.phone || '';
       document.getElementById('cab-avatar').innerText     = initials;
 
-      switchCabinetTab('main');
+      if (window.pendingCabinetTab) {
+        switchCabinetTab(window.pendingCabinetTab);
+        window.pendingCabinetTab = null;
+      } else {
+        switchCabinetTab('main');
+      }
       loadUserOrders(token);
     }
 
