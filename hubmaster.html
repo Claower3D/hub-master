@@ -5664,6 +5664,26 @@
     };
 
     // INIT
+    
+    let clientBotConfig = {
+      fallback: "Спасибо! Специалист уже рассматривает ваш запрос.",
+      rules: []
+    };
+
+    async function loadClientBotConfig() {
+      try {
+        const res = await fetch(API_BASE + '/api/assistant-config');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.fallback) {
+            clientBotConfig = data;
+          }
+        }
+      } catch (e) {
+        console.error("Failed to load assistant configuration:", e);
+      }
+    }
+    
     window.addEventListener('DOMContentLoaded', () => {
       populatePills();
       populateCatalogTabs();
@@ -5671,6 +5691,7 @@
       renderReviews();
       populateSelectDropdowns();
       switchLang('RU');
+      loadClientBotConfig();
     });
 
     // RENDER HERO PILLS
@@ -6828,8 +6849,20 @@
       cabChatHistory.push({ sender: 'user', text });
       input.value = '';
       renderChatMessages();
+      
+      let replyText = clientBotConfig.fallback || 'Спасибо! Специалист уже рассматривает ваш запрос.';
+      if (clientBotConfig.rules && clientBotConfig.rules.length > 0) {
+        const textLower = text.toLowerCase();
+        for (const rule of clientBotConfig.rules) {
+          if (rule.triggers && rule.triggers.some(trig => textLower.includes(trig.toLowerCase().trim()))) {
+            replyText = rule.reply;
+            break;
+          }
+        }
+      }
+      
       setTimeout(() => {
-        cabChatHistory.push({ sender: 'operator', text: 'Спасибо! Специалист уже рассматривает ваш запрос.' });
+        cabChatHistory.push({ sender: 'operator', text: replyText });
         renderChatMessages();
       }, 1200);
     };
