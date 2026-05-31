@@ -2,8 +2,7 @@
 builder = "NIXPACKS"
 
 [deploy]
-startCommand = "./main"
-healthcheckPath = "/api/auth/me"
+healthcheckPath = "/healthz"
 healthcheckTimeout = 30
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 5

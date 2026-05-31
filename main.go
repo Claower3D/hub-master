@@ -451,6 +451,10 @@ func main() {
 	mux := http.NewServeMux()
 
 	// API routes
+	mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	})
 	mux.HandleFunc("/api/auth/send-sms", handleSendSMS)
 	mux.HandleFunc("/api/auth/verify-sms", handleVerifySMS)
 	mux.HandleFunc("/api/auth/register-phone", handleRegisterPhone)
