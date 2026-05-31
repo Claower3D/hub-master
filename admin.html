@@ -765,6 +765,42 @@
       }
     }
 
+    // Catalog Filtering and Sorting State
+    let catalogFilterSearch = '';
+    let catalogFilterSection = 'all';
+    let catalogFilterCategory = 'all';
+    let catalogSortOrder = 'default';
+
+    window.switchCatalogSubTab = function(index) {
+      currentCatalogSubTab = index;
+      catalogFilterSearch = '';
+      catalogFilterSection = 'all';
+      catalogFilterCategory = 'all';
+      catalogSortOrder = 'default';
+      renderCatalogTab();
+    };
+
+    window.handleCatalogSearch = function(val) {
+      catalogFilterSearch = val.trim().toLowerCase();
+      renderCatalogTabOnlyTable();
+    };
+
+    window.handleFilterSection = function(val) {
+      catalogFilterSection = val;
+      catalogFilterCategory = 'all';
+      renderCatalogTab();
+    };
+
+    window.handleFilterCategory = function(val) {
+      catalogFilterCategory = val;
+      renderCatalogTabOnlyTable();
+    };
+
+    window.handleCatalogSort = function(val) {
+      catalogSortOrder = val;
+      renderCatalogTabOnlyTable();
+    };
+
     function renderCatalogTab() {
       const tabsCount = catalogData.tabs ? catalogData.tabs.length : 0;
       const categoriesCount = catalogData.categories ? catalogData.categories.length : 0;
@@ -799,6 +835,89 @@
       }
 
       const listContainer = document.querySelector('#tab-catalog .list-container');
+      if (!listContainer) return;
+
+      listContainer.innerHTML = `
+        <div style="padding: 20px 24px 0 24px;">
+          <div class="cat-tabs"></div>
+        </div>
+        <div class="filter-bar-container"></div>
+        <div class="table-container"></div>
+      `;
+
+      const newTabs = listContainer.querySelector('.cat-tabs');
+      if (newTabs && subTabsContainer) {
+        newTabs.innerHTML = subTabsContainer.innerHTML;
+      }
+
+      // Build filter bar
+      let filterBarHTML = `
+        <div class="filter-bar" style="padding: 16px 24px; display: flex; gap: 12px; align-items: center; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap;">
+          <input type="text" id="catalog-search" class="admin-form-input" placeholder="Поиск (название/ID)..." style="width: 220px; margin-bottom: 0;" oninput="handleCatalogSearch(this.value)">
+      `;
+
+      if (currentCatalogSubTab >= 1) {
+        let sectionOptions = '<option value="all">Все разделы</option>';
+        if (catalogData.tabs) {
+          catalogData.tabs.forEach(t => {
+            sectionOptions += `<option value="${t.id}">${t.label}</option>`;
+          });
+        }
+        filterBarHTML += `
+          <select id="filter-section-select" class="admin-form-select" style="width: 180px; margin-bottom: 0;" onchange="handleFilterSection(this.value)">
+            ${sectionOptions}
+          </select>
+        `;
+      }
+
+      if (currentCatalogSubTab === 2) {
+        let catOptions = '<option value="all">Все категории</option>';
+        if (catalogData.categories) {
+          const filteredCats = catalogFilterSection === 'all' 
+            ? catalogData.categories 
+            : catalogData.categories.filter(c => c.tab === catalogFilterSection);
+          filteredCats.forEach(c => {
+            catOptions += `<option value="${c.id}">${c.title}</option>`;
+          });
+        }
+        filterBarHTML += `
+          <select id="filter-category-select" class="admin-form-select" style="width: 200px; margin-bottom: 0;" onchange="handleFilterCategory(this.value)">
+            ${catOptions}
+          </select>
+        `;
+      }
+
+      filterBarHTML += `
+          <select id="filter-sort-select" class="admin-form-select" style="width: 180px; margin-bottom: 0;" onchange="handleCatalogSort(this.value)">
+            <option value="default">Сортировка: По умолчанию</option>
+            <option value="az">Сортировка: А - Я (А-Z)</option>
+            <option value="za">Сортировка: Я - А (Z-A)</option>
+          </select>
+        </div>
+      `;
+
+      listContainer.querySelector('.filter-bar-container').innerHTML = filterBarHTML;
+
+      // Restore states
+      const searchInput = listContainer.querySelector('#catalog-search');
+      if (searchInput) searchInput.value = catalogFilterSearch;
+
+      const secSelect = listContainer.querySelector('#filter-section-select');
+      if (secSelect) secSelect.value = catalogFilterSection;
+
+      const catSelect = listContainer.querySelector('#filter-category-select');
+      if (catSelect) catSelect.value = catalogFilterCategory;
+
+      const sortSelect = listContainer.querySelector('#filter-sort-select');
+      if (sortSelect) sortSelect.value = catalogSortOrder;
+
+      renderCatalogTabOnlyTable();
+    }
+
+    function renderCatalogTabOnlyTable() {
+      const tableContainer = document.querySelector('#tab-catalog .table-container');
+      if (!tableContainer) return;
+
       let tableHTML = '';
       if (currentCatalogSubTab === 0) {
         tableHTML = `
@@ -812,25 +931,38 @@
             </thead>
             <tbody>
         `;
-        if (catalogData.tabs && catalogData.tabs.length > 0) {
-          catalogData.tabs.forEach((t, index) => {
+
+        let items = [...(catalogData.tabs || [])];
+        if (catalogFilterSearch) {
+          items = items.filter(t => t.label.toLowerCase().includes(catalogFilterSearch) || t.id.toLowerCase().includes(catalogFilterSearch));
+        }
+        if (catalogSortOrder === 'az') {
+          items.sort((a, b) => a.label.localeCompare(b.label));
+        } else if (catalogSortOrder === 'za') {
+          items.sort((a, b) => b.label.localeCompare(a.label));
+        }
+
+        if (items.length > 0) {
+          items.forEach(t => {
+            const originalIndex = catalogData.tabs.findIndex(origTab => origTab.id === t.id);
             tableHTML += `
               <tr>
                 <td style="font-family: monospace; color: var(--text);">${t.id}</td>
                 <td style="font-weight: 600;">${t.label}</td>
                 <td style="text-align: right;">
                   <div class="td-actions" style="justify-content: flex-end;">
-                    <button class="btn-icon blue" onclick="openCatalogEditModal('tab', ${index})"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
-                    <button class="btn-icon red" onclick="deleteCatalogItem('tab', ${index})"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                    <button class="btn-icon blue" onclick="openCatalogEditModal('tab', ${originalIndex})"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
+                    <button class="btn-icon red" onclick="deleteCatalogItem('tab', ${originalIndex})"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                   </div>
                 </td>
               </tr>
             `;
           });
         } else {
-          tableHTML += `<tr><td colspan="3" style="text-align:center; color: var(--text-muted); padding:30px;">Разделы отсутствуют. Создайте первый раздел!</td></tr>`;
+          tableHTML += `<tr><td colspan="3" style="text-align:center; color: var(--text-muted); padding:30px;">Разделы не найдены или отсутствуют.</td></tr>`;
         }
         tableHTML += `</tbody></table>`;
+
       } else if (currentCatalogSubTab === 1) {
         tableHTML = `
           <table class="table">
@@ -845,8 +977,23 @@
             </thead>
             <tbody>
         `;
-        if (catalogData.categories && catalogData.categories.length > 0) {
-          catalogData.categories.forEach((c, index) => {
+
+        let items = [...(catalogData.categories || [])];
+        if (catalogFilterSection !== 'all') {
+          items = items.filter(c => c.tab === catalogFilterSection);
+        }
+        if (catalogFilterSearch) {
+          items = items.filter(c => c.title.toLowerCase().includes(catalogFilterSearch) || c.id.toLowerCase().includes(catalogFilterSearch));
+        }
+        if (catalogSortOrder === 'az') {
+          items.sort((a, b) => a.title.localeCompare(b.title));
+        } else if (catalogSortOrder === 'za') {
+          items.sort((a, b) => b.title.localeCompare(a.title));
+        }
+
+        if (items.length > 0) {
+          items.forEach(c => {
+            const originalIndex = catalogData.categories.findIndex(origCat => origCat.id === c.id);
             const sectionLabel = getTabLabel(c.tab);
             tableHTML += `
               <tr>
@@ -856,17 +1003,18 @@
                 <td style="font-family: monospace; font-size: 14px; color: var(--primary);"><i class="${c.icon || 'ri-tools-line'}"></i></td>
                 <td style="text-align: right;">
                   <div class="td-actions" style="justify-content: flex-end;">
-                    <button class="btn-icon blue" onclick="openCatalogEditModal('category', ${index})"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
-                    <button class="btn-icon red" onclick="deleteCatalogItem('category', ${index})"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                    <button class="btn-icon blue" onclick="openCatalogEditModal('category', ${originalIndex})"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
+                    <button class="btn-icon red" onclick="deleteCatalogItem('category', ${originalIndex})"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                   </div>
                 </td>
               </tr>
             `;
           });
         } else {
-          tableHTML += `<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding:30px;">Категории отсутствуют. Создайте первую категорию!</td></tr>`;
+          tableHTML += `<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding:30px;">Категории не найдены или отсутствуют.</td></tr>`;
         }
         tableHTML += `</tbody></table>`;
+
       } else {
         tableHTML = `
           <table class="table">
@@ -882,6 +1030,7 @@
             </thead>
             <tbody>
         `;
+
         let rows = [];
         if (catalogData.subcategories) {
           Object.keys(catalogData.subcategories).forEach(catId => {
@@ -894,8 +1043,26 @@
           });
         }
 
+        if (catalogFilterSection !== 'all') {
+          rows = rows.filter(row => {
+            const cat = catalogData.categories.find(c => c.id === row.catId);
+            return cat && cat.tab === catalogFilterSection;
+          });
+        }
+        if (catalogFilterCategory !== 'all') {
+          rows = rows.filter(row => row.catId === catalogFilterCategory);
+        }
+        if (catalogFilterSearch) {
+          rows = rows.filter(row => row.sub.title.toLowerCase().includes(catalogFilterSearch) || row.sub.id.toLowerCase().includes(catalogFilterSearch));
+        }
+        if (catalogSortOrder === 'az') {
+          rows.sort((a, b) => a.sub.title.localeCompare(b.sub.title));
+        } else if (catalogSortOrder === 'za') {
+          rows.sort((a, b) => b.sub.title.localeCompare(a.sub.title));
+        }
+
         if (rows.length > 0) {
-          rows.forEach((row, index) => {
+          rows.forEach(row => {
             const catLabel = getCategoryLabel(row.catId);
             const detail = catalogData.details && catalogData.details[row.sub.id] ? catalogData.details[row.sub.id] : { price: '-', time: '-', warr: '-', desc: '-' };
             tableHTML += `
@@ -915,18 +1082,12 @@
             `;
           });
         } else {
-          tableHTML += `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding:30px;">Услуги отсутствуют. Создайте первую услугу!</td></tr>`;
+          tableHTML += `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding:30px;">Услуги не найдены или отсутствуют.</td></tr>`;
         }
         tableHTML += `</tbody></table>`;
       }
 
-      const headerDiv = listContainer.firstElementChild;
-      listContainer.innerHTML = '';
-      listContainer.appendChild(headerDiv);
-      
-      const tableWrapper = document.createElement('div');
-      tableWrapper.innerHTML = tableHTML;
-      listContainer.appendChild(tableWrapper.firstElementChild);
+      tableContainer.innerHTML = tableHTML;
     }
 
     function getTabLabel(tabId) {
@@ -941,10 +1102,35 @@
       return cat ? cat.title : catId;
     }
 
-    function switchCatalogSubTab(index) {
-      currentCatalogSubTab = index;
-      renderCatalogTab();
-    }
+    window.filterSubCatOptions = function(query) {
+      const select = document.getElementById('sub-cat-select');
+      if (!select) return;
+      const lower = query.toLowerCase();
+      let optionsHTML = '';
+      const categories = catalogData.categories || [];
+      const filteredAndSorted = categories
+        .filter(c => c.title.toLowerCase().includes(lower) || c.id.toLowerCase().includes(lower))
+        .sort((a, b) => a.title.localeCompare(b.title));
+      filteredAndSorted.forEach(c => {
+        optionsHTML += `<option value="${c.id}">${c.title}</option>`;
+      });
+      select.innerHTML = optionsHTML;
+    };
+
+    window.filterCatTabOptions = function(query) {
+      const select = document.getElementById('cat-tab-select');
+      if (!select) return;
+      const lower = query.toLowerCase();
+      let optionsHTML = '';
+      const tabs = catalogData.tabs || [];
+      const filteredAndSorted = tabs
+        .filter(t => t.label.toLowerCase().includes(lower) || t.id.toLowerCase().includes(lower))
+        .sort((a, b) => a.label.localeCompare(b.label));
+      filteredAndSorted.forEach(t => {
+        optionsHTML += `<option value="${t.id}">${t.label}</option>`;
+      });
+      select.innerHTML = optionsHTML;
+    };
 
     function openCatalogEditModal(type, key) {
       editingItemType = type;
@@ -975,7 +1161,8 @@
         
         let tabOptions = '';
         if (catalogData.tabs) {
-          catalogData.tabs.forEach(t => {
+          const sortedTabs = [...catalogData.tabs].sort((a, b) => a.label.localeCompare(b.label));
+          sortedTabs.forEach(t => {
             tabOptions += `<option value="${t.id}" ${t.id === catData.tab ? 'selected' : ''}>${t.label}</option>`;
           });
         }
@@ -987,6 +1174,7 @@
           </div>
           <div class="admin-form-group">
             <label>Раздел (Вкладка)</label>
+            <input type="text" id="cat-tab-search" class="admin-form-input" placeholder="Поиск раздела (А-Я)..." style="margin-bottom:6px;" oninput="filterCatTabOptions(this.value)">
             <select id="cat-tab-select" class="admin-form-select">
               ${tabOptions}
             </select>
@@ -1018,7 +1206,8 @@
 
         let catOptions = '';
         if (catalogData.categories) {
-          catalogData.categories.forEach(c => {
+          const sortedCats = [...catalogData.categories].sort((a, b) => a.title.localeCompare(b.title));
+          sortedCats.forEach(c => {
             catOptions += `<option value="${c.id}" ${c.id === catId ? 'selected' : ''}>${c.title}</option>`;
           });
         }
@@ -1030,6 +1219,7 @@
           </div>
           <div class="admin-form-group">
             <label>Категория</label>
+            <input type="text" id="sub-cat-search" class="admin-form-input" placeholder="Поиск категории (А-Я)..." style="margin-bottom:6px;" oninput="filterSubCatOptions(this.value)">
             <select id="sub-cat-select" class="admin-form-select">
               ${catOptions}
             </select>

@@ -3820,7 +3820,7 @@
 
     /* Mega Catalog Modal */
     .mega-catalog-modal {
-      width: 1040px;
+      width: 1200px;
       max-width: 95%;
       height: 640px;
       max-height: 90vh;
@@ -3904,7 +3904,7 @@
 
     .mega-catalog-body {
       display: grid;
-      grid-template-columns: 260px 290px 1fr;
+      grid-template-columns: 220px 240px 260px 1fr;
       flex: 1;
       overflow: hidden;
     }
@@ -6347,12 +6347,14 @@
         </button>
       </div>
       <div class="mega-catalog-body">
-        <!-- Col 1: Categories -->
+        <!-- Col 1: Sections -->
         <div class="mega-col" id="mega-col-1"></div>
-        <!-- Col 2: Services -->
+        <!-- Col 2: Categories -->
         <div class="mega-col" id="mega-col-2"></div>
-        <!-- Col 3: Detail -->
-        <div class="mega-col" id="mega-col-3" style="display:flex; align-items:center; justify-content:center;">
+        <!-- Col 3: Subcategories -->
+        <div class="mega-col" id="mega-col-3"></div>
+        <!-- Col 4: Detail -->
+        <div class="mega-col" id="mega-col-4" style="display:flex; align-items:center; justify-content:center;">
           <!-- Detail content goes here -->
         </div>
       </div>
@@ -7735,13 +7737,21 @@
 
 
     // MEGA MODAL LOGIC
-    let megaActiveCat = null;
-    let megaActiveItem = null;
+    let megaActiveSection = null;    // Column 1 (Section)
+    let megaActiveCategory = null;   // Column 2 (Category)
+    let megaActiveSubcategory = null;// Column 3 (Subcategory / Service)
 
     window.openMegaModal = function () {
       document.getElementById('mega-modal-overlay').classList.add('active');
-      megaActiveCat = servicesData[0];
-      megaActiveItem = megaActiveCat.items[0];
+      if (servicesData && servicesData.length > 0) {
+        megaActiveSection = servicesData[0];
+        megaActiveCategory = (megaActiveSection.categories && megaActiveSection.categories.length > 0) ? megaActiveSection.categories[0] : null;
+        megaActiveSubcategory = (megaActiveCategory && megaActiveCategory.items && megaActiveCategory.items.length > 0) ? megaActiveCategory.items[0] : null;
+      } else {
+        megaActiveSection = null;
+        megaActiveCategory = null;
+        megaActiveSubcategory = null;
+      }
       renderMegaCols();
     };
 
@@ -7753,12 +7763,24 @@
       if (e.target.id === 'mega-modal-overlay') closeMegaModal();
     };
 
-    function renderMegaCol3() {
-      const col3 = document.getElementById('mega-col-3');
-      if (!col3 || !megaActiveItem) return;
-      const name = currentLang === 'RU' ? megaActiveItem.name : (currentLang === 'KZ' ? megaActiveItem.nameKz : megaActiveItem.name);
+    function renderMegaCol4() {
+      const col4 = document.getElementById('mega-col-4');
+      if (!col4) return;
+      
+      if (!megaActiveSubcategory) {
+        col4.style.display = 'flex';
+        col4.style.alignItems = 'center';
+        col4.style.justifyContent = 'center';
+        col4.innerHTML = `
+          <div style="color: var(--text-muted); font-size: 13px; text-align: center; padding: 20px;">
+            ${currentLang === 'RU' ? 'Выберите услугу для просмотра деталей' : (currentLang === 'KZ' ? 'Мәліметтерді көру үшін қызметті таңдаңыз' : 'Select service to view details')}
+          </div>
+        `;
+        return;
+      }
+      
+      const name = currentLang === 'RU' ? megaActiveSubcategory.name : (currentLang === 'KZ' ? megaActiveSubcategory.nameKz : megaActiveSubcategory.name);
 
-      // select random image based on string length to be deterministic
       const imgs = [
         "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=600&q=80",
         "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&q=80",
@@ -7766,46 +7788,46 @@
         "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=600&q=80",
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80"
       ];
-      const img = imgs[megaActiveItem.name.length % imgs.length];
+      const img = imgs[megaActiveSubcategory.name.length % imgs.length];
 
-      col3.style.display = 'block';
-      col3.innerHTML = `
+      col4.style.display = 'block';
+      col4.innerHTML = `
         <div class="mega-detail-card">
           <div class="mega-detail-img-wrap">
             <div class="mega-detail-img" style="background-image: url('${img}')"></div>
           </div>
           <div class="mega-detail-content">
             <div class="mega-detail-title">${name}</div>
-            <div class="mega-detail-desc">Профессиональная услуга от сертифицированных мастеров. Быстро, качественно и с гарантией.</div>
+            <div class="mega-detail-desc">${megaActiveSubcategory.desc || 'Профессиональная услуга от сертифицированных мастеров. Быстро, качественно и с гарантией.'}</div>
             
             <div class="mega-info-grid">
               <div class="mega-info-box">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 <div class="mega-info-text">
-                  <span class="mega-info-label">Время работы</span>
-                  <span class="mega-info-val">1-3 дня</span>
+                  <span class="mega-info-label">${currentLang === 'RU' ? 'Время работы' : (currentLang === 'KZ' ? 'Жұмыс уақыты' : 'Duration')}</span>
+                  <span class="mega-info-val">${megaActiveSubcategory.time}</span>
                 </div>
               </div>
               <div class="mega-info-box">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 <div class="mega-info-text">
-                  <span class="mega-info-label">Гарантия</span>
-                  <span class="mega-info-val">12 мес</span>
+                  <span class="mega-info-label">${currentLang === 'RU' ? 'Гарантия' : (currentLang === 'KZ' ? 'Кепілдік' : 'Warranty')}</span>
+                  <span class="mega-info-val">${megaActiveSubcategory.warr}</span>
                 </div>
               </div>
             </div>
 
             <div class="mega-price-box">
-              <span class="mega-price-label">Стоимость работы</span>
-              <span class="mega-price-val">${megaActiveItem.price}</span>
+              <span class="mega-price-label">${currentLang === 'RU' ? 'Стоимость работы' : (currentLang === 'KZ' ? 'Жұмыс құны' : 'Price')}</span>
+              <span class="mega-price-val">${megaActiveSubcategory.price}</span>
             </div>
 
             <div class="mega-actions">
-              <button class="review-submit-btn" style="padding: 14px; cursor: pointer;" onclick="navigateThematic('${megaActiveCat.id}', '${megaActiveItem.catId}', '${megaActiveItem.id}')">
-                Заказать
+              <button class="review-submit-btn" style="padding: 14px; cursor: pointer;" onclick="navigateThematic('${megaActiveSection.id}', '${megaActiveCategory.id}', '${megaActiveSubcategory.id}')">
+                ${currentLang === 'RU' ? 'Заказать' : (currentLang === 'KZ' ? 'Тапсырыс беру' : 'Order')}
               </button>
-              <a href="https://wa.me/77058462749?text=${encodeURIComponent('Здравствуйте! Хочу заказать услугу: ' + megaActiveItem.name)}" target="_blank" class="review-submit-btn" style="padding: 14px; background: #25D366; color: #fff; border: none; text-align: center; text-decoration: none; display: block;">
-                Заказать по WhatsApp
+              <a href="https://wa.me/77058462749?text=${encodeURIComponent('Здравствуйте! Хочу заказать услугу: ' + name)}" target="_blank" class="review-submit-btn" style="padding: 14px; background: #25D366; color: #fff; border: none; text-align: center; text-decoration: none; display: block;">
+                WhatsApp
               </a>
             </div>
           </div>
@@ -7816,59 +7838,104 @@
     function renderMegaCols() {
       const col1 = document.getElementById('mega-col-1');
       const col2 = document.getElementById('mega-col-2');
+      const col3 = document.getElementById('mega-col-3');
 
-      if (!megaActiveCat) return;
+      if (!col1 || !col2 || !col3) return;
 
-      // Col 1
+      // Col 1: Sections
       col1.innerHTML = '';
-      servicesData.forEach(cat => {
+      servicesData.forEach(sec => {
         const btn = document.createElement('button');
-        btn.className = 'mega-cat-btn' + (megaActiveCat.id === cat.id ? ' active' : '');
+        btn.className = 'mega-cat-btn' + (megaActiveSection && megaActiveSection.id === sec.id ? ' active' : '');
         btn.innerHTML = `
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            ${getIconPath(cat.iconName)}
+            ${getIconPath(sec.iconName)}
           </svg>
-          ${currentLang === 'RU' ? cat.title : (currentLang === 'KZ' ? cat.titleKz : cat.titleEn)}
+          ${currentLang === 'RU' ? sec.title : (currentLang === 'KZ' ? sec.titleKz : sec.titleEn)}
         `;
+        btn.onmouseenter = () => {
+          if (megaActiveSection !== sec) {
+            megaActiveSection = sec;
+            megaActiveCategory = (sec.categories && sec.categories.length > 0) ? sec.categories[0] : null;
+            megaActiveSubcategory = (megaActiveCategory && megaActiveCategory.items && megaActiveCategory.items.length > 0) ? megaActiveCategory.items[0] : null;
+            renderMegaCols();
+          }
+        };
         btn.onclick = () => {
-          megaActiveCat = cat;
-          megaActiveItem = cat.items[0];
-          renderMegaCols();
+          navigateThematic(sec.id);
         };
         col1.appendChild(btn);
       });
 
-      // Col 2
-      col2.innerHTML = `
-        <div style="font-size: 12px; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 12px; padding: 0 8px;">
-          ⚡ Все услуги: ${currentLang === 'RU' ? megaActiveCat.title : (currentLang === 'KZ' ? megaActiveCat.titleKz : megaActiveCat.titleEn)}
-        </div>
-      `;
-      megaActiveCat.items.forEach(item => {
-        const name = currentLang === 'RU' ? item.name : (currentLang === 'KZ' ? item.nameKz : item.name);
-        const btn = document.createElement('button');
-        btn.className = 'mega-item-btn' + (megaActiveItem && megaActiveItem.name === item.name ? ' active' : '');
-        btn.innerHTML = `
-          <span>${name}</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      // Col 2: Categories
+      col2.innerHTML = '';
+      if (megaActiveSection) {
+        col2.innerHTML = `
+          <div style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 12px; padding: 0 8px; letter-spacing: 0.5px;">
+            📁 ${currentLang === 'RU' ? 'Категории' : (currentLang === 'KZ' ? 'Санаттар' : 'Categories')}
+          </div>
         `;
-        btn.onmouseenter = () => {
-          megaActiveItem = item;
-          const allBtns = col2.querySelectorAll('.mega-item-btn');
-          megaActiveCat.items.forEach((it, idx) => {
-            if (allBtns[idx]) {
-              allBtns[idx].classList.toggle('active', it.id === item.id);
+        const categories = megaActiveSection.categories || [];
+        categories.forEach(cat => {
+          const btn = document.createElement('button');
+          btn.className = 'mega-cat-btn' + (megaActiveCategory && megaActiveCategory.id === cat.id ? ' active' : '');
+          btn.style.padding = '10px 14px';
+          btn.style.fontSize = '13px';
+          btn.innerHTML = `
+            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              ${currentLang === 'RU' ? cat.title : (currentLang === 'KZ' ? cat.titleKz : cat.titleEn)}
+            </span>
+          `;
+          btn.onmouseenter = () => {
+            if (megaActiveCategory !== cat) {
+              megaActiveCategory = cat;
+              megaActiveSubcategory = (cat.items && cat.items.length > 0) ? cat.items[0] : null;
+              renderMegaCols();
             }
-          });
-          renderMegaCol3();
-        };
-        btn.onclick = () => {
-          navigateThematic(megaActiveCat.id, item.catId, item.id);
-        };
-        col2.appendChild(btn);
-      });
+          };
+          btn.onclick = () => {
+            navigateThematic(megaActiveSection.id, cat.id);
+          };
+          col2.appendChild(btn);
+        });
+      }
 
-      renderMegaCol3();
+      // Col 3: Subcategories / Services
+      col3.innerHTML = '';
+      if (megaActiveCategory) {
+        col3.innerHTML = `
+          <div style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 12px; padding: 0 8px; letter-spacing: 0.5px;">
+            🛠️ ${currentLang === 'RU' ? 'Услуги' : (currentLang === 'KZ' ? 'Қызметтер' : 'Services')}
+          </div>
+        `;
+        const subcategories = megaActiveCategory.items || [];
+        subcategories.forEach(sub => {
+          const btn = document.createElement('button');
+          btn.className = 'mega-item-btn' + (megaActiveSubcategory && megaActiveSubcategory.id === sub.id ? ' active' : '');
+          btn.innerHTML = `
+            <span>${currentLang === 'RU' ? sub.name : (currentLang === 'KZ' ? sub.nameKz : sub.name)}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          `;
+          btn.onmouseenter = () => {
+            if (megaActiveSubcategory !== sub) {
+              megaActiveSubcategory = sub;
+              const allBtns = col3.querySelectorAll('.mega-item-btn');
+              subcategories.forEach((s, idx) => {
+                if (allBtns[idx]) {
+                  allBtns[idx].classList.toggle('active', s.id === sub.id);
+                }
+              });
+              renderMegaCol4();
+            }
+          };
+          btn.onclick = () => {
+            navigateThematic(megaActiveSection.id, megaActiveCategory.id, sub.id);
+          };
+          col3.appendChild(btn);
+        });
+      }
+
+      renderMegaCol4();
     }
 
     // helper for mega modal icons
@@ -8474,13 +8541,11 @@
             };
 
             servicesData = apiCatalog.tabs.map(tab => {
-              const cats = apiCatalog.categories.filter(c => c.tab === tab.id);
-              const items = [];
-              cats.forEach(cat => {
+              const cats = apiCatalog.categories.filter(c => c.tab === tab.id).map(cat => {
                 const subcats = (apiCatalog.subcategories && apiCatalog.subcategories[cat.id]) || [];
-                subcats.forEach(sub => {
+                const items = subcats.map(sub => {
                   const detail = (apiCatalog.details && apiCatalog.details[sub.id]) || {};
-                  items.push({
+                  return {
                     id: sub.id,
                     catId: cat.id,
                     catTitle: cat.title,
@@ -8492,8 +8557,22 @@
                     desc: detail.desc || 'Профессиональная услуга по установке, ремонту и обслуживанию.',
                     time: detail.time || 'Выезд: 45 мин',
                     warr: detail.warr || 'Гарантия: 12 мес'
-                  });
+                  };
                 });
+                return {
+                  id: cat.id,
+                  title: cat.title,
+                  titleKz: cat.titleKz || cat.title,
+                  titleEn: cat.titleEn || cat.title,
+                  icon: cat.icon,
+                  items: items
+                };
+              });
+
+              // Also create a flattened items list for backwards compatibility (for hero/catalog grid)
+              const flatItems = [];
+              cats.forEach(c => {
+                flatItems.push(...c.items);
               });
 
               return {
@@ -8502,7 +8581,8 @@
                 titleKz: tab.labelKz || tab.label,
                 titleEn: tab.labelEn || tab.label,
                 iconName: iconMap[tab.id] || 'hammer',
-                items: items
+                categories: cats,
+                items: flatItems
               };
             });
           }
