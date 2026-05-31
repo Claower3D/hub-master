@@ -8463,7 +8463,7 @@
 
     async function fetchDynamicCatalog() {
       try {
-        const res = await fetch(API_BASE + '/api/catalog');
+        const res = await fetch(API_BASE + '/api/catalog?t=' + Date.now());
         if (res.ok) {
           const apiCatalog = await res.json();
           if (apiCatalog && apiCatalog.tabs && apiCatalog.categories) {
@@ -8477,7 +8477,7 @@
               const cats = apiCatalog.categories.filter(c => c.tab === tab.id);
               const items = [];
               cats.forEach(cat => {
-                const subcats = apiCatalog.subcategories[cat.id] || [];
+                const subcats = (apiCatalog.subcategories && apiCatalog.subcategories[cat.id]) || [];
                 subcats.forEach(sub => {
                   const detail = (apiCatalog.details && apiCatalog.details[sub.id]) || {};
                   items.push({

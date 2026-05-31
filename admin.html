@@ -658,14 +658,14 @@
       : 'http://localhost:3030';
 
     // Check auth on load
-    window.onload = () => {
+    document.addEventListener('DOMContentLoaded', () => {
       const token = localStorage.getItem('admin_token');
       if (token) {
         verifyAdmin(token);
       } else {
         document.getElementById('login-overlay').style.display = 'flex';
       }
-    };
+    });
 
     async function verifyAdmin(token) {
       try {
@@ -677,7 +677,6 @@
           // Hide login overlay if authorized
           document.getElementById('login-overlay').style.display = 'none';
           loadCatalogData();
-        loadBotConfig();
           loadBotConfig();
         } else {
           localStorage.removeItem('admin_token');
@@ -750,7 +749,7 @@
     async function loadCatalogData() {
       const token = localStorage.getItem('admin_token');
       try {
-        const res = await fetch(API_BASE + '/api/catalog', {
+        const res = await fetch(API_BASE + '/api/catalog?t=' + Date.now(), {
           headers: { 'Authorization': 'Bearer ' + token }
         });
         if (res.ok) {
