@@ -859,7 +859,8 @@
       if (currentCatalogSubTab >= 1) {
         let sectionOptions = '<option value="all">Все разделы</option>';
         if (catalogData.tabs) {
-          catalogData.tabs.forEach(t => {
+          const sortedTabs = [...catalogData.tabs].sort((a, b) => a.label.localeCompare(b.label));
+          sortedTabs.forEach(t => {
             sectionOptions += `<option value="${t.id}">${t.label}</option>`;
           });
         }
@@ -873,9 +874,10 @@
       if (currentCatalogSubTab === 2) {
         let catOptions = '<option value="all">Все категории</option>';
         if (catalogData.categories) {
-          const filteredCats = catalogFilterSection === 'all' 
+          let filteredCats = catalogFilterSection === 'all' 
             ? catalogData.categories 
             : catalogData.categories.filter(c => c.tab === catalogFilterSection);
+          filteredCats = [...filteredCats].sort((a, b) => a.title.localeCompare(b.title));
           filteredCats.forEach(c => {
             catOptions += `<option value="${c.id}">${c.title}</option>`;
           });
@@ -1718,13 +1720,23 @@
       rules: [
         {
           id: "rule-price",
-          triggers: ["цен", "стоим", "прайс", "бага", "құн"],
-          reply: "Стоимость большинства услуг начинается от 2 500 ₸. Выезд мастера и диагностика при продолжении работ — бесплатно! Хотите оставить заявку на точный расчет?"
+          triggers: ["цен", "стоим", "прайс", "бага", "кун"],
+          reply: "Стоимость большинства услуг начинается от 2 500 Т. Выезд мастера и диагностика при продолжении работ — бесплатно! Хотите оставить заявку на точный расчет?"
         },
         {
           id: "rule-time",
-          triggers: ["как", "когда", "қашан"],
-          reply: "Наши специалисты работают 24/7. Мастер может выехать к вам в течение 45 минут после оформления заявки."
+          triggers: ["сроч", "быстр", "выезд", "тез", "апат"],
+          reply: "Среднее время прибытия мастера по городу — всего 45 минут! У нас 14 дежурных мастеров онлайн. Оформим срочный выезд?"
+        },
+        {
+          id: "rule-warranty",
+          triggers: ["гарант", "кепил"],
+          reply: "Мы предоставляем официальную гарантию до 12 месяцев на все виды работ и комплектующие. Выдаем акт выполненных работ!"
+        },
+        {
+          id: "rule-schedule",
+          triggers: ["график", "работ", "уакыт", "кесте"],
+          reply: "Мы работаем ежедневно, без выходных с 09:00 до 21:00. Готовы принять вашу заявку прямо сейчас!"
         }
       ]
     };

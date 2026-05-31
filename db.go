@@ -112,6 +112,7 @@ type DB interface {
 	GetCustomPageBySlug(slug string, pageType string) (*CustomPage, error)
 	UpdateCustomPage(page CustomPage) error
 	DeleteCustomPage(id int) error
+	AddUserBonuses(id int, amount int) (*User, error)
 }
 
 
@@ -331,6 +332,22 @@ func (p *PostgresDB) UpdateUser(id int, name, phone, city, password string) (*Us
 		)
 	}
 
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (p *PostgresDB) AddUserBonuses(id int, amount int) (*User, error) {
+	var user User
+	err := p.db.QueryRow(`
+		UPDATE users 
+		SET bonuses = bonuses + $1
+		WHERE id = $2
+		RETURNING id, name, email, phone, city, role, bonuses, created_at
+	`, amount, id).Scan(
+		&user.ID, &user.Name, &user.Email, &user.Phone, &user.City, &user.Role, &user.Bonuses, &user.CreatedAt,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -853,6 +870,21 @@ func (j *JsonDB) UpdateUser(id int, name, phone, city, password string) (*User, 
 				}
 				j.Data.Users[idx].PasswordHash = string(hash)
 			}
+			if err := j.save(); err != nil {
+				return nil, err
+			}
+			updated := j.Data.Users[idx]
+			return &updated, nil
+		}
+	}
+	return nil, errors.New("user not found")
+}
+
+func (j *JsonDB) AddUserBonuses(id int, amount int) (*User, error) {
+	j.load()
+	for idx, u := range j.Data.Users {
+		if u.ID == id {
+			j.Data.Users[idx].Bonuses += amount
 			if err := j.save(); err != nil {
 				return nil, err
 			}

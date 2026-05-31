@@ -374,13 +374,23 @@ func main() {
 				"rules": [
 					{
 						"id": "rule-price",
-						"triggers": ["цен", "стоим", "прайс", "бага", "құн"],
-						"reply": "Стоимость большинства услуг начинается от 2 500 ₸. Выезд мастера и диагностика при продолжении работ — бесплатно! Хотите оставить заявку на точный расчет?"
+						"triggers": ["цен", "стоим", "прайс", "бага", "кун"],
+						"reply": "Стоимость большинства услуг начинается от 2 500 Т. Выезд мастера и диагностика при продолжении работ — бесплатно! Хотите оставить заявку на точный расчет?"
 					},
 					{
 						"id": "rule-time",
-						"triggers": ["как", "когда", "қашан"],
-						"reply": "Наши специалисты работают 24/7. Мастер может выехать к вам в течение 45 минут после оформления заявки."
+						"triggers": ["сроч", "быстр", "выезд", "тез", "апат"],
+						"reply": "Среднее время прибытия мастера по городу — всего 45 минут! У нас 14 дежурных мастеров онлайн. Оформим срочный выезд?"
+					},
+					{
+						"id": "rule-warranty",
+						"triggers": ["гарант", "кепил"],
+						"reply": "Мы предоставляем официальную гарантию до 12 месяцев на все виды работ и комплектующие. Выдаем акт выполненных работ!"
+					},
+					{
+						"id": "rule-schedule",
+						"triggers": ["график", "работ", "уакыт", "кесте"],
+						"reply": "Мы работаем ежедневно, без выходных с 09:00 до 21:00. Готовы принять вашу заявку прямо сейчас!"
 					}
 				]
 			}`
@@ -822,6 +832,48 @@ func main() {
 		updatedUser, err := dbInstance.UpdateUser(user.ID, input.Name, input.Phone, input.City, input.Password)
 		if err != nil {
 			http.Error(w, "Failed to update profile: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"status": "success",
+			"user":   ToAPIUser(updatedUser),
+		})
+	}))
+
+	// POST /api/auth/add-bonuses
+	mux.HandleFunc("/api/auth/add-bonuses", corsMiddleware(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodOptions {
+			return
+		}
+		if r.Method != http.MethodPost {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		user, err := getAuthenticatedUser(r, dbInstance)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusUnauthorized)
+			return
+		}
+
+		var input struct {
+			Amount int `json:"amount"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+			http.Error(w, "Bad request", http.StatusBadRequest)
+			return
+		}
+
+		if input.Amount <= 0 {
+			http.Error(w, "Invalid amount", http.StatusBadRequest)
+			return
+		}
+
+		updatedUser, err := dbInstance.AddUserBonuses(user.ID, input.Amount)
+		if err != nil {
+			http.Error(w, "Failed to add bonuses: "+err.Error(), http.StatusInternalServerError)
 			return
 		}
 

@@ -67,7 +67,28 @@ func tgSendMessage(chatID int64, text string) {
 // NotifyNewOrder sends a notification about a new order to all Telegram subscribers
 func NotifyNewOrder(db DB, record *CallbackRecord) {
 	subscribers, err := db.GetTelegramSubscribers()
-	if err != nil || len(subscribers) == 0 {
+	if err != nil {
+		subscribers = []int64{}
+	}
+
+	// Check if a global chat ID is configured via environment variable
+	if globalChatStr := os.Getenv("TELEGRAM_CHAT_ID"); globalChatStr != "" {
+		if globalChatID, parseErr := strconv.ParseInt(globalChatStr, 10, 64); parseErr == nil {
+			// Append to subscribers if not already present
+			exists := false
+			for _, id := range subscribers {
+				if id == globalChatID {
+					exists = true
+					break
+				}
+			}
+			if !exists {
+				subscribers = append(subscribers, globalChatID)
+			}
+		}
+	}
+
+	if len(subscribers) == 0 {
 		return
 	}
 
