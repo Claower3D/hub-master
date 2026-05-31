@@ -169,21 +169,24 @@ func handleSendSMS(w http.ResponseWriter, r *http.Request) {
 
 	if twilioSID == "" || twilioToken == "" {
 		log.Printf("[SMS WARNING] Twilio credentials missing. Code for %s is %s", req.Phone, code)
-		// Return success to allow entering code from logs
-		json200(w, map[string]interface{}{"ok": true})
+		json200(w, map[string]interface{}{
+			"ok":        true,
+			"demo_code": code,
+		})
 		return
 	}
 
 	err := sendTwilioSMS(twilioSID, twilioToken, twilioFrom, req.Phone,
 		fmt.Sprintf("Ваш код HubMaster: %s", code))
 	if err != nil {
-		log.Printf("[SMS WARNING] Twilio error: %v. Code for %s is %s. (Developer can get this from Railway logs to test)", err, req.Phone, code)
-		// Return success to allow entering code from logs
-		json200(w, map[string]interface{}{"ok": true})
-		return
+		log.Printf("[SMS WARNING] Twilio error: %v. Code for %s is %s", err, req.Phone, code)
 	}
 
-	json200(w, map[string]interface{}{"ok": true})
+	// Always return demo_code for testing phase
+	json200(w, map[string]interface{}{
+		"ok":        true,
+		"demo_code": code,
+	})
 }
 
 func getTwilioCredentials() (string, string) {
