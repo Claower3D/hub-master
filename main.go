@@ -168,24 +168,16 @@ func handleSendSMS(w http.ResponseWriter, r *http.Request) {
 	twilioFrom := os.Getenv("TWILIO_FROM")
 
 	if twilioSID == "" || twilioToken == "" {
-		log.Printf("[SMS WARNING] Twilio credentials missing. Code for %s is %s", req.Phone, code)
-		// Return success with demo_code to allow login
-		json200(w, map[string]interface{}{
-			"ok":        true,
-			"demo_code": code,
-		})
+		log.Printf("[SMS] Twilio credentials missing. Code for %s is %s", req.Phone, code)
+		jsonErr(w, 500, "Сервер авторизации не настроен")
 		return
 	}
 
 	err := sendTwilioSMS(twilioSID, twilioToken, twilioFrom, req.Phone,
 		fmt.Sprintf("Ваш код HubMaster: %s", code))
 	if err != nil {
-		log.Printf("[SMS WARNING] Twilio error: %v. Code for %s is %s", err, req.Phone, code)
-		// Return success with demo_code since Twilio failed
-		json200(w, map[string]interface{}{
-			"ok":        true,
-			"demo_code": code,
-		})
+		log.Printf("[SMS] Twilio error: %v. Code for %s is %s", err, req.Phone, code)
+		jsonErr(w, 500, "Не удалось отправить SMS-код")
 		return
 	}
 
