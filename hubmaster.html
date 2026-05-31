@@ -3849,6 +3849,208 @@
         display: none;
       }
     }
+    
+    /* THEMATIC PAGE STYLES */
+    .thematic-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      font-family: var(--font-sans);
+    }
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .breadcrumbs a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .breadcrumbs a:hover {
+      color: var(--primary);
+    }
+    .breadcrumbs span.separator {
+      color: var(--text-muted);
+    }
+    .thematic-hero {
+      background: linear-gradient(135deg, rgba(230, 51, 51, 0.08) 0%, rgba(9, 9, 11, 0.8) 100%), var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+      margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    .thematic-hero::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(230, 51, 51, 0.15) 0%, transparent 70%);
+      filter: blur(50px);
+      pointer-events: none;
+    }
+    .thematic-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(230, 51, 51, 0.15);
+      color: var(--primary);
+      padding: 6px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .thematic-title {
+      font-family: var(--font-heading);
+      font-size: 38px;
+      font-weight: 800;
+      color: var(--text-white);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .thematic-subtitle {
+      font-size: 16px;
+      color: var(--text);
+      max-width: 800px;
+      line-height: 1.6;
+    }
+    .thematic-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 30px;
+      align-items: start;
+    }
+    @media (max-width: 992px) {
+      .thematic-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .thematic-left-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 30px;
+    }
+    .section-headline {
+      font-family: var(--font-heading);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .services-list-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .subcat-header-title {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 24px;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed var(--border);
+    }
+    .thematic-item-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s;
+    }
+    .thematic-item-card:hover {
+      border-color: var(--border-hover);
+      background: rgba(255, 255, 255, 0.04);
+      transform: translateY(-2px);
+    }
+    .item-card-left {
+      max-width: 70%;
+    }
+    .item-card-title {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-white);
+      margin-bottom: 6px;
+    }
+    .item-card-desc {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .item-card-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+    .item-card-price {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-white);
+    }
+    .item-card-action {
+      background: var(--primary);
+      color: var(--text-white);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .item-card-action:hover {
+      background: var(--primary-hover);
+    }
+    .thematic-form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 30px;
+      position: sticky;
+      top: 100px;
+    }
+    .form-badge-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+    .form-badge-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text);
+    }
+    .form-badge-item svg {
+      width: 16px;
+      height: 16px;
+      color: var(--primary);
+    }
     </style>
 </head>
 <body>
@@ -3936,6 +4138,8 @@
     </div>
   </nav>
 
+  <!-- LANDING CONTENT WRAPPER -->
+  <div id="landing-page-content">
   <!-- HERO SECTION -->
   <section class="hero-section">
     <div class="max-width-wrap">
@@ -5029,6 +5233,10 @@
       </div>
     </div>
   </section>
+  </div>
+
+  <!-- THEMATIC PAGE CONTAINER -->
+  <div id="thematic-page-content" style="display: none;"></div>
 
   <script>
     // Coverage zone data per city
@@ -5871,16 +6079,13 @@
       }
     }
     
-    window.addEventListener('DOMContentLoaded', () => {
-      populatePills();
-      populateCatalogTabs();
-      renderCatalogItems();
-      renderReviews();
-      populateSelectDropdowns();
+    window.addEventListener('DOMContentLoaded', async () => {
       switchLang('RU');
       loadClientBotConfig();
+      await fetchDynamicCatalog();
       initRouter();
       initScrollReveal();
+      renderReviews();
     });
 
     // RENDER HERO PILLS
@@ -5952,7 +6157,7 @@
             </div>
             <div class="catalog-card-bottom">
               <div class="catalog-card-price">${item.price.replace('от ', 'от ').replace(' ₸', ' ₸')}<span> за работу</span></div>
-              <button class="catalog-card-action" onclick="openModal('${currentLang === 'RU' || currentLang === 'EN' ? item.name : item.nameKz}')">
+              <button class="catalog-card-action" onclick="navigateThematic('${selectedCategory}', '${item.catId}', '${item.id}')">
                 ${currentLang === 'RU' ? 'Заказать' : currentLang === 'KZ' ? 'Тапсырыс' : 'Order'}
               </button>
             </div>
@@ -6549,7 +6754,7 @@
               </div>
 
               <div class="mega-actions">
-                <button class="review-submit-btn" style="padding: 14px; cursor: pointer;" onclick="closeMegaModal(); switchCategory('${megaActiveCat.id}'); setTimeout(() => { document.getElementById('catalog').scrollIntoView({behavior:'smooth', block:'start'}); }, 100);">
+                <button class="review-submit-btn" style="padding: 14px; cursor: pointer;" onclick="navigateThematic('${megaActiveCat.id}', '${megaActiveItem.catId}', '${megaActiveItem.id}')">
                   Заказать
                 </button>
                 <a href="https://wa.me/77058462749?text=${encodeURIComponent('Здравствуйте! Хочу заказать услугу: ' + megaActiveItem.name)}" target="_blank" class="review-submit-btn" style="padding: 14px; background: #25D366; color: #fff; border: none; text-align: center; text-decoration: none; display: block;">
@@ -7148,77 +7353,320 @@
     // ТЕКУЩЕЕ СОСТОЯНИЕ ДЛЯ URL
     let activeServiceName = null;
 
-    function updateURL() {
-      let path = '/';
-      if (selectedCategory) {
-        path += selectedCategory;
-        if (activeServiceName) {
-          path += '/' + slugify(activeServiceName);
+    async function fetchDynamicCatalog() {
+      try {
+        const res = await fetch(API_BASE + '/api/catalog');
+        if (res.ok) {
+          const apiCatalog = await res.json();
+          if (apiCatalog && apiCatalog.tabs && apiCatalog.categories) {
+            const iconMap = {
+              'okna': 'hammer',
+              'servis': 'wrench',
+              'mebel': 'couch'
+            };
+            
+            servicesData = apiCatalog.tabs.map(tab => {
+              const cats = apiCatalog.categories.filter(c => c.tab === tab.id);
+              const items = [];
+              cats.forEach(cat => {
+                const subcats = apiCatalog.subcategories[cat.id] || [];
+                subcats.forEach(sub => {
+                  const detail = (apiCatalog.details && apiCatalog.details[sub.id]) || {};
+                  items.push({
+                    id: sub.id,
+                    catId: cat.id,
+                    catTitle: cat.title,
+                    catTitleKz: cat.titleKz || cat.title,
+                    catTitleEn: cat.titleEn || cat.title,
+                    name: sub.title,
+                    nameKz: sub.titleKz || sub.title,
+                    price: detail.price || 'от 1 500 ₸',
+                    desc: detail.desc || 'Профессиональная услуга по установке, ремонту и обслуживанию.',
+                    time: detail.time || 'Выезд: 45 мин',
+                    warr: detail.warr || 'Гарантия: 12 мес'
+                  });
+                });
+              });
+              
+              return {
+                id: tab.id,
+                title: tab.label,
+                titleKz: tab.labelKz || tab.label,
+                titleEn: tab.labelEn || tab.label,
+                iconName: iconMap[tab.id] || 'hammer',
+                items: items
+              };
+            });
+          }
         }
+      } catch (e) {
+        console.error("Failed to load dynamic catalog from API, using fallback data:", e);
       }
-      if (window.location.pathname !== path) {
-        history.pushState({ category: selectedCategory, service: activeServiceName }, '', path);
+      
+      // Update pills, tabs, etc.
+      populatePills();
+      populateCatalogTabs();
+      renderCatalogItems();
+      populateSelectDropdowns();
+      
+      if (servicesData.length > 0 && !servicesData.some(s => s.id === selectedCategory)) {
+        selectedCategory = servicesData[0].id;
       }
     }
 
-    // ИНИЦИАЛИЗАЦИЯ И ОБРАБОТКА URL ПРИ ЗАГРУЗКЕ
+    function renderThematicPage(catId, subcatId = null, itemId = null) {
+      const landing = document.getElementById('landing-page-content');
+      const thematic = document.getElementById('thematic-page-content');
+      
+      if (!catId) {
+        landing.style.display = 'block';
+        thematic.style.display = 'none';
+        thematic.innerHTML = '';
+        return;
+      }
+      
+      const cat = servicesData.find(c => c.id === catId);
+      if (!cat) {
+        landing.style.display = 'block';
+        thematic.style.display = 'none';
+        return;
+      }
+      
+      landing.style.display = 'none';
+      thematic.style.display = 'block';
+      
+      let breadcrumbsHTML = `
+        <div class="breadcrumbs">
+          <a href="#" onclick="navigateThematic(''); return false;">Главная</a>
+          <span class="separator">/</span>
+          <a href="#" onclick="navigateThematic('${cat.id}'); return false;">${currentLang === 'RU' ? cat.title : (currentLang === 'KZ' ? cat.titleKz : cat.titleEn)}</a>
+      `;
+      
+      let title = currentLang === 'RU' ? cat.title : (currentLang === 'KZ' ? cat.titleKz : cat.titleEn);
+      let subtitle = currentLang === 'RU' ? `Профессиональный сервис услуг и товаров в категории "${cat.title}" в Алматы и Астане.` : `Сапалы қызмет көрсету "${cat.titleKz}" санаты бойынша.`;
+      let itemsList = [];
+      let activeSubcatTitle = "";
+      
+      if (itemId) {
+        const item = cat.items.find(i => i.id === itemId);
+        if (item) {
+          breadcrumbsHTML += `
+            <span class="separator">/</span>
+            <a href="#" onclick="navigateThematic('${cat.id}', '${item.catId}'); return false;">${currentLang === 'RU' ? item.catTitle : (currentLang === 'KZ' ? item.catTitleKz : item.catTitleEn)}</a>
+            <span class="separator">/</span>
+            <span>${currentLang === 'RU' ? item.name : item.nameKz}</span>
+          `;
+          title = currentLang === 'RU' ? item.name : item.nameKz;
+          subtitle = item.desc || '';
+          itemsList = [item];
+        }
+      } else if (subcatId) {
+        const subItems = cat.items.filter(i => i.catId === subcatId);
+        if (subItems.length > 0) {
+          activeSubcatTitle = currentLang === 'RU' ? subItems[0].catTitle : (currentLang === 'KZ' ? subItems[0].catTitleKz : subItems[0].catTitleEn);
+          breadcrumbsHTML += `
+            <span class="separator">/</span>
+            <span>${activeSubcatTitle}</span>
+          `;
+          title = activeSubcatTitle;
+          subtitle = currentLang === 'RU' ? `Полный спектр услуг по направлению "${title}". Выгодные цены и официальная гарантия.` : `"${title}" бағыты бойынша барлық қызметтер тізімі.`;
+          itemsList = subItems;
+        }
+      } else {
+        itemsList = cat.items;
+      }
+      
+      breadcrumbsHTML += `</div>`;
+      
+      let servicesHTML = '';
+      if (!itemId && !subcatId) {
+        const grouped = {};
+        itemsList.forEach(item => {
+          if (!grouped[item.catId]) {
+            grouped[item.catId] = {
+              title: currentLang === 'RU' ? item.catTitle : (currentLang === 'KZ' ? item.catTitleKz : item.catTitleEn),
+              items: []
+            };
+          }
+          grouped[item.catId].items.push(item);
+        });
+        
+        for (const subId in grouped) {
+          servicesHTML += `
+            <div class="subcat-header-title">${grouped[subId].title}</div>
+            <div class="services-list-grid">
+          `;
+          grouped[subId].items.forEach(item => {
+            servicesHTML += renderItemCardHTML(item, cat.id);
+          });
+          servicesHTML += `</div>`;
+        }
+      } else {
+        servicesHTML += `<div class="services-list-grid">`;
+        itemsList.forEach(item => {
+          servicesHTML += renderItemCardHTML(item, cat.id);
+        });
+        servicesHTML += `</div>`;
+      }
+      
+      thematic.innerHTML = `
+        <div class="thematic-container">
+          ${breadcrumbsHTML}
+          
+          <div class="thematic-hero animate-fade-in">
+            <div class="thematic-badge">
+              <span class="badge-dot">●</span>
+              <span>Premium Service</span>
+            </div>
+            <h1 class="thematic-title">${title}</h1>
+            <p class="thematic-subtitle">${subtitle}</p>
+          </div>
+          
+          <div class="thematic-grid">
+            <div class="thematic-left-section">
+              <div class="section-headline">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <span>${itemId ? 'Детали услуги' : 'Наши услуги и цены'}</span>
+              </div>
+              ${servicesHTML}
+            </div>
+            
+            <div class="thematic-form-card">
+              <div class="section-headline" style="font-size: 18px; margin-bottom: 12px;">
+                <span>Быстрый заказ</span>
+              </div>
+              <p style="font-size: 14px; color: var(--text); margin-bottom: 20px; line-height: 1.4;">Оставьте заявку, наш специалист свяжется с вами в течение 10 минут для консультации.</p>
+              
+              <form onsubmit="handleThematicSubmit(event, '${title}')">
+                <div class="input-group-v2" style="margin-bottom: 15px;">
+                  <label style="font-size: 12px; color: var(--text); display: block; margin-bottom: 6px; font-weight: 600;">Ваше имя</label>
+                  <input type="text" required placeholder="Введите имя" id="them-name" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; color: white;">
+                </div>
+                <div class="input-group-v2" style="margin-bottom: 15px;">
+                  <label style="font-size: 12px; color: var(--text); display: block; margin-bottom: 6px; font-weight: 600;">Номер телефона</label>
+                  <input type="tel" required placeholder="+7 (777) 777-77-77" id="them-phone" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; color: white;">
+                </div>
+                <button type="submit" class="cta-button-v2" style="width: 100%; padding: 14px; background: var(--primary); border: none; border-radius: 8px; color: white; font-weight: 700; cursor: pointer; transition: background 0.2s;">
+                  Отправить заявку
+                </button>
+              </form>
+              
+              <div class="form-badge-grid">
+                <div class="form-badge-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <span>Выезд за 45 мин</span>
+                </div>
+                <div class="form-badge-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  <span>Гарантия до 3 лет</span>
+                </div>
+                <div class="form-badge-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                  <span>Любая оплата</span>
+                </div>
+                <div class="form-badge-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  <span>Честная цена</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderItemCardHTML(item, catId) {
+      const name = currentLang === 'RU' ? item.name : item.nameKz;
+      return `
+        <div class="thematic-item-card">
+          <div class="item-card-left">
+            <div class="item-card-title">${name}</div>
+            <div class="item-card-desc">${item.desc}</div>
+            <div style="display: flex; gap: 15px; margin-top: 10px; font-size: 12px; color: var(--text-muted);">
+              <span>⏱ ${item.time}</span>
+              <span>🛡 ${item.warr}</span>
+            </div>
+          </div>
+          <div class="item-card-right">
+            <div class="item-card-price">${item.price}</div>
+            <button class="item-card-action" onclick="openModal('${name}')">Заказать</button>
+            <button class="item-card-action" style="background: transparent; border: 1px solid var(--border); margin-top: 4px; padding: 6px 12px; font-size: 12px;" onclick="navigateThematic('${catId}', '${item.catId}', '${item.id}')">Подробнее</button>
+          </div>
+        </div>
+      `;
+    }
+
+    async function handleThematicSubmit(e, serviceName) {
+      e.preventDefault();
+      const name = document.getElementById('them-name').value.trim();
+      const phone = document.getElementById('them-phone').value.trim();
+      const city = currentCity;
+      
+      if (!name || !phone) return;
+      
+      try {
+        const res = await fetch(API_BASE + '/api/callback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, phone, service: serviceName, city })
+        });
+        if (res.ok) {
+          alert('Заявка успешно принята! Мы свяжемся с вами в течение 10 минут.');
+          document.getElementById('them-name').value = '';
+          document.getElementById('them-phone').value = '';
+        } else {
+          alert('Произошла ошибка при отправке заявки. Попробуйте еще раз.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Произошла ошибка сети. Попробуйте еще раз.');
+      }
+    }
+
+    window.navigateThematic = function(catId, subcatId = '', itemId = '') {
+      let path = '/';
+      if (catId) {
+        path += catId;
+        if (subcatId) {
+          path += '/' + subcatId;
+          if (itemId) {
+            path += '/' + itemId;
+          }
+        }
+      }
+      if (window.location.pathname !== path) {
+        history.pushState({ catId, subcatId, itemId }, '', path);
+      }
+      renderThematicPage(catId, subcatId, itemId);
+      closeMegaModal();
+    };
+
     function initRouter() {
       const path = window.location.pathname;
-      if (path === '/' || path === '/index.html' || path === '/admin.html') return;
+      if (path === '/' || path === '/index.html' || path === '/admin.html') {
+        renderThematicPage(null);
+        return;
+      }
       
       const parts = path.split('/').filter(Boolean);
       if (parts.length > 0) {
         const catId = parts[0];
+        const subcatId = parts.length > 1 ? parts[1] : null;
+        const itemId = parts.length > 2 ? parts[2] : null;
+        
         const categoryExists = servicesData.some(s => s.id === catId);
         if (categoryExists) {
-          switchCategory(catId, false);
-          
-          setTimeout(() => {
-            const el = document.getElementById('catalog');
-            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 500);
-
-          if (parts.length > 1) {
-            const itemSlug = parts[1];
-            const cat = servicesData.find(s => s.id === catId);
-            const foundItem = cat.items.find(item => slugify(item.name) === itemSlug || slugify(item.nameKz) === itemSlug);
-            if (foundItem) {
-              const name = currentLang === 'RU' || currentLang === 'EN' ? foundItem.name : foundItem.nameKz;
-              activeServiceName = name;
-              setTimeout(() => {
-                openModal(name, true);
-              }, 600);
-            }
-          }
+          renderThematicPage(catId, subcatId, itemId);
+        } else {
+          renderThematicPage(null);
         }
       }
     }
 
     window.addEventListener('popstate', (event) => {
-      const path = window.location.pathname;
-      if (path === '/' || path === '/index.html') {
-        closeModal(true);
-        switchCategory(servicesData[0].id, false);
-        return;
-      }
-      const parts = path.split('/').filter(Boolean);
-      if (parts.length > 0) {
-        const catId = parts[0];
-        if (servicesData.some(s => s.id === catId)) {
-          switchCategory(catId, false);
-          if (parts.length > 1) {
-            const itemSlug = parts[1];
-            const cat = servicesData.find(s => s.id === catId);
-            const foundItem = cat.items.find(item => slugify(item.name) === itemSlug || slugify(item.nameKz) === itemSlug);
-            if (foundItem) {
-              const name = currentLang === 'RU' || currentLang === 'EN' ? foundItem.name : foundItem.nameKz;
-              openModal(name, true);
-            }
-          } else {
-            closeModal(true);
-          }
-        }
-      }
+      initRouter();
     });
 
     window.scrollToReviews = function() {
