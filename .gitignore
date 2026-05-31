@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Compiled binaries
+*.exe
+*.exe~
+server_test
+server
+

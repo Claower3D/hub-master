@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { servicesData, initialReviews } from './data/servicesData';
 import './App.css';
+import useAppLogic from './hooks/useAppLogic';
 
 // SVG Icons helper component to keep markup clean
 const Icon = ({ name, className = "" }) => {
@@ -111,164 +112,70 @@ const Icon = ({ name, className = "" }) => {
 };
 
 function App() {
-  const [lang, setLang] = useState('RU');
-  const [city, setCity] = useState('Алматы');
-  const [theme, setTheme] = useState('dark');
-  const [selectedServiceId, setSelectedServiceId] = useState('furniture');
-  const [reviews, setReviews] = useState(initialReviews);
-  
-  // Modals and form states
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalService, setModalService] = useState('');
-  const [modalName, setModalName] = useState('');
-  const [modalPhone, setModalPhone] = useState('');
-  const [modalSuccess, setModalSuccess] = useState(false);
-
-  const [leadName, setLeadName] = useState('');
-  const [leadPhone, setLeadPhone] = useState('');
-  const [leadService, setLeadService] = useState('furniture');
-  const [leadSuccess, setLeadSuccess] = useState(false);
-
-  // Review form states
-  const [newReviewName, setNewReviewName] = useState('');
-  const [newReviewService, setNewReviewService] = useState('');
-  const [newReviewRating, setNewReviewRating] = useState(5);
-  const [newReviewText, setNewReviewText] = useState('');
-
-  const catalogRef = useRef(null);
-
-  // Cabinet States
-  const [isCabinetOpen, setIsCabinetOpen] = useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [activeCabinetTab, setActiveCabinetTab] = useState('dashboard');
-  
-  // Login input states
-  const [loginPhone, setLoginPhone] = useState('');
-  const [loginCode, setLoginCode] = useState('');
-  const [loginStep, setLoginStep] = useState('phone'); // 'phone' | 'code'
-  const [smsTimer, setSmsTimer] = useState(0);
-  const [loginError, setLoginError] = useState('');
-  
-  // User Cabinet data
-  const [userProfile, setUserProfile] = useState({
-    name: 'Алексей Иванов',
-    phone: '',
-    email: 'alex.ivanov@mail.ru',
-    city: 'Алматы',
-    addresses: ['пр. Аль-Фараби, д. 77/7, кв. 42', 'ул. Абая, д. 10, оф. 5'],
-    bonuses: 2500,
-    spent: 45000,
-    loyaltyTier: 'Gold'
-  });
-  
-  const [cabinetOrders, setCabinetOrders] = useState([
-    {
-      id: '4829',
-      category: 'furniture',
-      serviceName: 'Сборка шкафа-купе и комода',
-      serviceNameKz: 'Купе-шкафты және комодты жинау',
-      serviceNameEn: 'Wardrobe and dresser assembly',
-      date: '30.05.2026',
-      price: '12 000 ₸',
-      status: 'assigned', // 'searching' | 'assigned' | 'completed' | 'cancelled'
-      master: {
-        name: 'Сергей Петров',
-        rating: '4.9',
-        completedCount: 1240,
-        experience: 5,
-        phone: '77058462749',
-        avatarBg: '#3498db'
-      }
-    },
-    {
-      id: '4711',
-      category: 'plumbing',
-      serviceName: 'Установка смесителя на кухне',
-      serviceNameKz: 'Ас үйде смесительді орнату',
-      serviceNameEn: 'Kitchen faucet installation',
-      date: '29.05.2026',
-      price: '4 000 ₸',
-      status: 'completed',
-      master: {
-        name: 'Данияр Сериков',
-        rating: '4.8',
-        completedCount: 890,
-        experience: 6,
-        phone: '77058462749',
-        avatarBg: '#1abc9c'
-      }
-    },
-    {
-      id: '4602',
-      category: 'cleaning',
-      serviceName: 'Генеральная уборка квартиры',
-      serviceNameKz: 'Пәтерді бас тазалау',
-      serviceNameEn: 'General apartment cleaning',
-      date: '12.05.2026',
-      price: '15 000 ₸',
-      status: 'completed',
-      master: {
-        name: 'Игорь Власов',
-        rating: '5.0',
-        completedCount: 410,
-        experience: 7,
-        phone: '77058462749',
-        avatarBg: '#9b59b6'
-      }
-    }
-  ]);
-
-  const [chatMessages, setChatMessages] = useState([
-    {
-      sender: 'operator',
-      time: '11:30',
-      text: 'Здравствуйте! Вас приветствует служба поддержки HUB MASTER. Чем я могу помочь вам сегодня?'
-    }
-  ]);
-  const [chatInput, setChatInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  
-  // Fast booking states inside cabinet
-  const [cabNewOrderCat, setCabNewOrderCat] = useState('furniture');
-  const [cabNewOrderText, setCabNewOrderText] = useState('');
-  const [cabNewOrderSuccess, setCabNewOrderSuccess] = useState(false);
-  const [profileSaveSuccess, setProfileSaveSuccess] = useState(false);
-  const [newAddressInput, setNewAddressInput] = useState('');
-
-  // Load session from localStorage
-  useEffect(() => {
-    const savedUser = localStorage.getItem('hubmaster_user');
-    if (savedUser) {
-      try {
-        const parsed = JSON.parse(savedUser);
-        setIsAuthenticated(true);
-        if (parsed.profile) setUserProfile(parsed.profile);
-        if (parsed.orders) setCabinetOrders(parsed.orders);
-        if (parsed.chat) setChatMessages(parsed.chat);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }, []);
-
-  // SMS Timer countdown
-  useEffect(() => {
-    let interval = null;
-    if (smsTimer > 0) {
-      interval = setInterval(() => {
-        setSmsTimer((prev) => prev - 1);
-      }, 1000);
-    } else {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [smsTimer]);
-
-  // Apply theme to document element
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
+  const {
+    lang, setLang,
+    city, setCity,
+    theme, setTheme,
+    selectedServiceId, setSelectedServiceId,
+    reviews, setReviews,
+    
+    isModalOpen, setIsModalOpen,
+    modalService, setModalService,
+    modalName, setModalName,
+    modalPhone, setModalPhone,
+    modalSuccess, setModalSuccess,
+    
+    leadName, setLeadName,
+    leadPhone, setLeadPhone,
+    leadService, setLeadService,
+    leadSuccess, setLeadSuccess,
+    
+    newReviewName, setNewReviewName,
+    newReviewService, setNewReviewService,
+    newReviewRating, setNewReviewRating,
+    newReviewText, setNewReviewText,
+    
+    catalogRef,
+    
+    isCabinetOpen, setIsCabinetOpen,
+    isLoginModalOpen, setIsLoginModalOpen,
+    isAuthenticated, setIsAuthenticated,
+    activeCabinetTab, setActiveCabinetTab,
+    
+    loginPhone, setLoginPhone,
+    loginCode, setLoginCode,
+    loginStep, setLoginStep,
+    smsTimer, setSmsTimer,
+    loginError, setLoginError,
+    
+    userProfile, setUserProfile,
+    cabinetOrders, setCabinetOrders,
+    chatMessages, setChatMessages,
+    chatInput, setChatInput,
+    isTyping, setIsTyping,
+    
+    cabNewOrderCat, setCabNewOrderCat,
+    cabNewOrderText, setCabNewOrderText,
+    cabNewOrderSuccess, setCabNewOrderSuccess,
+    profileSaveSuccess, setProfileSaveSuccess,
+    newAddressInput, setNewAddressInput,
+    
+    handleHeroPillClick,
+    handleOpenModalWithService,
+    handleModalSubmit,
+    handleLeadSubmit,
+    handleReviewSubmit,
+    handleCabinetClick,
+    handleSendCode,
+    handleVerifyCode,
+    handleLogout,
+    handleProfileSave,
+    handleAddAddress,
+    handleRemoveAddress,
+    handleCancelOrder,
+    handleCabinetNewOrder,
+    handleSendChatMessage
+  } = useAppLogic();
 
 
   // Dictionary for localizations
@@ -575,337 +482,7 @@ function App() {
     }
   };
 
-  const handleHeroPillClick = (id) => {
-    setSelectedServiceId(id);
-    if (catalogRef.current) {
-      catalogRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
-  const handleOpenModalWithService = (serviceName) => {
-    setModalService(serviceName);
-    setModalSuccess(false);
-    setIsModalOpen(true);
-  };
-
-  const handleModalSubmit = (e) => {
-    e.preventDefault();
-    if (!modalName || !modalPhone) return;
-    setModalSuccess(true);
-    setTimeout(() => {
-      setIsModalOpen(false);
-      setModalName('');
-      setModalPhone('');
-      setModalService('');
-      setModalSuccess(false);
-    }, 2500);
-  };
-
-  const handleLeadSubmit = (e) => {
-    e.preventDefault();
-    if (!leadName || !leadPhone) return;
-    setLeadSuccess(true);
-    setTimeout(() => {
-      setLeadName('');
-      setLeadPhone('');
-      setLeadSuccess(false);
-    }, 4000);
-  };
-
-  const handleReviewSubmit = (e) => {
-    e.preventDefault();
-    if (!newReviewName || !newReviewText || !newReviewService) return;
-
-    const newReview = {
-      name: newReviewName,
-      nameKz: newReviewName,
-      nameEn: newReviewName,
-      avatarBg: '#' + Math.floor(Math.random()*16777215).toString(16),
-      service: newReviewService,
-      serviceKz: newReviewService,
-      serviceEn: newReviewService,
-      rating: newReviewRating,
-      text: newReviewText,
-      textKz: newReviewText,
-      textEn: newReviewText
-    };
-
-    setReviews([newReview, ...reviews]);
-    setNewReviewName('');
-    setNewReviewService('');
-    setNewReviewText('');
-    setNewReviewRating(5);
-  };
-
-  // Cabinet Handlers
-  const handleCabinetClick = () => {
-    if (isAuthenticated) {
-      setIsCabinetOpen(true);
-    } else {
-      setIsLoginModalOpen(true);
-      setLoginStep('phone');
-      setLoginPhone('');
-      setLoginCode('');
-      setLoginError('');
-    }
-  };
-
-  const handleSendCode = (e) => {
-    e.preventDefault();
-    if (!loginPhone || loginPhone.length < 10) {
-      setLoginError(lang === 'RU' ? 'Введите корректный номер телефона' : lang === 'KZ' ? 'Дұрыс телефон нөмірін енгізіңіз' : 'Enter a valid phone number');
-      return;
-    }
-    setLoginStep('code');
-    setSmsTimer(60);
-    setLoginError('');
-  };
-
-  const handleVerifyCode = (e) => {
-    e.preventDefault();
-    if (loginCode === '1234') {
-      const updatedProfile = { ...userProfile, phone: loginPhone };
-      setUserProfile(updatedProfile);
-      setIsAuthenticated(true);
-      setIsLoginModalOpen(false);
-      setIsCabinetOpen(true);
-      setLoginPhone('');
-      setLoginCode('');
-      setLoginStep('phone');
-      setLoginError('');
-      
-      // Save session
-      localStorage.setItem('hubmaster_user', JSON.stringify({
-        profile: updatedProfile,
-        orders: cabinetOrders,
-        chat: chatMessages
-      }));
-    } else {
-      setLoginError(t[lang].invalidCode);
-    }
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    setIsCabinetOpen(false);
-    localStorage.removeItem('hubmaster_user');
-  };
-
-  const handleProfileSave = (e) => {
-    e.preventDefault();
-    localStorage.setItem('hubmaster_user', JSON.stringify({
-      profile: userProfile,
-      orders: cabinetOrders,
-      chat: chatMessages
-    }));
-    setProfileSaveSuccess(true);
-    setTimeout(() => {
-      setProfileSaveSuccess(false);
-    }, 3000);
-  };
-
-  const handleAddAddress = (e) => {
-    e.preventDefault();
-    if (!newAddressInput.trim()) return;
-    const updatedProfile = {
-      ...userProfile,
-      addresses: [...userProfile.addresses, newAddressInput.trim()]
-    };
-    setUserProfile(updatedProfile);
-    setNewAddressInput('');
-    localStorage.setItem('hubmaster_user', JSON.stringify({
-      profile: updatedProfile,
-      orders: cabinetOrders,
-      chat: chatMessages
-    }));
-  };
-
-  const handleRemoveAddress = (index) => {
-    const updatedAddresses = userProfile.addresses.filter((_, idx) => idx !== index);
-    const updatedProfile = {
-      ...userProfile,
-      addresses: updatedAddresses
-    };
-    setUserProfile(updatedProfile);
-    localStorage.setItem('hubmaster_user', JSON.stringify({
-      profile: updatedProfile,
-      orders: cabinetOrders,
-      chat: chatMessages
-    }));
-  };
-
-  const handleCancelOrder = (orderId) => {
-    if (window.confirm(t[lang].orderConfirmCancel)) {
-      const updated = cabinetOrders.map(order => {
-        if (order.id === orderId) {
-          return { ...order, status: 'cancelled' };
-        }
-        return order;
-      });
-      setCabinetOrders(updated);
-      localStorage.setItem('hubmaster_user', JSON.stringify({
-        profile: userProfile,
-        orders: updated,
-        chat: chatMessages
-      }));
-    }
-  };
-
-  const handleCabinetNewOrder = (e) => {
-    e.preventDefault();
-    if (!cabNewOrderText) return;
-    
-    const catData = servicesData.find(s => s.id === cabNewOrderCat);
-    const catTitle = catData ? catData.title : 'Услуга';
-    const catTitleKz = catData ? catData.titleKz : 'Қызмет';
-    const catTitleEn = catData ? catData.titleEn : 'Service';
-    
-    const newOrder = {
-      id: Math.floor(1000 + Math.random() * 9000).toString(),
-      category: cabNewOrderCat,
-      serviceName: `${catTitle}: ${cabNewOrderText}`,
-      serviceNameKz: `${catTitleKz}: ${cabNewOrderText}`,
-      serviceNameEn: `${catTitleEn}: ${cabNewOrderText}`,
-      date: new Date().toLocaleDateString('ru-RU'),
-      price: 'Расчет цены',
-      status: 'searching',
-      master: null
-    };
-    
-    const updatedOrders = [newOrder, ...cabinetOrders];
-    setCabinetOrders(updatedOrders);
-    setCabNewOrderText('');
-    setCabNewOrderSuccess(true);
-    
-    localStorage.setItem('hubmaster_user', JSON.stringify({
-      profile: userProfile,
-      orders: updatedOrders,
-      chat: chatMessages
-    }));
-    
-    setTimeout(() => {
-      setCabNewOrderSuccess(false);
-    }, 3000);
-
-    // Simulate tech assignment after 10s
-    setTimeout(() => {
-      setCabinetOrders(currentOrders => {
-        return currentOrders.map(order => {
-          if (order.id === newOrder.id) {
-            return {
-              ...order,
-              status: 'assigned',
-              price: 'от 5 000 ₸',
-              master: {
-                name: 'Ерлан Сабитов',
-                rating: '4.9',
-                completedCount: 520,
-                experience: 4,
-                phone: '77058462749',
-                avatarBg: '#e67e22'
-              }
-            };
-          }
-          return order;
-        });
-      });
-      
-      setChatMessages(prev => {
-        const timeNow = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-        const updatedChat = [
-          ...prev,
-          {
-            sender: 'operator',
-            time: timeNow,
-            text: lang === 'RU' 
-              ? `Специалист Ерлан Сабитов назначен по вашему заказу №${newOrder.id}. Он свяжется с вами в течение 10 минут.`
-              : lang === 'KZ'
-              ? `Сіздің №${newOrder.id} тапсырысыңыз бойынша Ерлан Сәбитов маман тағайындалды. Ол сізге 10 минут ішінде хабарласады.`
-              : `Specialist Erlan Sabitov has been assigned to your order #${newOrder.id}. He will contact you within 10 minutes.`
-          }
-        ];
-        // save chat to local storage
-        const saved = localStorage.getItem('hubmaster_user');
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          parsed.chat = updatedChat;
-          localStorage.setItem('hubmaster_user', JSON.stringify(parsed));
-        }
-        return updatedChat;
-      });
-    }, 10000);
-  };
-
-  const handleSendChatMessage = (e) => {
-    e.preventDefault();
-    if (!chatInput.trim()) return;
-    
-    const timeNow = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-    const userMsg = {
-      sender: 'user',
-      time: timeNow,
-      text: chatInput
-    };
-    
-    const updatedChat = [...chatMessages, userMsg];
-    setChatMessages(updatedChat);
-    const userMsgText = chatInput;
-    setChatInput('');
-    
-    localStorage.setItem('hubmaster_user', JSON.stringify({
-      profile: userProfile,
-      orders: cabinetOrders,
-      chat: updatedChat
-    }));
-    
-    setIsTyping(true);
-    setTimeout(() => {
-      setIsTyping(false);
-      let replyText = '';
-      const lowered = userMsgText.toLowerCase();
-      
-      if (lowered.includes('привет') || lowered.includes('здравствуй') || lowered.includes('hello') || lowered.includes('сәлем')) {
-        replyText = lang === 'RU' 
-          ? 'Здравствуйте! Рад помочь вам. Какой у вас вопрос?' 
-          : lang === 'KZ'
-          ? 'Сәлеметсіз бе! Сізге көмектесуге қуаныштымын. Қандай сұрағыңыз бар?'
-          : 'Hello! Happy to help you. What is your question?';
-      } else if (lowered.includes('заказ') || lowered.includes('мастер') || lowered.includes('order') || lowered.includes('шебер') || lowered.includes('тапсырыс')) {
-        replyText = lang === 'RU'
-          ? 'Статус ваших заказов вы можете посмотреть во вкладке "Мои заказы" в личном кабинете. Мастера обычно связываются за 30-40 минут до прибытия.'
-          : lang === 'KZ'
-          ? 'Тапсырыстарыңыздың мәртебесін жеке кабинеттегі "Менің тапсырыстарым" қосымшасынан көре аласыз. Шеберлер әдетте келуден 30-40 минут бұрын хабарласады.'
-          : 'You can check your order status in the "My Orders" tab of your cabinet. Technicians usually contact you 30-40 minutes before arrival.';
-      } else if (lowered.includes('цена') || lowered.includes('стоимость') || lowered.includes('баға') || lowered.includes('сколько') || lowered.includes('price') || lowered.includes('cost')) {
-        replyText = lang === 'RU'
-          ? 'Приблизительные тарифы указаны в каталоге услуг. Точную смету составит мастер после оценки сложности работ на месте.'
-          : lang === 'KZ'
-          ? 'Шамалы тарифтер қызметтер каталогында көрсетілген. Нақты сметаны шебер жұмыс орнындағы күрделілікті бағалағаннан кейін жасайды.'
-          : 'Approximate rates are listed in the services catalog. The exact cost will be determined by the technician after on-site evaluation.';
-      } else {
-        replyText = lang === 'RU'
-          ? 'Спасибо за сообщение! Я передал ваш запрос дежурному оператору. Мы перезвоним вам на указанный номер в течение 5 минут для консультации.'
-          : lang === 'KZ'
-          ? 'Хабарламаңызға рақмет! Мен сіздің сұранысыңызды кезекші операторға бердім. Біз сізге 5 минут ішінде кеңес беру үшін хабарласамыз.'
-          : 'Thank you for your message! I have forwarded your inquiry to the operator on duty. We will call you back on your registered phone within 5 minutes.';
-      }
-      
-      const newReply = {
-        sender: 'operator',
-        time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
-        text: replyText
-      };
-      
-      const updatedChatWithReply = [...updatedChat, newReply];
-      setChatMessages(updatedChatWithReply);
-      
-      localStorage.setItem('hubmaster_user', JSON.stringify({
-        profile: userProfile,
-        orders: cabinetOrders,
-        chat: updatedChatWithReply
-      }));
-    }, 1500);
-  };
 
 
   const currentServices = servicesData.find(s => s.id === selectedServiceId) || servicesData[0];
