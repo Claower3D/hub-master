@@ -1253,6 +1253,10 @@ func main() {
 			http.NotFound(w, r)
 			return
 		}
+		if r.URL.Path == "/admin" || r.URL.Path == "/admin/" {
+			http.ServeFile(w, r, filepath.Join(staticDir, "admin.html"))
+			return
+		}
 		// Check if file exists in static directory
 		cleanPath := filepath.Clean(r.URL.Path)
 		filePath := filepath.Join(staticDir, cleanPath)
