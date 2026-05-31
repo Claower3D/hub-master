@@ -229,7 +229,7 @@ func sendTwilioSMS(sid, token, from, to, body string) error {
 	if from == "" {
 		from = getTwilioPhoneNumber(sid, token)
 		if from == "" {
-			from = "+15017122661" // fallback test number
+			from = "+17722756597" // fallback purchased number
 		}
 	}
 	apiURL := fmt.Sprintf("https://api.twilio.com/2010-04-01/Accounts/%s/Messages.json", sid)
