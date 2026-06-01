@@ -9314,6 +9314,7 @@
       const color = STATUS_COLORS[o.status] || '#888';
       const label = STATUS_LABELS[o.status] || o.status;
       const date = o.created_at ? new Date(o.created_at).toLocaleDateString('ru-RU') : '';
+      const details = [o.city, o.address, o.comment].filter(Boolean).join(' • ');
       return `
         <div style="background:#18181c;border:1px solid #222226;border-radius:10px;padding:14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
           <div>
@@ -9321,7 +9322,7 @@
               <span style="font-size:11px;color:var(--text);font-weight:700;">#${o.id}</span>
               <span style="font-size:14px;font-weight:700;color:#fff;">${o.service || 'Заявка'}</span>
             </div>
-            <div style="font-size:12px;color:var(--text);">${o.comment || o.city || ''} ${date ? '• ' + date : ''}</div>
+            <div style="font-size:12px;color:var(--text);">${details}${date ? ' • ' + date : ''}</div>
           </div>
           <span style="font-size:12px;font-weight:700;color:#fff;background:${color};padding:4px 10px;border-radius:30px;white-space:nowrap;">${label}</span>
         </div>`;
