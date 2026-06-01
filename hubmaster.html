@@ -5228,15 +5228,7 @@
                       id="hero-lead-phone">
                   </div>
                 </div>
-                
-                <div class="form-card-inputs-row" style="margin-top: 14px;">
-                  <div class="input-wrap">
-                    <input type="text" class="card-input-field" placeholder="Город" required id="hero-lead-city" value="Алматы">
-                  </div>
-                  <div class="input-wrap">
-                    <input type="text" class="card-input-field" placeholder="Адрес" required id="hero-lead-address">
-                  </div>
-                </div>
+
 
                 <div class="form-card-action-row" style="margin-top: 14px;">
                   <div class="select-wrap">
@@ -5285,23 +5277,23 @@
             <ul class="form-card-checklist">
               <li>
                 <span class="chk-icon">✓</span>
-                <span class="chk-text">Без скрытых комиссий</span>
+                <span class="chk-text">Выезд за 45 минут</span>
               </li>
               <li>
                 <span class="chk-icon">✓</span>
-                <span class="chk-text">Профессиональные инструменты</span>
+                <span class="chk-text">Профессиональные мастера</span>
               </li>
               <li>
                 <span class="chk-icon">✓</span>
-                <span class="chk-text">Гарантия на работу</span>
+                <span class="chk-text">Гарантия на работы</span>
               </li>
               <li>
                 <span class="chk-icon">✓</span>
-                <span class="chk-text">Сертифицированные мастера</span>
+                <span class="chk-text">Огромный выбор услуг</span>
               </li>
               <li>
                 <span class="chk-icon">✓</span>
-                <span class="chk-text">Фиксированная цена</span>
+                <span class="chk-text">Точность по времени</span>
               </li>
             </ul>
           </div>
@@ -8116,9 +8108,9 @@
       
       const name = document.getElementById('hero-lead-name').value;
       const phone = document.getElementById('hero-lead-phone').value;
-      const city = document.getElementById('hero-lead-city').value;
-      const address = document.getElementById('hero-lead-address').value;
       const service = document.getElementById('hero-lead-service').value;
+      const city = currentCity || 'Алматы'; // default
+      const address = ''; // no address in quick form
       
       try {
         await fetch(API_BASE + '/api/callback', {
@@ -8139,7 +8131,6 @@
           formSuccess.style.display = 'none';
           document.getElementById('hero-lead-name').value = '';
           document.getElementById('hero-lead-phone').value = '';
-          document.getElementById('hero-lead-address').value = '';
         }, 4000);
       }
     }
