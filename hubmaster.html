@@ -3405,6 +3405,7 @@
       flex-direction: column;
       gap: 10px;
       flex-shrink: 0;
+      z-index: 5;
     }
 
     .col-left {
@@ -3415,6 +3416,20 @@
       align-items: flex-start;
     }
 
+    .hero-master-img {
+       height: 120%;
+       width: auto;
+       object-fit: contain;
+       z-index: 1;
+       position: relative;
+       content: url('/public/hero_master.png');
+       margin-bottom: -10%;
+    }
+    
+    [data-theme="light"] .hero-master-img {
+       content: url('/public/hero_master_day.png');
+    }
+
     /* CENTER: master illustration */
     .hero-v2-master {
       display: flex;
@@ -3422,8 +3437,9 @@
       justify-content: center;
       position: relative;
       flex-shrink: 0;
-      width: 180px;
-      height: 320px;
+      width: 250px;
+      height: 400px;
+      z-index: 1;
     }
 
     .master-glow-bg {
@@ -5067,7 +5083,7 @@
           <div class="hero-v2-left">
             <div class="hero-badge">
               <span class="badge-dot">●</span>
-              <span data-i18n="heroBadgeText">Алматы — работаем 24/7</span>
+              <span data-i18n="heroBadgeText">Алматы — работаем <span style="color: var(--text-white);">24/7</span></span>
             </div>
             <h1 class="hero-v2-title" data-i18n="heroTaglineMain">
               Мультисервис<br>услуг и товаров
@@ -5085,16 +5101,35 @@
           <!-- RIGHT Sandbox: Master flanked by Pills -->
           <div class="hero-v2-sandbox">
 
-            <!-- Left pills -->
+            <!-- Left pills (Short to Long) -->
             <div class="sandbox-col col-left">
-              <div class="svc-pill-v2" onclick="handleHeroTabClick('category','appliance')">
+              <div class="svc-pill-v2" onclick="handleHeroTabClick('category','cleaning')">
                 <div class="svc-pill-icon">
                   <svg viewBox="0 0 24 24">
-                    <path
-                      d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
+                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
                   </svg>
                 </div>
-                <span>Ремонт бытовой техники</span>
+                <span>Клининг</span>
+              </div>
+
+              <div class="svc-pill-v2" onclick="handleHeroTabClick('category','delivery')">
+                <div class="svc-pill-icon">
+                  <svg viewBox="0 0 24 24">
+                    <rect x="1" y="3" width="15" height="13" rx="2" />
+                    <path d="M16 8h5l2 4v3h-7V8zM5.5 21a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM18.5 21a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+                  </svg>
+                </div>
+                <span>Доставка</span>
+              </div>
+
+              <div class="svc-pill-v2" onclick="handleHeroTabClick('category','auto')">
+                <div class="svc-pill-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2h-2M9 21a2 2 0 104 0 2 2 0 00-4 0" />
+                  </svg>
+                </div>
+                <span>Автосервис</span>
               </div>
 
               <div class="svc-pill-v2" onclick="openModal('Сборка мебели')">
@@ -5106,54 +5141,51 @@
                 <span>Сборка мебели</span>
               </div>
 
-              <div class="svc-pill-v2" onclick="handleHeroTabClick('category','cleaning')">
+              <div class="svc-pill-v2" onclick="handleHeroTabClick('category','appliance')">
                 <div class="svc-pill-icon">
                   <svg viewBox="0 0 24 24">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                    <polyline points="9 22 9 12 15 12 15 22" />
+                    <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
                   </svg>
                 </div>
-                <span>Клининг</span>
-              </div>
-
-              <div class="svc-pill-v2" onclick="handleHeroTabClick('category','auto')">
-                <div class="svc-pill-icon">
-                  <svg viewBox="0 0 24 24">
-                    <path
-                      d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2h-2M9 21a2 2 0 104 0 2 2 0 00-4 0" />
-                  </svg>
-                </div>
-                <span>Автосервис</span>
-              </div>
-
-              <div class="svc-pill-v2" onclick="handleHeroTabClick('category','delivery')">
-                <div class="svc-pill-icon">
-                  <svg viewBox="0 0 24 24">
-                    <rect x="1" y="3" width="15" height="13" rx="2" />
-                    <path
-                      d="M16 8h5l2 4v3h-7V8zM5.5 21a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM18.5 21a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-                  </svg>
-                </div>
-                <span>Доставка</span>
+                <span>Ремонт бытовой техники</span>
               </div>
             </div>
 
             <!-- CENTER: placeholder for future master image -->
             <div class="hero-v2-master">
               <div class="master-glow-bg"></div>
-              <img src="/public/hero_master.png" alt="Master" class="hero-master-img" style="height: 100%; width: auto; object-fit: contain; z-index: 2; position: relative;">
+              <img class="hero-master-img" alt="Master">
             </div>
 
-            <!-- Right pills -->
+            <!-- Right pills (Long to Short) -->
             <div class="sandbox-col col-right">
-              <div class="svc-pill-v2" onclick="handleHeroTabClick('category','computer')">
+              <div class="svc-pill-v2" onclick="openModal('Установка кондиционера')">
                 <div class="svc-pill-icon">
                   <svg viewBox="0 0 24 24">
-                    <rect x="2" y="3" width="20" height="14" rx="2" />
-                    <path d="M8 21h8M12 17v4" />
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
                   </svg>
                 </div>
-                <span>Компьютерная помощь</span>
+                <span>Установка кондиционера</span>
+              </div>
+
+              <div class="svc-pill-v2" onclick="openModal('Ремонт дверей')">
+                <div class="svc-pill-icon">
+                  <svg viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <line x1="9" y1="3" x2="9" y2="21" />
+                  </svg>
+                </div>
+                <span>Ремонт дверей</span>
+              </div>
+
+              <div class="svc-pill-v2" onclick="openModal('Сантехника')">
+                <div class="svc-pill-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                </div>
+                <span>Сантехника</span>
               </div>
 
               <div class="svc-pill-v2" onclick="handleHeroTabClick('category','electrical')">
@@ -5165,16 +5197,6 @@
                 <span>Электрик</span>
               </div>
 
-              <div class="svc-pill-v2" onclick="openModal('Сантехник')">
-                <div class="svc-pill-icon">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                </div>
-                <span>Сантехник</span>
-              </div>
-
               <div class="svc-pill-v2" onclick="handleHeroTabClick('category','movers')">
                 <div class="svc-pill-icon">
                   <svg viewBox="0 0 24 24">
@@ -5183,7 +5205,7 @@
                     <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
                   </svg>
                 </div>
-                <span>Грузчики</span>
+                <span>Грузчик</span>
               </div>
             </div>
 
@@ -5198,12 +5220,21 @@
               <form onsubmit="handleHeroLeadSubmit(event)" style="margin-top: 14px;">
                 <div class="form-card-inputs-row">
                   <div class="input-wrap">
-                    <input type="text" class="card-input-field" placeholder="Имя" required id="hero-lead-name">
+                    <input type="text" class="card-input-field" placeholder="ФИО" required id="hero-lead-name">
                   </div>
                   <div class="input-wrap phone-input-wrap">
                     <span class="phone-prefix">+7</span>
                     <input type="tel" class="card-input-field phone-field" placeholder="Телефон" required
                       id="hero-lead-phone">
+                  </div>
+                </div>
+                
+                <div class="form-card-inputs-row" style="margin-top: 14px;">
+                  <div class="input-wrap">
+                    <input type="text" class="card-input-field" placeholder="Город" required id="hero-lead-city" value="Алматы">
+                  </div>
+                  <div class="input-wrap">
+                    <input type="text" class="card-input-field" placeholder="Адрес" required id="hero-lead-address">
                   </div>
                 </div>
 
@@ -5388,8 +5419,11 @@
     </section>
 
     <!-- MASTERS & ADVANTAGES SECTION -->
-    <section class="masters-advantages-section" id="masters-advantages">
+    <section class="masters-advantages-section" id="masters-advantages" style="padding-top: 60px;">
       <div class="max-width-wrap">
+        <div class="section-header" style="text-align: center; margin-bottom: 40px;">
+          <h2 class="section-title-main">Наши Услуги и Мастера</h2>
+        </div>
         <div class="masters-advantages-container">
 
           <!-- Left Column: Hero Content -->
@@ -5615,7 +5649,7 @@
 
           <div class="showcase-master">
             <div class="showcase-glow"></div>
-            <div class="showcase-master-placeholder" style="background: url('/public/showcase_master.png') no-repeat center bottom; background-size: contain; border: none;"></div>
+            <div class="showcase-master-placeholder" style="background: var(--showcase-img, url('/public/showcase_master.png')) no-repeat center bottom; background-size: contain; border: none;"></div>
 
             <!-- Floating Pills -->
             <div class="showcase-pill pill-1">
@@ -5763,7 +5797,7 @@
 
           <div class="showcase-master" style="transform: translateY(20px);">
             <div class="showcase-glow"></div>
-            <div class="showcase-master-placeholder" style="background: url('/public/showcase_master.png') no-repeat center bottom; background-size: contain; border: none;"></div>
+            <div class="showcase-master-placeholder" style="background: var(--showcase-img, url('/public/showcase_master.png')) no-repeat center bottom; background-size: contain; border: none;"></div>
 
             <!-- Floating Pills -->
             <div class="showcase-pill pill-1" style="left: -20px; top: -10px;">
@@ -6041,15 +6075,23 @@
         <div class="lead-form-box" id="lead-form-container">
           <form onsubmit="handleLeadSubmit(event)">
             <div class="form-group" style="margin-bottom: 14px;">
-              <label class="form-label" data-i18n="yourName">Ваше имя</label>
-              <input type="text" id="lead-name" class="form-input" required placeholder="Ерлан">
+              <label class="form-label" data-i18n="yourName">ФИО (Имя)</label>
+              <input type="text" id="lead-name" class="form-input" required placeholder="Иванов Иван">
             </div>
             <div class="form-group" style="margin-bottom: 14px;">
               <label class="form-label" data-i18n="yourPhone">Номер телефона</label>
               <input type="tel" id="lead-phone" class="form-input" required placeholder="+7 (705) 846-2749">
             </div>
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label" data-i18n="yourCity">Город</label>
+              <input type="text" id="lead-city" class="form-input" required placeholder="Алматы" value="Алматы">
+            </div>
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label" data-i18n="yourAddress">Адрес</label>
+              <input type="text" id="lead-address" class="form-input" required placeholder="ул. Абая, 50, кв 12">
+            </div>
             <div class="form-group" style="margin-bottom: 20px;">
-              <label class="form-label" data-i18n="selectService">Выберите услугу</label>
+              <label class="form-label" data-i18n="selectService">Причина обращения (Услуга)</label>
               <select id="lead-service-select" class="form-select">
                 <!-- Dynamically populated options -->
               </select>
@@ -8036,8 +8078,24 @@
       }, 2500);
     }
 
-    function handleLeadSubmit(e) {
+    async function handleLeadSubmit(e) {
       e.preventDefault();
+
+      const name = document.getElementById('lead-name').value;
+      const phone = document.getElementById('lead-phone').value;
+      const city = document.getElementById('lead-city').value;
+      const address = document.getElementById('lead-address').value;
+      const service = document.getElementById('lead-service-select').value;
+      
+      try {
+        await fetch(API_BASE + '/api/callback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, phone, city, address, service, comment: '' })
+        });
+      } catch(err) {
+        console.error(err);
+      }
 
       document.getElementById('lead-form-container').style.display = 'none';
       document.getElementById('lead-success-container').style.display = 'block';
@@ -8047,27 +8105,41 @@
         document.getElementById('lead-success-container').style.display = 'none';
         document.getElementById('lead-name').value = '';
         document.getElementById('lead-phone').value = '';
+        document.getElementById('lead-address').value = '';
       }, 4000);
     }
 
-    function handleHeroLeadSubmit(e) {
+    async function handleHeroLeadSubmit(e) {
       e.preventDefault();
       const formActual = document.getElementById('hero-form-actual');
       const formSuccess = document.getElementById('hero-form-success');
+      
+      const name = document.getElementById('hero-lead-name').value;
+      const phone = document.getElementById('hero-lead-phone').value;
+      const city = document.getElementById('hero-lead-city').value;
+      const address = document.getElementById('hero-lead-address').value;
+      const service = document.getElementById('hero-lead-service').value;
+      
+      try {
+        await fetch(API_BASE + '/api/callback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, phone, city, address, service, comment: '' })
+        });
+      } catch(err) {
+        console.error(err);
+      }
+
       if (formActual && formSuccess) {
         formActual.style.display = 'none';
         formSuccess.style.display = 'flex';
-
-        // You could send lead data to an API here if needed:
-        // const name = document.getElementById('hero-lead-name').value;
-        // const phone = document.getElementById('hero-lead-phone').value;
-        // const service = document.getElementById('hero-lead-service').value;
 
         setTimeout(() => {
           formActual.style.display = 'block';
           formSuccess.style.display = 'none';
           document.getElementById('hero-lead-name').value = '';
           document.getElementById('hero-lead-phone').value = '';
+          document.getElementById('hero-lead-address').value = '';
         }, 4000);
       }
     }

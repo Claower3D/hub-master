@@ -105,6 +105,7 @@ func NotifyNewOrder(db DB, record *CallbackRecord) {
 			"📞 <b>Телефон:</b> %s\n"+
 			"🛠 <b>Услуга:</b> %s\n"+
 			"🏙 <b>Город:</b> %s\n"+
+			"📍 <b>Адрес:</b> %s\n"+
 			"💬 <b>Описание/Проблема:</b> %s\n"+
 			"🕐 <b>Время:</b> %s\n"+
 			"━━━━━━━━━━━━━━━━━━━━\n"+
@@ -114,6 +115,7 @@ func NotifyNewOrder(db DB, record *CallbackRecord) {
 		record.Phone,
 		record.Service,
 		record.City,
+		record.Address,
 		commentStr,
 		record.CreatedAt.Format("02.01.2006 15:04"),
 	)

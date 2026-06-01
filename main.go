@@ -22,6 +22,7 @@ type CallbackRequest struct {
 	Phone   string `json:"phone"`
 	Service string `json:"service"`
 	City    string `json:"city"`
+	Address string `json:"address"`
 	Comment string `json:"comment"`
 }
 
@@ -470,7 +471,7 @@ func main() {
 			return
 		}
 
-		log.Printf("Новая заявка: Имя: %s, Тел: %s, Услуга: %s, Город: %s, Проблема: %s (UserID: %v)\n", req.Name, req.Phone, req.Service, req.City, req.Comment, userID)
+		log.Printf("Новая заявка: Имя: %s, Тел: %s, Услуга: %s, Город: %s, Адрес: %s, Проблема: %s (UserID: %v)\n", req.Name, req.Phone, req.Service, req.City, req.Address, req.Comment, userID)
 
 		// Send Telegram notification to all subscribers
 		go NotifyNewOrder(dbInstance, record)
