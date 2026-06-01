@@ -39,6 +39,7 @@
       --text-white: #09090b;
       --text-muted: #a1a1aa;
       --shadow: rgba(9, 9, 11, 0.05) 0px 10px 30px -10px;
+      --showcase-img: url('/public/showcase_master_day.png');
     }
 
     * {
@@ -820,23 +821,23 @@
     /* Showcase Master / Right Side */
     .showcase-master {
       position: relative;
-      height: 460px;
+      height: 540px;
       display: flex;
       align-items: flex-start;
       justify-content: center;
       padding-top: 20px;
       transform: translateY(40px);
-      /* Push only the master down to overlap the bottom card */
-      z-index: 5;
+      z-index: 0;
     }
 
     .showcase-master-placeholder {
-      width: 320px;
-      height: 440px;
+      width: 400px;
+      height: 540px;
       background: rgba(255, 255, 255, 0.02);
-      border: 1px dashed rgba(255, 255, 255, 0.1);
+      border: none;
       border-radius: 20px;
-      z-index: 2;
+      z-index: 0;
+      position: relative;
     }
 
     .showcase-glow {
@@ -850,11 +851,11 @@
       z-index: 1;
     }
 
-    /* Floating Pills */
+    /* Floating Pills - above the master image */
     .showcase-pill {
       position: absolute;
       background: var(--bg-card);
-      opacity: 0.95;
+      opacity: 0.97;
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid var(--border);
@@ -863,7 +864,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      z-index: 3;
+      z-index: 10;
       box-shadow: var(--shadow);
     }
 
@@ -3406,6 +3407,7 @@
       gap: 10px;
       flex-shrink: 0;
       z-index: 5;
+      position: relative;
     }
 
     .col-left {
@@ -3417,13 +3419,14 @@
     }
 
     .hero-master-img {
-       height: 120%;
+       height: 110%;
        width: auto;
        object-fit: contain;
-       z-index: 1;
+       z-index: 0;
        position: relative;
        content: url('/public/hero_master.png');
        margin-bottom: -10%;
+       filter: drop-shadow(0 12px 40px rgba(0,0,0,0.45));
     }
     
     [data-theme="light"] .hero-master-img {
@@ -3437,9 +3440,9 @@
       justify-content: center;
       position: relative;
       flex-shrink: 0;
-      width: 250px;
-      height: 400px;
-      z-index: 1;
+      width: 320px;
+      height: 460px;
+      z-index: 0;
     }
 
     .master-glow-bg {
@@ -3514,47 +3517,62 @@
     .col-left .svc-pill-v2:nth-child(1) {
       animation-delay: 0.0s;
       transform: translateX(18px);
+      min-width: 110px;
     }
 
     .col-left .svc-pill-v2:nth-child(2) {
       animation-delay: 0.6s;
       transform: translateX(6px);
+      min-width: 125px;
     }
 
     .col-left .svc-pill-v2:nth-child(3) {
       animation-delay: 1.2s;
       transform: translateX(-8px);
+      min-width: 148px;
     }
 
     .col-left .svc-pill-v2:nth-child(4) {
       animation-delay: 1.8s;
       transform: translateX(2px);
+      min-width: 170px;
     }
 
     .col-left .svc-pill-v2:nth-child(5) {
       animation-delay: 2.4s;
       transform: translateX(14px);
+      min-width: 210px;
     }
 
-    /* Staggered float timing — right column (4 pills) */
+    /* Staggered float timing — right column (5 pills) */
     .col-right .svc-pill-v2:nth-child(1) {
       animation-delay: 0.3s;
       transform: translateX(-14px);
+      min-width: 210px;
     }
 
     .col-right .svc-pill-v2:nth-child(2) {
       animation-delay: 0.9s;
       transform: translateX(4px);
+      min-width: 170px;
     }
 
     .col-right .svc-pill-v2:nth-child(3) {
       animation-delay: 1.5s;
       transform: translateX(-4px);
+      min-width: 148px;
     }
 
     .col-right .svc-pill-v2:nth-child(4) {
       animation-delay: 2.1s;
       transform: translateX(-12px);
+      min-width: 125px;
+    }
+
+    .col-right .svc-pill-v2:nth-child(5) {
+      animation-delay: 2.7s;
+      transform: translateX(-18px);
+      min-width: 110px;
     }
 
     @keyframes pillFloat {
@@ -5101,51 +5119,44 @@
           <!-- RIGHT Sandbox: Master flanked by Pills -->
           <div class="hero-v2-sandbox">
 
-            <!-- Left pills (Short to Long) -->
+            <!-- Left pills: SHORT top → LONG bottom -->
             <div class="sandbox-col col-left">
+              <!-- 1: 7 chars -->
               <div class="svc-pill-v2" onclick="handleHeroTabClick('category','cleaning')">
                 <div class="svc-pill-icon">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                    <polyline points="9 22 9 12 15 12 15 22" />
-                  </svg>
+                  <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
                 </div>
                 <span>Клининг</span>
               </div>
 
+              <!-- 2: 8 chars -->
               <div class="svc-pill-v2" onclick="handleHeroTabClick('category','delivery')">
                 <div class="svc-pill-icon">
-                  <svg viewBox="0 0 24 24">
-                    <rect x="1" y="3" width="15" height="13" rx="2" />
-                    <path d="M16 8h5l2 4v3h-7V8zM5.5 21a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM18.5 21a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-                  </svg>
+                  <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2" /><path d="M16 8h5l2 4v3h-7V8zM5.5 21a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM18.5 21a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" /></svg>
                 </div>
                 <span>Доставка</span>
               </div>
 
+              <!-- 3: 10 chars -->
               <div class="svc-pill-v2" onclick="handleHeroTabClick('category','auto')">
                 <div class="svc-pill-icon">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2h-2M9 21a2 2 0 104 0 2 2 0 00-4 0" />
-                  </svg>
+                  <svg viewBox="0 0 24 24"><path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2h-2M9 21a2 2 0 104 0 2 2 0 00-4 0" /></svg>
                 </div>
                 <span>Автосервис</span>
               </div>
 
+              <!-- 4: 13 chars -->
               <div class="svc-pill-v2" onclick="openModal('Сборка мебели')">
                 <div class="svc-pill-icon">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM12 5V3M8 5V3M16 5V3" />
-                  </svg>
+                  <svg viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM12 5V3M8 5V3M16 5V3" /></svg>
                 </div>
                 <span>Сборка мебели</span>
               </div>
 
+              <!-- 5: 21 chars -->
               <div class="svc-pill-v2" onclick="handleHeroTabClick('category','appliance')">
                 <div class="svc-pill-icon">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
-                  </svg>
+                  <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" /></svg>
                 </div>
                 <span>Ремонт бытовой техники</span>
               </div>
@@ -5157,53 +5168,44 @@
               <img class="hero-master-img" alt="Master">
             </div>
 
-            <!-- Right pills (Long to Short) -->
+            <!-- Right pills: LONG top → SHORT bottom (matching left column lengths) -->
             <div class="sandbox-col col-right">
-              <div class="svc-pill-v2" onclick="openModal('Установка кондиционера')">
+              <!-- 1: 21 chars mirrored -->
+              <div class="svc-pill-v2" onclick="openModal('Компьютерная помощь')">
                 <div class="svc-pill-icon">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
-                  </svg>
+                  <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" /><polyline points="8 21 12 17 16 21" /></svg>
                 </div>
-                <span>Установка кондиционера</span>
+                <span>Компьютерная помощь</span>
               </div>
 
-              <div class="svc-pill-v2" onclick="openModal('Ремонт дверей')">
+              <!-- 2: 13 chars mirrored -->
+              <div class="svc-pill-v2" onclick="openModal('Установка телека')">
                 <div class="svc-pill-icon">
-                  <svg viewBox="0 0 24 24">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                    <line x1="9" y1="3" x2="9" y2="21" />
-                  </svg>
+                  <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg>
                 </div>
-                <span>Ремонт дверей</span>
+                <span>Установка телека</span>
               </div>
 
-              <div class="svc-pill-v2" onclick="openModal('Сантехника')">
+              <!-- 3: 10 chars mirrored -->
+              <div class="svc-pill-v2" onclick="handleHeroTabClick('category','plumbing')">
                 <div class="svc-pill-icon">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z" /><circle cx="12" cy="10" r="3" /></svg>
                 </div>
                 <span>Сантехника</span>
               </div>
 
+              <!-- 4: 8 chars mirrored -->
               <div class="svc-pill-v2" onclick="handleHeroTabClick('category','electrical')">
                 <div class="svc-pill-icon">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                  </svg>
+                  <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg>
                 </div>
                 <span>Электрик</span>
               </div>
 
+              <!-- 5: 7 chars mirrored -->
               <div class="svc-pill-v2" onclick="handleHeroTabClick('category','movers')">
                 <div class="svc-pill-icon">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                    <circle cx="9" cy="7" r="4" />
-                    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-                  </svg>
+                  <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" /></svg>
                 </div>
                 <span>Грузчик</span>
               </div>
@@ -5641,7 +5643,7 @@
 
           <div class="showcase-master">
             <div class="showcase-glow"></div>
-            <div class="showcase-master-placeholder" style="background: var(--showcase-img, url('/public/showcase_master.png')) no-repeat center bottom; background-size: contain; border: none;"></div>
+            <div class="showcase-master-placeholder" style="background: var(--showcase-img, url('/public/showcase_master.png')) no-repeat center bottom; background-size: cover; width: 400px; height: 540px; border: none;"></div>
 
             <!-- Floating Pills -->
             <div class="showcase-pill pill-1">
@@ -5789,7 +5791,7 @@
 
           <div class="showcase-master" style="transform: translateY(20px);">
             <div class="showcase-glow"></div>
-            <div class="showcase-master-placeholder" style="background: var(--showcase-img, url('/public/showcase_master.png')) no-repeat center bottom; background-size: contain; border: none;"></div>
+            <div class="showcase-master-placeholder" style="background: var(--showcase-img, url('/public/showcase_master.png')) no-repeat center bottom; background-size: cover; width: 400px; height: 540px; border: none;"></div>
 
             <!-- Floating Pills -->
             <div class="showcase-pill pill-1" style="left: -20px; top: -10px;">
