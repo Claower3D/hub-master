@@ -3409,7 +3409,7 @@
     .sandbox-col {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 16px;
       flex-shrink: 0;
       z-index: 5;
       position: relative;
@@ -3496,6 +3496,8 @@
       -webkit-backdrop-filter: blur(8px);
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
       transition: background 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      --tx: 0px;
+      transform: translateX(var(--tx)) translateY(0px);
       /* Float animation — each pill has its own delay via nth-child */
       animation: pillFloat 4s ease-in-out infinite;
     }
@@ -3504,7 +3506,7 @@
       background: rgba(255, 255, 255, 0.09);
       border-color: rgba(255, 255, 255, 0.18);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
-      transform: translateY(-2px) !important;
+      transform: translateX(var(--tx)) translateY(-8px) !important;
     }
 
     [data-theme="light"] .svc-pill-v2 {
@@ -3521,74 +3523,73 @@
     /* Staggered float timing — left column (5 pills) */
     .col-left .svc-pill-v2:nth-child(1) {
       animation-delay: 0.0s;
-      transform: translateX(35px);
+      --tx: 15px;
       min-width: 110px;
     }
 
     .col-left .svc-pill-v2:nth-child(2) {
       animation-delay: 0.6s;
-      transform: translateX(-20px);
+      --tx: -10px;
       min-width: 125px;
     }
 
     .col-left .svc-pill-v2:nth-child(3) {
       animation-delay: 1.2s;
-      transform: translateX(-30px);
+      --tx: -20px;
       min-width: 148px;
     }
 
     .col-left .svc-pill-v2:nth-child(4) {
       animation-delay: 1.8s;
-      transform: translateX(20px);
+      --tx: 10px;
       min-width: 170px;
     }
 
     .col-left .svc-pill-v2:nth-child(5) {
       animation-delay: 2.4s;
-      transform: translateX(-40px);
+      --tx: -25px;
       min-width: 210px;
     }
 
     /* Staggered float timing — right column (5 pills) */
     .col-right .svc-pill-v2:nth-child(1) {
       animation-delay: 0.3s;
-      transform: translateX(45px);
+      --tx: 25px;
       min-width: 210px;
     }
 
     .col-right .svc-pill-v2:nth-child(2) {
       animation-delay: 0.9s;
-      transform: translateX(55px);
+      --tx: 35px;
       min-width: 170px;
     }
 
     .col-right .svc-pill-v2:nth-child(3) {
       animation-delay: 1.5s;
-      transform: translateX(-20px);
+      --tx: -10px;
       min-width: 148px;
     }
 
     .col-right .svc-pill-v2:nth-child(4) {
       animation-delay: 2.1s;
-      transform: translateX(-25px);
+      --tx: -15px;
       min-width: 125px;
     }
 
     .col-right .svc-pill-v2:nth-child(5) {
       animation-delay: 2.7s;
-      transform: translateX(-30px);
+      --tx: -20px;
       min-width: 110px;
     }
 
     @keyframes pillFloat {
-
       0%,
       100% {
-        margin-top: 0px;
+        transform: translateX(var(--tx)) translateY(0px);
       }
 
       50% {
-        margin-top: -7px;
+        transform: translateX(var(--tx)) translateY(-8px);
       }
     }
 
@@ -5183,12 +5184,12 @@
                 <span>Компьютерная помощь</span>
               </div>
 
-              <!-- 2: 12 chars mirrored -->
-              <div class="svc-pill-v2" onclick="openModal('Установка ТВ')">
+              <!-- 2: 13 chars mirrored -->
+              <div class="svc-pill-v2" onclick="openModal('Установка телека')">
                 <div class="svc-pill-icon">
                   <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg>
                 </div>
-                <span>Установка ТВ</span>
+                <span>Установка телека</span>
               </div>
 
               <!-- 3: 10 chars mirrored -->
