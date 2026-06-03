@@ -744,7 +744,7 @@
 
     .showcase-top {
       display: grid;
-      grid-template-columns: 1fr 450px;
+      grid-template-columns: 1fr 580px;
       gap: 40px;
       align-items: center;
       margin-bottom: 20px;
@@ -818,21 +818,26 @@
       background: var(--bg-card);
     }
 
+    .showcase-text-col {
+      position: relative;
+      z-index: 5;
+    }
+
     /* Showcase Master / Right Side */
     .showcase-master {
       position: relative;
-      height: 540px;
+      height: 750px;
       display: flex;
-      align-items: flex-start;
+      align-items: flex-end;
       justify-content: center;
       padding-top: 20px;
-      transform: translateY(40px);
-      z-index: 0;
+      transform: translateY(30px);
+      z-index: 1;
     }
 
     .showcase-master-placeholder {
-      width: 400px;
-      height: 540px;
+      width: 550px;
+      height: 750px;
       background: rgba(255, 255, 255, 0.02);
       border: none;
       border-radius: 20px;
@@ -3442,7 +3447,7 @@
       flex-shrink: 0;
       width: 320px;
       height: 460px;
-      z-index: 0;
+      z-index: 1;
     }
 
     .master-glow-bg {
@@ -5787,9 +5792,9 @@
       <div class="max-width-wrap">
 
         <!-- Top: Master on Left, Text on Right -->
-        <div class="showcase-top" style="grid-template-columns: 450px 1fr;">
+        <div class="showcase-top" style="grid-template-columns: 580px 1fr;">
 
-          <div class="showcase-master" style="transform: translateY(20px);">
+          <div class="showcase-master" style="transform: translateY(30px);">
             <div class="showcase-glow"></div>
             <div class="showcase-master-placeholder" style="background: var(--showcase-img, url('/public/showcase_master.png')) no-repeat center bottom; background-size: cover; width: 400px; height: 540px; border: none;"></div>
 
@@ -7871,6 +7876,20 @@
         document.getElementById('theme-sun').style.display = 'none';
         document.getElementById('theme-moon').style.display = 'block';
       }
+
+      const masterImg = document.querySelector('.hero-master-img');
+      if (masterImg) {
+        masterImg.src = currentTheme === 'dark'
+          ? '/public/hero_master.png'
+          : '/public/hero_master_day.png';
+      }
+
+      const showcasePls = document.querySelectorAll('.showcase-master-placeholder');
+      showcasePls.forEach(el => {
+        el.style.backgroundImage = currentTheme === 'dark'
+          ? "url('/public/showcase_master.png')"
+          : "url('/public/showcase_master_day.png')";
+      });
     }
 
     // TRANSLATIONS
