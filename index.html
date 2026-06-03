@@ -45,6 +45,7 @@
       --text-white: #09090b;
       --text-muted: #a1a1aa;
       --shadow: rgba(9, 9, 11, 0.05) 0px 10px 30px -10px;
+      --showcase-img: url('/public/showcase_master_day.webp?v=2');
     }
 
     * {
@@ -5180,8 +5181,8 @@
             <!-- CENTER: placeholder for future master image -->
             <div class="hero-v2-master">
               <div class="master-glow-bg"></div>
-              <img src="/public/hero_master.png?v=2" class="hero-master-img dark-only" alt="Master">
-              <img src="/public/hero_master_day.png?v=2" class="hero-master-img light-only" alt="Master">
+              <img src="/public/hero_master.webp?v=2" class="hero-master-img dark-only" alt="Master">
+              <img src="/public/hero_master_day.webp?v=2" class="hero-master-img light-only" alt="Master">
             </div>
 
             <!-- Right pills: LONG top → SHORT bottom (matching left column lengths) -->
@@ -5655,7 +5656,7 @@
 
           <div class="showcase-master">
             <div class="showcase-glow"></div>
-            <div class="showcase-master-placeholder" style="background: url('/public/showcase_master.png') no-repeat center bottom; background-size: contain; border: none;"></div>
+            <div class="showcase-master-placeholder" style="background: var(--showcase-img, url('/public/showcase_master.webp?v=2')) no-repeat center bottom; background-size: contain; border: none;"></div>
 
             <!-- Floating Pills -->
             <div class="showcase-pill pill-1">
@@ -5803,7 +5804,7 @@
 
           <div class="showcase-master" style="transform: translateY(30px);">
             <div class="showcase-glow"></div>
-            <div class="showcase-master-placeholder" style="background: url('/public/showcase_master.png') no-repeat center bottom; background-size: contain; border: none;"></div>
+            <div class="showcase-master-placeholder" style="background: var(--showcase-img, url('/public/showcase_master.webp?v=2')) no-repeat center bottom; background-size: contain; border: none;"></div>
 
             <!-- Floating Pills -->
             <div class="showcase-pill pill-1" style="left: -20px; top: -10px;">
@@ -7883,15 +7884,15 @@
       const masterImg = document.querySelector('.hero-master-img');
       if (masterImg) {
         masterImg.src = currentTheme === 'dark'
-          ? '/public/hero_master.png?v=2'
-          : '/public/hero_master_day.png?v=2';
+          ? '/public/hero_master.webp?v=2'
+          : '/public/hero_master_day.webp?v=2';
       }
 
       const showcasePls = document.querySelectorAll('.showcase-master-placeholder');
       showcasePls.forEach(el => {
         el.style.backgroundImage = currentTheme === 'dark'
-          ? "url('/public/showcase_master.png?v=2')"
-          : "url('/public/showcase_master_day.png?v=2')";
+          ? "url('/public/showcase_master.webp?v=2')"
+          : "url('/public/showcase_master_day.webp?v=2')";
       });
     }
 
@@ -7911,15 +7912,15 @@
       const masterImg = document.querySelector('.hero-master-img');
       if (masterImg) {
         masterImg.src = currentTheme === 'dark'
-          ? '/public/hero_master.png?v=2'
-          : '/public/hero_master_day.png?v=2';
+          ? '/public/hero_master.webp?v=2'
+          : '/public/hero_master_day.webp?v=2';
       }
 
       const showcasePls = document.querySelectorAll('.showcase-master-placeholder');
       showcasePls.forEach(el => {
         el.style.backgroundImage = currentTheme === 'dark'
-          ? "url('/public/showcase_master.png?v=2')"
-          : "url('/public/showcase_master_day.png?v=2')";
+          ? "url('/public/showcase_master.webp?v=2')"
+          : "url('/public/showcase_master_day.webp?v=2')";
       });
     }
 
