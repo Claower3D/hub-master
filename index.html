@@ -2,6 +2,12 @@
 <html lang="ru" data-theme="dark">
 
 <head>
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HUB MASTER — Мультисервис услуг и товаров в Алматы и Астане</title>
@@ -3443,6 +3449,15 @@
       margin-bottom: -10%;
       filter: drop-shadow(0 12px 40px rgba(0, 0, 0, 0.45));
     }
+    .hero-master-img.light-only {
+      display: none;
+    }
+    [data-theme="light"] .hero-master-img.light-only {
+      display: block;
+    }
+    [data-theme="light"] .hero-master-img.dark-only {
+      display: none;
+    }
 
     .master-glow-bg {
       position: absolute;
@@ -5165,7 +5180,8 @@
             <!-- CENTER: placeholder for future master image -->
             <div class="hero-v2-master">
               <div class="master-glow-bg"></div>
-              <img src="/public/hero_master.png?v=2" alt="Master" class="hero-master-img">
+              <img src="/public/hero_master.png?v=2" class="hero-master-img dark-only" alt="Master">
+              <img src="/public/hero_master_day.png?v=2" class="hero-master-img light-only" alt="Master">
             </div>
 
             <!-- Right pills: LONG top → SHORT bottom (matching left column lengths) -->
