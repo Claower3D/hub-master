@@ -2731,14 +2731,26 @@
 
     .card-select-field {
       width: 100%;
-      background: rgba(0, 0, 0, 0.25);
+      background-color: rgba(0, 0, 0, 0.25);
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 16px;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 8px;
-      padding: 10px 14px;
+      padding: 10px 36px 10px 14px;
       color: var(--text-white);
       font-size: 13px;
       font-family: var(--font-sans);
       cursor: pointer;
+    }
+
+    .card-select-field option {
+      background-color: var(--bg-card);
+      color: var(--text-white);
     }
 
     .card-select-field:focus {
@@ -3827,9 +3839,15 @@
     }
 
     /* Hero bottom form card inputs */
-    [data-theme="light"] .card-input-field,
-    [data-theme="light"] .card-select-field {
+    [data-theme="light"] .card-input-field {
       background: rgba(255, 255, 255, 0.9);
+      border-color: var(--border);
+      color: var(--text-white);
+    }
+
+    [data-theme="light"] .card-select-field {
+      background-color: rgba(255, 255, 255, 0.9);
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
       border-color: var(--border);
       color: var(--text-white);
     }
@@ -3855,9 +3873,13 @@
     }
 
     [data-theme="light"] .card-input-field:focus,
-    [data-theme="light"] .card-select-field:focus,
     [data-theme="light"] .phone-input-wrap:focus-within {
       background: rgba(255, 255, 255, 1) !important;
+      border-color: var(--primary) !important;
+    }
+
+    [data-theme="light"] .card-select-field:focus {
+      background-color: rgba(255, 255, 255, 1) !important;
       border-color: var(--primary) !important;
     }
 
