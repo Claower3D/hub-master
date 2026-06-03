@@ -5132,7 +5132,7 @@
             <div class="logo-hm">HM</div>
             <div class="logo-text-wrap">
               <span class="logo-text-hub">HUB MASTER</span>
-              <span class="logo-subtitle" id="nav-subtitle">Алматы - с 2018</span>
+              <span class="logo-subtitle" id="nav-subtitle" data-i18n="navSubtitle">Алматы — с 2018</span>
             </div>
           </div>
         </a>
@@ -6201,26 +6201,33 @@
         <div class="lead-form-box" id="lead-form-container">
           <form onsubmit="handleLeadSubmit(event)">
             <div class="form-group" style="margin-bottom: 14px;">
-              <label class="form-label" data-i18n="yourName">ФИО (Имя)</label>
-              <input type="text" id="lead-name" class="form-input" required placeholder="Иванов Иван">
+              <label class="form-label" data-i18n="yourName">Ваше имя</label>
+              <input type="text" id="lead-name" class="form-input" required placeholder="Ерлан">
             </div>
             <div class="form-group" style="margin-bottom: 14px;">
               <label class="form-label" data-i18n="yourPhone">Номер телефона</label>
               <input type="tel" id="lead-phone" class="form-input" required placeholder="+7 (705) 846-2749">
             </div>
             <div class="form-group" style="margin-bottom: 14px;">
-              <label class="form-label" data-i18n="yourCity">Город</label>
-              <input type="text" id="lead-city" class="form-input" required placeholder="Алматы" value="Алматы">
-            </div>
-            <div class="form-group" style="margin-bottom: 14px;">
-              <label class="form-label" data-i18n="yourAddress">Адрес</label>
-              <input type="text" id="lead-address" class="form-input" required placeholder="ул. Абая, 50, кв 12">
-            </div>
-            <div class="form-group" style="margin-bottom: 20px;">
-              <label class="form-label" data-i18n="selectService">Причина обращения (Услуга)</label>
+              <label class="form-label" data-i18n="selectService">Выберите услугу</label>
               <select id="lead-service-select" class="form-select">
                 <!-- Dynamically populated options -->
               </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label" data-i18n="selectCity">Выберите город</label>
+              <select id="lead-city-select" class="form-select">
+                <option value="almaty" data-i18n="selectCityAlmaty">Алматы</option>
+                <option value="astana" data-i18n="selectCityAstana">Астана</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label" data-i18n="yourAddress">Адрес (необязательно)</label>
+              <input type="text" id="lead-address" class="form-input" placeholder="ул. Абая, д. 10, кв. 5">
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label class="form-label" data-i18n="problemDescription">Описание проблемы (необязательно)</label>
+              <textarea id="lead-comment" class="form-input" style="height: 80px; resize: none;" placeholder="Опишите в двух словах вашу проблему..."></textarea>
             </div>
             <button type="submit" class="review-submit-btn" data-i18n="sendRequest">Отправить заявку</button>
           </form>
@@ -6749,6 +6756,19 @@
         </div>
         <h4 class="success-title" data-i18n="successTitle">Заявка успешно принята!</h4>
         <p class="success-message" data-i18n="successDesc">Мы свяжемся с вами в течение 10 минут. Спасибо!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LANGUAGE SELECTION MODAL -->
+  <div class="modal-overlay" id="lang-select-modal-overlay" style="z-index: 100000; display: none; align-items: center; justify-content: center; background: rgba(9, 9, 11, 0.85); backdrop-filter: blur(8px);">
+    <div class="modal-box" style="max-width: 400px; width: 90%; text-align: center; padding: 30px; border: 1px solid var(--border); background: var(--bg-card); border-radius: 20px; box-shadow: var(--shadow);">
+      <h3 style="font-family: var(--font-heading); font-size: 20px; font-weight: 700; color: var(--text-white); margin-bottom: 12px;" data-i18n="chooseLanguageTitle">Выберите язык</h3>
+      <p style="font-size: 14px; color: var(--text); margin-bottom: 24px;">Пожалуйста, выберите удобный язык интерфейса / Тілді таңдаңыз / Please choose your language</p>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <button class="review-submit-btn" style="background: var(--border); color: var(--text-white); border: 1px solid var(--border); transition: all 0.2s;" onclick="selectAndCloseLang('RU')">Русский</button>
+        <button class="review-submit-btn" style="background: var(--border); color: var(--text-white); border: 1px solid var(--border); transition: all 0.2s;" onclick="selectAndCloseLang('KZ')">Қазақша</button>
+        <button class="review-submit-btn" style="background: var(--border); color: var(--text-white); border: 1px solid var(--border); transition: all 0.2s;" onclick="selectAndCloseLang('EN')">English</button>
       </div>
     </div>
   </div>
@@ -7490,6 +7510,13 @@
         mobNavTheme: "Тема",
         tagline: "Все нужное — в 1 клик!",
         heroBadgeText: "Алматы — работаем <span style=\"color: var(--text-white);\">24/7</span>",
+        navSubtitle: "Алматы — с 2018",
+        chooseLanguageTitle: "Выберите язык",
+        selectCity: "Выберите город",
+        yourAddress: "Адрес (необязательно)",
+        problemDescription: "Описание проблемы (необязательно)",
+        selectCityAlmaty: "Алматы",
+        selectCityAstana: "Астана",
         callMaster: "Вызвать мастера",
         catalogTitle: "Каталог услуг",
         catalogSub: "Выберите категорию, чтобы ознакомиться с ценами и сделать быстрый заказ",
@@ -7574,6 +7601,13 @@
         mobNavTheme: "Тема",
         tagline: "Барлық қажеттіліктер — 1 басуда!",
         heroBadgeText: "Алматы — <span style=\"color: var(--text-white);\">24/7</span> жұмыс істейміз",
+        navSubtitle: "Алматы — 2018 жылдан бастап",
+        chooseLanguageTitle: "Тілді таңдаңыз",
+        selectCity: "Қаланы таңдаңыз",
+        yourAddress: "Мекенжай (міндетті емес)",
+        problemDescription: "Мәселенің сипаттамасы (міндетті емес)",
+        selectCityAlmaty: "Алматы",
+        selectCityAstana: "Астана",
         callMaster: "Шеберді шақыру",
         catalogTitle: "Қызметтер каталогы",
         catalogSub: "Бағалармен танысып, жылдам тапсырыс беру үшін санатты таңдаңыз",
@@ -7658,6 +7692,13 @@
         mobNavTheme: "Theme",
         tagline: "Everything you need — in 1 click!",
         heroBadgeText: "Almaty — open <span style=\"color: var(--text-white);\">24/7</span>",
+        navSubtitle: "Almaty — since 2018",
+        chooseLanguageTitle: "Choose Language",
+        selectCity: "Select City",
+        yourAddress: "Address (optional)",
+        problemDescription: "Description of the problem (optional)",
+        selectCityAlmaty: "Almaty",
+        selectCityAstana: "Astana",
         callMaster: "Call a Master",
         catalogTitle: "Services Catalog",
         catalogSub: "Select a category to view prices and make a quick order",
@@ -7780,7 +7821,15 @@
 
     window.addEventListener('DOMContentLoaded', async () => {
       initTheme();
-      switchLang('RU');
+      
+      const savedLang = localStorage.getItem('lang');
+      if (savedLang) {
+        switchLang(savedLang);
+      } else {
+        switchLang('RU');
+        openLangSelectModal();
+      }
+
       loadClientBotConfig();
       await fetchDynamicCatalog();
       initRouter();
@@ -7995,7 +8044,7 @@
     function selectCity(city) {
       currentCity = city;
       document.getElementById('current-city-label').innerText = currentCity;
-      document.getElementById('nav-subtitle').innerText = `${currentCity} • С 2018`;
+      updateNavSubtitle();
 
       const footerAddr = document.getElementById('footer-address');
       if (footerAddr) {
@@ -8064,6 +8113,7 @@
     // TRANSLATIONS
     function switchLang(langCode) {
       currentLang = langCode;
+      localStorage.setItem('lang', langCode);
 
       // Update lang buttons
       document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -8076,8 +8126,39 @@
       renderReviews();
     }
 
+    function openLangSelectModal() {
+      const modal = document.getElementById('lang-select-modal-overlay');
+      if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function selectAndCloseLang(langCode) {
+      switchLang(langCode);
+      const modal = document.getElementById('lang-select-modal-overlay');
+      if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    function updateNavSubtitle() {
+      const el = document.getElementById('nav-subtitle');
+      if (el) {
+        if (currentLang === 'RU') {
+          el.innerText = `${currentCity} — с 2018`;
+        } else if (currentLang === 'KZ') {
+          el.innerText = `${currentCity} — 2018 жылдан бастап`;
+        } else {
+          el.innerText = `${currentCity} — since 2018`;
+        }
+      }
+    }
+
     function translateUI() {
       const data = translations[currentLang];
+      updateNavSubtitle();
 
       // Update elements with data-i18n attributes
       document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -8247,81 +8328,123 @@
     }
 
     // SUBMIT ACTIONS
-    function handleModalSubmit(e) {
+    // SUBMIT ACTIONS
+    async function handleModalSubmit(e) {
       e.preventDefault();
+      const name = document.getElementById('modal-name').value.trim();
+      const phone = document.getElementById('modal-phone').value.trim();
+      const service = activeServiceName || 'Общая заявка';
+      const city = currentCity || 'Алматы';
 
-      document.getElementById('modal-form-container').style.display = 'none';
-      document.getElementById('modal-success-container').style.display = 'block';
+      if (!name || !phone) return;
 
-      setTimeout(() => {
-        closeModal();
-        document.getElementById('modal-name').value = '';
-        document.getElementById('modal-phone').value = '';
-      }, 2500);
+      try {
+        const res = await fetch(API_BASE + '/api/callback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, phone, service, city, comment: 'Заявка из модального окна' })
+        });
+        if (res.ok) {
+          document.getElementById('modal-form-container').style.display = 'none';
+          document.getElementById('modal-success-container').style.display = 'block';
+          setTimeout(() => {
+            closeModal();
+            document.getElementById('modal-name').value = '';
+            document.getElementById('modal-phone').value = '';
+          }, 2500);
+        } else {
+          alert('Ошибка при отправке заявки. Пожалуйста, попробуйте еще раз.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Ошибка сети. Пожалуйста, попробуйте еще раз.');
+      }
     }
 
     async function handleLeadSubmit(e) {
       e.preventDefault();
 
-      const name = document.getElementById('lead-name').value;
-      const phone = document.getElementById('lead-phone').value;
-      const city = document.getElementById('lead-city').value;
-      const address = document.getElementById('lead-address').value;
-      const service = document.getElementById('lead-service-select').value;
-      
+      const name = document.getElementById('lead-name').value.trim();
+      const phone = document.getElementById('lead-phone').value.trim();
+      const serviceSelect = document.getElementById('lead-service-select');
+      const service = serviceSelect.options[serviceSelect.selectedIndex]?.text || '';
+      const citySelect = document.getElementById('lead-city-select');
+      const city = citySelect.options[citySelect.selectedIndex]?.text || '';
+      const address = document.getElementById('lead-address').value.trim();
+      const comment = document.getElementById('lead-comment').value.trim();
+
+      if (!name || !phone) return;
+
       try {
-        await fetch(API_BASE + '/api/callback', {
+        const res = await fetch(API_BASE + '/api/callback', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, phone, city, address, service, comment: '' })
+          body: JSON.stringify({
+            name,
+            phone,
+            service,
+            city,
+            address,
+            comment
+          })
         });
-      } catch(err) {
+
+        if (res.ok) {
+          document.getElementById('lead-form-container').style.display = 'none';
+          document.getElementById('lead-success-container').style.display = 'block';
+
+          setTimeout(() => {
+            document.getElementById('lead-form-container').style.display = 'block';
+            document.getElementById('lead-success-container').style.display = 'none';
+            document.getElementById('lead-name').value = '';
+            document.getElementById('lead-phone').value = '';
+            document.getElementById('lead-address').value = '';
+            document.getElementById('lead-comment').value = '';
+          }, 4000);
+        } else {
+          alert('Ошибка при отправке заявки. Пожалуйста, попробуйте еще раз.');
+        }
+      } catch (err) {
         console.error(err);
+        alert('Ошибка сети. Пожалуйста, попробуйте еще раз.');
       }
-
-      document.getElementById('lead-form-container').style.display = 'none';
-      document.getElementById('lead-success-container').style.display = 'block';
-
-      setTimeout(() => {
-        document.getElementById('lead-form-container').style.display = 'block';
-        document.getElementById('lead-success-container').style.display = 'none';
-        document.getElementById('lead-name').value = '';
-        document.getElementById('lead-phone').value = '';
-        document.getElementById('lead-address').value = '';
-      }, 4000);
     }
 
     async function handleHeroLeadSubmit(e) {
       e.preventDefault();
+      const name = document.getElementById('hero-lead-name').value.trim();
+      const phone = document.getElementById('hero-lead-phone').value.trim();
+      const service = document.getElementById('hero-lead-service').value;
+      const city = currentCity || 'Алматы';
+
+      if (!name || !phone) return;
+
       const formActual = document.getElementById('hero-form-actual');
       const formSuccess = document.getElementById('hero-form-success');
-      
-      const name = document.getElementById('hero-lead-name').value;
-      const phone = document.getElementById('hero-lead-phone').value;
-      const service = document.getElementById('hero-lead-service').value;
-      const city = currentCity || 'Алматы'; // default
-      const address = ''; // no address in quick form
-      
+
       try {
-        await fetch(API_BASE + '/api/callback', {
+        const res = await fetch(API_BASE + '/api/callback', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, phone, city, address, service, comment: '' })
+          body: JSON.stringify({ name, phone, service, city, comment: 'Заявка из главного калькулятора (Hero)' })
         });
-      } catch(err) {
+        if (res.ok) {
+          if (formActual && formSuccess) {
+            formActual.style.display = 'none';
+            formSuccess.style.display = 'flex';
+            setTimeout(() => {
+              formActual.style.display = 'block';
+              formSuccess.style.display = 'none';
+              document.getElementById('hero-lead-name').value = '';
+              document.getElementById('hero-lead-phone').value = '';
+            }, 4000);
+          }
+        } else {
+          alert('Ошибка при отправке заявки. Пожалуйста, попробуйте еще раз.');
+        }
+      } catch (err) {
         console.error(err);
-      }
-
-      if (formActual && formSuccess) {
-        formActual.style.display = 'none';
-        formSuccess.style.display = 'flex';
-
-        setTimeout(() => {
-          formActual.style.display = 'block';
-          formSuccess.style.display = 'none';
-          document.getElementById('hero-lead-name').value = '';
-          document.getElementById('hero-lead-phone').value = '';
-        }, 4000);
+        alert('Ошибка сети. Пожалуйста, попробуйте еще раз.');
       }
     }
 

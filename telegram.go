@@ -92,33 +92,41 @@ func NotifyNewOrder(db DB, record *CallbackRecord) {
 		return
 	}
 
-	commentStr := record.Comment
-	if commentStr == "" {
-		commentStr = "не указано"
+	var sb strings.Builder
+	sb.WriteString("🌐 <b>HUB MASTER — Новая заявка с сайта</b>\n")
+	sb.WriteString("━━━━━━━━━━━━━━━━━━━━\n")
+	sb.WriteString(fmt.Sprintf("🔔 <b>Заявка #%d</b>\n\n", record.ID))
+
+	name := strings.TrimSpace(record.Name)
+	if name != "" && name != "не указано" {
+		sb.WriteString(fmt.Sprintf("👤 <b>Имя:</b> %s\n", name))
+	}
+	phone := strings.TrimSpace(record.Phone)
+	if phone != "" && phone != "не указано" {
+		sb.WriteString(fmt.Sprintf("📞 <b>Телефон:</b> %s\n", phone))
+	}
+	service := strings.TrimSpace(record.Service)
+	if service != "" && service != "не указано" {
+		sb.WriteString(fmt.Sprintf("🛠 <b>Услуга:</b> %s\n", service))
+	}
+	city := strings.TrimSpace(record.City)
+	if city != "" && city != "не указано" {
+		sb.WriteString(fmt.Sprintf("🏙 <b>Город:</b> %s\n", city))
+	}
+	address := strings.TrimSpace(record.Address)
+	if address != "" && address != "не указано" {
+		sb.WriteString(fmt.Sprintf("📍 <b>Адрес:</b> %s\n", address))
+	}
+	comment := strings.TrimSpace(record.Comment)
+	if comment != "" && comment != "не указано" {
+		sb.WriteString(fmt.Sprintf("💬 <b>Описание/Проблема:</b> %s\n", comment))
 	}
 
-	msg := fmt.Sprintf(
-		"🌐 <b>HUB MASTER — Новая заявка с сайта</b>\n"+
-			"━━━━━━━━━━━━━━━━━━━━\n"+
-			"🔔 <b>Заявка #%d</b>\n\n"+
-			"👤 <b>Имя:</b> %s\n"+
-			"📞 <b>Телефон:</b> %s\n"+
-			"🛠 <b>Услуга:</b> %s\n"+
-			"🏙 <b>Город:</b> %s\n"+
-			"📍 <b>Адрес:</b> %s\n"+
-			"💬 <b>Описание/Проблема:</b> %s\n"+
-			"🕐 <b>Время:</b> %s\n"+
-			"━━━━━━━━━━━━━━━━━━━━\n"+
-			"🔗 <i>master-hub-production.up.railway.app</i>",
-		record.ID,
-		record.Name,
-		record.Phone,
-		record.Service,
-		record.City,
-		record.Address,
-		commentStr,
-		record.CreatedAt.Format("02.01.2006 15:04"),
-	)
+	sb.WriteString(fmt.Sprintf("🕐 <b>Время:</b> %s\n", record.CreatedAt.Format("02.01.2006 15:04")))
+	sb.WriteString("━━━━━━━━━━━━━━━━━━━━\n")
+	sb.WriteString("🔗 <i>master-hub-production.up.railway.app</i>")
+
+	msg := sb.String()
 
 	for _, chatID := range subscribers {
 		tgSendMessage(chatID, msg)

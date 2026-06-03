@@ -953,6 +953,7 @@ func (j *JsonDB) CreateCallback(req CallbackRequest, userID *int) (*CallbackReco
 		Phone:     req.Phone,
 		Service:   req.Service,
 		City:      req.City,
+		Address:   req.Address,
 		Comment:   req.Comment,
 		Status:    "pending",
 		CreatedAt: time.Now(),
