@@ -5165,7 +5165,7 @@
             <!-- CENTER: placeholder for future master image -->
             <div class="hero-v2-master">
               <div class="master-glow-bg"></div>
-              <img src="/public/hero_master.png" alt="Master" class="hero-master-img">
+              <img src="/public/hero_master.png?v=2" alt="Master" class="hero-master-img">
             </div>
 
             <!-- Right pills: LONG top → SHORT bottom (matching left column lengths) -->
@@ -7867,15 +7867,15 @@
       const masterImg = document.querySelector('.hero-master-img');
       if (masterImg) {
         masterImg.src = currentTheme === 'dark'
-          ? '/public/hero_master.png'
-          : '/public/hero_master_day.png';
+          ? '/public/hero_master.png?v=2'
+          : '/public/hero_master_day.png?v=2';
       }
 
       const showcasePls = document.querySelectorAll('.showcase-master-placeholder');
       showcasePls.forEach(el => {
         el.style.backgroundImage = currentTheme === 'dark'
-          ? "url('/public/showcase_master.png')"
-          : "url('/public/showcase_master_day.png')";
+          ? "url('/public/showcase_master.png?v=2')"
+          : "url('/public/showcase_master_day.png?v=2')";
       });
     }
 
@@ -7895,15 +7895,15 @@
       const masterImg = document.querySelector('.hero-master-img');
       if (masterImg) {
         masterImg.src = currentTheme === 'dark'
-          ? '/public/hero_master.png'
-          : '/public/hero_master_day.png';
+          ? '/public/hero_master.png?v=2'
+          : '/public/hero_master_day.png?v=2';
       }
 
       const showcasePls = document.querySelectorAll('.showcase-master-placeholder');
       showcasePls.forEach(el => {
         el.style.backgroundImage = currentTheme === 'dark'
-          ? "url('/public/showcase_master.png')"
-          : "url('/public/showcase_master_day.png')";
+          ? "url('/public/showcase_master.png?v=2')"
+          : "url('/public/showcase_master_day.png?v=2')";
       });
     }
 
