@@ -7617,6 +7617,7 @@
     }
 
     window.addEventListener('DOMContentLoaded', async () => {
+      initTheme();
       switchLang('RU');
       loadClientBotConfig();
       await fetchDynamicCatalog();
@@ -7848,8 +7849,39 @@
       closeAllDropdowns();
     }
 
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      currentTheme = savedTheme;
+      document.documentElement.setAttribute('data-theme', currentTheme);
+
+      const sunEl = document.getElementById('theme-sun');
+      const moonEl = document.getElementById('theme-moon');
+      if (currentTheme === 'dark') {
+        if (sunEl) sunEl.style.display = 'block';
+        if (moonEl) moonEl.style.display = 'none';
+      } else {
+        if (sunEl) sunEl.style.display = 'none';
+        if (moonEl) moonEl.style.display = 'block';
+      }
+
+      const masterImg = document.querySelector('.hero-master-img');
+      if (masterImg) {
+        masterImg.src = currentTheme === 'dark'
+          ? '/public/hero_master.png'
+          : '/public/hero_master_day.png';
+      }
+
+      const showcasePls = document.querySelectorAll('.showcase-master-placeholder');
+      showcasePls.forEach(el => {
+        el.style.backgroundImage = currentTheme === 'dark'
+          ? "url('/public/showcase_master.png')"
+          : "url('/public/showcase_master_day.png')";
+      });
+    }
+
     function toggleTheme() {
       currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', currentTheme);
       document.documentElement.setAttribute('data-theme', currentTheme);
 
       if (currentTheme === 'dark') {
