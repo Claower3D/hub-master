@@ -6999,6 +6999,43 @@
     </div>
   </div>
 
+  <!-- AUTH WARNING MODAL -->
+  <div class="modal-overlay" id="auth-warning-modal-overlay" style="z-index: 100000;">
+    <div class="modal-box" style="max-width: 400px; width: 90%; text-align: center; padding: 30px; border-radius: 20px;">
+      <!-- Close button -->
+      <button class="modal-close-btn" onclick="closeAuthWarningModal()" aria-label="Close warning" style="top: 16px; right: 16px; z-index: 10;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+
+      <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(230, 51, 51, 0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" style="width: 28px; height: 28px;">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+      </div>
+
+      <h3 id="auth-warning-title" style="font-family: var(--font-heading); font-weight: 800; font-size: 20px; color: var(--text-white); margin-bottom: 12px;">
+        Требуется авторизация
+      </h3>
+      <p id="auth-warning-message" style="font-size: 14px; color: var(--text-white); opacity: 0.8; margin-bottom: 24px; line-height: 1.5;">
+        Оставлять отзывы могут только зарегистрированные пользователи. Пожалуйста, войдите в личный кабинет.
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <button onclick="handleAuthWarningLogin()" class="review-submit-btn" style="width: 100%; padding: 12px; font-size: 15px;">
+          Войти
+        </button>
+        <button onclick="closeAuthWarningModal()" id="auth-warning-cancel-btn" style="background: none; border: 1px solid var(--border); color: var(--text-white); cursor: pointer; font-size: 14px; font-weight: 600; padding: 12px; border-radius: 8px; transition: background 0.2s;">
+          Отмена
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- LANGUAGE SELECTION MODAL -->
   <div class="modal-overlay" id="lang-select-modal-overlay" style="z-index: 100000; display: none; align-items: center; justify-content: center; background: rgba(9, 9, 11, 0.85); backdrop-filter: blur(8px);">
     <div class="modal-box" style="max-width: 400px; width: 90%; text-align: center; padding: 30px; border: 1px solid var(--border); background: var(--bg-card); border-radius: 20px; box-shadow: var(--shadow);">
@@ -9265,6 +9302,12 @@
     function handleReviewSubmit(e) {
       e.preventDefault();
 
+      const token = localStorage.getItem('cab_token');
+      if (!token) {
+        openAuthWarningModal();
+        return;
+      }
+
       const name = document.getElementById('rev-name').value;
       const service = document.getElementById('rev-service').value;
       const text = document.getElementById('rev-text').value;
@@ -9294,6 +9337,67 @@
       document.getElementById('rev-service').value = '';
       document.getElementById('rev-text').value = '';
       setReviewRating(5);
+    }
+
+    // AUTH WARNING MODAL CONTROLLERS
+    function openAuthWarningModal() {
+      const modal = document.getElementById('auth-warning-modal-overlay');
+      const title = document.getElementById('auth-warning-title');
+      const message = document.getElementById('auth-warning-message');
+      const loginBtn = document.querySelector('#auth-warning-modal-overlay .review-submit-btn');
+      const cancelBtn = document.getElementById('auth-warning-cancel-btn');
+
+      if (currentLang === 'KZ') {
+        title.innerText = "Авторизация қажет";
+        message.innerText = "Пікір қалдыру тек тіркелген пайдаланушыларға рұқсат етілген. Жеке кабинетке кіріңіз немесе тіркеліңіз.";
+        loginBtn.innerText = "Кіру";
+        cancelBtn.innerText = "Бас тарту";
+      } else if (currentLang === 'EN') {
+        title.innerText = "Authorization Required";
+        message.innerText = "Only registered users can leave reviews. Please log in or register in your personal cabinet.";
+        loginBtn.innerText = "Login";
+        cancelBtn.innerText = "Cancel";
+      } else {
+        title.innerText = "Требуется авторизация";
+        message.innerText = "Оставлять отзывы могут только зарегистрированные пользователи. Пожалуйста, войдите в личный кабинет или зарегистрируйтесь.";
+        loginBtn.innerText = "Войти";
+        cancelBtn.innerText = "Отмена";
+      }
+
+      if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    // Light theme styles mapping to adapt modal dynamically
+    const styleTag = document.createElement('style');
+    styleTag.innerHTML = `
+      [data-theme="light"] #auth-warning-modal-overlay .modal-box {
+        background-color: var(--bg-card) !important;
+        border: 1px solid var(--border) !important;
+      }
+      [data-theme="light"] #auth-warning-modal-overlay h3,
+      [data-theme="light"] #auth-warning-modal-overlay p,
+      [data-theme="light"] #auth-warning-cancel-btn {
+        color: var(--text) !important;
+      }
+    `;
+    document.head.appendChild(styleTag);
+
+    function closeAuthWarningModal() {
+      const modal = document.getElementById('auth-warning-modal-overlay');
+      if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function handleAuthWarningLogin() {
+      closeAuthWarningModal();
+      if (typeof openCabinetModal === 'function') {
+        openCabinetModal();
+      }
     }
 
     // ═══════════════════════════════════════════════════════════════
