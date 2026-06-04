@@ -8601,6 +8601,11 @@
 
       // Update custom translated properties
       document.getElementById('stat-arrival-value').innerText = `45 ${data.minUnit}`;
+      document.getElementById('footer-desc').innerText = currentLang === 'RU'
+        ? 'HUB MASTER — мы мультисервис бытовых услуг и товаров по всему Казахстану. Быстро, качественно и с долгосрочной гарантией.'
+        : currentLang === 'KZ'
+          ? 'HUB MASTER — бүкіл Қазақстан бойынша тұрмыстық қызмет көрсету және тауарлар мультисервисі. Жылдам, сапалы және ұзақ мерзімді кепілдікпен.'
+          : 'HUB MASTER — household services and goods multi-service all over Kazakhstan. Fast, reliable, with long-term warranty.';
 
       // Translate options & text attributes
       document.querySelectorAll('[data-title-ru]').forEach(el => {
