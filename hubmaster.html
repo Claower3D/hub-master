@@ -9162,10 +9162,16 @@
 
       if (!name || !phone) return;
 
+      const token = localStorage.getItem('cab_token');
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) {
+        headers['Authorization'] = 'Bearer ' + token;
+      }
+
       try {
         const res = await fetch(API_BASE + '/api/callback', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: headers,
           body: JSON.stringify({
             name,
             phone,
@@ -9208,10 +9214,16 @@
 
       if (!name || !phone) return;
 
+      const token = localStorage.getItem('cab_token');
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) {
+        headers['Authorization'] = 'Bearer ' + token;
+      }
+
       try {
         const res = await fetch(API_BASE + '/api/callback', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: headers,
           body: JSON.stringify({
             name,
             phone,
@@ -9255,10 +9267,16 @@
       const formActual = document.getElementById('hero-form-actual');
       const formSuccess = document.getElementById('hero-form-success');
 
+      const token = localStorage.getItem('cab_token');
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) {
+        headers['Authorization'] = 'Bearer ' + token;
+      }
+
       try {
         const res = await fetch(API_BASE + '/api/callback', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: headers,
           body: JSON.stringify({ name, phone, service, city, comment: 'Заявка из главного калькулятора (Hero)' })
         });
         if (res.ok) {
@@ -11430,10 +11448,16 @@
 
       if (!name || !phone) return;
 
+      const token = localStorage.getItem('cab_token');
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) {
+        headers['Authorization'] = 'Bearer ' + token;
+      }
+
       try {
         const res = await fetch(API_BASE + '/api/callback', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: headers,
           body: JSON.stringify({ name, phone, service: serviceName, city })
         });
         if (res.ok) {

@@ -61,13 +61,20 @@ func tgSendMessage(chatID int64, text string) {
 		log.Printf("⚠️ Telegram send error: %v", err)
 		return
 	}
-	resp.Body.Close()
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		respBody, _ := io.ReadAll(resp.Body)
+		log.Printf("⚠️ Telegram API returned status %d: %s", resp.StatusCode, string(respBody))
+	}
 }
 
 // NotifyNewOrder sends a notification about a new order to all Telegram subscribers
 func NotifyNewOrder(db DB, record *CallbackRecord) {
+	log.Printf("📤 [Telegram] Processing new order #%d for notifications...", record.ID)
 	subscribers, err := db.GetTelegramSubscribers()
 	if err != nil {
+		log.Printf("⚠️ [Telegram] Error fetching subscribers: %v", err)
 		subscribers = []int64{}
 	}
 
@@ -84,11 +91,15 @@ func NotifyNewOrder(db DB, record *CallbackRecord) {
 			}
 			if !exists {
 				subscribers = append(subscribers, globalChatID)
+				log.Printf("📢 [Telegram] Added global chat ID from TELEGRAM_CHAT_ID env: %d", globalChatID)
 			}
+		} else {
+			log.Printf("⚠️ [Telegram] Invalid TELEGRAM_CHAT_ID env value: %s", globalChatStr)
 		}
 	}
 
 	if len(subscribers) == 0 {
+		log.Printf("⚠️ [Telegram] No subscribers or global TELEGRAM_CHAT_ID configured. Order notification #%d not sent. To receive notifications, start the bot with /start or set TELEGRAM_CHAT_ID env variable.", record.ID)
 		return
 	}
 
@@ -128,8 +139,10 @@ func NotifyNewOrder(db DB, record *CallbackRecord) {
 
 	msg := sb.String()
 
+	log.Printf("📤 [Telegram] Sending order #%d notification to %d subscribers...", record.ID, len(subscribers))
 	for _, chatID := range subscribers {
 		tgSendMessage(chatID, msg)
+		log.Printf("✅ [Telegram] Sent notification to chat %d", chatID)
 	}
 }
 
