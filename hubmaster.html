@@ -8154,10 +8154,12 @@
           if (svc.categories && svc.categories.length > 0) {
             svc.categories.forEach(cat => {
               if (!categoriesToRender.some(c => c.id === cat.id)) {
+                cat.tabId = svc.id;
                 categoriesToRender.push(cat);
               }
             });
           } else {
+            svc.tabId = svc.id;
             categoriesToRender.push(svc);
           }
         });
@@ -8167,6 +8169,7 @@
           if (svc.categories && svc.categories.length > 0) {
             const cat = svc.categories.find(c => c.id === selectedCategory);
             if (cat) {
+              cat.tabId = svc.id;
               categoriesToRender.push(cat);
               found = true;
             }
@@ -8175,6 +8178,7 @@
         if (!found) {
           const cat = servicesData.find(svc => svc.id === selectedCategory);
           if (cat) {
+            cat.tabId = cat.id;
             categoriesToRender.push(cat);
           }
         }
@@ -8204,7 +8208,7 @@
         const itemsListHTML = (cat.items || []).slice(0, 4).map(item => {
           const name = currentLang === 'RU' ? item.name : currentLang === 'KZ' ? item.nameKz || item.name : item.nameEn || item.name;
           const clickAction = (item.catId && item.id)
-            ? `navigateThematic('${cat.id}', '${item.catId}', '${item.id}')`
+            ? `navigateThematic('${cat.tabId || cat.id}', '${cat.id}', '${item.id}')`
             : `openModal('${item.name}')`;
 
           return `
@@ -10463,9 +10467,74 @@
       }
     }
 
+    function resolveCatalogRoute(parts) {
+      if (!parts || parts.length === 0) return null;
+      
+      let resolvedTab = null;
+      let resolvedCat = null;
+      let resolvedItem = null;
+
+      // 1. Search for item first (e.g. "sub-okna-1-1") in all parts
+      for (const part of parts) {
+        for (const tab of servicesData) {
+          if (tab.items) {
+            const foundItem = tab.items.find(i => i.id === part);
+            if (foundItem) {
+              resolvedItem = foundItem;
+              resolvedCat = (tab.categories || []).find(c => c.id === foundItem.catId);
+              resolvedTab = tab;
+              break;
+            }
+          }
+        }
+        if (resolvedItem) break;
+      }
+
+      // 2. Search for category (e.g. "cat-okna-1")
+      if (!resolvedItem) {
+        for (const part of parts) {
+          for (const tab of servicesData) {
+            if (tab.categories) {
+              const foundCat = tab.categories.find(c => c.id === part);
+              if (foundCat) {
+                resolvedCat = foundCat;
+                resolvedTab = tab;
+                break;
+              }
+            }
+            if (tab.id === part && (!tab.categories || tab.categories.length === 0)) {
+              resolvedCat = tab;
+              resolvedTab = tab;
+              break;
+            }
+          }
+          if (resolvedCat) break;
+        }
+      }
+
+      // 3. Search for tab (e.g. "okna")
+      if (!resolvedCat && !resolvedItem) {
+        for (const part of parts) {
+          const foundTab = servicesData.find(t => t.id === part);
+          if (foundTab) {
+            resolvedTab = foundTab;
+            break;
+          }
+        }
+      }
+
+      if (resolvedTab || resolvedCat || resolvedItem) {
+        return {
+          tabId: resolvedTab ? resolvedTab.id : (resolvedCat ? resolvedCat.tabId : null),
+          catId: resolvedCat ? resolvedCat.id : null,
+          itemId: resolvedItem ? resolvedItem.id : null
+        };
+      }
+      return null;
+    }
+
     function getThematicImage(catId, subcatId, itemId) {
       const images = {
-        // Tech
         'sub-tech-1-1': 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?q=80&w=600&auto=format&fit=crop',
         'sub-tech-1-2': 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=600&auto=format&fit=crop',
         'sub-tech-1-3': 'https://images.unsplash.com/photo-1585338107529-13afc5f02586?q=80&w=600&auto=format&fit=crop',
@@ -10474,43 +10543,106 @@
         'cat-tech-3': 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=600&auto=format&fit=crop',
         'cat-tech-4': 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=600&auto=format&fit=crop',
         'tech': 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=600&auto=format&fit=crop',
-        
-        // Auto
         'cat-auto-1': 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?q=80&w=600&auto=format&fit=crop',
         'cat-auto-2': 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=600&auto=format&fit=crop',
         'auto': 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?q=80&w=600&auto=format&fit=crop',
-        
-        // Household
         'cat-house-1': 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=600&auto=format&fit=crop',
         'cat-house-2': 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=600&auto=format&fit=crop',
         'cat-house-3': 'https://images.unsplash.com/photo-1528224202796-f3e49e29a997?q=80&w=600&auto=format&fit=crop',
         'cat-house-4': 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=600&auto=format&fit=crop',
         'household': 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=600&auto=format&fit=crop',
-        
-        // Specialists
         'cat-spec-1': 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=600&auto=format&fit=crop',
         'cat-spec-2': 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=600&auto=format&fit=crop',
         'specialists': 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=600&auto=format&fit=crop',
-
-        // Construction
         'cat-const-1': 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=600&auto=format&fit=crop',
         'cat-const-2': 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=600&auto=format&fit=crop',
         'cat-const-3': 'https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80&w=600&auto=format&fit=crop',
         'construction': 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=600&auto=format&fit=crop',
-
-        // Furniture
         'cat-furn-1': 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=600&auto=format&fit=crop',
         'cat-furn-2': 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=600&auto=format&fit=crop',
         'furniture': 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=600&auto=format&fit=crop',
-
-        // Other
         'cat-other-1': 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=600&auto=format&fit=crop',
         'cat-other-2': 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop',
         'cat-other-3': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600&auto=format&fit=crop',
         'other': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600&auto=format&fit=crop'
       };
 
-      return images[itemId] || images[subcatId] || images[catId] || 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=600&auto=format&fit=crop';
+      if (itemId && images[itemId]) return images[itemId];
+      if (subcatId && images[subcatId]) return images[subcatId];
+      if (catId && images[catId]) return images[catId];
+
+      let searchTitle = '';
+      let cat = servicesData.find(c => c.id === catId);
+      if (!cat) {
+        for (const tab of servicesData) {
+          if (tab.categories) {
+            const found = tab.categories.find(c => c.id === catId);
+            if (found) {
+              cat = found;
+              break;
+            }
+          }
+        }
+      }
+
+      if (cat) {
+        searchTitle = cat.title;
+        if (itemId && cat.items) {
+          const item = cat.items.find(i => i.id === itemId);
+          if (item) searchTitle = item.name;
+        } else if (subcatId && cat.items) {
+          const subItem = cat.items.find(i => i.catId === subcatId);
+          if (subItem) searchTitle = subItem.catTitle || subItem.name;
+        }
+      }
+
+      const t = (searchTitle || '').toLowerCase();
+      if (t.includes('крупн') || t.includes('стирал') || t.includes('холод')) {
+        return 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=800&q=80';
+      }
+      if (t.includes('мелк') || t.includes('пылесос') || t.includes('микроволн') || t.includes('кофема')) {
+        return 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&q=80';
+      }
+      if (t.includes('цифр') || t.includes('телевиз') || t.includes('телефо') || t.includes('планшет')) {
+        return 'https://images.unsplash.com/photo-1461151304267-38535e780c79?w=800&q=80';
+      }
+      if (t.includes('компь') || t.includes('ноутбук') || t.includes('macbook')) {
+        return 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=800&q=80';
+      }
+      if (t.includes('авто') || t.includes('сто') || t.includes('эвакуа')) {
+        return 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800&q=80';
+      }
+      if (t.includes('клини') || t.includes('уборк')) {
+        return 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80';
+      }
+      if (t.includes('санитар') || t.includes('дезинф') || t.includes('тарака') || t.includes('клоп')) {
+        return 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80';
+      }
+      if (t.includes('химчист') || t.includes('стирк') || t.includes('ковр')) {
+        return 'https://images.unsplash.com/photo-1545189656-786ac2d77ef7?w=800&q=80';
+      }
+      if (t.includes('сантех') || t.includes('электри') || t.includes('проводк')) {
+        return 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800&q=80';
+      }
+      if (t.includes('юрист') || t.includes('адвокат') || t.includes('закон')) {
+        return 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80';
+      }
+      if (t.includes('жиһаз') || t.includes('мебе')) {
+        return 'https://images.unsplash.com/photo-1592078615290-033ee584e267?w=800&q=80';
+      }
+      if (t.includes('окн') || t.includes('витраж')) {
+        return 'https://images.unsplash.com/photo-1509644851169-2aba0855683d?w=800&q=80';
+      }
+      if (t.includes('здоров') || t.includes('врач') || t.includes('фитнес')) {
+        return 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80';
+      }
+      if (t.includes('ремонт кварт') || t.includes('строител')) {
+        return 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80';
+      }
+      if (t.includes('монтаж') || t.includes('установк')) {
+        return 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80';
+      }
+      return 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=600&auto=format&fit=crop';
     }
 
     function renderThematicPage(catId, subcatId = null, itemId = null) {
@@ -10524,7 +10656,44 @@
         return;
       }
 
-      const cat = servicesData.find(c => c.id === catId);
+      let resolved = resolveCatalogRoute([catId, subcatId, itemId].filter(Boolean));
+      if (!resolved) {
+        let fallbackCat = servicesData.find(c => c.id === catId);
+        if (!fallbackCat) {
+          for (const tab of servicesData) {
+            if (tab.categories) {
+              const found = tab.categories.find(c => c.id === catId);
+              if (found) {
+                fallbackCat = found;
+                break;
+              }
+            }
+          }
+        }
+        if (!fallbackCat) {
+          landing.style.display = 'block';
+          thematic.style.display = 'none';
+          return;
+        }
+        resolved = {
+          tabId: catId,
+          catId: fallbackCat.id,
+          itemId: itemId
+        };
+      }
+
+      const tab = servicesData.find(t => t.id === resolved.tabId);
+      let cat = null;
+      if (resolved.catId) {
+        cat = tab ? (tab.categories || []).find(c => c.id === resolved.catId) : null;
+        if (!cat) {
+          cat = servicesData.find(c => c.id === resolved.catId);
+        }
+      }
+      if (!cat) {
+        cat = tab || servicesData.find(c => c.id === resolved.tabId);
+      }
+
       if (!cat) {
         landing.style.display = 'block';
         thematic.style.display = 'none';
@@ -10538,51 +10707,42 @@
         <div class="breadcrumbs">
           <a href="#" onclick="navigateThematic(''); return false;">Главная</a>
           <span class="separator">/</span>
-          <a href="#" onclick="navigateThematic('${cat.id}'); return false;">${currentLang === 'RU' ? cat.title : (currentLang === 'KZ' ? cat.titleKz : cat.titleEn)}</a>
+          <a href="#" onclick="navigateThematic('${resolved.tabId}'); return false;">${currentLang === 'RU' ? (tab ? tab.title : cat.title) : (currentLang === 'KZ' ? (tab ? tab.titleKz || tab.title : cat.titleKz || cat.title) : (tab ? tab.titleEn || tab.title : cat.titleEn || cat.title))}</a>
       `;
 
-      let title = currentLang === 'RU' ? cat.title : (currentLang === 'KZ' ? cat.titleKz : cat.titleEn);
-      let subtitle = currentLang === 'RU' ? `Профессиональный сервис услуг и товаров в категории "${cat.title}" в Алматы и Астане.` : `Сапалы қызмет көрсету "${cat.titleKz}" санаты бойынша.`;
+      let title = currentLang === 'RU' ? cat.title : (currentLang === 'KZ' ? cat.titleKz || cat.title : cat.titleEn || cat.title);
+      let subtitle = currentLang === 'RU' ? `Профессиональный сервис услуг и товаров в категории "${cat.title}" в Алматы и Астане.` : `Сапалы қызмет көрсету "${cat.titleKz || cat.title}" санаты бойынша.`;
       let itemsList = [];
-      let activeSubcatTitle = "";
 
-      if (itemId) {
-        const item = cat.items.find(i => i.id === itemId);
+      if (resolved.itemId) {
+        const item = cat.items.find(i => i.id === resolved.itemId);
         if (item) {
           breadcrumbsHTML += `
             <span class="separator">/</span>
-            <a href="#" onclick="navigateThematic('${cat.id}', '${item.catId}'); return false;">${currentLang === 'RU' ? item.catTitle : (currentLang === 'KZ' ? item.catTitleKz : item.catTitleEn)}</a>
+            <a href="#" onclick="navigateThematic('${resolved.tabId}', '${cat.id}'); return false;">${currentLang === 'RU' ? item.catTitle : (currentLang === 'KZ' ? item.catTitleKz || item.catTitle : item.catTitleEn || item.catTitle)}</a>
             <span class="separator">/</span>
-            <span>${currentLang === 'RU' ? item.name : item.nameKz}</span>
+            <span>${currentLang === 'RU' ? item.name : item.nameKz || item.name}</span>
           `;
-          title = currentLang === 'RU' ? item.name : item.nameKz;
+          title = currentLang === 'RU' ? item.name : item.nameKz || item.name;
           subtitle = item.desc || '';
           itemsList = [item];
         }
-      } else if (subcatId) {
-        const subItems = cat.items.filter(i => i.catId === subcatId);
-        if (subItems.length > 0) {
-          activeSubcatTitle = currentLang === 'RU' ? subItems[0].catTitle : (currentLang === 'KZ' ? subItems[0].catTitleKz : subItems[0].catTitleEn);
-          breadcrumbsHTML += `
-            <span class="separator">/</span>
-            <span>${activeSubcatTitle}</span>
-          `;
-          title = activeSubcatTitle;
-          subtitle = currentLang === 'RU' ? `Полный спектр услуг по направлению "${title}". Выгодные цены и официальная гарантия.` : `"${title}" бағыты бойынша барлық қызметтер тізімі.`;
-          itemsList = subItems;
-        }
+      } else if (resolved.catId && resolved.catId !== resolved.tabId) {
+        breadcrumbsHTML += `
+          <span class="separator">/</span>
+          <span>${title}</span>
+        `;
+        subtitle = currentLang === 'RU' ? `Полный спектр услуг по направлению "${title}". Выгодные цены и официальная гарантия.` : `"${title}" бағыты бойынша барлық қызметтер тізімі.`;
+        itemsList = cat.items || [];
       } else {
-        itemsList = cat.items;
+        itemsList = cat.items || [];
       }
 
       breadcrumbsHTML += `</div>`;
 
       let servicesHTML = '';
-      if (!itemId && !subcatId) {
-        // Render Categories with Subcategories/Services list blocks
-        servicesHTML += `
-          <div class="thematic-categories-grid">
-        `;
+      if (!resolved.itemId && (!resolved.catId || resolved.catId === resolved.tabId)) {
+        servicesHTML += `<div class="thematic-categories-grid">`;
         if (cat.categories && cat.categories.length > 0) {
           cat.categories.forEach(category => {
             const subItems = category.items || [];
@@ -10593,16 +10753,16 @@
                   <div class="category-block-icon">
                     <i class="${blockIcon}"></i>
                   </div>
-                  <h3 class="category-block-title">${currentLang === 'RU' ? category.title : (currentLang === 'KZ' ? category.titleKz : category.titleEn)}</h3>
+                  <h3 class="category-block-title">${currentLang === 'RU' ? category.title : (currentLang === 'KZ' ? category.titleKz || category.title : category.titleEn || category.title)}</h3>
                 </div>
                 <ul class="category-sublist">
             `;
             subItems.forEach(sub => {
               servicesHTML += `
                 <li>
-                  <a href="#" onclick="navigateThematic('${cat.id}', '${category.id}', '${sub.id}'); return false;">
+                  <a href="#" onclick="navigateThematic('${resolved.tabId}', '${category.id}', '${sub.id}'); return false;">
                     <i class="ri-arrow-right-s-line"></i>
-                    <span>${currentLang === 'RU' ? sub.name : sub.nameKz}</span>
+                    <span>${currentLang === 'RU' ? sub.name : sub.nameKz || sub.name}</span>
                   </a>
                 </li>
               `;
@@ -10616,12 +10776,11 @@
             `;
           });
         } else {
-          // Group flat list if categories array is missing
           const grouped = {};
-          itemsList.forEach(item => {
+          (itemsList || []).forEach(item => {
             if (!grouped[item.catId]) {
               grouped[item.catId] = {
-                title: currentLang === 'RU' ? item.catTitle : (currentLang === 'KZ' ? item.catTitleKz : item.catTitleEn),
+                title: currentLang === 'RU' ? item.catTitle : (currentLang === 'KZ' ? item.catTitleKz || item.catTitle : item.catTitleEn || item.catTitle),
                 items: []
               };
             }
@@ -10641,9 +10800,9 @@
             grouped[subId].items.forEach(item => {
               servicesHTML += `
                 <li>
-                  <a href="#" onclick="navigateThematic('${cat.id}', '${item.catId}', '${item.id}'); return false;">
+                  <a href="#" onclick="navigateThematic('${resolved.tabId}', '${item.catId}', '${item.id}'); return false;">
                     <i class="ri-arrow-right-s-line"></i>
-                    <span>${currentLang === 'RU' ? item.name : item.nameKz}</span>
+                    <span>${currentLang === 'RU' ? item.name : item.nameKz || item.name}</span>
                   </a>
                 </li>
               `;
@@ -10657,17 +10816,16 @@
         servicesHTML += `</div>`;
       } else {
         servicesHTML += `<div class="services-list-grid">`;
-        itemsList.forEach(item => {
-          servicesHTML += renderItemCardHTML(item, cat.id);
+        (itemsList || []).forEach(item => {
+          servicesHTML += renderItemCardHTML(item, resolved.tabId);
         });
         servicesHTML += `</div>`;
       }
 
-      // Generate dynamic pricing table for Category & Subcategory/Service pages
       let pricesTableHTML = '';
-      if (subcatId || itemId) {
-        const currentCategory = subcatId || (itemsList[0] && itemsList[0].catId);
-        const pricingItems = cat.items.filter(i => i.catId === currentCategory);
+      if ((resolved.catId && resolved.catId !== resolved.tabId) || resolved.itemId) {
+        const currentCategory = resolved.catId || (itemsList[0] && itemsList[0].catId);
+        const pricingItems = (cat.items || []).filter(i => i.catId === currentCategory);
         if (pricingItems.length > 0) {
           pricesTableHTML = `
             <div class="prices-section animate-fade-in">
@@ -10684,7 +10842,7 @@
                   <tbody>
           `;
           pricingItems.forEach(item => {
-            const name = currentLang === 'RU' ? item.name : item.nameKz;
+            const name = currentLang === 'RU' ? item.name : item.nameKz || item.name;
             pricesTableHTML += `
               <tr>
                 <td>${name}</td>
@@ -10705,9 +10863,8 @@
         }
       }
 
-      // Render the beautiful two-column hero
-      const heroImageSrc = getThematicImage(cat.id, subcatId, itemId);
-      const isQuickRepairBadge = itemId && (itemId.includes('tech-1-2') || itemId.includes('fridge'));
+      const heroImageSrc = getThematicImage(resolved.tabId, resolved.catId, resolved.itemId);
+      const isQuickRepairBadge = resolved.itemId && (resolved.itemId.includes('tech-1-2') || resolved.itemId.includes('fridge'));
       const badgeText = isQuickRepairBadge ? (currentLang === 'RU' ? 'Быстрый выезд мастера' : 'Шебердің жедел келуі') : 'Premium Service';
 
       let heroHTML = `
@@ -10755,7 +10912,7 @@
             <div class="thematic-left-section">
               <div class="section-headline">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                <span>${itemId ? (currentLang === 'RU' ? 'Детали услуги' : 'Қызмет мәліметтері') : (currentLang === 'RU' ? 'Наши услуги и цены' : 'Қызметтеріміз бен бағаларымыз')}</span>
+                <span>${resolved.itemId ? (currentLang === 'RU' ? 'Детали услуги' : 'Қызмет мәліметтері') : (currentLang === 'RU' ? 'Наши услуги и цены' : 'Қызметтеріміз бен бағаларымыз')}</span>
               </div>
               ${servicesHTML}
               ${pricesTableHTML}
@@ -10810,7 +10967,7 @@
     }
 
     function renderItemCardHTML(item, catId) {
-      const name = currentLang === 'RU' ? item.name : item.nameKz;
+      const name = currentLang === 'RU' ? item.name : item.nameKz || item.name;
       return `
         <div class="thematic-item-card">
           <div class="item-card-left">
@@ -10892,15 +11049,11 @@
 
       const parts = path.split('/').filter(Boolean);
       if (parts.length > 0) {
-        const catId = parts[0];
-        const subcatId = parts.length > 1 ? parts[1] : null;
-        const itemId = parts.length > 2 ? parts[2] : null;
-
-        const categoryExists = servicesData.some(s => s.id === catId);
-        if (categoryExists) {
-          renderThematicPage(catId, subcatId, itemId);
+        const resolved = resolveCatalogRoute(parts);
+        if (resolved) {
+          renderThematicPage(resolved.tabId, resolved.catId, resolved.itemId);
         } else {
-          renderThematicPage(null);
+          renderThematicPage(parts[0], parts.length > 1 ? parts[1] : null, parts.length > 2 ? parts[2] : null);
         }
       }
     }
