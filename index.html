@@ -6695,11 +6695,32 @@
         <form onsubmit="handleModalSubmit(event)">
           <div class="form-group" style="margin-bottom: 14px;">
             <label class="form-label" data-i18n="yourName">Ваше имя</label>
-            <input type="text" id="modal-name" class="form-input" required placeholder="Азамат">
+            <input type="text" id="modal-name" class="form-input" required placeholder="Азамат" style="width: 100%;">
+          </div>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label" data-i18n="yourPhone">Номер телефона</label>
+            <input type="tel" id="modal-phone" class="form-input" required placeholder="+7 (705) 846-2749" style="width: 100%;">
+          </div>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label" data-i18n="selectCity">Выберите город</label>
+            <select id="modal-city-select" class="form-select" style="width: 100%;">
+              <option value="almaty" data-i18n="selectCityAlmaty">Алматы</option>
+              <option value="astana" data-i18n="selectCityAstana">Астана</option>
+            </select>
           </div>
           <div class="form-group" style="margin-bottom: 20px;">
-            <label class="form-label" data-i18n="yourPhone">Номер телефона</label>
-            <input type="tel" id="modal-phone" class="form-input" required placeholder="+7 (705) 846-2749">
+            <label class="form-label" data-i18n="selectService">Выберите услугу</label>
+            <select id="modal-service-select" class="form-select" style="width: 100%;">
+              <option value="furniture" data-i18n="selectServiceFurniture">Сборка мебели</option>
+              <option value="appliances" data-i18n="selectServiceAppliances">Ремонт бытовой техники</option>
+              <option value="computer" data-i18n="selectServiceComputer">Компьютерная помощь</option>
+              <option value="plumbing" data-i18n="selectServicePlumbing">Сантехник</option>
+              <option value="electrical" data-i18n="selectServiceElectrical">Электрик</option>
+              <option value="cleaning" data-i18n="selectServiceCleaning">Клининг</option>
+              <option value="auto" data-i18n="selectServiceAuto">Автосервис</option>
+              <option value="movers" data-i18n="selectServiceMovers">Грузчики</option>
+              <option value="delivery" data-i18n="selectServiceDelivery">Доставка</option>
+            </select>
           </div>
           <button type="submit" class="review-submit-btn" data-i18n="sendRequest">Отправить заявку</button>
         </form>
@@ -7510,6 +7531,15 @@
         heroFormTitle: "Быстрый заказ услуг",
         heroFormDesc: "Оставьте заявку на ремонт или сборку мебели, и наши специалисты свяжутся с вами в течение 10 минут, либо напишите нам в WhatsApp.",
         btnLeaveAnketa: "Оставить анкету",
+        selectServiceFurniture: "Сборка мебели",
+        selectServiceAppliances: "Ремонт бытовой техники",
+        selectServiceComputer: "Компьютерная помощь",
+        selectServicePlumbing: "Сантехник",
+        selectServiceElectrical: "Электрик",
+        selectServiceCleaning: "Клининг",
+        selectServiceAuto: "Автосервис",
+        selectServiceMovers: "Грузчики",
+        selectServiceDelivery: "Доставка",
         ourMastersTitle: "Наши мастера",
         whyChooseTitle: "Почему выбирают нас",
         tabServices: "Услуги",
@@ -7604,6 +7634,15 @@
         heroFormTitle: "Қызметке өтінім қалдыру",
         heroFormDesc: "Жиһазды жөндеуге немесе жинауға өтінім қалдырыңыз, біздің мамандар 10 минут ішінде сізбен хабарласады немесе WhatsApp-қа жазыңыз.",
         btnLeaveAnketa: "Сауалнаманы қалдыру",
+        selectServiceFurniture: "Жиһаз жинау",
+        selectServiceAppliances: "Бытовой техника жөндеу",
+        selectServiceComputer: "Компьютерлік көмек",
+        selectServicePlumbing: "Сантехник қызметі",
+        selectServiceElectrical: "Электрик қызметі",
+        selectServiceCleaning: "Тазалық қызметі",
+        selectServiceAuto: "Автокөлік жөндеу",
+        selectServiceMovers: "Жүк тасушылар",
+        selectServiceDelivery: "Жеткізу қызметі",
         ourMastersTitle: "Біздің шеберлер",
         whyChooseTitle: "Неге бізді таңдайды",
         tabServices: "Қызметтер",
@@ -7698,6 +7737,15 @@
         heroFormTitle: "Quick Service Request",
         heroFormDesc: "Leave a request for repair or furniture assembly, and our specialists will contact you within 10 minutes, or message us on WhatsApp.",
         btnLeaveAnketa: "Submit Request",
+        selectServiceFurniture: "Furniture Assembly",
+        selectServiceAppliances: "Appliance Repair",
+        selectServiceComputer: "Computer Help",
+        selectServicePlumbing: "Plumbing",
+        selectServiceElectrical: "Electrical",
+        selectServiceCleaning: "Cleaning",
+        selectServiceAuto: "Auto Service",
+        selectServiceMovers: "Movers",
+        selectServiceDelivery: "Delivery",
         ourMastersTitle: "Our masters",
         whyChooseTitle: "Why choose us",
         tabServices: "Services",
@@ -8268,6 +8316,43 @@
         activeServiceName = null;
       }
 
+      // Prepopulate city
+      const citySelect = document.getElementById('modal-city-select');
+      if (citySelect) {
+        citySelect.value = currentCity || 'almaty';
+      }
+
+      // Prepopulate service
+      const serviceSelect = document.getElementById('modal-service-select');
+      if (serviceSelect) {
+        // Clear any dynamic custom options from previous opens
+        for (let i = serviceSelect.options.length - 1; i >= 9; i--) {
+          serviceSelect.remove(i);
+        }
+        if (serviceName) {
+          const lowerName = serviceName.toLowerCase();
+          let matched = false;
+          for (let i = 0; i < serviceSelect.options.length; i++) {
+            const optText = serviceSelect.options[i].text.toLowerCase();
+            const optVal = serviceSelect.options[i].value.toLowerCase();
+            if (lowerName.includes(optVal) || lowerName.includes(optText) || optText.includes(lowerName)) {
+              serviceSelect.selectedIndex = i;
+              matched = true;
+              break;
+            }
+          }
+          if (!matched) {
+            let opt = document.createElement('option');
+            opt.value = serviceName;
+            opt.text = serviceName;
+            opt.selected = true;
+            serviceSelect.add(opt);
+          }
+        } else {
+          serviceSelect.selectedIndex = 0;
+        }
+      }
+
       // Reset success status
       document.getElementById('modal-form-container').style.display = 'block';
       document.getElementById('modal-success-container').style.display = 'none';
@@ -8298,8 +8383,12 @@
       e.preventDefault();
       const name = document.getElementById('modal-name').value.trim();
       const phone = document.getElementById('modal-phone').value.trim();
-      const service = activeServiceName || 'Общая заявка';
-      const city = currentCity || 'Алматы';
+      
+      const serviceSelect = document.getElementById('modal-service-select');
+      const service = serviceSelect ? (serviceSelect.options[serviceSelect.selectedIndex]?.text || activeServiceName || 'Общая заявка') : (activeServiceName || 'Общая заявка');
+      
+      const citySelect = document.getElementById('modal-city-select');
+      const city = citySelect ? (citySelect.options[citySelect.selectedIndex]?.text || currentCity || 'Алматы') : (currentCity || 'Алматы');
 
       if (!name || !phone) return;
 
