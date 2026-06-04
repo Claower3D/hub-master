@@ -1944,7 +1944,7 @@
 
     .footer-grid {
       display: grid;
-      grid-template-columns: 2fr 1fr 1.5fr;
+      grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
       gap: 40px;
       margin-bottom: 40px;
     }
@@ -6748,14 +6748,21 @@
 
         <div>
           <h4 class="footer-col-title" data-i18n="catalogTitle">Каталог услуг</h4>
-          <ul class="footer-links-list" id="footer-links">
+          <ul class="footer-links-list">
             <li><a href="/furniture" class="footer-link-btn" onclick="navigateThematic('furniture'); return false;" data-i18n="selectServiceFurniture">Сборка мебели</a></li>
             <li><a href="/appliance" class="footer-link-btn" onclick="navigateThematic('appliance'); return false;" data-i18n="selectServiceAppliances">Ремонт техники</a></li>
             <li><a href="/computer" class="footer-link-btn" onclick="navigateThematic('computer'); return false;" data-i18n="selectServiceComputer">Компьютерная помощь</a></li>
             <li><a href="/plumbing" class="footer-link-btn" onclick="navigateThematic('plumbing'); return false;" data-i18n="selectServicePlumbing">Сантехника</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title" data-i18n="otherServicesTitle">Дополнительно</h4>
+          <ul class="footer-links-list">
             <li><a href="/electrical" class="footer-link-btn" onclick="navigateThematic('electrical'); return false;" data-i18n="selectServiceElectrical">Электрика</a></li>
             <li><a href="/cleaning" class="footer-link-btn" onclick="navigateThematic('cleaning'); return false;" data-i18n="selectServiceCleaning">Клининг</a></li>
             <li><a href="/movers" class="footer-link-btn" onclick="navigateThematic('movers'); return false;" data-i18n="selectServiceMovers">Грузоперевозки</a></li>
+            <li><a href="#" class="footer-link-btn" onclick="openCabinetModal(); return false;" data-i18n="cabinet">Личный кабинет</a></li>
           </ul>
         </div>
 
@@ -7719,6 +7726,7 @@
     const translations = {
       RU: {
                 partnersTitle: "Наши партнёры",
+        otherServicesTitle: "Дополнительно",
         showcaseTitle: "Премиальный <span class=\"text-red\">сервис услуг</span> для вашего<br>комфорта",
         showcaseDesc: "Быстрое решение любых бытовых и ремонтных задач. Прозрачные фиксированные цены, сертифицированные специалисты и официальная гарантия до 1 года.",
         showcasePrimaryBtn: "Заказать услугу",
@@ -7837,6 +7845,7 @@
       },
       KZ: {
                 partnersTitle: "Біздің серіктестер",
+        otherServicesTitle: "Қосымша",
         showcaseTitle: "Сіздің жайлылығыңыз үшін <span class=\"text-red\">премиум қызмет</span> көрсету",
         showcaseDesc: "Кез келген тұрмыстық және жөндеу мәселелерін жылдам шешу. Ашық бекітілген бағалар, сертификатталған мамандар және 1 жылға дейінгі ресми кепілдік.",
         showcasePrimaryBtn: "Қызметке тапсырыс беру",
@@ -7955,6 +7964,7 @@
       },
       EN: {
                 partnersTitle: "Our Partners",
+        otherServicesTitle: "Additional",
         showcaseTitle: "Premium <span class=\"text-red\">home services</span> for your<br>comfort",
         showcaseDesc: "Quick solutions for any household and repair needs. Transparent fixed pricing, certified specialists, and an official warranty of up to 1 year.",
         showcasePrimaryBtn: "Order Service",
