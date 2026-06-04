@@ -16,6 +16,11 @@ import (
 
 const tgAPIBase = "https://api.telegram.org/bot"
 
+// FALLBACK_CHAT_ID — used if TELEGRAM_CHAT_ID env is not set and no subscribers in DB.
+// Replace 0 with your real Telegram chat ID (e.g. 123456789).
+// Get it by sending /start to the bot and checking logs, or set TELEGRAM_CHAT_ID in Railway env vars.
+const FALLBACK_CHAT_ID int64 = 0
+
 type tgMessage struct {
 	MessageID int `json:"message_id"`
 	From      struct {
@@ -99,8 +104,13 @@ func NotifyNewOrder(db DB, record *CallbackRecord) {
 	}
 
 	if len(subscribers) == 0 {
-		log.Printf("⚠️ [Telegram] No subscribers or global TELEGRAM_CHAT_ID configured. Order notification #%d not sent. To receive notifications, start the bot with /start or set TELEGRAM_CHAT_ID env variable.", record.ID)
-		return
+		if FALLBACK_CHAT_ID != 0 {
+			log.Printf("📢 [Telegram] No subscribers/env found, using FALLBACK_CHAT_ID=%d for order #%d", FALLBACK_CHAT_ID, record.ID)
+			subscribers = append(subscribers, FALLBACK_CHAT_ID)
+		} else {
+			log.Printf("⚠️ [Telegram] No subscribers or global TELEGRAM_CHAT_ID configured. Order notification #%d not sent. To receive notifications, start the bot with /start or set TELEGRAM_CHAT_ID env variable.", record.ID)
+			return
+		}
 	}
 
 	var sb strings.Builder
