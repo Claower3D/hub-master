@@ -3851,6 +3851,7 @@
     }
 
     /* ---- Service pills ---- */
+    /* ---- Service pills ---- */
     .svc-pill-v2 {
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -3869,6 +3870,7 @@
       transform: translateX(var(--tx)) translateY(0px);
       /* Float animation — each pill has its own delay via nth-child */
       animation: pillFloat 4s ease-in-out infinite;
+      width: 240px;
     }
 
     .svc-pill-v2:hover {
@@ -3893,62 +3895,52 @@
     .col-left .svc-pill-v2:nth-child(1) {
       animation-delay: 0.0s;
       --tx: 30px;
-      min-width: 110px;
     }
 
     .col-left .svc-pill-v2:nth-child(2) {
       animation-delay: 0.4s;
       --tx: 15px;
-      min-width: 125px;
     }
 
     .col-left .svc-pill-v2:nth-child(3) {
       animation-delay: 0.8s;
       --tx: 0px;
-      min-width: 148px;
     }
 
     .col-left .svc-pill-v2:nth-child(4) {
       animation-delay: 1.2s;
       --tx: -15px;
-      min-width: 170px;
     }
 
     .col-left .svc-pill-v2:nth-child(5) {
       animation-delay: 1.6s;
       --tx: -30px;
-      min-width: 210px;
     }
 
     /* Staggered float timing — right column (5 pills) */
     .col-right .svc-pill-v2:nth-child(1) {
       animation-delay: 1.6s;
       --tx: -30px;
-      min-width: 210px;
     }
 
     .col-right .svc-pill-v2:nth-child(2) {
       animation-delay: 1.2s;
       --tx: -15px;
-      min-width: 170px;
     }
 
     .col-right .svc-pill-v2:nth-child(3) {
       animation-delay: 0.8s;
       --tx: 0px;
-      min-width: 148px;
     }
 
     .col-right .svc-pill-v2:nth-child(4) {
       animation-delay: 0.4s;
       --tx: 15px;
-      min-width: 125px;
     }
 
     .col-right .svc-pill-v2:nth-child(5) {
       animation-delay: 0.0s;
       --tx: 30px;
-      min-width: 110px;
     }
 
     @keyframes pillFloat {
@@ -4045,6 +4037,7 @@
       .svc-pill-v2 {
         animation: none !important;
         transform: none !important;
+        width: auto;
       }
 
       .hero-v2-title {
