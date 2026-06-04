@@ -5791,13 +5791,11 @@
         <!-- Top: Text and Master -->
         <div class="showcase-top">
           <div class="showcase-text-col">
-            <h2 class="showcase-title">Качественная <span class="text-red">сборка<br>и реставрация</span>
-              вашей<br>мебели</h2>
-            <p class="showcase-desc">Сборка кухонь, шкафов-купе, ремонт каркасов и перетяжка мягкой мебели с премиальной
-              фурнитурой и гарантией качества.</p>
+            <h2 class="showcase-title" data-i18n="showcaseTitle">Премиальный <span class="text-red">сервис услуг</span> для вашего<br>комфорта</h2>
+            <p class="showcase-desc" data-i18n="showcaseDesc">Быстрое решение любых бытовых и ремонтных задач. Прозрачные фиксированные цены, сертифицированные специалисты и официальная гарантия до 1 года.</p>
             <div class="showcase-actions">
-              <button class="btn-showcase-primary" onclick="openModal('Сборка мебели')">Вызвать мебельщика</button>
-              <button class="btn-showcase-outline" onclick="openModal('Перезвонить мне')">Перезвонить мне</button>
+              <button class="btn-showcase-primary" data-i18n="showcasePrimaryBtn" onclick="openModal('Заказать услугу')">Заказать услугу</button>
+              <button class="btn-showcase-outline" data-i18n="showcaseOutlineBtn" onclick="openModal('Перезвонить мне')">Перезвонить мне</button>
             </div>
           </div>
 
@@ -5808,31 +5806,31 @@
             <!-- Floating Pills -->
             <div class="showcase-pill pill-1">
               <div class="pill-icon-box"><svg viewBox="0 0 24 24">
-                  <path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM12 5V3M8 5V3M16 5V3" />
+                  <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14" />
                 </svg></div>
               <div>
-                <div class="pill-text">Перетяжка</div>
-                <div class="pill-sub">от 8 000 ₸</div>
+                <div class="pill-text" data-i18n="pill1Text">Выезд за 45 мин</div>
+                <div class="pill-sub" data-i18n="pill1Sub">По Алматы и Астане</div>
               </div>
             </div>
 
             <div class="showcase-pill pill-2">
               <div class="pill-icon-box"><svg viewBox="0 0 24 24">
-                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 </svg></div>
               <div>
-                <div class="pill-text">HVAC:</div>
-                <div class="pill-sub">Обслуживание и Ремонт</div>
+                <div class="pill-text" data-i18n="pill2Text">Гарантия 12 мес</div>
+                <div class="pill-sub" data-i18n="pill2Sub">Официальный договор</div>
               </div>
             </div>
 
             <div class="showcase-pill pill-3">
               <div class="pill-icon-box"><svg viewBox="0 0 24 24">
-                  <path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z" />
+                  <path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg></div>
               <div>
-                <div class="pill-text">PLUMBING:</div>
-                <div class="pill-sub">Ремонт Сантехники</div>
+                <div class="pill-text" data-i18n="pill3Text">112+ Услуг</div>
+                <div class="pill-sub" data-i18n="pill3Sub">Все виды работ</div>
               </div>
             </div>
 
@@ -7574,7 +7572,17 @@
 
     const translations = {
       RU: {
-        partnersTitle: "Наши партнёры",
+                partnersTitle: "Наши партнёры",
+        showcaseTitle: "Премиальный <span class=\"text-red\">сервис услуг</span> для вашего<br>комфорта",
+        showcaseDesc: "Быстрое решение любых бытовых и ремонтных задач. Прозрачные фиксированные цены, сертифицированные специалисты и официальная гарантия до 1 года.",
+        showcasePrimaryBtn: "Заказать услугу",
+        showcaseOutlineBtn: "Перезвонить мне",
+        pill1Text: "Выезд за 45 мин",
+        pill1Sub: "По Алматы и Астане",
+        pill2Text: "Гарантия 12 мес",
+        pill2Sub: "Официальный договор",
+        pill3Text: "112+ Услуг",
+        pill3Sub: "Все виды работ",
         mobNavHome: "Главная",
         mobNavCatalog: "Каталог",
         mobNavOrder: "Заявка",
@@ -7682,7 +7690,17 @@
         minUnit: "мин"
       },
       KZ: {
-        partnersTitle: "Біздің серіктестер",
+                partnersTitle: "Біздің серіктестер",
+        showcaseTitle: "Сіздің жайлылығыңыз үшін <span class=\"text-red\">премиум қызмет</span> көрсету",
+        showcaseDesc: "Кез келген тұрмыстық және жөндеу мәселелерін жылдам шешу. Ашық бекітілген бағалар, сертификатталған мамандар және 1 жылға дейінгі ресми кепілдік.",
+        showcasePrimaryBtn: "Қызметке тапсырыс беру",
+        showcaseOutlineBtn: "Маған хабарласыңыз",
+        pill1Text: "45 минутта келу",
+        pill1Sub: "Алматы мен Астанада",
+        pill2Text: "12 ай кепілдік",
+        pill2Sub: "Ресми келісімшарт",
+        pill3Text: "112+ Қызметтер",
+        pill3Sub: "Жұмыстың барлық түрі",
         mobNavHome: "Басты бет",
         mobNavCatalog: "Каталог",
         mobNavOrder: "Өтінім",
@@ -7790,7 +7808,17 @@
         minUnit: "мин"
       },
       EN: {
-        partnersTitle: "Our Partners",
+                partnersTitle: "Our Partners",
+        showcaseTitle: "Premium <span class=\"text-red\">home services</span> for your<br>comfort",
+        showcaseDesc: "Quick solutions for any household and repair needs. Transparent fixed pricing, certified specialists, and an official warranty of up to 1 year.",
+        showcasePrimaryBtn: "Order Service",
+        showcaseOutlineBtn: "Call me back",
+        pill1Text: "Arrive in 45 min",
+        pill1Sub: "In Almaty & Astana",
+        pill2Text: "12 Months Warranty",
+        pill2Sub: "Official agreement",
+        pill3Text: "112+ Services",
+        pill3Sub: "All types of work",
         mobNavHome: "Home",
         mobNavCatalog: "Catalog",
         mobNavOrder: "Order",
