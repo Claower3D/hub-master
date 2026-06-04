@@ -6615,6 +6615,38 @@
       'Астана': {
         address: 'Астана, пр. Республики, 15',
         districts: ['р-н Есиль', 'р-н Алматы', 'р-н Байконур', 'р-н Сарыарка', 'Левый берег', 'Правый берег']
+      },
+      'Шымкент': {
+        address: 'Шымкент, пр. Тауке хана, 50',
+        districts: ['Абайский р-н', 'Аль-Фарабийский р-н', 'Енбекшинский р-н', 'Каратауский р-н', 'Туранский р-н']
+      },
+      'Атырау': {
+        address: 'Атырау, ул. Сатпаева, 19',
+        districts: ['Еркинкалинский с.о.', 'Кенузекский с.о.', 'Атырауский с.о.', 'Алмалинский с.о.', 'Балыкши', 'Авангард', 'Привокзальный']
+      },
+      'Актобе': {
+        address: 'Актобе, пр. Абилкайыр хана, 46',
+        districts: ['р-н Алматы', 'р-н Астана', 'Старый город', 'Жилгородок', '11-й микрорайон', '12-й микрорайон']
+      },
+      'Тараз': {
+        address: 'Тараз, ул. Толе би, 55',
+        districts: ['Центр', '1-й микрорайон', '2-й микрорайон', '3-й микрорайон', '4-й микрорайон', '5-й микрорайон', '6-й микрорайон', '7-й микрорайон', '8-й микрорайон', '9-й микрорайон']
+      },
+      'Павлодар': {
+        address: 'Павлодар, ул. Академика Сатпаева, 100',
+        districts: ['Центр', 'Дачный', 'Химгородки', 'Усольский', 'Второй Павлодар', 'Лесозавод', 'Радиозавод']
+      },
+      'Усть-Каменогорск': {
+        address: 'Усть-Каменогорск, ул. Казахстан, 59',
+        districts: ['Центр', 'КШТ', 'Аблакетка', 'Согра', 'Мирный', 'Защита', 'Пристань']
+      },
+      'Семей': {
+        address: 'Семей, ул. Мухамедханова, 8',
+        districts: ['Центр', 'Новостройка', 'Океан', 'Заря', 'Восточный', 'Карагайлы', 'Цементный']
+      },
+      'Кызылорда': {
+        address: 'Кызылорда, ул. Айтеке би, 28',
+        districts: ['Центр', 'микрорайон Акмешит', 'микрорайон Мерей', 'микрорайон Саяхат', 'Шугла', 'Залиния']
       }
     };
 
@@ -6627,8 +6659,12 @@
       const gridEl = document.getElementById('coverage-districts-grid');
       if (cityEl) cityEl.textContent = city;
       if (addrEl) addrEl.textContent = data.address;
-      if (countEl) countEl.textContent = data.districts.length + ' районов охвата';
-      if (labelEl) labelEl.textContent = 'Районы обслуживания — ' + city;
+      
+      const countText = currentLang === 'RU' ? data.districts.length + ' районов охвата' : currentLang === 'KZ' ? data.districts.length + ' қамту ауданы' : data.districts.length + ' coverage districts';
+      const labelText = currentLang === 'RU' ? 'Районы обслуживания — ' + city : currentLang === 'KZ' ? 'Қызмет көрсету аудандары — ' + city : 'Service districts — ' + city;
+      
+      if (countEl) countEl.textContent = countText;
+      if (labelEl) labelEl.textContent = labelText;
       if (gridEl) {
         gridEl.innerHTML = data.districts.map(d => `
           <div class="district-chip">
@@ -8111,6 +8147,11 @@
       if (heroCityPill) {
         heroCityPill.innerText = currentCity;
       }
+
+      if (typeof updateCoverageBlock === 'function') {
+        updateCoverageBlock(currentCity);
+      }
+
       closeAllDropdowns();
     }
 
