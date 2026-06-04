@@ -4187,6 +4187,86 @@
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
     }
 
+    /* Light theme adaptation for Form Controls */
+    [data-theme="light"] .form-input,
+    [data-theme="light"] .form-select,
+    [data-theme="light"] .form-textarea {
+      background-color: var(--bg-dark) !important;
+      border: 1px solid var(--border) !important;
+      color: var(--text) !important;
+    }
+    [data-theme="light"] .form-input::placeholder,
+    [data-theme="light"] .form-textarea::placeholder,
+    [data-theme="light"] .form-select::placeholder {
+      color: rgba(9, 9, 11, 0.4) !important;
+    }
+
+    /* Light theme adaptation for Personal Cabinet */
+    [data-theme="light"] #cabinet-modal-overlay .modal-box {
+      background-color: var(--bg-card) !important;
+      border: 1px solid var(--border) !important;
+    }
+    [data-theme="light"] #cab-auth-container h3,
+    [data-theme="light"] #cab-auth-container h4,
+    [data-theme="light"] #cab-auth-container p,
+    [data-theme="light"] #cab-auth-container label,
+    [data-theme="light"] #cab-auth-container span,
+    [data-theme="light"] #cab-auth-container div {
+      color: var(--text) !important;
+    }
+    [data-theme="light"] #cab-dashboard-container {
+      background-color: var(--bg-card) !important;
+    }
+    [data-theme="light"] .cab-sidebar {
+      background-color: var(--bg-dark) !important;
+      border-right: 1px solid var(--border) !important;
+    }
+    [data-theme="light"] .cab-sidebar #cab-user-name {
+      color: var(--text) !important;
+    }
+    [data-theme="light"] .cab-sidebar #cab-avatar {
+      color: #fff !important; /* Keep avatar text white on gradient */
+    }
+    [data-theme="light"] #cab-dashboard-container > div:last-child {
+      background-color: var(--bg-card) !important;
+    }
+    [data-theme="light"] #cab-dashboard-container h3,
+    [data-theme="light"] #cab-dashboard-container h4,
+    [data-theme="light"] #cab-dashboard-container span,
+    [data-theme="light"] #cab-dashboard-container p,
+    [data-theme="light"] #cab-dashboard-container label,
+    [data-theme="light"] #cab-dashboard-container th,
+    [data-theme="light"] #cab-dashboard-container td {
+      color: var(--text) !important;
+    }
+    [data-theme="light"] #cab-dashboard-container .cab-nav-tab:not(.active) {
+      color: #71717a !important;
+    }
+    [data-theme="light"] #cab-dashboard-container .cab-nav-tab:not(.active):hover {
+      color: var(--text) !important;
+      background: var(--bg-card-hover) !important;
+    }
+    [data-theme="light"] #cab-dashboard-container div[style*="background: #18181c"],
+    [data-theme="light"] #cab-dashboard-container div[style*="background:#18181c"],
+    [data-theme="light"] #cab-dashboard-container div[style*="background: rgb(24, 24, 28)"],
+    [data-theme="light"] #cab-dashboard-container div[style*="background-color: #18181c"],
+    [data-theme="light"] #cab-dashboard-container .order-card,
+    [data-theme="light"] #cab-dashboard-container .bonus-card,
+    [data-theme="light"] #cab-dashboard-container .chat-message {
+      background-color: var(--bg-card-hover) !important;
+      border: 1px solid var(--border) !important;
+    }
+    [data-theme="light"] #cab-dashboard-container div[style*="border: 1px solid #222226"],
+    [data-theme="light"] #cab-dashboard-container div[style*="border:1px solid #222226"] {
+      border: 1px solid var(--border) !important;
+      background-color: var(--bg-card-hover) !important;
+    }
+    [data-theme="light"] #cab-chat-input {
+      background-color: var(--bg-dark) !important;
+      border: 1px solid var(--border) !important;
+      color: var(--text) !important;
+    }
+
     /* Showcase glow — less aggressive in light mode */
     [data-theme="light"] .showcase-glow {
       background: radial-gradient(circle, rgba(230, 51, 51, 0.08) 0%, transparent 60%);
