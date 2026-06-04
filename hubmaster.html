@@ -655,81 +655,194 @@
 
     .catalog-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 24px;
     }
 
     .catalog-card {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      min-height: 250px;
+      padding: 30px;
+      border-radius: 20px;
+      background: rgba(20, 20, 24, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       flex-direction: column;
-      overflow: hidden;
-      transition: transform 0.2s, box-shadow 0.2s;
+      justify-content: flex-start;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
     }
 
     .catalog-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow);
+      transform: translateY(-6px);
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     }
 
-    .catalog-card-img {
-      height: 180px;
-      background-color: var(--bg-card-hover);
-      background-size: cover;
-      background-position: center;
+    /* Column spans */
+    .catalog-card.span-4 {
+      grid-column: span 4;
+    }
+    .catalog-card.span-8 {
+      grid-column: span 8;
+    }
+    .catalog-card.span-12 {
+      grid-column: span 12;
+      min-height: 220px;
     }
 
-    .catalog-card-content {
-      padding: 20px;
+    .catalog-card.highlighted {
+      background: linear-gradient(135deg, rgba(230, 51, 51, 0.08) 0%, rgba(18, 18, 22, 0.85) 100%);
+      border: 1px solid rgba(230, 51, 51, 0.3);
+      box-shadow: 0 8px 32px rgba(230, 51, 51, 0.05);
+    }
+
+    .catalog-card.highlighted:hover {
+      background: linear-gradient(135deg, rgba(230, 51, 51, 0.15) 0%, rgba(24, 24, 30, 0.95) 100%);
+      border-color: rgba(230, 51, 51, 0.65);
+      box-shadow: 0 20px 40px rgba(230, 51, 51, 0.15);
+    }
+
+    .cat-card-main-content {
+      position: relative;
+      z-index: 2;
+      max-width: 60%;
+    }
+
+    .catalog-card.span-12 .cat-card-main-content {
+      max-width: 70%;
+    }
+
+    .cat-card-title {
+      font-family: var(--font-heading);
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-white);
+      margin-bottom: 18px;
+      line-height: 1.3;
+      letter-spacing: -0.5px;
+    }
+
+    .cat-card-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
       display: flex;
       flex-direction: column;
-      flex-grow: 1;
-      justify-content: space-between;
+      gap: 12px;
     }
 
-    .catalog-card-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text-white);
-      margin-bottom: 20px;
+    .cat-card-item {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex;
+      align-items: center;
       line-height: 1.4;
     }
 
-    .catalog-card-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .cat-card-item::before {
+      content: "•";
+      color: var(--primary);
+      margin-right: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      transition: transform 0.25s ease;
     }
 
-    .catalog-card-price {
-      font-weight: 700;
-      font-size: 14px;
+    .catalog-card.highlighted .cat-card-item::before {
+      color: var(--primary);
+    }
+
+    .cat-card-item:hover {
       color: var(--text-white);
+      transform: translateX(6px);
     }
 
-    .catalog-card-price span {
-      color: var(--text);
-      font-weight: 400;
-      font-size: 12px;
+    .cat-card-image {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 45%;
+      height: 100%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center right;
+      opacity: 0.85;
+      pointer-events: none;
+      transition: all 0.4s ease;
+      -webkit-mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 100%);
+      mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 100%);
     }
 
-    .catalog-card-action {
-      background: var(--primary);
-      border: none;
-      color: #fff;
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-family: var(--font-sans);
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s;
+    .catalog-card.span-12 .cat-card-image {
+      width: 35%;
     }
 
-    .catalog-card-action:hover {
-      background-color: var(--primary-hover);
+    .catalog-card:hover .cat-card-image {
+      transform: scale(1.05);
+      opacity: 1;
+    }
+
+    /* Light Theme Overrides */
+    [data-theme="light"] .catalog-card {
+      background: rgba(255, 255, 255, 0.7);
+      border-color: rgba(9, 9, 11, 0.08);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+    }
+
+    [data-theme="light"] .catalog-card:hover {
+      border-color: rgba(9, 9, 11, 0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    [data-theme="light"] .catalog-card.highlighted {
+      background: linear-gradient(135deg, rgba(230, 51, 51, 0.04) 0%, rgba(255, 255, 255, 0.9) 100%);
+      border-color: rgba(230, 51, 51, 0.25);
+    }
+
+    [data-theme="light"] .catalog-card.highlighted:hover {
+      background: linear-gradient(135deg, rgba(230, 51, 51, 0.08) 0%, rgba(255, 255, 255, 0.98) 100%);
+      border-color: rgba(230, 51, 51, 0.55);
+    }
+
+    @media (max-width: 1024px) {
+      .catalog-card.span-4 {
+        grid-column: span 6;
+      }
+      .catalog-card.span-8 {
+        grid-column: span 6;
+      }
+      .cat-card-main-content {
+        max-width: 70%;
+      }
+      .cat-card-image {
+        width: 35%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .catalog-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .catalog-card.span-4,
+      .catalog-card.span-8,
+      .catalog-card.span-12 {
+        grid-column: span 1;
+        min-height: 220px;
+      }
+      .cat-card-main-content {
+        max-width: 65%;
+      }
+      .cat-card-image {
+        width: 40%;
+      }
     }
 
     /* SHOWCASE COMBO BLOCK */
@@ -7870,7 +7983,7 @@
     let currentLang = 'RU';
     let currentCity = 'Алматы';
     let currentTheme = 'dark';
-    let selectedCategory = 'furniture';
+    let selectedCategory = 'all';
     let reviewRating = 5;
 
     // SVG renderers
@@ -7952,7 +8065,20 @@
     // RENDER CATALOG TABS
     function populateCatalogTabs() {
       const tabsContainer = document.getElementById('catalog-tab-headers');
+      if (!tabsContainer) return;
       tabsContainer.innerHTML = '';
+
+      // Add "All" tab
+      const allBtn = document.createElement('button');
+      allBtn.className = `catalog-tab-btn ${selectedCategory === 'all' ? 'active' : ''}`;
+      allBtn.id = `tab-all`;
+      allBtn.onclick = () => switchCategory('all', false);
+      allBtn.setAttribute('data-title-ru', 'Все услуги');
+      allBtn.setAttribute('data-title-kz', 'Барлық қызметтер');
+      allBtn.setAttribute('data-title-en', 'All Services');
+      allBtn.innerText = currentLang === 'RU' ? 'Все услуги' : currentLang === 'KZ' ? 'Барлық қызметтер' : 'All Services';
+      tabsContainer.appendChild(allBtn);
+
       servicesData.forEach(svc => {
         const btn = document.createElement('button');
         btn.className = `catalog-tab-btn ${selectedCategory === svc.id ? 'active' : ''}`;
@@ -7961,7 +8087,7 @@
         btn.setAttribute('data-title-ru', svc.title);
         btn.setAttribute('data-title-kz', svc.titleKz);
         btn.setAttribute('data-title-en', svc.titleEn);
-        btn.innerText = svc.title;
+        btn.innerText = currentLang === 'RU' ? svc.title : currentLang === 'KZ' ? svc.titleKz : svc.titleEn;
         tabsContainer.appendChild(btn);
       });
     }
@@ -7969,37 +8095,135 @@
     // RENDER CATALOG ITEMS
     function renderCatalogItems() {
       const grid = document.getElementById('catalog-items-grid');
+      if (!grid) return;
       grid.innerHTML = '';
-      const currentSvc = servicesData.find(s => s.id === selectedCategory) || servicesData[0];
 
-      currentSvc.items.forEach(item => {
+      function getCategoryImage(title) {
+        const t = (title || '').toLowerCase();
+        if (t.includes('крупн') || t.includes('стирал') || t.includes('холод')) {
+          return 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=600&q=80';
+        }
+        if (t.includes('мелк') || t.includes('пылесос') || t.includes('микроволн') || t.includes('кофема')) {
+          return 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=600&q=80';
+        }
+        if (t.includes('цифр') || t.includes('телевиз') || t.includes('телефо') || t.includes('планшет')) {
+          return 'https://images.unsplash.com/photo-1461151304267-38535e780c79?w=600&q=80';
+        }
+        if (t.includes('компь') || t.includes('ноутбук') || t.includes('macbook')) {
+          return 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80';
+        }
+        if (t.includes('авто') || t.includes('сто') || t.includes('эвакуа')) {
+          return 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=600&q=80';
+        }
+        if (t.includes('клини') || t.includes('уборк')) {
+          return 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80';
+        }
+        if (t.includes('санитар') || t.includes('дезинф') || t.includes('тарака') || t.includes('клоп')) {
+          return 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&q=80';
+        }
+        if (t.includes('химчист') || t.includes('стирк') || t.includes('ковр')) {
+          return 'https://images.unsplash.com/photo-1545189656-786ac2d77ef7?w=600&q=80';
+        }
+        if (t.includes('сантех') || t.includes('электри') || t.includes('проводк')) {
+          return 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&q=80';
+        }
+        if (t.includes('юрист') || t.includes('адвокат') || t.includes('закон')) {
+          return 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&q=80';
+        }
+        if (t.includes('жиһаз') || t.includes('мебе')) {
+          return 'https://images.unsplash.com/photo-1592078615290-033ee584e267?w=600&q=80';
+        }
+        if (t.includes('окн') || t.includes('витраж')) {
+          return 'https://images.unsplash.com/photo-1509644851169-2aba0855683d?w=600&q=80';
+        }
+        if (t.includes('здоров') || t.includes('врач') || t.includes('фитнес')) {
+          return 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&q=80';
+        }
+        if (t.includes('ремонт кварт') || t.includes('строител')) {
+          return 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&q=80';
+        }
+        if (t.includes('монтаж') || t.includes('установк')) {
+          return 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80';
+        }
+        return 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&q=80';
+      }
+
+      let categoriesToRender = [];
+      if (selectedCategory === 'all') {
+        servicesData.forEach(svc => {
+          if (svc.categories && svc.categories.length > 0) {
+            svc.categories.forEach(cat => {
+              if (!categoriesToRender.some(c => c.id === cat.id)) {
+                categoriesToRender.push(cat);
+              }
+            });
+          } else {
+            categoriesToRender.push(svc);
+          }
+        });
+      } else {
+        let found = false;
+        servicesData.forEach(svc => {
+          if (svc.categories && svc.categories.length > 0) {
+            const cat = svc.categories.find(c => c.id === selectedCategory);
+            if (cat) {
+              categoriesToRender.push(cat);
+              found = true;
+            }
+          }
+        });
+        if (!found) {
+          const cat = servicesData.find(svc => svc.id === selectedCategory);
+          if (cat) {
+            categoriesToRender.push(cat);
+          }
+        }
+      }
+
+      categoriesToRender.forEach((cat, index) => {
         const card = document.createElement('div');
-        card.className = 'catalog-card';
+        
+        let spanClass = 'span-4';
+        let isHighlighted = false;
+        
+        if (selectedCategory === 'all') {
+          if (index % 5 === 0) {
+            spanClass = 'span-8';
+            isHighlighted = true;
+          }
+        } else {
+          spanClass = 'span-12';
+          isHighlighted = true;
+        }
 
-        const placeholderImages = [
-          "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=600&q=80",
-          "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&q=80",
-          "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=600&q=80",
-          "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=600&q=80",
-          "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80",
-          "https://images.unsplash.com/photo-1581141849291-1125c7b692b5?w=600&q=80",
-          "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&q=80",
-          "https://images.unsplash.com/photo-1542013936693-884638332954?w=600&q=80"
-        ];
+        card.className = `catalog-card ${spanClass} ${isHighlighted ? 'highlighted' : ''}`;
+
+        const catTitle = currentLang === 'RU' ? cat.title : currentLang === 'KZ' ? cat.titleKz || cat.title : cat.titleEn || cat.title;
+        const imgUrl = getCategoryImage(cat.title);
+
+        const itemsListHTML = (cat.items || []).slice(0, 4).map(item => {
+          const name = currentLang === 'RU' ? item.name : currentLang === 'KZ' ? item.nameKz || item.name : item.nameEn || item.name;
+          const clickAction = (item.catId && item.id)
+            ? `navigateThematic('${cat.id}', '${item.catId}', '${item.id}')`
+            : `openModal('${item.name}')`;
+
+          return `
+            <li>
+              <a href="#" class="cat-card-item" onclick="${clickAction}; return false;">
+                ${name}
+              </a>
+            </li>
+          `;
+        }).join('');
 
         card.innerHTML = `
-          <div class="catalog-card-img" style="background-image: url('${placeholderImages[Math.floor(Math.random() * placeholderImages.length)]}');"></div>
-          <div class="catalog-card-content">
-            <div class="catalog-card-title" data-name-ru="${item.name}" data-name-kz="${item.nameKz}" data-name-en="${item.name}">
-              ${currentLang === 'RU' || currentLang === 'EN' ? item.name : item.nameKz}
-            </div>
-            <div class="catalog-card-bottom">
-              <div class="catalog-card-price">${item.price.replace('от ', 'от ').replace(' ₸', ' ₸')}<span> за работу</span></div>
-              <button class="catalog-card-action" onclick="navigateThematic('${selectedCategory}', '${item.catId}', '${item.id}')">
-                ${currentLang === 'RU' ? 'Заказать' : currentLang === 'KZ' ? 'Тапсырыс' : 'Order'}
-              </button>
-            </div>
+          <div class="cat-card-main-content">
+            <h3 class="cat-card-title">${catTitle}</h3>
+            <ul class="cat-card-list">
+              ${itemsListHTML}
+            </ul>
           </div>
+          <div class="cat-card-image" style="background-image: url('${imgUrl}');"></div>
         `;
         grid.appendChild(card);
       });
@@ -10234,8 +10458,8 @@
       renderCatalogItems();
       populateSelectDropdowns();
 
-      if (servicesData.length > 0 && !servicesData.some(s => s.id === selectedCategory)) {
-        selectedCategory = servicesData[0].id;
+      if (servicesData.length > 0 && selectedCategory !== 'all' && !servicesData.some(s => s.id === selectedCategory)) {
+        selectedCategory = 'all';
       }
     }
 
