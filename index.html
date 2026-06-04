@@ -2792,8 +2792,8 @@
     }
 
     .master-status-pill {
-      background: rgba(16, 185, 129, 0.12);
-      color: #10b981;
+      background: rgba(245, 158, 11, 0.12);
+      color: #f59e0b;
       font-size: 9px;
       font-weight: 800;
       text-transform: uppercase;
@@ -5724,7 +5724,7 @@
                 </svg>
               </div>
               <div class="stat-new-text">
-                <span class="stat-new-val">4.9 ★</span>
+                <span class="stat-new-val">4.9 <span style="color: #ffc107;">★</span></span>
                 <span class="stat-new-lbl" data-i18n="ratingAvg">средняя оценка</span>
               </div>
             </div>
@@ -8760,56 +8760,64 @@
         role: { RU: "Реставратор мебели", KZ: "Жиһаз қалпына келтіруші", EN: "Furniture Restorer" },
         category: "furniture",
         rating: 5,
-        avatar: "/public/master_azamat.png"
+        avatar: "/public/master_azamat.png",
+        experience: { RU: "Опыт 6 лет", KZ: "Тәжірибе 6 жыл", EN: "6 years exp" }
       },
       {
         name: "Данияр К.",
         role: { RU: "Сборщик мебели", KZ: "Жиһаз жинаушы", EN: "Furniture Assembler" },
         category: "furniture",
         rating: 5,
-        avatar: "/public/master_daniyar.png"
+        avatar: "/public/master_daniyar.png",
+        experience: { RU: "Опыт 5 лет", KZ: "Тәжірибе 5 жыл", EN: "5 years exp" }
       },
       {
         name: "Алибек И.",
         role: { RU: "Мастер по перетяжке", KZ: "Қаптау шебері", EN: "Re-upholstery Master" },
         category: "furniture",
         rating: 5,
-        avatar: "/public/master_alibek.png"
+        avatar: "/public/master_alibek.png",
+        experience: { RU: "Опыт 7 лет", KZ: "Тәжірибе 7 жыл", EN: "7 years exp" }
       },
       {
         name: "Руслан С.",
         role: { RU: "Электрик", KZ: "Электрик", EN: "Electrician" },
         category: "appliance",
         rating: 5,
-        avatar: "/public/master_ruslan.png"
+        avatar: "/public/master_ruslan.png",
+        experience: { RU: "Опыт 8 лет", KZ: "Тәжірибе 8 жыл", EN: "8 years exp" }
       },
       {
         name: "Арман Б.",
         role: { RU: "Сантехник", KZ: "Сантехник", EN: "Plumber" },
         category: "appliance",
         rating: 5,
-        avatar: "/public/master_arman.png"
+        avatar: "/public/master_arman.png",
+        experience: { RU: "Опыт 9 лет", KZ: "Тәжірибе 9 жыл", EN: "9 years exp" }
       },
       {
         name: "Игорь В.",
         role: { RU: "Мастер по окнам", KZ: "Терезе шебері", EN: "Window Specialist" },
         category: "windows",
         rating: 5,
-        avatar: "/public/master_azamat.png"
+        avatar: "/public/master_azamat.png",
+        experience: { RU: "Опыт 5 лет", KZ: "Тәжірибе 5 жыл", EN: "5 years exp" }
       },
       {
         name: "Ерлан М.",
         role: { RU: "Специалист по клинингу", KZ: "Тазалық маманы", EN: "Cleaning Specialist" },
         category: "cleaning",
         rating: 5,
-        avatar: "/public/master_alibek.png"
+        avatar: "/public/master_alibek.png",
+        experience: { RU: "Опыт 4 года", KZ: "Тәжірибе 4 жыл", EN: "4 years exp" }
       },
       {
         name: "Сергей Д.",
         role: { RU: "Мастер по ремонту техники", KZ: "Техника жөндеу шебері", EN: "Appliance Technician" },
         category: "appliance",
         rating: 5,
-        avatar: "/public/master_daniyar.png"
+        avatar: "/public/master_daniyar.png",
+        experience: { RU: "Опыт 8 лет", KZ: "Тәжірибе 8 жыл", EN: "8 years exp" }
       }
     ];
 
@@ -8910,7 +8918,7 @@
           <div class="master-name-new">${m.name}</div>
           <div class="master-role-new">${m.role[currentLang]}</div>
           <div class="master-stars-new">${'★'.repeat(m.rating)}</div>
-          <div class="master-status-pill">${statusText}</div>
+          <div class="master-status-pill">${m.experience[currentLang]}</div>
         </div>
       `).join('');
 
