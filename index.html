@@ -1944,9 +1944,74 @@
 
     .footer-grid {
       display: grid;
-      grid-template-columns: 1.6fr 1fr 1fr 1fr 1.2fr;
-      gap: 30px;
+      grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+      gap: 40px;
       margin-bottom: 40px;
+    }
+
+    .footer-directory {
+      border-top: 1px solid var(--border);
+      padding: 40px 0 20px;
+      margin-bottom: 30px;
+    }
+    .footer-directory-title {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-light);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .footer-directory-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+    }
+    .footer-directory-col {
+      display: flex;
+      flex-direction: column;
+    }
+    .footer-directory-col-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-light);
+      margin-bottom: 10px;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .footer-directory-col-title:hover {
+      color: var(--accent);
+    }
+    .footer-directory-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .footer-directory-link {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .footer-directory-link:hover {
+      color: var(--accent);
+    }
+
+    @media (max-width: 1024px) {
+      .footer-directory-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+      }
+    }
+    @media (max-width: 600px) {
+      .footer-directory-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
     }
 
     .footer-about-col {
@@ -6739,78 +6804,122 @@
           <p class="footer-desc-text" id="footer-desc" data-i18n="footerDesc">
             HUB MASTER — мы мультисервис бытовых услуг и товаров по всему Казахстану. Быстро, качественно и с долгосрочной гарантией.
           </p>
-          <div class="footer-contact-info" style="margin-top: 15px;">
-            <div class="footer-contact-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth="2">
-                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
-              </svg>
-              +7 705 846 2749
-            </div>
-            <div class="footer-contact-item">
-              <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" stroke="currentColor">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                <polyline points="22,6 12,13 2,6" />
-              </svg>
-              info@hubmaster.kz
-            </div>
-            <div class="footer-contact-item">
-              <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" stroke="currentColor">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-              <span id="footer-address">Алматы, пр. Аль-Фараби 77/7</span>
-            </div>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title" data-i18n="catalogTitle">Каталог услуг</h4>
+          <ul class="footer-links-list">
+            <li><a href="/furniture" class="footer-link-btn" onclick="navigateThematic('furniture'); return false;" data-i18n="selectServiceFurniture">Сборка мебели</a></li>
+            <li><a href="/appliance" class="footer-link-btn" onclick="navigateThematic('appliance'); return false;" data-i18n="selectServiceAppliances">Ремонт техники</a></li>
+            <li><a href="/computer" class="footer-link-btn" onclick="navigateThematic('computer'); return false;" data-i18n="selectServiceComputer">Компьютерная помощь</a></li>
+            <li><a href="/plumbing" class="footer-link-btn" onclick="navigateThematic('plumbing'); return false;" data-i18n="selectServicePlumbing">Сантехника</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title" data-i18n="otherServicesTitle">Дополнительно</h4>
+          <ul class="footer-links-list">
+            <li><a href="/electrical" class="footer-link-btn" onclick="navigateThematic('electrical'); return false;" data-i18n="selectServiceElectrical">Электрика</a></li>
+            <li><a href="/cleaning" class="footer-link-btn" onclick="navigateThematic('cleaning'); return false;" data-i18n="selectServiceCleaning">Клининг</a></li>
+            <li><a href="/movers" class="footer-link-btn" onclick="navigateThematic('movers'); return false;" data-i18n="selectServiceMovers">Грузоперевозки</a></li>
+            <li><a href="#" class="footer-link-btn" onclick="openCabinetModal(); return false;" data-i18n="cabinet">Личный кабинет</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-contact-info">
+          <h4 class="footer-col-title" data-i18n="contacts">Контакты</h4>
+          <div class="footer-contact-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth="2">
+              <path
+                d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+            </svg>
+            +7 705 846 2749
           </div>
-        </div>
-
-        <div>
-          <h4 class="footer-col-title" data-title-ru="Мебель и техника" data-title-kz="Жиһаз бен техника" data-title-en="Furniture & Appliances">Мебель и техника</h4>
-          <ul class="footer-links-list">
-            <li><a href="/furniture" class="footer-link-btn" onclick="navigateThematic('furniture'); return false;" data-title-ru="Сборка мебели" data-title-kz="Жиһаз жинау" data-title-en="Furniture Assembly">Сборка мебели</a></li>
-            <li><a href="/furniture" class="footer-link-btn" onclick="navigateThematic('furniture', 'kitchen'); return false;" data-title-ru="• Сборка кухонь" data-title-kz="• Асүй жиһазын жинау" data-title-en="• Kitchen Assembly">• Сборка кухонь</a></li>
-            <li><a href="/furniture" class="footer-link-btn" onclick="navigateThematic('furniture', 'wardrobe'); return false;" data-title-ru="• Шкафы и кровати" data-title-kz="• Шкафтар мен кереуеттер" data-title-en="• Wardrobes & Beds">• Шкафы и кровати</a></li>
-            <li><a href="/appliance" class="footer-link-btn" onclick="navigateThematic('appliance'); return false;" data-title-ru="Ремонт техники" data-title-kz="Техника жөндеу" data-title-en="Appliance Repair">Ремонт техники</a></li>
-            <li><a href="/appliance" class="footer-link-btn" onclick="navigateThematic('appliance', 'washer'); return false;" data-title-ru="• Стиральные машины" data-title-kz="• Кір жуғыш машиналар" data-title-en="• Washing Machines">• Стиральные машины</a></li>
-            <li><a href="/appliance" class="footer-link-btn" onclick="navigateThematic('appliance', 'fridge'); return false;" data-title-ru="• Холодильники" data-title-kz="• Тоңазытқыштар" data-title-en="• Refrigerators">• Холодильники</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 class="footer-col-title" data-title-ru="Компьютеры и свет" data-title-kz="Компьютерлер мен жарық" data-title-en="IT & Electrical">Компьютеры и свет</h4>
-          <ul class="footer-links-list">
-            <li><a href="/computer" class="footer-link-btn" onclick="navigateThematic('computer'); return false;" data-title-ru="Компьютерный мастер" data-title-kz="Компьютер шебері" data-title-en="Computer Tech">Компьютерный мастер</a></li>
-            <li><a href="/computer" class="footer-link-btn" onclick="navigateThematic('computer', 'laptop'); return false;" data-title-ru="• Ремонт ноутбуков" data-title-kz="• Ноутбуктерді жөндеу" data-title-en="• Laptop Repair">• Ремонт ноутбуков</a></li>
-            <li><a href="/computer" class="footer-link-btn" onclick="navigateThematic('computer', 'windows'); return false;" data-title-ru="• Установка Windows" data-title-kz="• Windows орнату" data-title-en="• Windows Install">• Установка Windows</a></li>
-            <li><a href="/electrical" class="footer-link-btn" onclick="navigateThematic('electrical'); return false;" data-title-ru="Услуги электрика" data-title-kz="Электрик қызметі" data-title-en="Electrical Services">Услуги электрика</a></li>
-            <li><a href="/electrical" class="footer-link-btn" onclick="navigateThematic('electrical', 'wiring'); return false;" data-title-ru="• Монтаж проводки" data-title-kz="• Сымдарды монтаждау" data-title-en="• Wiring Installation">• Монтаж проводки</a></li>
-            <li><a href="/electrical" class="footer-link-btn" onclick="navigateThematic('electrical', 'socket'); return false;" data-title-ru="• Розетки и люстры" data-title-kz="• Розеткалар мен люстралар" data-title-en="• Sockets & Lighting">• Розетки и люстры</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 class="footer-col-title" data-title-ru="Сантехника и уборка" data-title-kz="Сантехника мен тазалық" data-title-en="Plumbing & Cleaning">Сантехника и уборка</h4>
-          <ul class="footer-links-list">
-            <li><a href="/plumbing" class="footer-link-btn" onclick="navigateThematic('plumbing'); return false;" data-title-ru="Услуги сантехника" data-title-kz="Сантехник қызметі" data-title-en="Plumbing Services">Услуги сантехника</a></li>
-            <li><a href="/plumbing" class="footer-link-btn" onclick="navigateThematic('plumbing', 'clog'); return false;" data-title-ru="• Устранение засоров" data-title-kz="• Бітелуді тазарту" data-title-en="• Clog Clearing">• Устранение засоров</a></li>
-            <li><a href="/plumbing" class="footer-link-btn" onclick="navigateThematic('plumbing', 'faucet'); return false;" data-title-ru="• Ремонт смесителей" data-title-kz="• Шүмектерді жөндеу" data-title-en="• Faucet Repair">• Ремонт смесителей</a></li>
-            <li><a href="/cleaning" class="footer-link-btn" onclick="navigateThematic('cleaning'); return false;" data-title-ru="Клининг и уборка" data-title-kz="Клининг және тазалау" data-title-en="Cleaning Services">Клининг и уборка</a></li>
-            <li><a href="/cleaning" class="footer-link-btn" onclick="navigateThematic('cleaning', 'deep'); return false;" data-title-ru="• Генеральная уборка" data-title-kz="• Бас тазалық" data-title-en="• Deep Cleaning">• Генеральная уборка</a></li>
-            <li><a href="/cleaning" class="footer-link-btn" onclick="navigateThematic('cleaning', 'dry'); return false;" data-title-ru="• Химчистка мебели" data-title-kz="• Жиһазды химиялық тазалау" data-title-en="• Furniture Dry Cleaning">• Химчистка мебели</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 class="footer-col-title" data-title-ru="Транспорт и Кабинет" data-title-kz="Көлік пен Кабинет" data-title-en="Transport & Account">Транспорт и Кабинет</h4>
-          <ul class="footer-links-list">
-            <li><a href="/movers" class="footer-link-btn" onclick="navigateThematic('movers'); return false;" data-title-ru="Грузоперевозки" data-title-kz="Жүк тасымалы" data-title-en="Cargo Shipping">Грузоперевозки</a></li>
-            <li><a href="/movers" class="footer-link-btn" onclick="navigateThematic('movers', 'flat'); return false;" data-title-ru="• Квартирный переезд" data-title-kz="• Пәтер көшіру" data-title-en="• Flat Moving">• Квартирный переезд</a></li>
-            <li><a href="/movers" class="footer-link-btn" onclick="navigateThematic('movers', 'workers'); return false;" data-title-ru="• Услуги грузчиков" data-title-kz="• Жүк тасушылар" data-title-en="• Mover Services">• Услуги грузчиков</a></li>
-            <li><a href="#" class="footer-link-btn" onclick="openCabinetModal(); return false;" data-title-ru="Личный кабинет" data-title-kz="Жеке кабинет" data-title-en="Personal Cabinet">Личный кабинет</a></li>
-            <li><a href="#" class="footer-link-btn" onclick="openModal('Быстрый заказ'); return false;" data-title-ru="Вызвать мастера" data-title-kz="Шеберді шақыру" data-title-en="Call Master">Вызвать мастера</a></li>
-          </ul>
+          <div class="footer-contact-item">
+            <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" stroke="currentColor">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+              <polyline points="22,6 12,13 2,6" />
+            </svg>
+            info@hubmaster.kz
+          </div>
+          <div class="footer-contact-item">
+            <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" stroke="currentColor">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            <span id="footer-address">Алматы, пр. Аль-Фараби 77/7</span>
+          </div>
         </div>
       </div>
 
+      <!-- Bottom SEO Directory Block -->
+      <div class="footer-directory">
+        <h4 class="footer-directory-title" data-title-ru="Карта услуг мультисервиса" data-title-kz="Мультисервис қызметтерінің картасы" data-title-en="Multiservice Site Directory">Карта услуг мультисервиса</h4>
+        <div class="footer-directory-grid">
+          
+          <div class="footer-directory-col">
+            <a href="/furniture" onclick="navigateThematic('furniture'); return false;" class="footer-directory-col-title" data-title-ru="Сборка и ремонт мебели" data-title-kz="Жиһаз жинау және жөндеу" data-title-en="Furniture Assembly">Сборка и ремонт мебели</a>
+            <ul class="footer-directory-links">
+              <li><a href="/furniture" onclick="navigateThematic('furniture', 'kitchen'); return false;" class="footer-directory-link" data-title-ru="Сборка кухонь" data-title-kz="Асүй жиһазын жинау" data-title-en="Kitchen Assembly">Сборка кухонь</a></li>
+              <li><a href="/furniture" onclick="navigateThematic('furniture', 'wardrobe'); return false;" class="footer-directory-link" data-title-ru="Сборка шкафов-купе" data-title-kz="Шкафтарды жинау" data-title-en="Wardrobe Assembly">Сборка шкафов-купе</a></li>
+              <li><a href="/furniture" onclick="navigateThematic('furniture', 'bed'); return false;" class="footer-directory-link" data-title-ru="Сборка кроватей" data-title-kz="Кереуеттерді жинау" data-title-en="Bed Assembly">Сборка кроватей</a></li>
+              <li><a href="/furniture" onclick="navigateThematic('furniture', 'table'); return false;" class="footer-directory-link" data-title-ru="Сборка столов и стульев" data-title-kz="Үстел-орындық жинау" data-title-en="Tables & Chairs Assembly">Сборка столов и стульев</a></li>
+              <li><a href="/furniture" onclick="navigateThematic('furniture', 'repair'); return false;" class="footer-directory-link" data-title-ru="Ремонт и реставрация мебели" data-title-kz="Жиһаз жөндеу және қалпына келтіру" data-title-en="Furniture Repair">Ремонт и реставрация мебели</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-directory-col">
+            <a href="/appliance" onclick="navigateThematic('appliance'); return false;" class="footer-directory-col-title" data-title-ru="Ремонт бытовой техники" data-title-kz="Тұрмыстық техниканы жөндеу" data-title-en="Appliance Repair">Ремонт бытовой техники</a>
+            <ul class="footer-directory-links">
+              <li><a href="/appliance" onclick="navigateThematic('appliance', 'washer'); return false;" class="footer-directory-link" data-title-ru="Ремонт стиральных машин" data-title-kz="Кір жуғыш машиналарды жөндеу" data-title-en="Washing Machine Repair">Ремонт стиральных машин</a></li>
+              <li><a href="/appliance" onclick="navigateThematic('appliance', 'fridge'); return false;" class="footer-directory-link" data-title-ru="Ремонт холодильников" data-title-kz="Тоңазытқыштарды жөндеу" data-title-en="Refrigerator Repair">Ремонт холодильников</a></li>
+              <li><a href="/appliance" onclick="navigateThematic('appliance', 'dishwasher'); return false;" class="footer-directory-link" data-title-ru="Ремонт посудомоечных машин" data-title-kz="Ыдыс жуғыш машиналарды жөндеу" data-title-en="Dishwasher Repair">Ремонт посудомоечных машин</a></li>
+              <li><a href="/appliance" onclick="navigateThematic('appliance', 'stove'); return false;" class="footer-directory-link" data-title-ru="Ремонт электроплит и духовок" data-title-kz="Плиталар мен пештерді жөндеу" data-title-en="Electric Stove Repair">Ремонт электроплит и духовок</a></li>
+            </ul>
+            <div style="margin-top: 15px;"></div>
+            <a href="/computer" onclick="navigateThematic('computer'); return false;" class="footer-directory-col-title" data-title-ru="Компьютерная помощь" data-title-kz="Компьютерлік көмек" data-title-en="Computer & IT Help">Компьютерная помощь</a>
+            <ul class="footer-directory-links">
+              <li><a href="/computer" onclick="navigateThematic('computer', 'laptop'); return false;" class="footer-directory-link" data-title-ru="Ремонт ноутбуков и ПК" data-title-kz="Ноутбуктер мен ДК жөндеу" data-title-en="Laptop & PC Repair">Ремонт ноутбуков и ПК</a></li>
+              <li><a href="/computer" onclick="navigateThematic('computer', 'windows'); return false;" class="footer-directory-link" data-title-ru="Установка Windows и программ" data-title-kz="Windows пен бағдарламаларды орнату" data-title-en="Windows & Software Setup">Установка Windows и ПО</a></li>
+              <li><a href="/computer" onclick="navigateThematic('computer', 'network'); return false;" class="footer-directory-link" data-title-ru="Настройка роутеров и сетей" data-title-kz="Роутерлер мен желілерді баптау" data-title-en="Router & Wi-Fi Setup">Настройка роутеров и сетей</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-directory-col">
+            <a href="/plumbing" onclick="navigateThematic('plumbing'); return false;" class="footer-directory-col-title" data-title-ru="Услуги сантехника" data-title-kz="Сантехник қызметі" data-title-en="Plumbing Services">Услуги сантехника</a>
+            <ul class="footer-directory-links">
+              <li><a href="/plumbing" onclick="navigateThematic('plumbing', 'clog'); return false;" class="footer-directory-link" data-title-ru="Устранение засоров" data-title-kz="Бітелуді тазарту" data-title-en="Drain Clog Clearing">Устранение засоров</a></li>
+              <li><a href="/plumbing" onclick="navigateThematic('plumbing', 'faucet'); return false;" class="footer-directory-link" data-title-ru="Ремонт и замена смесителей" data-title-kz="Шүмектерді жөндеу және ауыстыру" data-title-en="Faucet Repair & Install">Ремонт и замена смесителей</a></li>
+              <li><a href="/plumbing" onclick="navigateThematic('plumbing', 'toilet'); return false;" class="footer-directory-link" data-title-ru="Ремонт унитазов и инсталляций" data-title-kz="Унитаздарды жөндеу" data-title-en="Toilet & Flush Repair">Ремонт унитазов и инсталляций</a></li>
+            </ul>
+            <div style="margin-top: 15px;"></div>
+            <a href="/electrical" onclick="navigateThematic('electrical'); return false;" class="footer-directory-col-title" data-title-ru="Услуги электрика" data-title-kz="Электрик қызметтері" data-title-en="Electrical Services">Услуги электрика</a>
+            <ul class="footer-directory-links">
+              <li><a href="/electrical" onclick="navigateThematic('electrical', 'wiring'); return false;" class="footer-directory-link" data-title-ru="Монтаж и ремонт проводки" data-title-kz="Сымдарды монтаждау және жөндеу" data-title-en="Wiring Installation & Repair">Монтаж и ремонт проводки</a></li>
+              <li><a href="/electrical" onclick="navigateThematic('electrical', 'socket'); return false;" class="footer-directory-link" data-title-ru="Установка розеток и выключателей" data-title-kz="Розеткалар мен ажыратқыштарды орнату" data-title-en="Sockets & Switches Install">Установка розеток</a></li>
+              <li><a href="/electrical" onclick="navigateThematic('electrical', 'lighting'); return false;" class="footer-directory-link" data-title-ru="Монтаж люстр и светильников" data-title-kz="Люстралар мен шамдарды орнату" data-title-en="Chandelier & Lighting Install">Монтаж люстр и светильников</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-directory-col">
+            <a href="/cleaning" onclick="navigateThematic('cleaning'); return false;" class="footer-directory-col-title" data-title-ru="Клининг и уборка" data-title-kz="Клининг және тазалау" data-title-en="Cleaning Services">Клининг и уборка</a>
+            <ul class="footer-directory-links">
+              <li><a href="/cleaning" onclick="navigateThematic('cleaning', 'deep'); return false;" class="footer-directory-link" data-title-ru="Генеральная уборка" data-title-kz="Бас тазалық жұмыстары" data-title-en="Deep House Cleaning">Генеральная уборка</a></li>
+              <li><a href="/cleaning" onclick="navigateThematic('cleaning', 'dry'); return false;" class="footer-directory-link" data-title-ru="Химчистка мебели и ковров" data-title-kz="Жиһазды химиялық тазалау" data-title-en="Upholstery & Carpet Cleaning">Химчистка мебели и ковров</a></li>
+              <li><a href="/cleaning" onclick="navigateThematic('cleaning', 'windows'); return false;" class="footer-directory-link" data-title-ru="Мытье окон и витражей" data-title-kz="Терезе жуу" data-title-en="Window Cleaning">Мытье окон и витражей</a></li>
+            </ul>
+            <div style="margin-top: 15px;"></div>
+            <a href="/movers" onclick="navigateThematic('movers'); return false;" class="footer-directory-col-title" data-title-ru="Грузоперевозки" data-title-kz="Жүк тасымалдары" data-title-en="Movers & Cargo">Грузоперевозки</a>
+            <ul class="footer-directory-links">
+              <li><a href="/movers" onclick="navigateThematic('movers', 'flat'); return false;" class="footer-directory-link" data-title-ru="Квартирные и офисные переезды" data-title-kz="Пәтер мен кеңсе көшіру" data-title-en="Flat & Office Moving">Квартирные и офисные переезды</a></li>
+              <li><a href="/movers" onclick="navigateThematic('movers', 'workers'); return false;" class="footer-directory-link" data-title-ru="Услуги профессиональных грузчиков" data-title-kz="Кәсіби жүк тасушылар қызметі" data-title-en="Professional Movers">Услуги грузчиков</a></li>
+              <li><a href="/movers" onclick="navigateThematic('movers', 'waste'); return false;" class="footer-directory-link" data-title-ru="Вывоз строительного мусора" data-title-kz="Құрылыс қоқысын шығару" data-title-en="Construction Waste Removal">Вывоз строительного мусора</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+      
       <div class="footer-bottom">
         <div data-i18n="copyright">© 2026 HUB MASTER. Все права защищены.</div>
         <div>Powered by HTML5 & Vanilla JS</div>
