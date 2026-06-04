@@ -6735,9 +6735,11 @@
     <div class="max-width-wrap">
       <div class="footer-grid">
         <div class="footer-about-col">
-          <div class="footer-logo-title">
-            HUB<span>MASTER</span>
-          </div>
+          <a href="/" class="footer-logo-link" style="text-decoration: none;">
+            <div class="footer-logo-title">
+              HUB<span>MASTER</span>
+            </div>
+          </a>
           <p class="footer-desc-text" id="footer-desc">
             Профессиональная сборка мебели, ремонт бытовой техники, компьютерная помощь, сантехнические и
             электромонтажные услуги в Алматы и Астане. Быстро, качественно и с долгосрочной гарантией.
@@ -6747,7 +6749,13 @@
         <div>
           <h4 class="footer-col-title" data-i18n="catalogTitle">Каталог услуг</h4>
           <ul class="footer-links-list" id="footer-links">
-            <!-- Dynamically populated -->
+            <li><a href="/furniture" class="footer-link-btn" onclick="navigateThematic('furniture'); return false;" data-i18n="selectServiceFurniture">Сборка мебели</a></li>
+            <li><a href="/appliance" class="footer-link-btn" onclick="navigateThematic('appliance'); return false;" data-i18n="selectServiceAppliances">Ремонт техники</a></li>
+            <li><a href="/computer" class="footer-link-btn" onclick="navigateThematic('computer'); return false;" data-i18n="selectServiceComputer">Компьютерная помощь</a></li>
+            <li><a href="/plumbing" class="footer-link-btn" onclick="navigateThematic('plumbing'); return false;" data-i18n="selectServicePlumbing">Сантехника</a></li>
+            <li><a href="/electrical" class="footer-link-btn" onclick="navigateThematic('electrical'); return false;" data-i18n="selectServiceElectrical">Электрика</a></li>
+            <li><a href="/cleaning" class="footer-link-btn" onclick="navigateThematic('cleaning'); return false;" data-i18n="selectServiceCleaning">Клининг</a></li>
+            <li><a href="/movers" class="footer-link-btn" onclick="navigateThematic('movers'); return false;" data-i18n="selectServiceMovers">Грузоперевозки</a></li>
           </ul>
         </div>
 
@@ -8296,10 +8304,13 @@
           const clickAction = (item.catId && item.id)
             ? `navigateThematic('${cat.tabId || cat.id}', '${cat.id}', '${item.id}')`
             : `openModal('${name.replace(/'/g, "\\'")}')`;
+          const hrefAttr = (item.catId && item.id)
+            ? `/${cat.tabId || cat.id}/${cat.id}/${item.id}`
+            : `#`;
 
           return `
             <li>
-              <a href="#" class="cat-card-item" onclick="${clickAction}; return false;">
+              <a href="${hrefAttr}" class="cat-card-item" onclick="${clickAction}; return false;">
                 ${name}
               </a>
             </li>
@@ -10848,9 +10859,9 @@
 
       let breadcrumbsHTML = `
         <div class="breadcrumbs">
-          <a href="#" onclick="navigateThematic(''); return false;">Главная</a>
+          <a href="/" onclick="navigateThematic(''); return false;">Главная</a>
           <span class="separator">/</span>
-          <a href="#" onclick="navigateThematic('${resolved.tabId}'); return false;">${currentLang === 'RU' ? (tab ? tab.title : cat.title) : (currentLang === 'KZ' ? (tab ? tab.titleKz || tab.title : cat.titleKz || cat.title) : (tab ? tab.titleEn || tab.title : cat.titleEn || cat.title))}</a>
+          <a href="/${resolved.tabId}" onclick="navigateThematic('${resolved.tabId}'); return false;">${currentLang === 'RU' ? (tab ? tab.title : cat.title) : (currentLang === 'KZ' ? (tab ? tab.titleKz || tab.title : cat.titleKz || cat.title) : (tab ? tab.titleEn || tab.title : cat.titleEn || cat.title))}</a>
       `;
 
       let title = currentLang === 'RU' ? cat.title : (currentLang === 'KZ' ? cat.titleKz || cat.title : cat.titleEn || cat.title);
@@ -10862,7 +10873,7 @@
         if (item) {
           breadcrumbsHTML += `
             <span class="separator">/</span>
-            <a href="#" onclick="navigateThematic('${resolved.tabId}', '${cat.id}'); return false;">${currentLang === 'RU' ? item.catTitle : (currentLang === 'KZ' ? item.catTitleKz || item.catTitle : item.catTitleEn || item.catTitle)}</a>
+            <a href="/${resolved.tabId}/${cat.id}" onclick="navigateThematic('${resolved.tabId}', '${cat.id}'); return false;">${currentLang === 'RU' ? item.catTitle : (currentLang === 'KZ' ? item.catTitleKz || item.catTitle : item.catTitleEn || item.catTitle)}</a>
             <span class="separator">/</span>
             <span>${currentLang === 'RU' ? item.name : item.nameKz || item.name}</span>
           `;
@@ -10903,7 +10914,7 @@
             subItems.forEach(sub => {
               servicesHTML += `
                 <li>
-                  <a href="#" onclick="navigateThematic('${resolved.tabId}', '${category.id}', '${sub.id}'); return false;">
+                  <a href="/${resolved.tabId}/${category.id}/${sub.id}" onclick="navigateThematic('${resolved.tabId}', '${category.id}', '${sub.id}'); return false;">
                     <i class="ri-arrow-right-s-line"></i>
                     <span>${currentLang === 'RU' ? sub.name : sub.nameKz || sub.name}</span>
                   </a>
@@ -10943,7 +10954,7 @@
             grouped[subId].items.forEach(item => {
               servicesHTML += `
                 <li>
-                  <a href="#" onclick="navigateThematic('${resolved.tabId}', '${item.catId}', '${item.id}'); return false;">
+                  <a href="/${resolved.tabId}/${item.catId}/${item.id}" onclick="navigateThematic('${resolved.tabId}', '${item.catId}', '${item.id}'); return false;">
                     <i class="ri-arrow-right-s-line"></i>
                     <span>${currentLang === 'RU' ? item.name : item.nameKz || item.name}</span>
                   </a>
@@ -11184,6 +11195,22 @@
     };
 
     function initRouter() {
+      // Bind click handlers for SPA navigation on logos
+      setTimeout(() => {
+        document.querySelectorAll('.logo-link, .footer-logo-link').forEach(el => {
+          if (!el.dataset.spaBound) {
+            el.dataset.spaBound = 'true';
+            el.addEventListener('click', (e) => {
+              e.preventDefault();
+              if (window.location.pathname !== '/') {
+                history.pushState(null, '', '/');
+              }
+              renderThematicPage(null);
+            });
+          }
+        });
+      }, 50);
+
       const path = window.location.pathname;
       if (path === '/' || path === '/index.html' || path === '/admin.html') {
         renderThematicPage(null);
