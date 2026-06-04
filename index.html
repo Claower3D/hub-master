@@ -69,7 +69,7 @@
     }
 
     .max-width-wrap {
-      width: 1200px;
+      width: 1400px;
       max-width: 100%;
       margin: 0 auto;
       padding: 0 24px;
@@ -4090,10 +4090,10 @@
 
     /* Mega Catalog Modal */
     .mega-catalog-modal {
-      width: 1200px;
-      max-width: 95%;
-      height: 640px;
-      max-height: 90vh;
+      width: 1400px;
+      max-width: 98%;
+      height: 720px;
+      max-height: 95vh;
       background: rgba(18, 18, 22, 0.88);
       backdrop-filter: blur(35px);
       -webkit-backdrop-filter: blur(35px);
@@ -4174,7 +4174,7 @@
 
     .mega-catalog-body {
       display: grid;
-      grid-template-columns: 220px 240px 260px 1fr;
+      grid-template-columns: 260px 280px 300px 1fr;
       flex: 1;
       overflow: hidden;
     }
@@ -4194,6 +4194,7 @@
       background: rgba(0, 0, 0, 0.25);
       display: flex;
       flex-direction: column;
+      overflow-y: hidden;
     }
 
     [data-theme="light"] .mega-col:last-child {
@@ -4744,7 +4745,7 @@
 
     /* THEMATIC PAGE STYLES */
     .thematic-container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 40px 20px;
       font-family: var(--font-sans);
@@ -5454,24 +5455,15 @@
 
         <div class="hero-bottom-form-card">
           <div class="form-card-left" style="display: flex; flex-direction: column; justify-content: center; gap: 12px;">
-            <h3 class="form-card-title" data-i18n="heroFormTitle">Быстрый заказ услуг</h3>
-            <p style="font-size: 14px; color: var(--text); line-height: 1.6; margin: 0 0 8px 0;" data-i18n="heroFormDesc">
-              Оставьте заявку на ремонт или сборку мебели, и наши специалисты свяжутся с вами в течение 10 минут, либо напишите нам в WhatsApp.
-            </p>
-            <div style="display: flex; gap: 14px; flex-wrap: wrap;">
-              <button onclick="document.getElementById('lead-form-container').scrollIntoView({ behavior: 'smooth' })" class="form-submit-red-btn" style="display: inline-flex; align-items: center; justify-content: center; height: 46px; font-size: 14px; border-radius: 8px; padding: 0 24px; cursor: pointer;" data-i18n="btnLeaveAnketa">
-                Оставить анкету
-              </button>
-              <a href="https://wa.me/77058462749" target="_blank" rel="noopener noreferrer" class="form-whatsapp-green-btn" style="display: inline-flex; align-items: center; justify-content: center; height: 46px; font-size: 14px; text-decoration: none; border-radius: 8px; padding: 0 24px;">
-                <svg viewBox="0 0 24 24" width="18" height="18">
-                  <path fill="currentColor"
-                    d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.96 9.96 0 001.37 5.016L2 22l5.13-1.346a9.92 9.92 0 004.882 1.28h.005c5.507 0 9.99-4.478 9.99-9.986 0-2.67-1.037-5.178-2.923-7.065A9.925 9.925 0 0012.012 2zm5.72 14.103c-.235.662-1.362 1.224-1.879 1.285-.466.056-.918.23-2.986-.583-2.645-1.04-4.327-3.738-4.46-3.914-.131-.176-1.077-1.433-1.077-2.731a2.8 2.8 0 01.854-2.074c.264-.265.578-.332.772-.332.193 0 .386.002.553.01.173.008.406-.065.636.488.235.568.805 1.961.875 2.1.07.142.118.307.022.493-.095.187-.142.307-.283.473-.142.167-.29.351-.414.47-.142.138-.29.288-.125.572.167.283.74 1.22 1.585 1.97.1.09.286.257.48.337.195.08.388.082.533-.082.146-.166.627-.728.794-.977.167-.249.333-.207.562-.123.23.084 1.455.686 1.705.811.25.124.417.187.478.293.063.107.063.621-.172 1.283z" />
-                </svg>
-                WhatsApp
-              </a>
+            <h3 class="form-card-title" data-i18n="partnersTitle">Наши партнёры</h3>
+            <div class="partners-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; margin-top: 4px; width: 100%;">
+              <div class="partner-logo-item" style="background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--text-white); font-size: 13px; min-height: 42px;">Kaspi.kz</div>
+              <div class="partner-logo-item" style="background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--text-white); font-size: 13px; min-height: 42px;">Halyk Bank</div>
+              <div class="partner-logo-item" style="background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--text-white); font-size: 13px; min-height: 42px;">Technodom</div>
+              <div class="partner-logo-item" style="background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--text-white); font-size: 13px; min-height: 42px;">Sulpak</div>
+              <div class="partner-logo-item" style="background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--text-white); font-size: 13px; min-height: 42px;">Mechta.kz</div>
             </div>
           </div>
-
           <div class="form-card-right">
             <ul class="form-card-checklist">
               <li>
@@ -5583,9 +5575,7 @@
             нужно</p>
         </div>
 
-        <div class="catalog-tabs" id="catalog-tab-headers">
-          <!-- Dynamically populated tabs -->
-        </div>
+        
 
         <div class="catalog-grid" id="catalog-items-grid">
           <!-- Dynamically populated cards -->
@@ -6742,10 +6732,7 @@
             <input type="text" id="mega-search-input" placeholder="Поиск услуг..." oninput="handleMegaSearch(this.value)" style="width: 100%; padding: 8px 12px 8px 32px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 8px; color: white; font-size: 13px; outline: none; transition: border-color 0.2s;">
             <i class="ri-search-line" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px;"></i>
           </div>
-          <button class="mega-sort-btn" onclick="toggleMegaSort()" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 8px; color: white; padding: 8px 12px; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap;">
-            <i class="ri-sort-asc"></i>
-            <span id="mega-sort-label">Сортировка</span>
-          </button>
+          
         </div>
         <button class="mega-catalog-close" onclick="closeMegaModal()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -7587,6 +7574,7 @@
 
     const translations = {
       RU: {
+        partnersTitle: "Наши партнёры",
         mobNavHome: "Главная",
         mobNavCatalog: "Каталог",
         mobNavOrder: "Заявка",
@@ -7694,6 +7682,7 @@
         minUnit: "мин"
       },
       KZ: {
+        partnersTitle: "Біздің серіктестер",
         mobNavHome: "Басты бет",
         mobNavCatalog: "Каталог",
         mobNavOrder: "Өтінім",
@@ -7801,6 +7790,7 @@
         minUnit: "мин"
       },
       EN: {
+        partnersTitle: "Our Partners",
         mobNavHome: "Home",
         mobNavCatalog: "Catalog",
         mobNavOrder: "Order",
@@ -8986,14 +8976,14 @@
     let megaActiveCategory = null;   // Column 2 (Category)
     let megaActiveSubcategory = null;// Column 3 (Subcategory / Service)
     let megaSearchQuery = '';
-    let megaSortOrder = 'default';   // 'default' | 'asc' | 'desc'
+    let megaSortOrder = 'asc';   // 'default' | 'asc' | 'desc'
 
     window.openMegaModal = function () {
       document.getElementById('mega-modal-overlay').classList.add('active');
       const searchInp = document.getElementById('mega-search-input');
       if (searchInp) searchInp.value = '';
       megaSearchQuery = '';
-      megaSortOrder = 'default';
+      megaSortOrder = 'asc';
       const sortLabel = document.getElementById('mega-sort-label');
       const sortBtn = document.querySelector('.mega-sort-btn');
       if (sortLabel) sortLabel.textContent = 'Сортировка';
@@ -9021,16 +9011,43 @@
 
     window.handleMegaSearch = function(query) {
       megaSearchQuery = query;
+      const q = megaSearchQuery.toLowerCase().trim();
+
+      if (megaSearchQuery) {
+        let matchingSections = servicesData.filter(sec => {
+          const secName = (currentLang === 'RU' ? sec.name : (currentLang === 'KZ' ? sec.nameKz : sec.nameEn)).toLowerCase();
+          const secMatch = secName.includes(q);
+          const catMatch = (sec.categories || []).some(cat => {
+            const catTitle = (currentLang === 'RU' ? cat.title : (currentLang === 'KZ' ? cat.titleKz : cat.titleEn)).toLowerCase();
+            const subMatch = (cat.items || []).some(sub => (currentLang === 'RU' ? sub.name : (currentLang === 'KZ' ? sub.nameKz : sub.name)).toLowerCase().includes(q));
+            return catTitle.includes(q) || subMatch;
+          });
+          return secMatch || catMatch;
+        });
+
+        if (matchingSections.length > 0) {
+          if (!matchingSections.includes(megaActiveSection)) {
+            megaActiveSection = matchingSections[0];
+          }
+        } else {
+          megaActiveSection = null;
+        }
+      } else {
+        if (servicesData && servicesData.length > 0 && !megaActiveSection) {
+          megaActiveSection = servicesData[0];
+        }
+      }
+
       if (megaActiveSection) {
         let categories = megaActiveSection.categories || [];
         if (megaSearchQuery) {
-          const q = megaSearchQuery.toLowerCase().trim();
           categories = categories.filter(cat => {
             const titleMatch = (currentLang === 'RU' ? cat.title : (currentLang === 'KZ' ? cat.titleKz : cat.titleEn)).toLowerCase().includes(q);
             const subMatch = (cat.items || []).some(sub => (currentLang === 'RU' ? sub.name : (currentLang === 'KZ' ? sub.nameKz : sub.name)).toLowerCase().includes(q));
             return titleMatch || subMatch;
           });
         }
+
         if (categories.length > 0) {
           if (!categories.includes(megaActiveCategory)) {
             megaActiveCategory = categories[0];
@@ -9042,7 +9059,6 @@
         if (megaActiveCategory) {
           let subs = megaActiveCategory.items || [];
           if (megaSearchQuery) {
-            const q = megaSearchQuery.toLowerCase().trim();
             subs = subs.filter(sub => (currentLang === 'RU' ? sub.name : (currentLang === 'KZ' ? sub.nameKz : sub.name)).toLowerCase().includes(q));
           }
           if (subs.length > 0) {
@@ -9055,6 +9071,9 @@
         } else {
           megaActiveSubcategory = null;
         }
+      } else {
+        megaActiveCategory = null;
+        megaActiveSubcategory = null;
       }
       renderMegaCols();
     };
@@ -9071,7 +9090,7 @@
         label.textContent = 'Я-А';
         btn.innerHTML = `<i class="ri-sort-alphabet-desc"></i> <span id="mega-sort-label">Я-А</span>`;
       } else {
-        megaSortOrder = 'default';
+        megaSortOrder = 'asc';
         label.textContent = 'По умолч.';
         btn.innerHTML = `<i class="ri-sort-asc"></i> <span id="mega-sort-label">По умолч.</span>`;
       }
@@ -9159,7 +9178,21 @@
 
       // Col 1: Sections
       col1.innerHTML = '';
-      servicesData.forEach(sec => {
+      let sectionsToRender = servicesData;
+      if (megaSearchQuery) {
+        const q = megaSearchQuery.toLowerCase().trim();
+        sectionsToRender = servicesData.filter(sec => {
+          const secName = (currentLang === 'RU' ? sec.name : (currentLang === 'KZ' ? sec.nameKz : sec.nameEn)).toLowerCase();
+          const secMatch = secName.includes(q);
+          const catMatch = (sec.categories || []).some(cat => {
+            const catTitle = (currentLang === 'RU' ? cat.title : (currentLang === 'KZ' ? cat.titleKz : cat.titleEn)).toLowerCase();
+            const subMatch = (cat.items || []).some(sub => (currentLang === 'RU' ? sub.name : (currentLang === 'KZ' ? sub.nameKz : sub.name)).toLowerCase().includes(q));
+            return catTitle.includes(q) || subMatch;
+          });
+          return secMatch || catMatch;
+        });
+      }
+      sectionsToRender.forEach(sec => {
         const btn = document.createElement('button');
         btn.className = 'mega-cat-btn' + (megaActiveSection && megaActiveSection.id === sec.id ? ' active' : '');
         btn.innerHTML = `
