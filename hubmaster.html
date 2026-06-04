@@ -5548,7 +5548,7 @@
             </div>
             <!-- Category Tabs Navigation -->
             <div class="hero-nav-tabs">
-              <button class="nav-tab-btn active" onclick="handleHeroTabClick('scroll', 'catalog')">
+              <button class="nav-tab-btn active" onclick="handleHeroTabClick('scroll', 'catalog', this)">
                 <svg viewBox="0 0 24 24">
                   <line x1="4" y1="21" x2="4" y2="14" />
                   <line x1="4" y1="10" x2="4" y2="3" />
@@ -5562,7 +5562,7 @@
                 </svg>
                 <span data-i18n="tabServices">Услуги</span>
               </button>
-              <button class="nav-tab-btn" onclick="handleHeroTabClick('scroll', 'masters-advantages')">
+              <button class="nav-tab-btn" onclick="handleHeroTabClick('scroll', 'masters-advantages', this)">
                 <svg viewBox="0 0 24 24">
                   <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                   <circle cx="9" cy="7" r="4" />
@@ -5571,7 +5571,7 @@
                 </svg>
                 <span data-i18n="tabMasters">Мастера</span>
               </button>
-              <button class="nav-tab-btn" onclick="handleHeroTabClick('category', 'appliance')">
+              <button class="nav-tab-btn" onclick="handleHeroCategorySwitch('windows', this)">
                 <svg viewBox="0 0 24 24">
                   <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
                   <line x1="9" y1="3" x2="9" y2="21" />
@@ -5583,14 +5583,13 @@
               </button>
             </div>
             <div class="hero-nav-row-2">
-              <button class="nav-tab-btn" onclick="handleHeroTabClick('category', 'appliance')">
+              <button class="nav-tab-btn" onclick="handleHeroCategorySwitch('appliance', this)">
                 <svg viewBox="0 0 24 24">
-                  <path
-                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
                 </svg>
                 <span data-i18n="tabRepair">Ремонт</span>
               </button>
-              <button class="nav-tab-btn" onclick="handleHeroTabClick('category', 'cleaning')">
+              <button class="nav-tab-btn" onclick="handleHeroCategorySwitch('cleaning', this)">
                 <svg viewBox="0 0 24 24">
                   <polygon points="12 2 2 7 12 12 22 7 12 2" />
                   <polyline points="2 17 12 22 22 17" />
@@ -8226,6 +8225,9 @@
       document.querySelectorAll('[data-name-ru]').forEach(el => {
         el.innerText = el.getAttribute(`data-name-${currentLang.toLowerCase()}`);
       });
+      if (typeof updateHeroCategoryUI === 'function') {
+        updateHeroCategoryUI();
+      }
       renderMastersCarousel();
     }
     // MASTERS CAROUSEL & TAB HANDLERS
@@ -8233,35 +8235,138 @@
       {
         name: "Азамат Т.",
         role: { RU: "Реставратор мебели", KZ: "Жиһаз қалпына келтіруші", EN: "Furniture Restorer" },
+        category: "furniture",
         rating: 5,
         avatar: "/public/master_azamat.png"
       },
       {
         name: "Данияр К.",
         role: { RU: "Сборщик мебели", KZ: "Жиһаз жинаушы", EN: "Furniture Assembler" },
+        category: "furniture",
         rating: 5,
         avatar: "/public/master_daniyar.png"
       },
       {
         name: "Алибек И.",
         role: { RU: "Мастер по перетяжке", KZ: "Қаптау шебері", EN: "Re-upholstery Master" },
+        category: "furniture",
         rating: 5,
         avatar: "/public/master_alibek.png"
       },
       {
         name: "Руслан С.",
         role: { RU: "Электрик", KZ: "Электрик", EN: "Electrician" },
+        category: "appliance",
         rating: 5,
         avatar: "/public/master_ruslan.png"
       },
       {
         name: "Арман Б.",
         role: { RU: "Сантехник", KZ: "Сантехник", EN: "Plumber" },
+        category: "appliance",
         rating: 5,
         avatar: "/public/master_arman.png"
+      },
+      {
+        name: "Игорь В.",
+        role: { RU: "Мастер по окнам", KZ: "Терезе шебері", EN: "Window Specialist" },
+        category: "windows",
+        rating: 5,
+        avatar: "/public/master_azamat.png"
+      },
+      {
+        name: "Ерлан М.",
+        role: { RU: "Специалист по клинингу", KZ: "Тазалық маманы", EN: "Cleaning Specialist" },
+        category: "cleaning",
+        rating: 5,
+        avatar: "/public/master_alibek.png"
+      },
+      {
+        name: "Сергей Д.",
+        role: { RU: "Мастер по ремонту техники", KZ: "Техника жөндеу шебері", EN: "Appliance Technician" },
+        category: "appliance",
+        rating: 5,
+        avatar: "/public/master_daniyar.png"
       }
     ];
 
+    const categoryContentData = {
+      furniture: {
+        title: {
+          RU: "КАЧЕСТВЕННАЯ<br><span class='highlight'>СБОРКА</span><br><span class='highlight'>И РЕСТАВРАЦИЯ</span><br><span class='highlight'>ВАШЕЙ</span><br>МЕБЕЛИ",
+          KZ: "ЖИҺАЗДЫ ЖОҒАРЫ<br><span class='highlight'>САПАЛЫ ЖИНАУ</span><br><span class='highlight'>ЖӘНЕ</span><br><span class='highlight'>ҚАЛПЫНА</span><br>КЕЛТІРУ",
+          EN: "QUALITY<br><span class='highlight'>FURNITURE</span><br><span class='highlight'>ASSEMBLY &</span><br><span class='highlight'>RESTORATION</span><br>SERVICES"
+        },
+        desc: {
+          RU: "Сборка кухонь, шкафов-купе, ремонт каркасов и перетяжка мягкой мебели с премиальной фурнитурой и гарантией качества.",
+          KZ: "Ас үй жиһаздарын, купе-шкафтарды жинау, қаңқаларды жөндеу және жұмсақ жиһаздарды сапа кепілдігімен қаптау.",
+          EN: "Assembly of kitchens, sliding wardrobes, frame repair and re-upholstery of soft furniture with premium fittings and quality guarantee."
+        },
+        btnText: {
+          RU: "Вызвать мебельщика",
+          KZ: "Жиһазшыны шақыру",
+          EN: "Call Furniture Maker"
+        },
+        serviceName: "Сборка мебели"
+      },
+      windows: {
+        title: {
+          RU: "ПРОФЕССИОНАЛЬНАЯ<br><span class='highlight'>УСТАНОВКА</span><br><span class='highlight'>И РЕМОНТ</span><br><span class='highlight'>ПЛАСТИКОВЫХ</span><br>ОКОН",
+          KZ: "ТЕРЕЗЕЛЕРДІ<br><span class='highlight'>КӘСИБИ</span><br><span class='highlight'>ОРНАТУ ЖӘНЕ</span><br><span class='highlight'>ЖӨНДЕУ</span><br>ҚЫЗМЕТІ",
+          EN: "PROFESSIONAL<br><span class='highlight'>WINDOW</span><br><span class='highlight'>INSTALLATION &</span><br><span class='highlight'>REPAIR</span><br>SERVICES"
+        },
+        desc: {
+          RU: "Регулировка окон, замена уплотнителей, установка москитных сеток, замена стеклопакетов и ремонт фурнитуры с гарантией.",
+          KZ: "Терезелерді реттеу, тығыздағыштарды ауыстыру, москит торларын орнату, шыны пакеттерді ауыстыру және кепілдікпен жөндеу.",
+          EN: "Window adjustment, seal replacement, mosquito net installation, double glazing replacement and hardware repair with a guarantee."
+        },
+        btnText: {
+          RU: "Вызвать оконщика",
+          KZ: "Терезе шеберін шақыру",
+          EN: "Call Window Specialist"
+        },
+        serviceName: "Ремонт окон"
+      },
+      appliance: {
+        title: {
+          RU: "НАДЕЖНЫЙ<br><span class='highlight'>РЕМОНТ</span><br><span class='highlight'>БЫТОВОЙ</span><br><span class='highlight'>ТЕХНИКИ</span><br>ДОМА",
+          KZ: "ТҰРМЫСТЫҚ<br><span class='highlight'>ТЕХНИКАНЫ</span><br><span class='highlight'>СЕНІМДІ ЖӘНЕ</span><br><span class='highlight'>ТЕЗ</span><br>ЖӨНДЕУ",
+          EN: "RELIABLE<br><span class='highlight'>APPLIANCE</span><br><span class='highlight'>REPAIR</span><br><span class='highlight'>AT YOUR</span><br>HOME"
+        },
+        desc: {
+          RU: "Ремонт стиральных и посудомоечных машин, холодильников, кондиционеров и духовок с выездом мастера в день обращения.",
+          KZ: "Кір жуғыш және ыдыс жуғыш машиналарды, тоңазытқыштарды, кондиционерлерді өтінім берген күні шебердің келуімен жөндеу.",
+          EN: "Repair of washing machines, dishwashers, refrigerators, air conditioners and ovens with same-day technician visit."
+        },
+        btnText: {
+          RU: "Вызвать мастера",
+          KZ: "Шеберді шақыру",
+          EN: "Call Technician"
+        },
+        serviceName: "Ремонт бытовой техники"
+      },
+      cleaning: {
+        title: {
+          RU: "БЕЗУПРЕЧНЫЙ<br><span class='highlight'>КЛИНИНГ</span><br><span class='highlight'>И УБОРКА</span><br><span class='highlight'>ЛЮБЫХ</span><br>ПОМЕЩЕНИЙ",
+          KZ: "КЕЗ КЕЛГЕН<br><span class='highlight'>БӨЛМЕНІ</span><br><span class='highlight'>КІРШІКСІЗ ТАЗАЛАУ</span><br><span class='highlight'>ЖӘНЕ</span><br>КЛИНИНГ",
+          EN: "IMPECCABLE<br><span class='highlight'>CLEANING</span><br><span class='highlight'>SERVICES</span><br><span class='highlight'>FOR YOUR</span><br>SPACE"
+        },
+        desc: {
+          RU: "Генеральная и поддерживающая уборка квартир, химчистка диванов и ковров, мытье окон с использованием гипоаллергенных средств.",
+          KZ: "Пәтерлерді жалпы және күнделікті тазалау, дивандар мен кілемдерді химиялық тазалау, гипоаллергенді өнімдермен терезе жуу.",
+          EN: "Deep and maintenance cleaning of apartments, dry cleaning of sofas and carpets, window washing using hypoallergenic products."
+        },
+        btnText: {
+          RU: "Вызвать клинера",
+          KZ: "Тазалықшыны шақыру",
+          EN: "Call Cleaner"
+        },
+        serviceName: "Клининг"
+      }
+    };
+
+    let selectedMastersCategory = 'all';
+    let activeHeroCategory = 'furniture';
     let currentCarouselOffset = 0;
 
     function renderMastersCarousel() {
@@ -8270,7 +8375,11 @@
 
       const statusText = translations[currentLang].availableLabel || (currentLang === 'RU' ? 'Свободен' : currentLang === 'KZ' ? 'Бос' : 'Available');
 
-      track.innerHTML = mastersData.map(m => `
+      const filtered = selectedMastersCategory === 'all' 
+        ? mastersData 
+        : mastersData.filter(m => m.category === selectedMastersCategory);
+
+      track.innerHTML = filtered.map(m => `
         <div class="master-card-new">
           <div class="master-avatar-circle">
             <img src="${m.avatar}" alt="${m.name}">
@@ -8290,8 +8399,12 @@
       const track = document.getElementById('masters-track');
       if (!track) return;
 
+      const filtered = selectedMastersCategory === 'all' 
+        ? mastersData 
+        : mastersData.filter(m => m.category === selectedMastersCategory);
+
       const cardWidth = 162; // card flex width (150) + gap (12)
-      const maxOffset = mastersData.length - 3;
+      const maxOffset = Math.max(0, filtered.length - 3);
 
       currentCarouselOffset += direction;
       if (currentCarouselOffset < 0) currentCarouselOffset = 0;
@@ -8300,31 +8413,76 @@
       track.style.transform = `translateX(-${currentCarouselOffset * cardWidth}px)`;
     }
 
-    function handleHeroTabClick(tabType, categoryName) {
-      // Prevent default to avoid page reload issues
-      if (window.event) window.event.preventDefault();
+    function handleHeroCategorySwitch(category, btnElement) {
+      activeHeroCategory = category;
+      selectedMastersCategory = category;
 
-      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+      // Update active tab styling
+      document.querySelectorAll('.hero-nav-tabs .nav-tab-btn, .hero-nav-row-2 .nav-tab-btn').forEach(btn => {
         btn.classList.remove('active');
       });
-      if (window.event && window.event.currentTarget) {
+      if (btnElement) {
+        btnElement.classList.add('active');
+      }
+
+      // Update UI elements
+      updateHeroCategoryUI();
+
+      // Refresh carousel
+      renderMastersCarousel();
+    }
+
+    function updateHeroCategoryUI() {
+      const data = categoryContentData[activeHeroCategory] || categoryContentData['furniture'];
+      
+      const headingEl = document.querySelector('.ma-heading');
+      if (headingEl) {
+        headingEl.innerHTML = data.title[currentLang] || data.title['RU'];
+        headingEl.removeAttribute('data-i18n');
+      }
+
+      const subtextEl = document.querySelector('.ma-subtext');
+      if (subtextEl) {
+        subtextEl.innerText = data.desc[currentLang] || data.desc['RU'];
+        subtextEl.removeAttribute('data-i18n');
+      }
+
+      const callBtn = document.querySelector('.hero-btn-red');
+      if (callBtn) {
+        const textSpan = callBtn.querySelector('span');
+        if (textSpan) {
+          textSpan.innerText = data.btnText[currentLang] || data.btnText['RU'];
+          textSpan.removeAttribute('data-i18n');
+        }
+        callBtn.onclick = () => openModal(data.serviceName);
+      }
+    }
+
+    function handleHeroTabClick(tabType, categoryName, btnElement) {
+      if (window.event) window.event.preventDefault();
+
+      document.querySelectorAll('.hero-nav-tabs .nav-tab-btn, .hero-nav-row-2 .nav-tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      if (btnElement) {
+        btnElement.classList.add('active');
+      } else if (window.event && window.event.currentTarget) {
         window.event.currentTarget.classList.add('active');
       }
+
+      // Reset info cards to furniture assembly by default when clicking Услуги or Мастера
+      activeHeroCategory = 'furniture';
+      selectedMastersCategory = 'all'; // show all masters
+      updateHeroCategoryUI();
+      renderMastersCarousel();
 
       if (tabType === 'scroll') {
         const target = document.getElementById(categoryName);
         if (target) {
           target.scrollIntoView({ behavior: 'smooth' });
         }
-      } else if (tabType === 'category') {
-        switchCategory(categoryName);
-        const target = document.getElementById('catalog');
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth' });
-        }
       }
     }
-
 
     // MODAL
     function openModal(serviceName, skipUrlUpdate = false) {
