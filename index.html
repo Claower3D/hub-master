@@ -5231,6 +5231,58 @@
       height: 16px;
       color: var(--primary);
     }
+
+    /* Back to Top Button */
+    .scroll-to-top-btn {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(100%);
+      width: 110px;
+      height: 32px;
+      background-color: var(--primary);
+      clip-path: polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%);
+      cursor: pointer;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      border: none;
+      outline: none;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s;
+      box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+      padding: 0;
+    }
+
+    .scroll-to-top-btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .scroll-to-top-btn.visible {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .scroll-to-top-btn svg {
+      width: 16px;
+      height: 16px;
+      margin-top: -2px;
+      color: white;
+      transition: transform 0.2s;
+    }
+
+    .scroll-to-top-btn:hover svg {
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .scroll-to-top-btn {
+        bottom: 60px; /* Position above mobile bottom nav */
+        width: 90px;
+        height: 28px;
+        clip-path: polygon(12% 0%, 88% 0%, 100% 100%, 0% 100%);
+      }
+    }
   </style>
 </head>
 
@@ -10123,7 +10175,14 @@
               Сервисная служба HUB MASTER • Алматы, Казахстан • Поддержка: +7 (705) 846-2749
             </div>
           </div>
-        </body>
+          <!-- Back to Top Button -->
+  <button id="back-to-top" class="scroll-to-top-btn" onclick="scrollToTop()" aria-label="Scroll to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+</body>
         </html>
       `);
       printWindow.document.close();
@@ -11102,6 +11161,25 @@
         observer.observe(sec);
       });
     }
+
+    // Back to Top functionality
+    window.addEventListener('scroll', () => {
+      const btn = document.getElementById('back-to-top');
+      if (btn) {
+        if (window.scrollY > 400) {
+          btn.classList.add('visible');
+        } else {
+          btn.classList.remove('visible');
+        }
+      }
+    });
+
+    window.scrollToTop = function() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    };
   </script>
 
   <!-- MOBILE BOTTOM NAVIGATION -->
@@ -11142,6 +11220,13 @@
       <span data-i18n="mobNavTheme">Тема</span>
     </button>
   </div>
+
+  <!-- Back to Top Button -->
+  <button id="back-to-top" class="scroll-to-top-btn" onclick="scrollToTop()" aria-label="Scroll to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
 
 </body>
 
