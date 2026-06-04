@@ -2733,11 +2733,11 @@
 
     /* Master Card */
     .master-card-new {
-      flex: 0 0 170px;
+      flex: 0 0 220px;
       background: rgba(25, 25, 29, 0.55);
       border: 1px solid rgba(255, 255, 255, 0.04);
       border-radius: 16px;
-      padding: 18px 12px;
+      padding: 22px 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -2752,14 +2752,14 @@
     }
 
     .master-avatar-circle {
-      width: 80px;
-      height: 80px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
       overflow: hidden;
-      border: 2.5px solid rgba(255, 255, 255, 0.12);
-      margin-bottom: 12px;
+      border: 3px solid rgba(255, 255, 255, 0.12);
+      margin-bottom: 15px;
       background: #1e1e24;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     }
 
     .master-avatar-circle img {
@@ -2769,16 +2769,16 @@
     }
 
     .master-name-new {
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 700;
       color: var(--text-white);
     }
 
     .master-role-new {
-      font-size: 10px;
+      font-size: 11px;
       color: var(--text-muted);
-      margin-top: 2px;
-      height: 24px;
+      margin-top: 4px;
+      height: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -2786,7 +2786,7 @@
 
     .master-stars-new {
       color: #f59e0b;
-      font-size: 9px;
+      font-size: 11px;
       margin-top: 4px;
       letter-spacing: 0.5px;
     }
@@ -2794,10 +2794,10 @@
     .master-status-pill {
       background: rgba(245, 158, 11, 0.12);
       color: #f59e0b;
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 800;
       text-transform: uppercase;
-      padding: 3px 8px;
+      padding: 4px 10px;
       border-radius: 10px;
       margin-top: 8px;
       letter-spacing: 0.5px;
@@ -8938,8 +8938,8 @@
         ? mastersData 
         : mastersData.filter(m => m.category === selectedMastersCategory);
 
-      const cardWidth = 182; // card flex width (170) + gap (12)
-      const maxOffset = Math.max(0, filtered.length - 3);
+      const cardWidth = 232; // card flex width (220) + gap (12)
+      const maxOffset = Math.max(0, filtered.length - 2);
 
       currentCarouselOffset += direction;
       if (currentCarouselOffset < 0) currentCarouselOffset = 0;
