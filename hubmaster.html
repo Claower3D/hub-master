@@ -6255,86 +6255,7 @@
       </div>
     </section>
 
-    <!-- LEAD SECTION (FOOTER FORM) -->
-    <section class="lead-section">
-      <div class="max-width-wrap lead-inner-box">
-        <div class="lead-text-box">
-          <h3 data-i18n="leaveRequest">Оставьте заявку</h3>
-          <p data-i18n="leaveRequestSub">Наш оператор перезвонит вам в течение 10 минут для уточнения деталей</p>
-          <div class="lead-features-small">
-            <div class="lead-feat-item">
-              <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth="2.5">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              <span data-i18n="feat1">Выезд бесплатно</span>
-            </div>
-            <div class="lead-feat-item">
-              <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth="2.5">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              <span data-i18n="feat2">Гарантия качества</span>
-            </div>
-            <div class="lead-feat-item">
-              <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth="2.5">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              <span data-i18n="feat3">Опытные специалисты</span>
-            </div>
-            <div class="lead-feat-item">
-              <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth="2.5">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              <span data-i18n="feat4">Работаем 24/7</span>
-            </div>
-          </div>
-        </div>
 
-        <div class="lead-form-box" id="lead-form-container">
-          <form onsubmit="handleLeadSubmit(event)">
-            <div class="form-group" style="margin-bottom: 14px;">
-              <label class="form-label" data-i18n="yourName">Ваше имя</label>
-              <input type="text" id="lead-name" class="form-input" required placeholder="Ерлан">
-            </div>
-            <div class="form-group" style="margin-bottom: 14px;">
-              <label class="form-label" data-i18n="yourPhone">Номер телефона</label>
-              <input type="tel" id="lead-phone" class="form-input" required placeholder="+7 (705) 846-2749">
-            </div>
-            <div class="form-group" style="margin-bottom: 14px;">
-              <label class="form-label" data-i18n="selectService">Выберите услугу</label>
-              <select id="lead-service-select" class="form-select">
-                <!-- Dynamically populated options -->
-              </select>
-            </div>
-            <div class="form-group" style="margin-bottom: 14px;">
-              <label class="form-label" data-i18n="selectCity">Выберите город</label>
-              <select id="lead-city-select" class="form-select">
-                <option value="almaty" data-i18n="selectCityAlmaty">Алматы</option>
-                <option value="astana" data-i18n="selectCityAstana">Астана</option>
-              </select>
-            </div>
-            <div class="form-group" style="margin-bottom: 14px;">
-              <label class="form-label" data-i18n="yourAddress">Адрес (необязательно)</label>
-              <input type="text" id="lead-address" class="form-input" placeholder="ул. Абая, д. 10, кв. 5">
-            </div>
-            <div class="form-group" style="margin-bottom: 20px;">
-              <label class="form-label" data-i18n="problemDescription">Описание проблемы (необязательно)</label>
-              <textarea id="lead-comment" class="form-input" style="height: 80px; resize: none;" placeholder="Опишите в двух словах вашу проблему..."></textarea>
-            </div>
-            <button type="submit" class="review-submit-btn" data-i18n="sendRequest">Отправить заявку</button>
-          </form>
-        </div>
-
-        <div class="lead-form-box lead-form-success" id="lead-success-container">
-          <div class="success-icon-badge">
-            <svg viewBox="0 0 24 24" stroke="#25d366" fill="none" strokeWidth="2.5">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-          </div>
-          <h4 class="success-title" data-i18n="successTitle">Заявка успешно принята!</h4>
-          <p class="success-message" data-i18n="successDesc">Мы свяжемся с вами в течение 10 минут. Спасибо!</p>
-        </div>
-      </div>
-    </section>
 
     <!-- COVERAGE ZONES SECTION -->
     <style>
@@ -6954,13 +6875,6 @@
             <input type="tel" id="modal-phone" class="form-input" required placeholder="+7 (705) 846-2749" style="width: 100%;">
           </div>
           <div class="form-group" style="margin-bottom: 14px;">
-            <label class="form-label" data-i18n="selectCity">Выберите город</label>
-            <select id="modal-city-select" class="form-select" style="width: 100%;">
-              <option value="almaty" data-i18n="selectCityAlmaty">Алматы</option>
-              <option value="astana" data-i18n="selectCityAstana">Астана</option>
-            </select>
-          </div>
-          <div class="form-group" style="margin-bottom: 20px;">
             <label class="form-label" data-i18n="selectService">Выберите услугу</label>
             <select id="modal-service-select" class="form-select" style="width: 100%;">
               <option value="furniture" data-i18n="selectServiceFurniture">Сборка мебели</option>
@@ -6973,6 +6887,21 @@
               <option value="movers" data-i18n="selectServiceMovers">Грузчики</option>
               <option value="delivery" data-i18n="selectServiceDelivery">Доставка</option>
             </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label" data-i18n="selectCity">Выберите город</label>
+            <select id="modal-city-select" class="form-select" style="width: 100%;">
+              <option value="almaty" data-i18n="selectCityAlmaty">Алматы</option>
+              <option value="astana" data-i18n="selectCityAstana">Астана</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label" data-i18n="yourAddress">Адрес (необязательно)</label>
+            <input type="text" id="modal-address" class="form-input" placeholder="ул. Абая, д. 10, кв. 5" style="width: 100%;">
+          </div>
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label class="form-label" data-i18n="problemDescription">Описание проблемы (необязательно)</label>
+            <textarea id="modal-comment" class="form-input" style="height: 80px; resize: none; width: 100%;" placeholder="Опишите в двух словах вашу проблему..."></textarea>
           </div>
           <button type="submit" class="review-submit-btn" data-i18n="sendRequest">Отправить заявку</button>
         </form>
@@ -8513,25 +8442,29 @@
       const revSel = document.getElementById('rev-service');
       const leadSel = document.getElementById('lead-service-select');
 
-      revSel.innerHTML = '<option value="" data-i18n="selectPrompt">-- Выберите --</option>';
-      leadSel.innerHTML = '';
+      if (revSel) revSel.innerHTML = '<option value="" data-i18n="selectPrompt">-- Выберите --</option>';
+      if (leadSel) leadSel.innerHTML = '';
 
       servicesData.forEach(s => {
-        const optRev = document.createElement('option');
-        optRev.value = s.title;
-        optRev.setAttribute('data-title-ru', s.title);
-        optRev.setAttribute('data-title-kz', s.titleKz);
-        optRev.setAttribute('data-title-en', s.titleEn);
-        optRev.innerText = s.title;
-        revSel.appendChild(optRev);
+        if (revSel) {
+          const optRev = document.createElement('option');
+          optRev.value = s.title;
+          optRev.setAttribute('data-title-ru', s.title);
+          optRev.setAttribute('data-title-kz', s.titleKz);
+          optRev.setAttribute('data-title-en', s.titleEn);
+          optRev.innerText = s.title;
+          revSel.appendChild(optRev);
+        }
 
-        const optLead = document.createElement('option');
-        optLead.value = s.id;
-        optLead.setAttribute('data-title-ru', s.title);
-        optLead.setAttribute('data-title-kz', s.titleKz);
-        optLead.setAttribute('data-title-en', s.titleEn);
-        optLead.innerText = s.title;
-        leadSel.appendChild(optLead);
+        if (leadSel) {
+          const optLead = document.createElement('option');
+          optLead.value = s.id;
+          optLead.setAttribute('data-title-ru', s.title);
+          optLead.setAttribute('data-title-kz', s.titleKz);
+          optLead.setAttribute('data-title-en', s.titleEn);
+          optLead.innerText = s.title;
+          leadSel.appendChild(optLead);
+        }
       });
     }
 
@@ -9074,6 +9007,11 @@
       document.getElementById('modal-form-container').style.display = 'block';
       document.getElementById('modal-success-container').style.display = 'none';
 
+      const addressInput = document.getElementById('modal-address');
+      if (addressInput) addressInput.value = '';
+      const commentInput = document.getElementById('modal-comment');
+      if (commentInput) commentInput.value = '';
+
       if (!skipUrlUpdate && typeof updateURL === 'function') {
         updateURL();
       }
@@ -9096,7 +9034,6 @@
     }
 
     // SUBMIT ACTIONS
-    // SUBMIT ACTIONS
     async function handleModalSubmit(e) {
       e.preventDefault();
       const name = document.getElementById('modal-name').value.trim();
@@ -9108,13 +9045,23 @@
       const citySelect = document.getElementById('modal-city-select');
       const city = citySelect ? (citySelect.options[citySelect.selectedIndex]?.text || currentCity || 'Алматы') : (currentCity || 'Алматы');
 
+      const address = document.getElementById('modal-address') ? document.getElementById('modal-address').value.trim() : '';
+      const comment = document.getElementById('modal-comment') ? document.getElementById('modal-comment').value.trim() : '';
+
       if (!name || !phone) return;
 
       try {
         const res = await fetch(API_BASE + '/api/callback', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, phone, service, city, comment: 'Заявка из модального окна' })
+          body: JSON.stringify({
+            name,
+            phone,
+            service,
+            city,
+            address,
+            comment
+          })
         });
         if (res.ok) {
           document.getElementById('modal-form-container').style.display = 'none';
@@ -9123,6 +9070,8 @@
             closeModal();
             document.getElementById('modal-name').value = '';
             document.getElementById('modal-phone').value = '';
+            if (document.getElementById('modal-address')) document.getElementById('modal-address').value = '';
+            if (document.getElementById('modal-comment')) document.getElementById('modal-comment').value = '';
           }, 2500);
         } else {
           alert('Ошибка при отправке заявки. Пожалуйста, попробуйте еще раз.');
