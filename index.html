@@ -8963,11 +8963,11 @@
       },
       {
         name: "Ерлан М.",
-        role: { RU: "Специалист по клинингу", KZ: "Тазалық маманы", EN: "Cleaning Specialist" },
-        category: "cleaning",
+        role: { RU: "Мастер по сварке", KZ: "Дәнекерлеу шебері", EN: "Welding Specialist" },
+        category: "welding",
         rating: 5,
         avatar: "/public/master_alibek.png",
-        experience: { RU: "Опыт 4 года", KZ: "Тәжірибе 4 жыл", EN: "4 years exp" }
+        experience: { RU: "Опыт 6 лет", KZ: "Тәжірибе 6 жыл", EN: "6 years exp" }
       },
       {
         name: "Сергей Д.",
@@ -9101,6 +9101,14 @@
       maSlides[currentMaSlide].classList.add('active');
       if (maDots[currentMaSlide]) maDots[currentMaSlide].classList.add('active');
 
+      // Bind masters category to active slide!
+      const categories = ['furniture', 'windows', 'welding', 'appliance'];
+      selectedMastersCategory = categories[index];
+
+      // Reset carousel offset and refresh cards
+      currentCarouselOffset = 0;
+      renderMastersCarousel();
+
       resetMaInterval();
     }
 
@@ -9118,7 +9126,7 @@
 
     // Initialize text slider auto-rotation
     document.addEventListener('DOMContentLoaded', () => {
-      resetMaInterval();
+      window.setMaSlide(0); // Synchronize active category on load
     });
 
     function moveCarousel(direction) {
