@@ -3636,11 +3636,53 @@
     }
 
     .ma-left-col {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-self: start;
+      position: relative;
+      display: block;
+      min-height: 380px;
       min-width: 0;
+    }
+
+    .ma-slide {
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      pointer-events: none;
+    }
+
+    .ma-slide.active {
+      opacity: 1;
+      transform: translateY(0);
+      position: relative;
+      pointer-events: auto;
+    }
+
+    .ma-slides-dots {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+
+    .ma-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .ma-dot:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .ma-dot.active {
+      background: var(--primary);
+      transform: scale(1.2);
     }
 
     .why-choose-block {
@@ -5896,14 +5938,105 @@
 
           <!-- Left Column: Hero Content -->
           <div class="ma-left-col">
-            <h2 class="ma-heading" data-i18n="heroTitle">
-              КАЧЕСТВЕННАЯ<br><span class="highlight">СБОРКА</span><br><span class="highlight">И
-                РЕСТАВРАЦИЯ</span><br><span class="highlight">ВАШЕЙ</span><br>ВАШЕЙ МЕБЕЛИ
-            </h2>
-            <p class="ma-subtext" data-i18n="heroSubtextText">
-              Сборка кухонь, шкафов-купе, ремонт каркасов и перетяжка мягкой мебели с премиальной фурнитурой и гарантией
-              качества.
-                        </div>
+            <!-- Slide 1: Furniture -->
+            <div class="ma-slide active">
+              <h2 class="ma-heading" data-i18n="heroTitle">
+                КАЧЕСТВЕННАЯ<br><span class="highlight">СБОРКА</span><br><span class="highlight">И
+                  РЕСТАВРАЦИЯ</span><br>МЕБЕЛИ
+              </h2>
+              <p class="ma-subtext" data-i18n="heroSubtextText">
+                Сборка кухонь, шкафов-купе, ремонт каркасов и перетяжка мягкой мебели с премиальной фурнитурой и гарантией
+                качества.
+              </p>
+              <div class="hero-buttons" style="margin-bottom: 24px;">
+                <button class="hero-btn-red" onclick="openModal('Сборка мебели')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path
+                      d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+                  </svg>
+                  <span data-i18n="btnCallFurniture">Вызвать мебельщика</span>
+                </button>
+                <button class="hero-btn-outline" onclick="openModal('Обратный звонок')">
+                  <span data-i18n="btnCallMe">Перезвонить мне</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Slide 2: Windows -->
+            <div class="ma-slide">
+              <h2 class="ma-heading" data-i18n="slideWinTitle">
+                ПРОФЕССИОНАЛЬНЫЙ<br><span class="highlight">РЕМОНТ</span><br><span class="highlight">И РЕГУЛИРОВКА</span><br>ОКОН
+              </h2>
+              <p class="ma-subtext" data-i18n="slideWinSub">
+                Устранение продувания, замена уплотнителей, ремонт пластиковых окон и регулировка фурнитуры с гарантией тепла и уюта.
+              </p>
+              <div class="hero-buttons" style="margin-bottom: 24px;">
+                <button class="hero-btn-red" onclick="openModal('Ремонт окон')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <line x1="9" y1="3" x2="9" y2="21" />
+                    <line x1="15" y1="3" x2="15" y2="21" />
+                    <line x1="3" y1="9" x2="21" y2="9" />
+                    <line x1="3" y1="15" x2="21" y2="15" />
+                  </svg>
+                  <span data-i18n="btnCallWin">Вызвать оконщика</span>
+                </button>
+                <button class="hero-btn-outline" onclick="openModal('Обратный звонок')">
+                  <span data-i18n="btnCallMe">Перезвонить мне</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Slide 3: Welding -->
+            <div class="ma-slide">
+              <h2 class="ma-heading" data-i18n="slideWeldTitle">
+                КАЧЕСТВЕННЫЕ<br><span class="highlight">СВАРОЧНЫЕ</span><br><span class="highlight">РАБОТЫ</span><br>НА ВЫЕЗД
+              </h2>
+              <p class="ma-subtext" data-i18n="slideWeldSub">
+                Изготовление навесов, ворот, заборов, перил и оперативный ремонт металлоконструкций любой сложности опытными сварщиками.
+              </p>
+              <div class="hero-buttons" style="margin-bottom: 24px;">
+                <button class="hero-btn-red" onclick="openModal('Сварочные работы')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                  </svg>
+                  <span data-i18n="btnCallWeld">Вызвать сварщика</span>
+                </button>
+                <button class="hero-btn-outline" onclick="openModal('Обратный звонок')">
+                  <span data-i18n="btnCallMe">Перезвонить мне</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Slide 4: Appliances -->
+            <div class="ma-slide">
+              <h2 class="ma-heading" data-i18n="slideApplTitle">
+                БЫСТРЫЙ РЕМОНТ<br><span class="highlight">БЫТОВОЙ</span><br><span class="highlight">ТЕХНИКИ</span><br>НА ДОМУ
+              </h2>
+              <p class="ma-subtext" data-i18n="slideApplSub">
+                Ремонт стиральных машин, холодильников, электроплит и бойлеров с выездом сертифицированного мастера на дом за 45 минут.
+              </p>
+              <div class="hero-buttons" style="margin-bottom: 24px;">
+                <button class="hero-btn-red" onclick="openModal('Ремонт техники')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M16.2 7.8l-2 2a3 3 0 0 0-4.2 4.2l-2 2" />
+                  </svg>
+                  <span data-i18n="btnCallAppl">Вызвать мастера</span>
+                </button>
+                <button class="hero-btn-outline" onclick="openModal('Обратный звонок')">
+                  <span data-i18n="btnCallMe">Перезвонить мне</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Pagination Dots -->
+            <div class="ma-slides-dots">
+              <span class="ma-dot active" onclick="setMaSlide(0)"></span>
+              <span class="ma-dot" onclick="setMaSlide(1)"></span>
+              <span class="ma-dot" onclick="setMaSlide(2)"></span>
+              <span class="ma-dot" onclick="setMaSlide(3)"></span>
+            </div>
           </div>
 
           <!-- Why Choose Us -->
@@ -7893,6 +8026,15 @@
         heroSubtextText: "Сборка кухонь, шкафов-купе, ремонт каркасов и перетяжка мягкой мебели с премиальной фурнитурой и гарантией качества.",
         btnCallFurniture: "Вызвать мебельщика",
         btnCallMe: "Перезвонить мне",
+        slideWinTitle: "ПРОФЕССИОНАЛЬНЫЙ<br><span class=\"highlight\">РЕМОНТ</span><br><span class=\"highlight\">И РЕГУЛИРОВКА</span><br>ОКОН",
+        slideWinSub: "Устранение продувания, замена уплотнителей, ремонт пластиковых окон и регулировка фурнитуры с гарантией тепла и уюта.",
+        btnCallWin: "Вызвать оконщика",
+        slideWeldTitle: "КАЧЕСТВЕННЫЕ<br><span class=\"highlight\">СВАРОЧНЫЕ</span><br><span class=\"highlight\">РАБОТЫ</span><br>НА ВЫЕЗД",
+        slideWeldSub: "Изготовление навесов, ворот, заборов, перил и оперативный ремонт металлоконструкций любой сложности опытными сварщиками.",
+        btnCallWeld: "Вызвать сварщика",
+        slideApplTitle: "БЫСТРЫЙ РЕМОНТ<br><span class=\"highlight\">БЫТОВОЙ</span><br><span class=\"highlight\">ТЕХНИКИ</span><br>НА ДОМУ",
+        slideApplSub: "Ремонт стиральных машин, холодильников, электроплит и бойлеров с выездом сертифицированного мастера на дом за 45 минут.",
+        btnCallAppl: "Вызвать мастера",
         heroFormTitle: "Быстрый заказ услуг",
         heroFormDesc: "Оставьте заявку на ремонт или сборку мебели, и наши специалисты свяжутся с вами в течение 10 минут, либо напишите нам в WhatsApp.",
         btnLeaveAnketa: "Оставить анкету",
@@ -8013,6 +8155,15 @@
         heroSubtextText: "Премиум фурнитурамен және сапа кепілдігімен ас үйлерді, шкафтарды жинау, қаңқаларды жөндеу және жұмсақ жиһаздарды қаптау.",
         btnCallFurniture: "Жиһазшыны шақыру",
         btnCallMe: "Маған хабарласыңыз",
+        slideWinTitle: "ТЕРЕЗЕЛЕРДІ<br><span class=\"highlight\">КӘСИБИ ЖӨНДЕУ</span><br><span class=\"highlight\">ЖӘНЕ РЕТТЕУ</span>",
+        slideWinSub: "Үрлеуді жою, тығыздағыштарды ауыстыру, пластикалық терезелерді жөндеу және фурнитураны реттеу.",
+        btnCallWin: "Терезешіні шақыру",
+        slideWeldTitle: "САПАЛЫ<br><span class=\"highlight\">ДӘНЕКЕРЛЕУ</span><br><span class=\"highlight\">ЖҰМЫСТАРЫ</span>",
+        slideWeldSub: "Тәжірибелі дәнекерлеушілердің кез келген күрделіліктегі металл конструкцияларын дайындауы және жедел жөндеуі.",
+        btnCallWeld: "Дәнекерлеушіні шақыру",
+        slideApplTitle: "ТҰРМЫСТЫҚ ТЕХНИКАНЫ<br><span class=\"highlight\">ҮЙДЕ ЖЫЛДАМ</span><br><span class=\"highlight\">ЖӨНДЕУ</span>",
+        slideApplSub: "Кір жуғыш машиналарды, тоңазытқыштарды, электр плиталарын және бойлерлерді 45 минутта жөндеу.",
+        btnCallAppl: "Шеберді шақыру",
         heroFormTitle: "Қызметке өтінім қалдыру",
         heroFormDesc: "Жиһазды жөндеуге немесе жинауға өтінім қалдырыңыз, біздің мамандар 10 минут ішінде сізбен хабарласады немесе WhatsApp-қа жазыңыз.",
         btnLeaveAnketa: "Сауалнаманы қалдыру",
@@ -8133,6 +8284,15 @@
         heroSubtextText: "Assembly of kitchens, wardrobes, repair of frames and upholstery of upholstered furniture with premium fittings and quality guarantee.",
         btnCallFurniture: "Call a furniture maker",
         btnCallMe: "Call me back",
+        slideWinTitle: "PROFESSIONAL<br><span class=\"highlight\">WINDOW REPAIR</span><br><span class=\"highlight\">AND ADJUSTMENT</span>",
+        slideWinSub: "Elimination of drafts, replacement of seals, repair of plastic windows and adjustment of fittings.",
+        btnCallWin: "Call window specialist",
+        slideWeldTitle: "HIGH QUALITY<br><span class=\"highlight\">WELDING WORKS</span><br><span class=\"highlight\">ON SITE</span>",
+        slideWeldSub: "Manufacture of sheds, gates, fences, handrails and prompt repair of metal structures by expert welders.",
+        btnCallWeld: "Call a welder",
+        slideApplTitle: "FAST HOME<br><span class=\"highlight\">APPLIANCE REPAIR</span><br><span class=\"highlight\">AT HOME</span>",
+        slideApplSub: "Repair of washing machines, refrigerators, electric stoves and boilers with home visit within 45 minutes.",
+        btnCallAppl: "Call a technician",
         heroFormTitle: "Quick Service Request",
         heroFormDesc: "Leave a request for repair or furniture assembly, and our specialists will contact you within 10 minutes, or message us on WhatsApp.",
         btnLeaveAnketa: "Submit Request",
@@ -8908,6 +9068,43 @@
       currentCarouselOffset = 0;
       track.style.transform = `translateX(0px)`;
     }
+
+    // HERO TEXT SLIDER LOGIC
+    let currentMaSlide = 0;
+    let maInterval;
+
+    window.setMaSlide = function(index) {
+      const maSlides = document.querySelectorAll('.ma-slide');
+      const maDots = document.querySelectorAll('.ma-dot');
+      if (maSlides.length === 0) return;
+
+      maSlides[currentMaSlide].classList.remove('active');
+      if (maDots[currentMaSlide]) maDots[currentMaSlide].classList.remove('active');
+
+      currentMaSlide = index;
+
+      maSlides[currentMaSlide].classList.add('active');
+      if (maDots[currentMaSlide]) maDots[currentMaSlide].classList.add('active');
+
+      resetMaInterval();
+    }
+
+    function nextMaSlide() {
+      const maSlides = document.querySelectorAll('.ma-slide');
+      if (maSlides.length === 0) return;
+      let next = (currentMaSlide + 1) % maSlides.length;
+      window.setMaSlide(next);
+    }
+
+    function resetMaInterval() {
+      clearInterval(maInterval);
+      maInterval = setInterval(nextMaSlide, 6000);
+    }
+
+    // Initialize text slider auto-rotation
+    document.addEventListener('DOMContentLoaded', () => {
+      resetMaInterval();
+    });
 
     function moveCarousel(direction) {
       const track = document.getElementById('masters-track');
