@@ -26,8 +26,12 @@ jobs:
         run: |
           chmod +x ./gradlew
           ./gradlew assembleDebug
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: HubMaster-app.apk
-          path: android_app/android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Commit APK to repository
+        run: |
+          mkdir -p public/app
+          cp android_app/android/app/build/outputs/apk/debug/app-debug.apk public/app/HubMaster.apk
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add public/app/HubMaster.apk
+          git commit -m "Auto-build APK"
+          git push origin main
