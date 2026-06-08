@@ -5561,15 +5561,22 @@
     .mobile-hero-master {
       display: none;
       position: absolute;
-      bottom: -16px;
-      right: -20px;
-      width: 260px;
-      z-index: 1;
+      bottom: 0;
+      right: -10px;
+      width: 45%;
+      min-width: 180px;
+      max-width: 240px;
+      z-index: 0;
       pointer-events: none;
     }
     @media (max-width: 700px) {
       .mobile-hero-master {
         display: block;
+      }
+      .hero-v2-left {
+        position: relative;
+        z-index: 2; /* ensure text stays above the image */
+        max-width: 60%; /* prevent text from overlapping the image too much */
       }
     }
   </style>
