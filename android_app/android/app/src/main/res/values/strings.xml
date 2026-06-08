@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">HubMaster</string>
+    <string name="title_activity_main">HubMaster</string>
+    <string name="package_name">com.hubmaster.app</string>
+    <string name="custom_url_scheme">com.hubmaster.app</string>
+</resources>

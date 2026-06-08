@@ -1,0 +1,9 @@
+{
+  "appId": "com.hubmaster.app",
+  "appName": "HubMaster",
+  "webDir": "www",
+  "server": {
+    "url": "https://master-hub-production.up.railway.app",
+    "cleartext": true
+  }
+}

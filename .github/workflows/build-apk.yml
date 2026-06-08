@@ -1,0 +1,31 @@
+name: Build Android APK
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - name: Install dependencies
+        working-directory: android_app
+        run: npm install
+      - name: Sync Capacitor
+        working-directory: android_app
+        run: npx cap sync android
+      - name: Build APK
+        working-directory: android_app/android
+        run: ./gradlew assembleDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: HubMaster-app.apk
+          path: android_app/android/app/build/outputs/apk/debug/app-debug.apk
