@@ -1,0 +1,92 @@
+.navbar {
+  background: rgba(15, 15, 18, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 12px 0;
+  transition: background-color 0.3s;
+}
+[data-theme="light"] .navbar { background: rgba(255,255,255,0.75); }
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.logoSection { display: flex; align-items: center; gap: 16px; }
+.logoLink { display: block; }
+.logoBox { display: flex; align-items: center; }
+.logoHm {
+  background: var(--primary);
+  color: #fff;
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: 16px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-right: 8px;
+}
+.logoTextWrap { display: flex; flex-direction: column; line-height: 1.1; }
+.logoTextHub { color: var(--text-white); font-family: var(--font-heading); font-weight: 900; font-size: 14px; }
+.logoSubtitle { font-size: 10px; color: var(--text-muted); }
+
+.cityBtn {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 14px; font-weight: 600; color: var(--text-white);
+  background: none; border: none; cursor: pointer; padding: 6px 10px;
+  border-radius: 6px; transition: background 0.2s;
+}
+.cityBtn:hover { background: var(--bg-card-hover); }
+
+.right { display: flex; align-items: center; gap: 20px; }
+
+.langSelector {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  padding: 2px 8px; border-radius: 20px; gap: 4px;
+}
+.langBtn { background: none; border: none; color: var(--text-muted); font-size: 11px; font-weight: 700; cursor: pointer; padding: 4px; }
+.langActive { color: var(--text-white) !important; }
+.langDivider { color: var(--border); font-size: 10px; }
+
+.themeBtn {
+  background: none; border: none; cursor: pointer; color: var(--text);
+  padding: 6px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, color 0.2s;
+}
+.themeBtn:hover { background: var(--bg-card-hover); color: var(--text-white); }
+
+.phoneBtn {
+  display: flex; align-items: center; gap: 8px;
+  color: var(--text-white); font-size: 14px; font-weight: 700;
+  text-decoration: none; transition: color 0.2s;
+}
+.phoneBtn:hover { color: var(--primary); }
+
+.waBadge {
+  background: #25d366; border-radius: 50%;
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.waBadge svg { stroke: #fff; }
+
+.cabinetBtn {
+  background: none; border: none; cursor: pointer;
+  color: var(--text); font-size: 14px; font-weight: 500; transition: color 0.2s;
+}
+.cabinetBtn:hover { color: var(--text-white); }
+
+.ctaBtn {
+  background: var(--primary); color: #fff; border: none;
+  padding: 8px 16px; border-radius: 8px;
+  font-weight: 700; font-size: 13px; cursor: pointer;
+  transition: background 0.2s;
+}
+.ctaBtn:hover { background: var(--primary-hover); }

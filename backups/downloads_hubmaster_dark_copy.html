@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HUB MASTER — Мультисервис</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0d0d0d; font-family: 'Segoe UI', Arial, sans-serif; color: #fff; }
+
+  /* NAVBAR */
+  .navbar {
+    background: #161616;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 10px 28px;
+    border-bottom: 1px solid #2a2a2a;
+    flex-wrap: wrap;
+  }
+  .logo-wrap { display: flex; align-items: center; gap: 8px; }
+  .logo { display: flex; align-items: center; }
+  .logo-hub { background: #f0f0f0; color: #111; font-weight: 900; font-size: 14px; padding: 4px 7px; border-radius: 4px 0 0 4px; letter-spacing: 0.5px; }
+  .logo-master { background: #e63333; color: #fff; font-weight: 900; font-size: 14px; padding: 4px 8px; border-radius: 0 4px 4px 0; letter-spacing: 0.5px; }
+  .logo-sub { font-size: 10px; color: #555; }
+  .btn-catalog {
+    background: #e63333;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    letter-spacing: 0.3px;
+  }
+  .nav-link { font-size: 13px; color: #bbb; text-decoration: none; }
+  .nav-link:hover { color: #fff; }
+  .nav-city { font-size: 13px; color: #bbb; display: flex; align-items: center; gap: 4px; cursor: pointer; }
+  .nav-city svg { stroke: #e63333; }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 20px; }
+  .lang { display: flex; gap: 8px; font-size: 12px; }
+  .lang span { color: #555; cursor: pointer; }
+  .lang span.active { color: #e63333; font-weight: 700; }
+  .theme-icons { display: flex; align-items: center; gap: 6px; }
+  .theme-icons svg { stroke: #555; width: 16px; height: 16px; cursor: pointer; }
+  .phone-wrap { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #fff; }
+  .whatsapp-icon {
+    background: #25d366;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cabinet { font-size: 12px; color: #aaa; display: flex; align-items: center; gap: 5px; cursor: pointer; }
+  .cabinet:hover { color: #fff; }
+
+  /* HERO */
+  .hero {
+    background: #161616;
+    display: flex;
+    align-items: stretch;
+    padding: 0 28px 0 40px;
+    min-height: 280px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    flex: 0 0 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 32px 0;
+    z-index: 2;
+  }
+  .hero-title { font-size: 36px; font-weight: 900; line-height: 1.15; color: #fff; }
+  .hero-sub { font-size: 15px; color: #888; margin-top: 10px; }
+  .btn-call {
+    background: #e63333;
+    color: #fff;
+    border: none;
+    padding: 13px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 22px;
+    width: fit-content;
+    transition: background 0.2s;
+  }
+  .btn-call:hover { background: #cc2222; }
+
+  /* WORKER */
+  .hero-center {
+    flex: 0 0 220px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+  }
+  .worker-bg {
+    position: absolute;
+    bottom: 0;
+    width: 180px;
+    height: 240px;
+    background: #1e2a3a;
+    border-radius: 16px 16px 0 0;
+  }
+  .worker-svg { position: relative; z-index: 2; }
+
+  /* SERVICES */
+  .hero-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 24px 0 24px 20px;
+  }
+  .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+  .svc-pill {
+    background: #1e1e1e;
+    border: 1px solid #2d2d2d;
+    border-radius: 10px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #ddd;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .svc-pill:hover { background: #252525; border-color: #444; color: #fff; }
+  .svc-icon {
+    width: 32px; height: 32px;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .svc-icon svg { width: 16px; height: 16px; stroke: #e63333; fill: none; stroke-width: 1.8; }
+
+  /* STATS */
+  .stats {
+    background: #111;
+    border-top: 1px solid #222;
+    display: flex;
+    padding: 16px 40px;
+    gap: 0;
+  }
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    border-right: 1px solid #222;
+    padding: 0 28px;
+  }
+  .stat:first-child { padding-left: 0; }
+  .stat:last-child { border-right: none; }
+  .stat-icon {
+    width: 36px; height: 36px;
+    background: #1e1e1e;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid #2d2d2d;
+  }
+  .stat-icon svg { width: 18px; height: 18px; stroke: #e63333; fill: none; stroke-width: 1.8; }
+  .stat-num { font-size: 20px; font-weight: 900; color: #fff; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<div class="navbar">
+  <div class="logo-wrap">
+    <div class="logo">
+      <div class="logo-hub">HUB</div>
+      <div class="logo-master">MASTER</div>
+    </div>
+    <div class="logo-sub">АЛМАТЫ • С 2018</div>
+  </div>
+
+  <button class="btn-catalog">
+    <svg width="14" height="14" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-width="2.5">
+      <path d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+    КАТАЛОГ УСЛУГ
+  </button>
+
+  <a href="#" class="nav-link">Контакты</a>
+
+  <div class="nav-city">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2">
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+      <circle cx="12" cy="9" r="2.5"/>
+    </svg>
+    Алматы ▾
+  </div>
+
+  <div class="nav-right">
+    <div class="lang">
+      <span class="active">RU</span>
+      <span>KZ</span>
+      <span>EN</span>
+    </div>
+    <div class="theme-icons">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </div>
+    <div class="phone-wrap">
+      <div class="whatsapp-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-width="2.2">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+        </svg>
+      </div>
+      +7 705 846 2749
+    </div>
+    <div class="cabinet">
+      <svg width="15" height="15" viewBox="0 0 24 24" stroke="#aaa" fill="none" stroke-width="2">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+      </svg>
+      Кабинет
+    </div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-title">Мультисервис<br>услуг и товаров</div>
+    <div class="hero-sub">Все нужное — в 1 клик!</div>
+    <button class="btn-call">Вызвать мастера</button>
+  </div>
+
+  <div class="hero-center">
+    <div class="worker-bg"></div>
+    <svg class="worker-svg" viewBox="0 0 160 240" width="160" height="240" xmlns="http://www.w3.org/2000/svg">
+      <!-- body -->
+      <rect x="30" y="100" width="100" height="120" rx="10" fill="#1a4fa0"/>
+      <rect x="30" y="100" width="38" height="120" rx="6" fill="#c0392b"/>
+      <!-- head -->
+      <ellipse cx="80" cy="72" rx="30" ry="32" fill="#f5c89a"/>
+      <!-- cap -->
+      <rect x="48" y="38" width="64" height="26" rx="5" fill="#1a4fa0"/>
+      <rect x="42" y="36" width="76" height="14" rx="7" fill="#1566c8"/>
+      <rect x="44" y="50" width="72" height="8" rx="0" fill="#1a4fa0"/>
+      <!-- face details -->
+      <ellipse cx="70" cy="70" rx="4" ry="4.5" fill="#e8b080"/>
+      <ellipse cx="90" cy="70" rx="4" ry="4.5" fill="#e8b080"/>
+      <ellipse cx="70" cy="69" rx="2.5" ry="3" fill="#5a3010"/>
+      <ellipse cx="90" cy="69" rx="2.5" ry="3" fill="#5a3010"/>
+      <path d="M72 82 Q80 88 88 82" stroke="#c0704a" stroke-width="1.5" fill="none"/>
+      <!-- arms -->
+      <rect x="8" y="102" width="26" height="72" rx="8" fill="#1a4fa0"/>
+      <rect x="126" y="102" width="26" height="72" rx="8" fill="#1a4fa0"/>
+      <!-- tablet in right hand -->
+      <rect x="110" y="130" width="32" height="24" rx="4" fill="#e8e8e8" stroke="#ccc" stroke-width="1"/>
+      <rect x="113" y="133" width="26" height="18" rx="2" fill="#a0c4f0"/>
+      <!-- legs -->
+      <rect x="38" y="200" width="34" height="38" rx="6" fill="#222"/>
+      <rect x="88" y="200" width="34" height="38" rx="6" fill="#222"/>
+      <!-- collar / badge -->
+      <rect x="62" y="100" width="16" height="18" rx="3" fill="#fff" opacity="0.15"/>
+    </svg>
+  </div>
+
+  <div class="hero-right">
+    <div class="services-grid">
+      <div class="svc-pill">
+        <div class="svc-icon">
+          <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        Ремонт бытовой техники
+      </div>
+      <div class="svc-pill">
+        <div class="svc-icon">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        Компьютерная помощь
+      </div>
+      <div class="svc-pill">
+        <div class="svc-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM12 5V3M8 5V3M16 5V3"/></svg>
+        </div>
+        Сборка мебели
+      </div>
+      <div class="svc-pill">
+        <div class="svc-icon">
+          <svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+        </div>
+        Электрик
+      </div>
+      <div class="svc-pill">
+        <div class="svc-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        Клининг
+      </div>
+      <div class="svc-pill">
+        <div class="svc-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        Сантехник
+      </div>
+      <div class="svc-pill">
+        <div class="svc-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        </div>
+        Автосервис
+      </div>
+      <div class="svc-pill">
+        <div class="svc-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        Грузчики
+      </div>
+      <div class="svc-pill" style="grid-column: span 2; justify-content: flex-start;">
+        <div class="svc-icon">
+          <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h5l2 4v3h-7V8zM5.5 21a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM18.5 21a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/></svg>
+        </div>
+        Доставка
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-icon">
+      <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+    </div>
+    <div>
+      <div class="stat-num">70 000+</div>
+      <div class="stat-lbl">выполненных заказов</div>
+    </div>
+  </div>
+  <div class="stat">
+    <div class="stat-icon">
+      <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    </div>
+    <div>
+      <div class="stat-num">4.9 ★</div>
+      <div class="stat-lbl">средняя оценка</div>
+    </div>
+  </div>
+  <div class="stat">
+    <div class="stat-icon">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    </div>
+    <div>
+      <div class="stat-num">45 мин</div>
+      <div class="stat-lbl">среднее время прибытия</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

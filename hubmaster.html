@@ -4079,8 +4079,7 @@
       }
 
       .hero-v2-sandbox {
-        flex-wrap: wrap;
-        gap: 8px;
+        display: none !important;
       }
 
       .sandbox-col {
@@ -5558,6 +5557,21 @@
         clip-path: polygon(12% 0%, 88% 0%, 100% 100%, 0% 100%);
       }
     }
+    /* Mobile Hero Master Addition */
+    .mobile-hero-master {
+      display: none;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 180px;
+      z-index: 1;
+      pointer-events: none;
+    }
+    @media (max-width: 700px) {
+      .mobile-hero-master {
+        display: block;
+      }
+    }
   </style>
 </head>
 
@@ -5664,7 +5678,11 @@
   <!-- LANDING CONTENT WRAPPER -->
   <div id="landing-page-content">
     <!-- HERO SECTION -->
-    <section class="hero-section">
+    <section class="hero-section scroll-reveal active" style="position: relative;">
+      <div class="mobile-hero-master">
+        <img src="/public/hero_master.webp?v=2" class="hero-master-img dark-only" alt="Master">
+        <img src="/public/hero_master_day.webp?v=2" class="hero-master-img light-only" alt="Master">
+      </div>
       <div class="max-width-wrap">
         <div class="hero-v2-wrap">
 
