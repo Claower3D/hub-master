@@ -133,7 +133,7 @@ func main() {
 			return
 		}
 
-		filePath := "catalog_data.json"
+		filePath := "data/catalog_data.json"
 
 		if r.Method == http.MethodGet {
 			w.Header().Set("Content-Type", "application/json")
@@ -359,7 +359,7 @@ func main() {
 			return
 		}
 
-		filePath := "assistant_config.json"
+		filePath := "data/assistant_config.json"
 
 		if r.Method == http.MethodGet {
 			w.Header().Set("Content-Type", "application/json")

@@ -1,122 +1,80 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from 'react';
+import Navbar from './components/Navbar/Navbar';
+import Catalog from './components/Catalog/Catalog';
+import Coverage from './components/Coverage/Coverage';
+import Reviews from './components/Reviews/Reviews';
+import Modal from './components/Modal/Modal';
+import { useLang } from './hooks/useLang';
+import { useTheme } from './hooks/useTheme';
+import { useModal } from './hooks/useModal';
+import { i18n } from './data/i18n';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { lang, switchLang } = useLang();
+  const { theme, toggleTheme } = useTheme();
+  const { modal, openModal, closeModal } = useModal();
+  const [city, setCity] = useState('Алматы');
+
+  const t = i18n[lang] || i18n['RU'];
+
+  const handleCityToggle = () => {
+    setCity(prev => prev === 'Алматы' ? 'Астана' : 'Алматы');
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="app-container">
+      <Navbar 
+        lang={lang} 
+        switchLang={switchLang} 
+        theme={theme} 
+        toggleTheme={toggleTheme} 
+        city={city} 
+        onCityToggle={handleCityToggle} 
+        onOpenModal={openModal} 
+        t={t} 
+      />
+      
+      <main>
+        {/* Placeholder for Hero Section */}
+        <section style={{ padding: '80px 0', textAlign: 'center' }}>
+          <div className="max-width-wrap">
+            <h1 style={{ fontSize: '48px', marginBottom: '20px', fontFamily: 'var(--font-heading)' }}>
+              {t.heroTitle1} <span style={{ color: 'var(--primary)' }}>{t.heroTitle2}</span> {t.heroTitle3}
+            </h1>
+            <p style={{ fontSize: '18px', color: 'var(--text-muted)', marginBottom: '40px' }}>
+              {t.heroSub}
+            </p>
+            <button 
+              onClick={() => openModal()}
+              style={{ padding: '15px 30px', fontSize: '18px', background: 'var(--primary)', color: '#fff', border: 'none', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold' }}
+            >
+              {t.heroCta}
+            </button>
+          </div>
+        </section>
 
-      <div className="ticks"></div>
+        <Catalog lang={lang} t={t} onOpenModal={openModal} />
+        <Coverage city={city} t={t} />
+        <Reviews lang={lang} t={t} />
+      </main>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      {/* Basic Footer Placeholder */}
+      <footer style={{ background: 'var(--bg-nav)', padding: '40px 0', borderTop: '1px solid var(--border)', marginTop: '60px' }}>
+        <div className="max-width-wrap">
+          <p style={{ color: 'var(--text-muted)', fontSize: '14px', textAlign: 'center' }}>{t.copyRight}</p>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      </footer>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <Modal 
+        open={modal.open} 
+        service={modal.service} 
+        onClose={closeModal} 
+        t={t} 
+        lang={lang} 
+      />
+    </div>
+  );
 }
 
-export default App
+export default App;
