@@ -1,0 +1,15 @@
+.git
+.github
+node_modules/
+frontend/node_modules/
+dist/
+android_app/
+bin/
+scratch/
+legacy_react/
+backups/
+scripts/
+*.exe
+*.exe~
+logs_and_texts/
+.env
