@@ -1350,8 +1350,8 @@
                   <div class="cic-header">
                     <div class="cic-icon" style="color:#a855f7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
                     <div class="cic-actions">
-                      <button class="btn-icon blue" onclick="openCatalogEditModal('subcategory', ${originalIndex}, '${s.categoryId}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></button>
-                      <button class="btn-icon red" onclick="deleteCatalogItem('subcategory', ${originalIndex}, '${s.categoryId}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                      <button class="btn-icon blue" onclick="openCatalogEditModal('subcategory', '${s.categoryId}:${originalIndex}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></button>
+                      <button class="btn-icon red" onclick="deleteCatalogItem('subcategory', '${s.categoryId}:${originalIndex}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                     </div>
                   </div>
                   <div class="cic-title">${s.title}</div>
@@ -1369,8 +1369,8 @@
                   <td>${s.price ? (s.price + ' ₸') : '<span style="color:#555">—</span>'}</td>
                   <td style="text-align: right;">
                     <div class="td-actions" style="justify-content: flex-end;">
-                      <button class="btn-icon blue" onclick="openCatalogEditModal('subcategory', ${originalIndex}, '${s.categoryId}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
-                      <button class="btn-icon red" onclick="deleteCatalogItem('subcategory', ${originalIndex}, '${s.categoryId}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                      <button class="btn-icon blue" onclick="openCatalogEditModal('subcategory', '${s.categoryId}:${originalIndex}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
+                      <button class="btn-icon red" onclick="deleteCatalogItem('subcategory', '${s.categoryId}:${originalIndex}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                     </div>
                   </td>
                 </tr>
@@ -1515,40 +1515,53 @@
         }
 
         formFields.innerHTML = `
-          <div class="admin-form-group">
-            <label>ID / Код услуги (напр. "sub-okna-1-1")</label>
-            <input type="text" id="sub-id" class="admin-form-input" value="${subData.id}" ${key !== null ? 'disabled' : ''}>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+            <div class="admin-form-group" style="margin-bottom: 0;">
+              <label><i class="ri-fingerprint-line"></i> ID Услуги</label>
+              <input type="text" id="sub-id" class="admin-form-input" value="${subData.id}" ${key !== null ? 'disabled' : ''}>
+            </div>
+            <div class="admin-form-group" style="margin-bottom: 0;">
+              <label><i class="ri-folder-2-line"></i> Категория</label>
+              <select id="sub-cat-select" class="admin-form-select">${catOptions}</select>
+            </div>
           </div>
+          
           <div class="admin-form-group">
-            <label>Категория</label>
-            <input type="text" id="sub-cat-search" class="admin-form-input" placeholder="Поиск категории (А-Я)..." style="margin-bottom:6px;" oninput="filterSubCatOptions(this.value)">
-            <select id="sub-cat-select" class="admin-form-select">
-              ${catOptions}
-            </select>
-          </div>
-          <div class="admin-form-group">
-            <label>Название услуги</label>
+            <label><i class="ri-text"></i> Название услуги</label>
             <input type="text" id="sub-title" class="admin-form-input" value="${subData.title}">
           </div>
-          <div class="admin-form-group">
-            <label>Цена (напр. "от 3 000 ₸")</label>
-            <input type="text" id="detail-price" class="admin-form-input" value="${detailData.price || ''}">
+          
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+            <div style="font-size: 12px; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;"><i class="ri-list-settings-line"></i> Детали и Условия</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+              <div class="admin-form-group" style="margin-bottom: 0;">
+                <label>Цена</label>
+                <input type="text" id="detail-price" class="admin-form-input" placeholder="от 3 000 ₸" value="${detailData.price || ''}">
+              </div>
+              <div class="admin-form-group" style="margin-bottom: 0;">
+                <label>Срок работы</label>
+                <input type="text" id="detail-time" class="admin-form-input" placeholder="Срок: 1 час" value="${detailData.time || ''}">
+              </div>
+              <div class="admin-form-group" style="margin-bottom: 0;">
+                <label>Гарантия</label>
+                <input type="text" id="detail-warr" class="admin-form-input" placeholder="Гарантия: 12 мес" value="${detailData.warr || ''}">
+              </div>
+            </div>
           </div>
-          <div class="admin-form-group">
-            <label>Срок работы (напр. "Срок: 1 час")</label>
-            <input type="text" id="detail-time" class="admin-form-input" value="${detailData.time || ''}">
-          </div>
-          <div class="admin-form-group">
-            <label>Гарантия (напр. "Гарантия: 12 мес")</label>
-            <input type="text" id="detail-warr" class="admin-form-input" value="${detailData.warr || ''}">
-          </div>
-          <div class="admin-form-group">
-            <label>URL фото (напр. "https://images.unsplash.com/...")</label>
-            <input type="text" id="detail-image" class="admin-form-input" value="${detailData.image || ''}">
-          </div>
-          <div class="admin-form-group">
-            <label>Описание услуги</label>
-            <textarea id="detail-desc" class="admin-form-textarea" rows="3">${detailData.desc || ''}</textarea>
+          
+          <div style="display: grid; grid-template-columns: 1fr 160px; gap: 16px; margin-bottom: 16px;">
+            <div class="admin-form-group" style="margin-bottom: 0;">
+              <label><i class="ri-image-add-line"></i> URL фото услуги</label>
+              <input type="text" id="detail-image" class="admin-form-input" placeholder="https://..." value="${detailData.image || ''}" oninput="document.getElementById('cat-img-prev').style.backgroundImage = 'url(' + this.value + ')'">
+              <div style="margin-top: 12px;">
+                <label><i class="ri-align-left"></i> Описание услуги</label>
+                <textarea id="detail-desc" class="admin-form-textarea" rows="4" placeholder="Подробное описание услуги...">${detailData.desc || ''}</textarea>
+              </div>
+            </div>
+            <div>
+              <label style="font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px;">Предпросмотр фото</label>
+              <div id="cat-img-prev" style="width: 100%; height: 140px; border-radius: 8px; border: 1px dashed var(--border); background-size: cover; background-position: center; background-image: url('${detailData.image || ''}'); background-color: rgba(0,0,0,0.3);"></div>
+            </div>
           </div>
         `;
       }
