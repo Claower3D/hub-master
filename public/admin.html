@@ -75,7 +75,7 @@
 
     /* MAIN NAV */
     .admin-nav {
-      display: flex;
+      display: none;
       justify-content: center;
       gap: 32px;
       padding: 0 32px;
@@ -97,6 +97,61 @@
       color: var(--text-white);
       border-bottom-color: var(--primary);
     }
+
+    /* DASHBOARD */
+    .dashboard-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+    .dash-top-title { font-family: var(--font-heading); font-size: 32px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: -0.5px; margin-bottom: 8px; }
+    .dash-top-desc { font-size: 14px; color: var(--text-muted); }
+    .dash-btn-apply { background: #10b981; color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-family: var(--font-sans); transition: 0.2s; }
+    .dash-btn-apply:hover { opacity: 0.8; }
+    
+    .dash-section-sub { font-size: 11px; font-weight: 800; color: #10b981; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+    .dash-section-title { font-family: var(--font-heading); font-size: 28px; font-weight: 800; color: #fff; text-transform: uppercase; margin-bottom: 8px; }
+    .dash-section-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 32px; }
+
+    .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    
+    .dash-card {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px;
+      cursor: pointer; position: relative; transition: all 0.3s ease; overflow: hidden;
+      display: flex; flex-direction: column; min-height: 220px;
+    }
+    .dash-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: transparent; transition: 0.3s;
+    }
+    .dash-card:hover { transform: translateY(-4px); background: var(--bg-card-hover); border-color: #444; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    
+    .dc-green:hover::before { background: #10b981; }
+    .dc-blue:hover::before { background: #3b82f6; }
+    .dc-purple:hover::before { background: #a855f7; }
+    .dc-yellow:hover::before { background: #eab308; }
+    
+    .dc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+    .dc-icon {
+      width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+    }
+    .dc-green .dc-icon { color: #10b981; }
+    .dc-blue .dc-icon { color: #3b82f6; }
+    .dc-purple .dc-icon { color: #a855f7; }
+    .dc-yellow .dc-icon { color: #eab308; }
+    
+    .dc-count-box { text-align: right; }
+    .dc-count { font-size: 24px; font-weight: 800; color: #fff; font-family: var(--font-heading); line-height: 1; }
+    .dc-count-lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-top: 4px; }
+    
+    .dc-sub { font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .dc-title { font-family: var(--font-heading); font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+    .dc-desc { font-size: 13px; color: var(--text); line-height: 1.5; flex: 1; }
+    
+    .dc-action { font-size: 12px; font-weight: 700; margin-top: 24px; display: flex; align-items: center; gap: 4px; }
+    .dc-green .dc-action { color: #10b981; }
+    .dc-blue .dc-action { color: #3b82f6; }
+    .dc-purple .dc-action { color: #a855f7; }
+    .dc-yellow .dc-action { color: #eab308; }
+    
+    .back-to-dash { cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 24px; transition: 0.2s; }
+    .back-to-dash:hover { color: #fff; }
 
     /* CONTENT */
     .admin-content {
@@ -357,7 +412,7 @@
   <!-- HEADER -->
   <header class="admin-header">
     <div class="header-left">
-      <div class="logo-box">HM</div>
+      <div class="logo-box" style="cursor:pointer;" onclick="openAdminTab('dashboard')">HM</div>
       <div class="header-title-box">
         <span class="header-title">HUB MASTER Admin</span>
         <span class="header-subtitle">Панель мониторинга</span>
@@ -401,8 +456,131 @@
   <!-- CONTENT -->
   <div class="admin-content">
 
+    <!-- TAB 0: DASHBOARD -->
+    <div id="tab-dashboard" class="tab-content active">
+      <div class="dashboard-top">
+        <div>
+          <div class="dash-top-title">ПАНЕЛЬ УПРАВЛЕНИЯ</div>
+          <div class="dash-top-desc">Управление промышленной платформой HUB MASTER.</div>
+        </div>
+        <button class="dash-btn-apply" onclick="alert('Все изменения автоматически сохраняются на сервере!')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          ПРИМЕНИТЬ ИЗМЕНЕНИЯ
+        </button>
+      </div>
+
+      <div class="dash-section-sub">ГЛАВНАЯ ПАНЕЛЬ</div>
+      <div class="dash-section-title">ВЫБЕРИТЕ РАЗДЕЛ ДЛЯ УПРАВЛЕНИЯ</div>
+      <div class="dash-section-desc">Нажмите на плитку чтобы открыть нужный раздел администрирования.</div>
+
+      <div class="dash-grid">
+        <!-- 1: ЗАЯВКИ -->
+        <div class="dash-card dc-green" onclick="openAdminTab('requests')">
+          <div class="dc-header">
+            <div class="dc-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="dc-count-box">
+              <div class="dc-count" id="dash-req-count">-</div>
+              <div class="dc-count-lbl">заявок</div>
+            </div>
+          </div>
+          <div class="dc-sub">КЛИЕНТСКАЯ БАЗА</div>
+          <div class="dc-title">Заявки и Лиды</div>
+          <div class="dc-desc">Обрабатывайте новые обращения клиентов, меняйте статусы и управляйте заказами.</div>
+          <div class="dc-action">Управление &rarr;</div>
+        </div>
+
+        <!-- 2: КАТАЛОГ -->
+        <div class="dash-card dc-blue" onclick="openAdminTab('catalog')">
+          <div class="dc-header">
+            <div class="dc-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </div>
+            <div class="dc-count-box">
+              <div class="dc-count" id="dash-cat-count">-</div>
+              <div class="dc-count-lbl">услуг</div>
+            </div>
+          </div>
+          <div class="dc-sub">СПИСОК УСЛУГ</div>
+          <div class="dc-title">Услуги</div>
+          <div class="dc-desc">Управляйте описанием услуг, изображениями, видео и переводами.</div>
+          <div class="dc-action">Управление &rarr;</div>
+        </div>
+
+        <!-- 3: РЕДАКТОР -->
+        <div class="dash-card dc-purple" onclick="openAdminTab('editor')">
+          <div class="dc-header">
+            <div class="dc-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </div>
+            <div class="dc-count-box">
+              <div class="dc-count">7</div>
+              <div class="dc-count-lbl">страниц</div>
+            </div>
+          </div>
+          <div class="dc-sub">КОНСТРУКТОР СТРАНИЦ</div>
+          <div class="dc-title">Visual Builder</div>
+          <div class="dc-desc">Перетаскивайте блоки, добавляйте медиа и настраивайте каждую страницу сайта.</div>
+          <div class="dc-action">Открыть Builder &rarr;</div>
+        </div>
+
+        <!-- 4: КОНТЕНТ -->
+        <div class="dash-card dc-yellow" onclick="openAdminTab('editor')">
+          <div class="dc-header">
+            <div class="dc-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <div class="dc-count-box">
+              <div class="dc-count">3</div>
+              <div class="dc-count-lbl">языка</div>
+            </div>
+          </div>
+          <div class="dc-sub">ТЕКСТЫ И ПЕРЕВОДЫ</div>
+          <div class="dc-title">Контент</div>
+          <div class="dc-desc">Редактируйте все тексты сайта на русском, казахском и английском языках.</div>
+          <div class="dc-action">Управление &rarr;</div>
+        </div>
+
+        <!-- 5: БОТ -->
+        <div class="dash-card dc-blue" onclick="openAdminTab('bot')">
+          <div class="dc-header">
+            <div class="dc-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+            </div>
+            <div class="dc-count-box">
+              <div class="dc-count" id="dash-bot-count">-</div>
+              <div class="dc-count-lbl">сценариев</div>
+            </div>
+          </div>
+          <div class="dc-sub">АВТОМАТИЗАЦИЯ</div>
+          <div class="dc-title">Бот Иришка</div>
+          <div class="dc-desc">Редактируйте сценарии ответов, ключевые слова и стандартные реплики ассистента.</div>
+          <div class="dc-action">Управление &rarr;</div>
+        </div>
+
+        <!-- 6: НАСТРОЙКИ -->
+        <div class="dash-card" style="cursor:default;">
+          <div class="dc-header">
+            <div class="dc-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+            <div class="dc-count-box">
+              <div class="dc-count" style="color:var(--text-muted)">—</div>
+            </div>
+          </div>
+          <div class="dc-sub">ГЛОБАЛЬНЫЕ ПАРАМЕТРЫ</div>
+          <div class="dc-title">Настройки</div>
+          <div class="dc-desc">Название компании, цвета, логотип, контактная информация и SEO.</div>
+          <div class="dc-action" style="color:var(--text-muted)">В разработке</div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- TAB 1: ЗАЯВКИ -->
-    <div id="tab-requests" class="tab-content active">
+    <div id="tab-requests" class="tab-content">
+      <div class="back-to-dash" onclick="openAdminTab('dashboard')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Вернуться на главную панель</div>
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-header"><svg width="16" height="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Всего заявок</div>
@@ -454,6 +632,7 @@
     <!-- TAB 2: КАТАЛОГ -->
         <!-- TAB 2: КАТАЛОГ -->
     <div id="tab-catalog" class="tab-content">
+      <div class="back-to-dash" onclick="openAdminTab('dashboard')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Вернуться на главную панель</div>
       <div class="catalog-header-area">
         <div>
           <div class="page-title">Управление структурой каталога</div>
@@ -482,6 +661,7 @@
 
     <!-- TAB 3: БОТ -->
     <div id="tab-bot" class="tab-content">
+      <div class="back-to-dash" onclick="openAdminTab('dashboard')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Вернуться на главную панель</div>
       <div class="catalog-header-area">
         <div>
           <div class="page-title">Настройка ответов ассистента Иришка</div>
@@ -538,6 +718,7 @@
     </div>
     <!-- TAB 4: РЕДАКТОР -->
     <div id="tab-editor" class="tab-content">
+      <div class="back-to-dash" onclick="openAdminTab('dashboard')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Вернуться на главную панель</div>
       <div class="catalog-header-area">
         <div>
           <div class="page-title">Редактирование страниц и блоков</div>
@@ -736,7 +917,14 @@
       document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       
-      event.currentTarget.classList.add('active');
+      if(event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+      }
+      document.getElementById('tab-' + tabId).classList.add('active');
+    }
+
+    function openAdminTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.getElementById('tab-' + tabId).classList.add('active');
     }
   
@@ -759,6 +947,7 @@
           if (!catalogData.subcategories) catalogData.subcategories = {};
           if (!catalogData.details) catalogData.details = {};
           renderCatalogTab();
+          if (document.getElementById('dash-cat-count')) document.getElementById('dash-cat-count').innerText = (catalogData.subcategories && Object.keys(catalogData.subcategories).reduce((acc, k) => acc + catalogData.subcategories[k].length, 0)) || 0;
         }
       } catch (e) {
         console.error("Failed to load catalog data:", e);
