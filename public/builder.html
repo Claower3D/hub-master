@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visual Builder | HubMaster</title>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #10b981;
+      --primary-hover: #059669;
+      --bg-dark: #0f1115;
+      --bg-panel: #16191f;
+      --bg-card: #1c2026;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2a313c;
+      --font-body: 'Inter', sans-serif;
+      --font-heading: 'Outfit', sans-serif;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-body); background: var(--bg-dark); color: var(--text); overflow: hidden; display: flex; flex-direction: column; height: 100vh; }
+    
+    /* TOP NAVIGATION */
+    .builder-nav { height: 60px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; justify-content: space-between; flex-shrink: 0; }
+    .nav-left { display: flex; align-items: center; gap: 12px; }
+    .nav-btn { background: transparent; border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; transition: 0.2s; }
+    .nav-btn:hover { background: rgba(255,255,255,0.05); }
+    .nav-btn.active { border-color: var(--primary); color: var(--primary); }
+    .badge-visual { background: var(--primary); color: #000; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; }
+    .nav-select { background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; outline: none; cursor: pointer; }
+    .nav-center { display: flex; align-items: center; gap: 16px; font-size: 12px; color: var(--text-muted); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .btn-publish { background: var(--primary); color: #000; padding: 8px 16px; border-radius: 6px; border: none; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+    .btn-publish:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+    /* WORKSPACE */
+    .workspace { display: flex; flex: 1; overflow: hidden; }
+    
+    /* SIDEBAR (LIBRARY) */
+    .sidebar { width: 300px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; transition: 0.3s; z-index: 20; }
+    .sidebar.collapsed { width: 0; border: none; overflow: hidden; }
+    .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .sidebar-title { font-family: var(--font-heading); font-size: 14px; font-weight: 800; letter-spacing: 1px; color: var(--primary); text-transform: uppercase; }
+    .sidebar-close { cursor: pointer; color: var(--text-muted); }
+    .sidebar-search { padding: 16px; }
+    .search-input { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: var(--text); padding: 10px 12px 10px 36px; border-radius: 6px; font-size: 13px; outline: none; }
+    .search-wrapper { position: relative; }
+    .search-icon { position: absolute; left: 12px; top: 10px; color: var(--text-muted); font-size: 14px; }
+    
+    .sidebar-content { flex: 1; overflow-y: auto; padding: 0 16px 20px 16px; }
+    .sidebar-content::-webkit-scrollbar { width: 6px; }
+    .sidebar-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    
+    .sec-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 10px 0 12px 0; }
+    .block-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
+    .block-item:hover { border-color: var(--primary); background: rgba(16, 185, 129, 0.05); }
+    .block-info { display: flex; align-items: flex-start; gap: 10px; }
+    .block-icon { color: var(--primary); font-size: 18px; margin-top: 2px; }
+    .block-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .block-desc { font-size: 11px; color: var(--text-muted); }
+    .block-status { font-size: 10px; font-weight: 800; color: var(--primary); text-transform: uppercase; }
+    
+    .std-elements { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .std-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 16px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: 0.2s; text-align: center; }
+    .std-item:hover { border-color: var(--primary); background: rgba(16, 185, 129, 0.05); color: var(--primary); }
+    .std-item i { font-size: 20px; color: var(--primary); }
+    .std-item .name { font-size: 12px; font-weight: 700; }
+    .std-item .en-name { font-size: 10px; color: var(--text-muted); }
+
+    /* PREVIEW AREA */
+    .preview-area { flex: 1; display: flex; flex-direction: column; background: #000; position: relative; }
+    .preview-toolbar { height: 40px; background: rgba(22, 25, 31, 0.9); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; justify-content: space-between; font-size: 12px; z-index: 15; }
+    .screen-sizes { display: flex; gap: 16px; align-items: center; }
+    .sz-btn { background: none; border: none; color: var(--text-muted); font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+    .sz-btn:hover { color: var(--text); }
+    .sz-btn.active { color: var(--primary); }
+    .sz-btn.active i { color: var(--primary); }
+    
+    .iframe-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; overflow: hidden; position: relative; }
+    .preview-iframe { width: 1440px; height: 100%; background: #fff; border: 1px solid var(--border); border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: width 0.3s; position: relative; z-index: 1; }
+    
+    /* OVERLAY & SELECTION */
+    .builder-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 10; display: flex; justify-content: center; align-items: center; }
+    .selection-box { position: absolute; border: 2px dashed var(--primary); background: rgba(16, 185, 129, 0.1); pointer-events: auto; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px; transition: 0.2s; z-index: 11; }
+    .selection-box:hover { background: rgba(16, 185, 129, 0.2); }
+    .edit-badge { background: var(--primary); color: #000; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 20px; cursor: pointer; pointer-events: auto; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 6px; }
+    .edit-badge:hover { transform: scale(1.05); }
+
+    /* MODAL */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; backdrop-filter: blur(5px); }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-card { width: 850px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: translateY(20px); transition: 0.3s; }
+    .modal-overlay.active .modal-card { transform: translateY(0); }
+    
+    .modal-header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); }
+    .modal-title { display: flex; align-items: center; gap: 12px; font-family: var(--font-heading); font-size: 14px; font-weight: 800; letter-spacing: 1px; color: #fff; text-transform: uppercase; }
+    .modal-sys-badge { border: 1px solid var(--primary); color: var(--primary); padding: 2px 6px; border-radius: 4px; font-size: 10px; }
+    .modal-close { background: rgba(255,255,255,0.05); border: none; color: var(--text-muted); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+    .modal-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    
+    .modal-tabs { display: flex; border-bottom: 1px solid var(--border); }
+    .mtab { flex: 1; text-align: center; padding: 16px 10px; font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; border-bottom: 2px solid transparent; transition: 0.2s; }
+    .mtab:hover { color: var(--text); background: rgba(255,255,255,0.02); }
+    .mtab.active { color: var(--primary); border-bottom-color: var(--primary); background: rgba(16, 185, 129, 0.05); }
+    .mtab i { font-size: 16px; }
+    
+    .modal-body { padding: 24px; display: flex; gap: 30px; }
+    .mb-left { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+    .mb-right { flex: 1; }
+    
+    .fm-label { font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+    
+    .bg-type-toggles { display: flex; gap: 10px; }
+    .bg-tg { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+    .bg-tg.active { border-color: var(--primary); color: var(--primary); background: rgba(16, 185, 129, 0.05); }
+    
+    .url-input-group { display: flex; gap: 10px; }
+    .url-input { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-size: 13px; outline: none; }
+    .url-input:focus { border-color: var(--primary); }
+    .btn-upload { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 0 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+    .btn-upload:hover { background: rgba(255,255,255,0.1); border-color: var(--text-muted); }
+    
+    .preview-box { height: 160px; background: rgba(0,0,0,0.4); border: 1px dashed var(--border); border-radius: 8px; display: flex; justify-content: center; align-items: center; color: var(--text-muted); font-size: 12px; background-size: cover; background-position: center; position: relative; }
+    
+    .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-height: 250px; overflow-y: auto; padding-right: 8px; }
+    .gallery-grid::-webkit-scrollbar { width: 4px; }
+    .gallery-grid::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    
+    .gal-item { height: 80px; background: #222; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; position: relative; overflow: hidden; transition: 0.2s; }
+    .gal-item:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+    .gal-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.2s; }
+    .gal-item:hover .gal-img { opacity: 1; }
+    .gal-label { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.8); color: #fff; font-size: 10px; font-weight: 700; padding: 6px; text-align: center; }
+    
+    .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; background: rgba(0,0,0,0.2); }
+    .btn-close { background: transparent; border: 1px solid var(--border); color: var(--text); padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; transition: 0.2s; }
+    .btn-close:hover { background: rgba(255,255,255,0.05); }
+    .btn-save { background: var(--primary); color: #000; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: 0.2s; }
+    .btn-save:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+    .chat-bubble { position: absolute; bottom: 20px; right: 20px; width: 50px; height: 50px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); z-index: 100; transition: 0.2s; }
+    .chat-bubble:hover { transform: scale(1.1); }
+    
+    /* Notification */
+    .publish-notify { position: fixed; top: 20px; right: 20px; background: var(--bg-card); border-left: 4px solid var(--primary); padding: 16px 20px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 2000; display: flex; align-items: center; gap: 12px; transform: translateX(120%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .publish-notify.show { transform: translateX(0); }
+    .pn-icon { width: 32px; height: 32px; background: rgba(16, 185, 129, 0.2); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .pn-title { font-weight: 700; font-size: 14px; margin-bottom: 2px; color: #fff; }
+    .pn-desc { font-size: 12px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <header class="builder-nav">
+    <div class="nav-left">
+      <button class="nav-btn" style="padding: 8px; border: none;"><i class="ri-menu-line" style="font-size: 18px;"></i></button>
+      <div class="badge-visual">VISUAL MODE</div>
+      <button class="nav-btn"><i class="ri-palette-line" style="color: var(--primary);"></i> TEMA: GREEN</button>
+      <button class="nav-btn active" onclick="toggleSidebar()"><i class="ri-layout-masonry-line"></i> Библиотека блоков</button>
+      <button class="nav-btn active"><i class="ri-grid-line"></i> Сетка</button>
+      <select class="nav-select">
+        <option>Главная (Home)</option>
+        <option>Кабинет (Dashboard)</option>
+      </select>
+    </div>
+    <div class="nav-center">
+      Switch pages to edit different areas.
+    </div>
+    <div class="nav-right">
+      <button class="nav-btn" onclick="window.location.href='/admin.html'"><i class="ri-arrow-left-line"></i> НАЗАД</button>
+      <button class="btn-publish" onclick="publishChanges()"><i class="ri-save-3-line"></i> PUBLISH CHANGES</button>
+    </div>
+  </header>
+
+  <!-- WORKSPACE -->
+  <div class="workspace">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Библиотека блоков</div>
+        <i class="ri-close-line sidebar-close" onclick="toggleSidebar()"></i>
+      </div>
+      <div class="sidebar-search">
+        <div class="sec-title" style="margin-top:0;">Нажмите элемент для добавления</div>
+        <div class="search-wrapper">
+          <i class="ri-search-line search-icon"></i>
+          <input type="text" class="search-input" placeholder="Поиск блоков и элементов...">
+        </div>
+      </div>
+      
+      <div class="sidebar-content">
+        <div class="sec-title">Секции страницы</div>
+        
+        <div class="block-item" onclick="openHeroSettings()">
+          <div class="block-info">
+            <i class="ri-layout-top-line block-icon"></i>
+            <div>
+              <div class="block-name">Hero (Обложка)</div>
+              <div class="block-desc">Главный баннер, слайды и кнопки</div>
+            </div>
+          </div>
+          <div class="block-status">Активен</div>
+        </div>
+        
+        <div class="block-item">
+          <div class="block-info">
+            <i class="ri-text-spacing block-icon"></i>
+            <div>
+              <div class="block-name">Marquee (Инфо-строка)</div>
+              <div class="block-desc">Бегущая строка с показателями</div>
+            </div>
+          </div>
+          <div class="block-status">Активен</div>
+        </div>
+        
+        <div class="block-item">
+          <div class="block-info">
+            <i class="ri-dashboard-2-line block-icon"></i>
+            <div>
+              <div class="block-name">Catalog (Каталог)</div>
+              <div class="block-desc">Сетка продукции и оборудования</div>
+            </div>
+          </div>
+          <div class="block-status">Активен</div>
+        </div>
+        
+        <div class="block-item">
+          <div class="block-info">
+            <i class="ri-shake-hands-line block-icon"></i>
+            <div>
+              <div class="block-name">Partnership (Партнеры)</div>
+              <div class="block-desc">Сетка логотипов партнеров</div>
+            </div>
+          </div>
+          <div class="block-status">Активен</div>
+        </div>
+
+        <div class="block-item">
+          <div class="block-info">
+            <i class="ri-customer-service-2-line block-icon"></i>
+            <div>
+              <div class="block-name">Services (Услуги)</div>
+              <div class="block-desc">Блоки преимуществ и услуг</div>
+            </div>
+          </div>
+          <div class="block-status">Активен</div>
+        </div>
+
+        <div class="block-item">
+          <div class="block-info">
+            <i class="ri-phone-line block-icon"></i>
+            <div>
+              <div class="block-name">CTA (Обратная связь)</div>
+              <div class="block-desc">Кнопки обратной связи</div>
+            </div>
+          </div>
+          <div class="block-status">Активен</div>
+        </div>
+        
+        <div class="sec-title" style="margin-top:20px;">Стандартные элементы</div>
+        <div class="std-elements">
+          <div class="std-item">
+            <i class="ri-heading"></i>
+            <div class="name">Заголовок</div>
+            <div class="en-name">Heading</div>
+          </div>
+          <div class="std-item">
+            <i class="ri-paragraph"></i>
+            <div class="name">Текст</div>
+            <div class="en-name">Paragraph</div>
+          </div>
+          <div class="std-item">
+            <i class="ri-square-root"></i>
+            <div class="name">Кнопка</div>
+            <div class="en-name">Button</div>
+          </div>
+          <div class="std-item">
+            <i class="ri-window-fill"></i>
+            <div class="name">Карточка</div>
+            <div class="en-name">Card</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- PREVIEW AREA -->
+    <main class="preview-area">
+      <div class="preview-toolbar">
+        <div class="screen-sizes">
+          <span style="color:var(--text-muted); font-weight:700; margin-right:8px;">РАЗМЕР ЭКРАНА:</span>
+          <button class="sz-btn" onclick="setScreenSize('375px', this)"><i class="ri-smartphone-line"></i> Мобильный (375px)</button>
+          <button class="sz-btn" onclick="setScreenSize('768px', this)"><i class="ri-tablet-line"></i> Планшет (768px)</button>
+          <button class="sz-btn" onclick="setScreenSize('1280px', this)"><i class="ri-macbook-line"></i> Ноутбук (1280px)</button>
+          <button class="sz-btn active" onclick="setScreenSize('1440px', this)"><i class="ri-computer-line"></i> Десктоп (1440px)</button>
+          <button class="sz-btn" style="background:var(--primary); color:#000; padding:4px 10px; border-radius:4px;" onclick="setScreenSize('100%', this)"><i class="ri-fullscreen-line" style="color:#000;"></i> На весь экран</button>
+        </div>
+        <div style="font-weight:700; color:var(--text); display:flex; gap:8px;">
+          <span id="current-width">1440</span> px
+        </div>
+      </div>
+      
+      <div class="iframe-wrapper">
+        <iframe src="/index.html" class="preview-iframe" id="preview-frame" style="width: 1440px;"></iframe>
+        <div class="builder-overlay" id="builder-overlay">
+          <div class="selection-box" style="width: 1440px; height: 600px; top: 0;" onclick="openHeroSettings()">
+            <div class="edit-badge"><i class="ri-edit-2-line"></i> РЕДАКТИРОВАТЬ HERO СЕКЦИЮ</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-bubble">
+        <i class="ri-message-3-fill"></i>
+      </div>
+    </main>
+    
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span class="modal-sys-badge">СИСТЕМНЫЙ БЛОК</span>
+          НАСТРОЙКИ ЭЛЕМЕНТА: HERO
+        </div>
+        <button class="modal-close" onclick="closeHeroSettings()"><i class="ri-close-line"></i></button>
+      </div>
+      
+      <div class="modal-tabs">
+        <div class="mtab"><i class="ri-file-text-line"></i> Текст & Информация</div>
+        <div class="mtab active"><i class="ri-image-line"></i> Изображения & Видео</div>
+        <div class="mtab"><i class="ri-layout-masonry-fill"></i> Размеры & Сетка</div>
+        <div class="mtab"><i class="ri-magic-line"></i> Эффекты & Фон</div>
+        <div class="mtab"><i class="ri-flashlight-line"></i> Действия & Модалки</div>
+        <div class="mtab"><i class="ri-add-line"></i> Добавить элемент</div>
+      </div>
+      
+      <div class="modal-body">
+        <div class="mb-left">
+          <div>
+            <span class="fm-label">Тип фонового контента</span>
+            <div class="bg-type-toggles">
+              <button class="bg-tg active"><i class="ri-image-2-fill"></i> Фото / Изображение</button>
+              <button class="bg-tg"><i class="ri-movie-fill"></i> Видеоролик (BG)</button>
+            </div>
+          </div>
+          
+          <div>
+            <span class="fm-label">Ссылка на изображение или загрузка файла</span>
+            <div class="url-input-group">
+              <input type="text" class="url-input" id="hero-bg-input" value="https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=1200" oninput="updatePreview(this.value)">
+              <button class="btn-upload"><i class="ri-folder-upload-fill"></i> Загрузить фото</button>
+            </div>
+          </div>
+          
+          <div>
+            <span class="fm-label">Предпросмотр медиафайла</span>
+            <div class="preview-box" id="hero-img-preview" style="background-image: url('https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=1200');">
+            </div>
+          </div>
+        </div>
+        
+        <div class="mb-right">
+          <span class="fm-label">Быстрый выбор фото для HubMaster</span>
+          <div class="gallery-grid">
+            <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=1200')">
+              <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=300" class="gal-img">
+              <div class="gal-label">Ремонт техники</div>
+            </div>
+            <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1486006920555-c77dce18193b?q=80&w=1200')">
+              <img src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?q=80&w=300" class="gal-img">
+              <div class="gal-label">Автосервис / СТО</div>
+            </div>
+            <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1200')">
+              <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=300" class="gal-img">
+              <div class="gal-label">Уборка / Клининг</div>
+            </div>
+            <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=1200')">
+              <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=300" class="gal-img">
+              <div class="gal-label">Сантехника</div>
+            </div>
+            <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200')">
+              <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=300" class="gal-img">
+              <div class="gal-label">Строительство</div>
+            </div>
+            <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1200')">
+              <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=300" class="gal-img">
+              <div class="gal-label">Мебель</div>
+            </div>
+            <div class="gal-item" onclick="selectGalleryImg('/hero_master_day.png')">
+              <img src="/hero_master_day.png" class="gal-img">
+              <div class="gal-label">Оригинальный Hero</div>
+            </div>
+            <div class="gal-item" onclick="selectGalleryImg('/hero_master.png')">
+              <img src="/hero_master.png" class="gal-img">
+              <div class="gal-label">Оригинальный Hero Dark</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn-close" onclick="closeHeroSettings()">Закрыть</button>
+        <button class="btn-save" onclick="applyHeroChanges()">Применить изменения</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="publish-notify" id="publish-notify">
+    <div class="pn-icon"><i class="ri-check-line"></i></div>
+    <div>
+      <div class="pn-title">Изменения опубликованы</div>
+      <div class="pn-desc">Сайт успешно обновлен для всех пользователей</div>
+    </div>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      sb.classList.toggle('collapsed');
+      setTimeout(updateOverlaySize, 300);
+    }
+
+    function setScreenSize(width, btn) {
+      document.querySelectorAll('.sz-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const frame = document.getElementById('preview-frame');
+      frame.style.width = width;
+      document.getElementById('current-width').innerText = width === '100%' ? window.innerWidth : parseInt(width);
+      
+      const selBox = document.querySelector('.selection-box');
+      if (width === '100%') {
+        selBox.style.width = '100%';
+      } else {
+        selBox.style.width = width;
+      }
+    }
+
+    function updateOverlaySize() {
+      // Re-adjust overlay width if needed
+    }
+
+    function openHeroSettings() {
+      document.getElementById('settings-modal').classList.add('active');
+    }
+
+    function closeHeroSettings() {
+      document.getElementById('settings-modal').classList.remove('active');
+    }
+
+    function updatePreview(url) {
+      const box = document.getElementById('hero-img-preview');
+      if (url) {
+        box.style.backgroundImage = `url('${url}')`;
+        box.innerText = '';
+      } else {
+        box.style.backgroundImage = 'none';
+        box.innerText = 'Изображение не выбрано';
+      }
+    }
+
+    function selectGalleryImg(url) {
+      document.getElementById('hero-bg-input').value = url;
+      updatePreview(url);
+    }
+
+    function applyHeroChanges() {
+      const url = document.getElementById('hero-bg-input').value;
+      const iframe = document.getElementById('preview-frame');
+      
+      // Live injection into the iframe if possible (same-origin works)
+      try {
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        // In index.html the new hero section uses class hero-container-consolidated or similar
+        const heroSection = iframeDoc.querySelector('.hero-left-new') || iframeDoc.querySelector('.hero-section');
+        if (heroSection) {
+           // For HubMaster, it's often a side image or full background depending on layout. 
+           // In index.html line 2542: ".hero-container-consolidated"
+           const imgElement = iframeDoc.querySelector('.hero-image-new');
+           if (imgElement) {
+               imgElement.src = url;
+           } else {
+               heroSection.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('${url}')`;
+               heroSection.style.backgroundSize = 'cover';
+               heroSection.style.backgroundPosition = 'center';
+           }
+        }
+      } catch(e) {
+        console.warn("Cross-origin or iframe not fully loaded", e);
+      }
+      
+      closeHeroSettings();
+    }
+
+    function publishChanges() {
+      const btn = document.querySelector('.btn-publish');
+      const originalHtml = btn.innerHTML;
+      btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> СОХРАНЕНИЕ...';
+      
+      setTimeout(() => {
+        btn.innerHTML = '<i class="ri-check-line"></i> УСПЕШНО';
+        btn.style.background = '#059669';
+        
+        const notify = document.getElementById('publish-notify');
+        notify.classList.add('show');
+        
+        setTimeout(() => {
+          btn.innerHTML = originalHtml;
+          btn.style.background = 'var(--primary)';
+          notify.classList.remove('show');
+        }, 3000);
+      }, 800);
+    }
+  </script>
+</body>
+</html>
