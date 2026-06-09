@@ -11060,7 +11060,8 @@
                     timeEn: getCatalogText(detail.time || '', 'EN'),
                     warr: detail.warr || 'Гарантия: 12 мес',
                     warrKz: getCatalogText(detail.warr || '', 'KZ'),
-                    warrEn: getCatalogText(detail.warr || '', 'EN')
+                    warrEn: getCatalogText(detail.warr || '', 'EN'),
+                    image: detail.image || null
                   };
                 });
                 return {
@@ -11508,7 +11509,7 @@
         }
       }
 
-      const heroImageSrc = getThematicImage(resolved.tabId, resolved.catId, resolved.itemId);
+      const heroImageSrc = (item && item.image) ? item.image : getThematicImage(resolved.tabId, resolved.catId, resolved.itemId);
       const isQuickRepairBadge = resolved.itemId && (resolved.itemId.includes('tech-1-2') || resolved.itemId.includes('fridge'));
       const badgeText = isQuickRepairBadge ? (currentLang === 'RU' ? 'Быстрый выезд мастера' : 'Шебердің жедел келуі') : 'Premium Service';
 

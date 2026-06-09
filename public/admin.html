@@ -1496,14 +1496,14 @@
         let catId = '';
         let subIdx = null;
         let subData = { id: '', title: '' };
-        let detailData = { price: '', time: '', warr: '', desc: '' };
+        let detailData = { price: '', time: '', warr: '', desc: '', image: '' };
 
         if (key !== null) {
           const parts = String(key).split(':');
           catId = parts[0];
           subIdx = parseInt(parts[1], 10);
           subData = catalogData.subcategories[catId][subIdx];
-          detailData = catalogData.details && catalogData.details[subData.id] ? catalogData.details[subData.id] : { price: '', time: '', warr: '', desc: '' };
+          detailData = catalogData.details && catalogData.details[subData.id] ? catalogData.details[subData.id] : { price: '', time: '', warr: '', desc: '', image: '' };
         }
 
         let catOptions = '';
@@ -1541,6 +1541,10 @@
           <div class="admin-form-group">
             <label>Гарантия (напр. "Гарантия: 12 мес")</label>
             <input type="text" id="detail-warr" class="admin-form-input" value="${detailData.warr || ''}">
+          </div>
+          <div class="admin-form-group">
+            <label>URL фото (напр. "https://images.unsplash.com/...")</label>
+            <input type="text" id="detail-image" class="admin-form-input" value="${detailData.image || ''}">
           </div>
           <div class="admin-form-group">
             <label>Описание услуги</label>
@@ -1589,6 +1593,7 @@
         const price = document.getElementById('detail-price').value.trim();
         const time = document.getElementById('detail-time').value.trim();
         const warr = document.getElementById('detail-warr').value.trim();
+        const image = document.getElementById('detail-image').value.trim();
         const desc = document.getElementById('detail-desc').value.trim();
 
         if (!id || !catId || !title) { alert('Заполните обязательные поля'); return; }
@@ -1612,7 +1617,7 @@
         }
 
         if (!catalogData.details) catalogData.details = {};
-        catalogData.details[id] = { title, desc, price, time, warr };
+        catalogData.details[id] = { title, desc, price, time, warr, image };
       }
 
       closeCatalogEditModal();
