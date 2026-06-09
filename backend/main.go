@@ -83,6 +83,17 @@ type ServiceCategory struct {
 // Global database instance
 var dbInstance DB
 
+func resolvePath(basePath string) string {
+	if _, err := os.Stat(basePath); err == nil {
+		return basePath
+	}
+	parentPath := "../" + basePath
+	if _, err := os.Stat(parentPath); err == nil {
+		return parentPath
+	}
+	return basePath
+}
+
 func main() {
 	var err error
 	dbInstance, err = InitDB()
@@ -133,7 +144,7 @@ func main() {
 			return
 		}
 
-		filePath := "data/catalog_data.json"
+		filePath := resolvePath("data/catalog_data.json")
 
 		if r.Method == http.MethodGet {
 			w.Header().Set("Content-Type", "application/json")
@@ -359,7 +370,7 @@ func main() {
 			return
 		}
 
-		filePath := "data/assistant_config.json"
+		filePath := resolvePath("data/assistant_config.json")
 
 		if r.Method == http.MethodGet {
 			w.Header().Set("Content-Type", "application/json")
@@ -1283,7 +1294,7 @@ func main() {
 
 
 	// Serve Static Files from dist / root directory (needed for deployment)
-	staticDir := "public"
+	staticDir := resolvePath("public")
 
 	mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/plain")
@@ -1293,12 +1304,12 @@ func main() {
 
 	mux.Handle("/sitemap.xml", corsMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/xml")
-		http.ServeFile(w, r, "seo/sitemap.xml")
+		http.ServeFile(w, r, resolvePath("seo/sitemap.xml"))
 	}))
 
 	mux.Handle("/robots.txt", corsMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/plain")
-		http.ServeFile(w, r, "seo/robots.txt")
+		http.ServeFile(w, r, resolvePath("seo/robots.txt"))
 	}))
 
 	fileServer := http.FileServer(http.Dir(staticDir))

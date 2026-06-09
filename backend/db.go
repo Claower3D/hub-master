@@ -1223,11 +1223,11 @@ func InitDB() (DB, error) {
 			log.Println("✅ Connected to PostgreSQL successfully!")
 		} else {
 			log.Printf("⚠️ PostgreSQL connection failed: %v. Falling back to JSON storage.\n", err)
-			db, err = NewJsonDB("masterhub_data.json")
+			db, err = NewJsonDB(resolvePath("data/masterhub_data.json"))
 		}
 	} else {
-		log.Println("📁 Using JSON local file storage (masterhub_data.json)...")
-		db, err = NewJsonDB("masterhub_data.json")
+		log.Println("📁 Using JSON local file storage (data/masterhub_data.json)...")
+		db, err = NewJsonDB(resolvePath("data/masterhub_data.json"))
 	}
 
 	if err != nil {
