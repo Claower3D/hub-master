@@ -1292,6 +1292,51 @@ func main() {
 		handleDeleteCustomPage(dbInstance)(w, r)
 	}))
 
+	// POST /api/admin/save-page-html (admin only)
+	mux.HandleFunc("/api/admin/save-page-html", corsMiddleware(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodOptions {
+			return
+		}
+		if r.Method != http.MethodPost {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+		user, err := getAuthenticatedUser(r, dbInstance)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusUnauthorized)
+			return
+		}
+		if user.Role != "admin" {
+			http.Error(w, "Forbidden (Admin only)", http.StatusForbidden)
+			return
+		}
+
+		type SavePageRequest struct {
+			Page string `json:"page"`
+			HTML string `json:"html"`
+		}
+
+		var req SavePageRequest
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			http.Error(w, "Invalid payload", http.StatusBadRequest)
+			return
+		}
+
+		if req.Page != "index.html" && req.Page != "hubmaster.html" {
+			http.Error(w, "Invalid page name: only index.html or hubmaster.html are allowed", http.StatusBadRequest)
+			return
+		}
+
+		filePath := filepath.Join(resolvePath("public"), req.Page)
+		err = os.WriteFile(filePath, []byte(req.HTML), 0644)
+		if err != nil {
+			http.Error(w, fmt.Sprintf("Failed to write file: %v", err), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]string{"status": "success", "message": "Page updated successfully"})
+	}))
 
 	// Serve Static Files from dist / root directory (needed for deployment)
 	staticDir := resolvePath("public")

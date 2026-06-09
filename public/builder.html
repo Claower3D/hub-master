@@ -40,7 +40,7 @@
     .workspace { display: flex; flex: 1; overflow: hidden; }
     
     /* SIDEBAR (LIBRARY) */
-    .sidebar { width: 300px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; transition: 0.3s; z-index: 20; }
+    .sidebar { width: 320px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; transition: 0.3s; z-index: 20; }
     .sidebar.collapsed { width: 0; border: none; overflow: hidden; }
     .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
     .sidebar-title { font-family: var(--font-heading); font-size: 14px; font-weight: 800; letter-spacing: 1px; color: var(--primary); text-transform: uppercase; }
@@ -54,7 +54,16 @@
     .sidebar-content::-webkit-scrollbar { width: 6px; }
     .sidebar-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     
-    .sec-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 10px 0 12px 0; }
+    .sec-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 15px 0 10px 0; }
+    
+    .section-list-item { background: rgba(255,255,255,0.01); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
+    .section-list-item:hover { border-color: var(--primary); background: rgba(16, 185, 129, 0.03); }
+    .section-list-info { display: flex; align-items: center; gap: 10px; }
+    .section-list-icon { color: var(--primary); font-size: 16px; }
+    .section-list-name { font-size: 13px; font-weight: 600; }
+    .section-list-edit { color: var(--text-muted); font-size: 14px; transition: 0.2s; }
+    .section-list-item:hover .section-list-edit { color: var(--primary); transform: scale(1.1); }
+
     .block-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
     .block-item:hover { border-color: var(--primary); background: rgba(16, 185, 129, 0.05); }
     .block-info { display: flex; align-items: flex-start; gap: 10px; }
@@ -71,7 +80,7 @@
     .std-item .en-name { font-size: 10px; color: var(--text-muted); }
 
     /* PREVIEW AREA */
-    .preview-area { flex: 1; display: flex; flex-direction: column; background: #000; position: relative; }
+    .preview-area { flex: 1; display: flex; flex-direction: column; background: #07080a; position: relative; }
     .preview-toolbar { height: 40px; background: rgba(22, 25, 31, 0.9); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; justify-content: space-between; font-size: 12px; z-index: 15; }
     .screen-sizes { display: flex; gap: 16px; align-items: center; }
     .sz-btn { background: none; border: none; color: var(--text-muted); font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
@@ -80,39 +89,46 @@
     .sz-btn.active i { color: var(--primary); }
     
     .iframe-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; overflow: hidden; position: relative; }
-    .preview-iframe { width: 1440px; height: 100%; background: #fff; border: 1px solid var(--border); border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: width 0.3s; position: relative; z-index: 1; }
+    .preview-iframe { width: 1440px; height: 100%; background: #0f1015; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); transition: width 0.3s; position: relative; z-index: 1; }
     
-    /* OVERLAY & SELECTION */
-    .builder-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 10; display: flex; justify-content: center; align-items: center; }
-    .selection-box { position: absolute; border: 2px dashed var(--primary); background: rgba(16, 185, 129, 0.1); pointer-events: auto; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px; transition: 0.2s; z-index: 11; }
-    .selection-box:hover { background: rgba(16, 185, 129, 0.2); }
-    .edit-badge { background: var(--primary); color: #000; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 20px; cursor: pointer; pointer-events: auto; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 6px; }
-    .edit-badge:hover { transform: scale(1.05); }
-
     /* MODAL */
-    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; backdrop-filter: blur(5px); }
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; backdrop-filter: blur(8px); }
     .modal-overlay.active { opacity: 1; pointer-events: auto; }
-    .modal-card { width: 850px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: translateY(20px); transition: 0.3s; }
+    .modal-card { width: 880px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.6); transform: translateY(20px); transition: 0.3s; max-height: 85vh; }
     .modal-overlay.active .modal-card { transform: translateY(0); }
     
-    .modal-header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); }
+    .modal-header { padding: 18px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); }
     .modal-title { display: flex; align-items: center; gap: 12px; font-family: var(--font-heading); font-size: 14px; font-weight: 800; letter-spacing: 1px; color: #fff; text-transform: uppercase; }
     .modal-sys-badge { border: 1px solid var(--primary); color: var(--primary); padding: 2px 6px; border-radius: 4px; font-size: 10px; }
     .modal-close { background: rgba(255,255,255,0.05); border: none; color: var(--text-muted); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
     .modal-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
     
-    .modal-tabs { display: flex; border-bottom: 1px solid var(--border); }
-    .mtab { flex: 1; text-align: center; padding: 16px 10px; font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; border-bottom: 2px solid transparent; transition: 0.2s; }
+    .modal-tabs { display: flex; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.1); }
+    .mtab { flex: 1; text-align: center; padding: 14px 10px; font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; border-bottom: 2px solid transparent; transition: 0.2s; }
     .mtab:hover { color: var(--text); background: rgba(255,255,255,0.02); }
     .mtab.active { color: var(--primary); border-bottom-color: var(--primary); background: rgba(16, 185, 129, 0.05); }
     .mtab i { font-size: 16px; }
     
-    .modal-body { padding: 24px; display: flex; gap: 30px; }
+    .modal-body { padding: 24px; display: flex; gap: 24px; overflow-y: auto; max-height: calc(85vh - 180px); }
     .mb-left { flex: 1; display: flex; flex-direction: column; gap: 20px; }
-    .mb-right { flex: 1; }
+    .mb-right { flex: 1; display: flex; flex-direction: column; gap: 20px; border-left: 1px solid var(--border); padding-left: 24px; }
     
-    .fm-label { font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+    .fm-label { font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
     
+    /* Translation Sub-tabs */
+    .lang-tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+    .ltab { background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: var(--text-muted); padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+    .ltab:hover { color: #fff; border-color: var(--text-muted); }
+    .ltab.active { background: rgba(16, 185, 129, 0.1); border-color: var(--primary); color: var(--primary); }
+
+    .fields-container { display: flex; flex-direction: column; gap: 16px; width: 100%; }
+    .field-group { display: flex; flex-direction: column; gap: 6px; }
+    .field-info { display: flex; justify-content: space-between; align-items: center; }
+    .field-key { font-size: 11px; color: var(--text-muted); font-family: monospace; }
+    .field-input { background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: #fff; padding: 10px 12px; border-radius: 6px; font-size: 13px; outline: none; width: 100%; transition: 0.2s; }
+    .field-input:focus { border-color: var(--primary); box-shadow: 0 0 8px rgba(16,185,129,0.2); }
+    .field-textarea { min-height: 80px; resize: vertical; }
+
     .bg-type-toggles { display: flex; gap: 10px; }
     .bg-tg { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
     .bg-tg.active { border-color: var(--primary); color: var(--primary); background: rgba(16, 185, 129, 0.05); }
@@ -141,9 +157,6 @@
     .btn-save { background: var(--primary); color: #000; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: 0.2s; }
     .btn-save:hover { background: var(--primary-hover); transform: translateY(-1px); }
 
-    .chat-bubble { position: absolute; bottom: 20px; right: 20px; width: 50px; height: 50px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); z-index: 100; transition: 0.2s; }
-    .chat-bubble:hover { transform: scale(1.1); }
-    
     /* Notification */
     .publish-notify { position: fixed; top: 20px; right: 20px; background: var(--bg-card); border-left: 4px solid var(--primary); padding: 16px 20px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 2000; display: flex; align-items: center; gap: 12px; transform: translateX(120%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
     .publish-notify.show { transform: translateX(0); }
@@ -158,17 +171,15 @@
   <header class="builder-nav">
     <div class="nav-left">
       <button class="nav-btn" style="padding: 8px; border: none;"><i class="ri-menu-line" style="font-size: 18px;"></i></button>
-      <div class="badge-visual">VISUAL MODE</div>
-      <button class="nav-btn"><i class="ri-palette-line" style="color: var(--primary);"></i> TEMA: GREEN</button>
-      <button class="nav-btn active" onclick="toggleSidebar()"><i class="ri-layout-masonry-line"></i> Библиотека блоков</button>
-      <button class="nav-btn active"><i class="ri-grid-line"></i> Сетка</button>
-      <select class="nav-select">
-        <option>Главная (Home)</option>
-        <option>Кабинет (Dashboard)</option>
+      <div class="badge-visual">VISUAL BUILDER</div>
+      <button class="nav-btn"><i class="ri-palette-line" style="color: var(--primary);"></i> TEMA: EMERALD</button>
+      <select class="nav-select" id="page-selector" onchange="changePage(this.value)">
+        <option value="index.html">Главная (Home)</option>
+        <option value="hubmaster.html">Кабинет (Dashboard)</option>
       </select>
     </div>
     <div class="nav-center">
-      Switch pages to edit different areas.
+      Выберите секцию на макете или кликните в списке слева для редактирования.
     </div>
     <div class="nav-right">
       <button class="nav-btn" onclick="window.location.href='/admin.html'"><i class="ri-arrow-left-line"></i> НАЗАД</button>
@@ -182,21 +193,25 @@
     <!-- LEFT SIDEBAR -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <div class="sidebar-title">Библиотека блоков</div>
-        <i class="ri-close-line sidebar-close" onclick="toggleSidebar()"></i>
+        <div class="sidebar-title">Структура и Блоки</div>
       </div>
+      
       <div class="sidebar-search">
-        <div class="sec-title" style="margin-top:0;">Нажмите элемент для добавления</div>
+        <div class="sec-title" style="margin-top:0;">Навигация по разделам</div>
         <div class="search-wrapper">
           <i class="ri-search-line search-icon"></i>
-          <input type="text" class="search-input" placeholder="Поиск блоков и элементов...">
+          <input type="text" class="search-input" id="sidebar-search-input" placeholder="Поиск блоков..." oninput="filterSidebar(this.value)">
         </div>
       </div>
       
       <div class="sidebar-content">
         <div class="sec-title">Секции страницы</div>
+        <div id="sections-list-container">
+          <!-- Dynamic Sections List -->
+        </div>
         
-        <div class="block-item" onclick="openHeroSettings()">
+        <div class="sec-title" style="margin-top:20px;">Библиотека новых блоков</div>
+        <div class="block-item" onclick="addNewBlockMock('hero')">
           <div class="block-info">
             <i class="ri-layout-top-line block-icon"></i>
             <div>
@@ -204,10 +219,9 @@
               <div class="block-desc">Главный баннер, слайды и кнопки</div>
             </div>
           </div>
-          <div class="block-status">Активен</div>
+          <div class="block-status"><i class="ri-add-line"></i></div>
         </div>
-        
-        <div class="block-item">
+        <div class="block-item" onclick="addNewBlockMock('marquee')">
           <div class="block-info">
             <i class="ri-text-spacing block-icon"></i>
             <div>
@@ -215,10 +229,9 @@
               <div class="block-desc">Бегущая строка с показателями</div>
             </div>
           </div>
-          <div class="block-status">Активен</div>
+          <div class="block-status"><i class="ri-add-line"></i></div>
         </div>
-        
-        <div class="block-item">
+        <div class="block-item" onclick="addNewBlockMock('catalog')">
           <div class="block-info">
             <i class="ri-dashboard-2-line block-icon"></i>
             <div>
@@ -226,64 +239,17 @@
               <div class="block-desc">Сетка продукции и оборудования</div>
             </div>
           </div>
-          <div class="block-status">Активен</div>
+          <div class="block-status"><i class="ri-add-line"></i></div>
         </div>
-        
-        <div class="block-item">
+        <div class="block-item" onclick="addNewBlockMock('masters')">
           <div class="block-info">
-            <i class="ri-shake-hands-line block-icon"></i>
+            <i class="ri-user-star-line block-icon"></i>
             <div>
-              <div class="block-name">Partnership (Партнеры)</div>
-              <div class="block-desc">Сетка логотипов партнеров</div>
+              <div class="block-name">Masters (Наши специалисты)</div>
+              <div class="block-desc">Список сертифицированных мастеров</div>
             </div>
           </div>
-          <div class="block-status">Активен</div>
-        </div>
-
-        <div class="block-item">
-          <div class="block-info">
-            <i class="ri-customer-service-2-line block-icon"></i>
-            <div>
-              <div class="block-name">Services (Услуги)</div>
-              <div class="block-desc">Блоки преимуществ и услуг</div>
-            </div>
-          </div>
-          <div class="block-status">Активен</div>
-        </div>
-
-        <div class="block-item">
-          <div class="block-info">
-            <i class="ri-phone-line block-icon"></i>
-            <div>
-              <div class="block-name">CTA (Обратная связь)</div>
-              <div class="block-desc">Кнопки обратной связи</div>
-            </div>
-          </div>
-          <div class="block-status">Активен</div>
-        </div>
-        
-        <div class="sec-title" style="margin-top:20px;">Стандартные элементы</div>
-        <div class="std-elements">
-          <div class="std-item">
-            <i class="ri-heading"></i>
-            <div class="name">Заголовок</div>
-            <div class="en-name">Heading</div>
-          </div>
-          <div class="std-item">
-            <i class="ri-paragraph"></i>
-            <div class="name">Текст</div>
-            <div class="en-name">Paragraph</div>
-          </div>
-          <div class="std-item">
-            <i class="ri-square-root"></i>
-            <div class="name">Кнопка</div>
-            <div class="en-name">Button</div>
-          </div>
-          <div class="std-item">
-            <i class="ri-window-fill"></i>
-            <div class="name">Карточка</div>
-            <div class="en-name">Card</div>
-          </div>
+          <div class="block-status"><i class="ri-add-line"></i></div>
         </div>
       </div>
     </aside>
@@ -297,7 +263,7 @@
           <button class="sz-btn" onclick="setScreenSize('768px', this)"><i class="ri-tablet-line"></i> Планшет (768px)</button>
           <button class="sz-btn" onclick="setScreenSize('1280px', this)"><i class="ri-macbook-line"></i> Ноутбук (1280px)</button>
           <button class="sz-btn active" onclick="setScreenSize('1440px', this)"><i class="ri-computer-line"></i> Десктоп (1440px)</button>
-          <button class="sz-btn" style="background:var(--primary); color:#000; padding:4px 10px; border-radius:4px;" onclick="setScreenSize('100%', this)"><i class="ri-fullscreen-line" style="color:#000;"></i> На весь экран</button>
+          <button class="sz-btn" onclick="setScreenSize('100%', this)"><i class="ri-fullscreen-line"></i> На весь экран</button>
         </div>
         <div style="font-weight:700; color:var(--text); display:flex; gap:8px;">
           <span id="current-width">1440</span> px
@@ -306,15 +272,6 @@
       
       <div class="iframe-wrapper">
         <iframe src="/index.html" class="preview-iframe" id="preview-frame" style="width: 1440px;"></iframe>
-        <div class="builder-overlay" id="builder-overlay">
-          <div class="selection-box" style="width: 1440px; height: 600px; top: 0;" onclick="openHeroSettings()">
-            <div class="edit-badge"><i class="ri-edit-2-line"></i> РЕДАКТИРОВАТЬ HERO СЕКЦИЮ</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="chat-bubble">
-        <i class="ri-message-3-fill"></i>
       </div>
     </main>
     
@@ -325,88 +282,133 @@
     <div class="modal-card">
       <div class="modal-header">
         <div class="modal-title">
-          <span class="modal-sys-badge">СИСТЕМНЫЙ БЛОК</span>
-          НАСТРОЙКИ ЭЛЕМЕНТА: HERO
+          <span class="modal-sys-badge" id="modal-badge">СИСТЕМНЫЙ БЛОК</span>
+          НАСТРОЙКИ ЭЛЕМЕНТА: <span id="modal-section-title-display">HERO</span>
         </div>
-        <button class="modal-close" onclick="closeHeroSettings()"><i class="ri-close-line"></i></button>
+        <button class="modal-close" onclick="closeSettings()"><i class="ri-close-line"></i></button>
       </div>
       
       <div class="modal-tabs">
-        <div class="mtab"><i class="ri-file-text-line"></i> Текст & Информация</div>
-        <div class="mtab active"><i class="ri-image-line"></i> Изображения & Видео</div>
-        <div class="mtab"><i class="ri-layout-masonry-fill"></i> Размеры & Сетка</div>
-        <div class="mtab"><i class="ri-magic-line"></i> Эффекты & Фон</div>
-        <div class="mtab"><i class="ri-flashlight-line"></i> Действия & Модалки</div>
-        <div class="mtab"><i class="ri-add-line"></i> Добавить элемент</div>
+        <div class="mtab active" onclick="switchModalTab('text', this)"><i class="ri-file-text-line"></i> Текст & Информация</div>
+        <div class="mtab" onclick="switchModalTab('media', this)"><i class="ri-image-line"></i> Изображения & Видео</div>
+        <div class="mtab" onclick="switchModalTab('grid', this)"><i class="ri-layout-masonry-fill"></i> Размеры & Сетка</div>
+        <div class="mtab" onclick="switchModalTab('effects', this)"><i class="ri-magic-line"></i> Эффекты & Фон</div>
+        <div class="mtab" onclick="switchModalTab('actions', this)"><i class="ri-flashlight-line"></i> Действия & Модалки</div>
+        <div class="mtab" onclick="switchModalTab('add', this)"><i class="ri-add-line"></i> Добавить элемент</div>
       </div>
       
       <div class="modal-body">
-        <div class="mb-left">
-          <div>
-            <span class="fm-label">Тип фонового контента</span>
-            <div class="bg-type-toggles">
-              <button class="bg-tg active"><i class="ri-image-2-fill"></i> Фото / Изображение</button>
-              <button class="bg-tg"><i class="ri-movie-fill"></i> Видеоролик (BG)</button>
+        <!-- TEXT TAB -->
+        <div class="tab-pane-content" id="tab-text" style="width: 100%; display: flex; flex-direction: column;">
+          <div class="lang-tabs">
+            <button class="ltab active" onclick="switchLangTab('RU', this)">RU (Русский)</button>
+            <button class="ltab" onclick="switchLangTab('KZ', this)">KK (Казахский)</button>
+            <button class="ltab" onclick="switchLangTab('EN', this)">EN (Английский)</button>
+          </div>
+          <div class="fields-container" id="text-fields-container">
+            <!-- Dynamic fields go here -->
+          </div>
+        </div>
+
+        <!-- MEDIA TAB -->
+        <div class="tab-pane-content" id="tab-media" style="width: 100%; display: none; gap: 24px;">
+          <div class="mb-left">
+            <div>
+              <span class="fm-label">Тип фонового контента</span>
+              <div class="bg-type-toggles">
+                <button class="bg-tg active" id="media-type-image" onclick="toggleMediaType('image')"><i class="ri-image-2-fill"></i> Фото / Изображение</button>
+                <button class="bg-tg" id="media-type-video" onclick="toggleMediaType('video')"><i class="ri-movie-fill"></i> Видеоролик (BG)</button>
+              </div>
+            </div>
+            
+            <div style="margin-top: 16px;">
+              <span class="fm-label" id="media-url-label-1">Ссылка на темное изображение (Dark Master)</span>
+              <div class="url-input-group">
+                <input type="text" class="url-input" id="media-url-input-1" value="/public/hero_master.webp?v=2" oninput="updateMediaPreview()">
+                <button class="btn-upload" onclick="alert('Для изменения изображения выберите файл или введите его URL в поле слева.')"><i class="ri-folder-upload-fill"></i> Загрузить</button>
+              </div>
+            </div>
+
+            <div style="margin-top: 16px;" id="media-light-group">
+              <span class="fm-label">Ссылка на светлое изображение (Light Master)</span>
+              <div class="url-input-group">
+                <input type="text" class="url-input" id="media-url-input-2" value="/public/hero_master_day.webp?v=2" oninput="updateMediaPreview()">
+                <button class="btn-upload" onclick="alert('Для изменения изображения выберите файл или введите его URL в поле слева.')"><i class="ri-folder-upload-fill"></i> Загрузить</button>
+              </div>
+            </div>
+            
+            <div style="margin-top: 16px;">
+              <span class="fm-label">Предпросмотр медиафайла</span>
+              <div class="preview-box" id="media-preview-box" style="background-image: url('/public/hero_master.webp?v=2');">
+              </div>
             </div>
           </div>
           
-          <div>
-            <span class="fm-label">Ссылка на изображение или загрузка файла</span>
-            <div class="url-input-group">
-              <input type="text" class="url-input" id="hero-bg-input" value="https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=1200" oninput="updatePreview(this.value)">
-              <button class="btn-upload"><i class="ri-folder-upload-fill"></i> Загрузить фото</button>
-            </div>
-          </div>
-          
-          <div>
-            <span class="fm-label">Предпросмотр медиафайла</span>
-            <div class="preview-box" id="hero-img-preview" style="background-image: url('https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=1200');">
+          <div class="mb-right">
+            <span class="fm-label">Быстрый выбор фото для HubMaster</span>
+            <div class="gallery-grid">
+              <div class="gal-item" onclick="selectGalleryImg('/public/hero_master.webp?v=2', '/public/hero_master_day.webp?v=2')">
+                <img src="/public/hero_master.webp?v=2" class="gal-img">
+                <div class="gal-label">Оригинальный Мастер</div>
+              </div>
+              <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=1200', 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=1200')">
+                <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=300" class="gal-img">
+                <div class="gal-label">Ремонт техники</div>
+              </div>
+              <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1486006920555-c77dce18193b?q=80&w=1200', 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?q=80&w=1200')">
+                <img src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?q=80&w=300" class="gal-img">
+                <div class="gal-label">Автосервис / СТО</div>
+              </div>
+              <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1200', 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1200')">
+                <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=300" class="gal-img">
+                <div class="gal-label">Уборка / Клининг</div>
+              </div>
+              <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=1200', 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=1200')">
+                <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=300" class="gal-img">
+                <div class="gal-label">Сантехника</div>
+              </div>
+              <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1200', 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1200')">
+                <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=300" class="gal-img">
+                <div class="gal-label">Мебель</div>
+              </div>
             </div>
           </div>
         </div>
-        
-        <div class="mb-right">
-          <span class="fm-label">Быстрый выбор фото для HubMaster</span>
-          <div class="gallery-grid">
-            <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=1200')">
-              <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=300" class="gal-img">
-              <div class="gal-label">Ремонт техники</div>
-            </div>
-            <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1486006920555-c77dce18193b?q=80&w=1200')">
-              <img src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?q=80&w=300" class="gal-img">
-              <div class="gal-label">Автосервис / СТО</div>
-            </div>
-            <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1200')">
-              <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=300" class="gal-img">
-              <div class="gal-label">Уборка / Клининг</div>
-            </div>
-            <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=1200')">
-              <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=300" class="gal-img">
-              <div class="gal-label">Сантехника</div>
-            </div>
-            <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200')">
-              <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=300" class="gal-img">
-              <div class="gal-label">Строительство</div>
-            </div>
-            <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1200')">
-              <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=300" class="gal-img">
-              <div class="gal-label">Мебель</div>
-            </div>
-            <div class="gal-item" onclick="selectGalleryImg('/hero_master_day.png')">
-              <img src="/hero_master_day.png" class="gal-img">
-              <div class="gal-label">Оригинальный Hero</div>
-            </div>
-            <div class="gal-item" onclick="selectGalleryImg('/hero_master.png')">
-              <img src="/hero_master.png" class="gal-img">
-              <div class="gal-label">Оригинальный Hero Dark</div>
-            </div>
+
+        <!-- PLACEHOLDER TABS -->
+        <div class="tab-pane-content" id="tab-grid" style="width: 100%; display: none;">
+          <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <i class="ri-layout-masonry-line" style="font-size: 48px; color: var(--primary); margin-bottom: 12px; display: block;"></i>
+            <h3>Настройки сетки и размеров</h3>
+            <p style="font-size: 13px; margin-top: 8px;">Данные параметры генерируются автоматически в соответствии с Premium Emerald дизайн-системой.</p>
+          </div>
+        </div>
+        <div class="tab-pane-content" id="tab-effects" style="width: 100%; display: none;">
+          <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <i class="ri-magic-line" style="font-size: 48px; color: var(--primary); margin-bottom: 12px; display: block;"></i>
+            <h3>Эффекты анимации и задний фон</h3>
+            <p style="font-size: 13px; margin-top: 8px;">Все секции имеют плавную анимацию появления ScrollReveal и адаптивные задние фоны.</p>
+          </div>
+        </div>
+        <div class="tab-pane-content" id="tab-actions" style="width: 100%; display: none;">
+          <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <i class="ri-flashlight-line" style="font-size: 48px; color: var(--primary); margin-bottom: 12px; display: block;"></i>
+            <h3>Интерактивные Действия и Модальные окна</h3>
+            <p style="font-size: 13px; margin-top: 8px;">Кнопки вызывают встроенную форму быстрого заказа услуг или открывают окно чата с оператором.</p>
+          </div>
+        </div>
+        <div class="tab-pane-content" id="tab-add" style="width: 100%; display: none;">
+          <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <i class="ri-add-line" style="font-size: 48px; color: var(--primary); margin-bottom: 12px; display: block;"></i>
+            <h3>Добавление новых элементов</h3>
+            <p style="font-size: 13px; margin-top: 8px;">Используйте левую панель "Библиотека новых блоков" для добавления целых блоков в DOM макета.</p>
           </div>
         </div>
       </div>
       
       <div class="modal-footer">
-        <button class="btn-close" onclick="closeHeroSettings()">Закрыть</button>
-        <button class="btn-save" onclick="applyHeroChanges()">Применить изменения</button>
+        <button class="btn-close" onclick="closeSettings()">Закрыть</button>
+        <button class="btn-save" onclick="applySectionChanges()">Применить изменения</button>
       </div>
     </div>
   </div>
@@ -414,47 +416,460 @@
   <div class="publish-notify" id="publish-notify">
     <div class="pn-icon"><i class="ri-check-line"></i></div>
     <div>
-      <div class="pn-title">Изменения опубликованы</div>
-      <div class="pn-desc">Сайт успешно обновлен для всех пользователей</div>
+      <div class="pn-title" id="notify-title">Изменения опубликованы</div>
+      <div class="pn-desc" id="notify-desc">Сайт успешно обновлен для всех пользователей</div>
     </div>
   </div>
 
   <script>
-    function toggleSidebar() {
-      const sb = document.getElementById('sidebar');
-      sb.classList.toggle('collapsed');
-      setTimeout(updateOverlaySize, 300);
+    // Security check: Redirect if no admin token
+    const adminToken = localStorage.getItem('admin_token');
+    if (!adminToken) {
+      window.location.href = '/admin.html';
+    }
+
+    // Config Mapping
+    const sectionSelectors = {
+      header: '.navbar',
+      hero: '.hero-section',
+      marquee: '.stats-section',
+      showcase: '.showcase-combo-section',
+      catalog: '.catalog-section',
+      masters: '.masters-advantages-section',
+      whyChooseUs: '.why-section',
+      reviews: '.reviews-section',
+      footer: '.app-footer'
+    };
+
+    const pageSections = {
+      header: {
+        title: "Header (Шапка)",
+        icon: "ri-window-line",
+        keys: ["navSubtitle", "cabinet", "contacts"]
+      },
+      hero: {
+        title: "Hero (Главный баннер)",
+        icon: "ri-layout-top-line",
+        keys: [
+          "heroTitle", "heroSubtextText", "btnCallFurniture", "btnCallMe",
+          "slideWinTitle", "slideWinSub", "btnCallWin",
+          "slideWeldTitle", "slideWeldSub", "btnCallWeld",
+          "slideApplTitle", "slideApplSub", "btnCallAppl",
+          "heroFormTitle", "heroFormDesc", "btnLeaveAnketa"
+        ],
+        media: true
+      },
+      marquee: {
+        title: "Marquee (Инфо-строка)",
+        icon: "ri-text-spacing",
+        keys: ["pill1Text", "pill1Sub", "pill2Text", "pill2Sub", "pill3Text", "pill3Sub"]
+      },
+      showcase: {
+        title: "Showcase (Приветствие)",
+        icon: "ri-shake-hands-line",
+        keys: ["showcaseTitle", "showcaseDesc", "showcasePrimaryBtn", "showcaseOutlineBtn"]
+      },
+      catalog: {
+        title: "Catalog (Каталог)",
+        icon: "ri-dashboard-2-line",
+        keys: ["catalogPretitle", "catalogTitle", "catalogSub", "orderBtn"]
+      },
+      masters: {
+        title: "Masters (Наши специалисты)",
+        icon: "ri-user-star-line",
+        keys: ["ourMastersTitle", "ourMastersPretitle", "ourMastersTitleMain", "ourMastersSubMain", "availableLabel", "ordersCount", "ratingAvg", "arrivalTime", "warrantyLabel"]
+      },
+      whyChooseUs: {
+        title: "Why Choose Us (Преимущества)",
+        icon: "ri-shield-check-line",
+        keys: [
+          "whyChooseTitle",
+          "whyTitle1", "whyDesc1",
+          "whyTitle2", "whyDesc2",
+          "whyTitle3", "whyDesc3",
+          "whyTitle4", "whyDesc4",
+          "whyTitle5", "whyDesc5",
+          "whyTitle6", "whyDesc6",
+          "whyTitle7", "whyDesc7",
+          "whyTitle8", "whyDesc8",
+          "whyTitle9", "whyDesc9"
+        ]
+      },
+      reviews: {
+        title: "Reviews (Отзывы клиентов)",
+        icon: "ri-message-3-line",
+        keys: ["reviewsTitle", "reviewsSub", "writeReview", "yourName", "yourPhone", "selectService", "reviewText", "submitReview"]
+      },
+      footer: {
+        title: "Footer (Подвал)",
+        icon: "ri-menu-5-line",
+        keys: ["partnersTitle", "otherServicesTitle", "footerDesc", "copyright"]
+      }
+    };
+
+    let activePage = 'index.html';
+    let activeSection = null;
+    let activeLang = 'RU';
+    let localTranslations = {}; 
+    let localCatalogTranslations = {};
+
+    // DOM Elements
+    const frame = document.getElementById('preview-frame');
+    const sectionsContainer = document.getElementById('sections-list-container');
+
+    // On Load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderSectionsList();
+      
+      frame.onload = () => {
+        setupIframeEditing();
+        // Load initial translation values from the iframe environment
+        try {
+          if (frame.contentWindow.translations) {
+            localTranslations = JSON.parse(JSON.stringify(frame.contentWindow.translations));
+          }
+          if (frame.contentWindow.catalogTranslations) {
+            localCatalogTranslations = JSON.parse(JSON.stringify(frame.contentWindow.catalogTranslations));
+          }
+        } catch(e) {
+          console.error("Failed to fetch initial translations from iframe window:", e);
+        }
+      };
+    });
+
+    function renderSectionsList() {
+      sectionsContainer.innerHTML = '';
+      Object.keys(pageSections).forEach(key => {
+        const sect = pageSections[key];
+        const div = document.createElement('div');
+        div.className = 'section-list-item';
+        div.onclick = () => scrollToAndSelectSection(key);
+        div.innerHTML = `
+          <div class="section-list-info">
+            <i class="${sect.icon} section-list-icon"></i>
+            <span class="section-list-name">${sect.title}</span>
+          </div>
+          <i class="ri-edit-line section-list-edit" onclick="event.stopPropagation(); openSectionEditor('${key}')"></i>
+        `;
+        sectionsContainer.appendChild(div);
+      });
+    }
+
+    function filterSidebar(query) {
+      const q = query.toLowerCase();
+      const items = document.querySelectorAll('.section-list-item');
+      Object.keys(pageSections).forEach((key, index) => {
+        const item = items[index];
+        const name = pageSections[key].title.toLowerCase();
+        if (name.includes(q)) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    function changePage(page) {
+      activePage = page;
+      frame.src = '/' + page;
+      showToast('Загрузка страницы', `Переключение на ${page}...`, 'ri-loader-4-line');
     }
 
     function setScreenSize(width, btn) {
       document.querySelectorAll('.sz-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      const frame = document.getElementById('preview-frame');
       frame.style.width = width;
       document.getElementById('current-width').innerText = width === '100%' ? window.innerWidth : parseInt(width);
-      
-      const selBox = document.querySelector('.selection-box');
-      if (width === '100%') {
-        selBox.style.width = '100%';
-      } else {
-        selBox.style.width = width;
+    }
+
+    // Scroll & highlight in iframe
+    function scrollToAndSelectSection(key) {
+      try {
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        const selector = sectionSelectors[key];
+        const element = doc.querySelector(selector);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          element.style.outline = '4px solid #10b981';
+          element.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.4)';
+          setTimeout(() => {
+            element.style.outline = '';
+            element.style.boxShadow = '';
+          }, 1500);
+        }
+      } catch(e) {
+        console.warn("Cannot interact with iframe DOM:", e);
       }
     }
 
-    function updateOverlaySize() {
-      // Re-adjust overlay width if needed
+    // Setup visual borders and edit buttons inside the iframe
+    function setupIframeEditing() {
+      try {
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        
+        // Inject custom CSS styling
+        const style = doc.createElement('style');
+        style.id = 'builder-styles';
+        style.innerHTML = `
+          .builder-section-highlight {
+            position: relative !important;
+            outline: 2px dashed rgba(16, 185, 129, 0.4) !important;
+            transition: all 0.2s ease-in-out;
+          }
+          .builder-section-highlight:hover {
+            outline: 3px solid #10b981 !important;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3) !important;
+          }
+          .builder-section-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #10b981;
+            color: #000;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+          }
+          .builder-section-btn:hover {
+            transform: scale(1.05);
+          }
+          .builder-section-highlight:hover .builder-section-btn {
+            display: flex;
+          }
+          .builder-add-divider {
+            height: 10px;
+            background: transparent;
+            position: relative;
+            margin: -5px 0;
+            z-index: 9999;
+            cursor: pointer;
+            transition: all 0.2s;
+          }
+          .builder-add-divider:hover {
+            height: 30px;
+            background: rgba(16, 185, 129, 0.15);
+            margin: -15px 0;
+          }
+          .builder-add-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 2px;
+            background: #10b981;
+            opacity: 0;
+            transition: 0.2s;
+            transform: translateY(-50%);
+          }
+          .builder-add-divider:hover .builder-add-line {
+            opacity: 1;
+          }
+          .builder-add-btn {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: #10b981;
+            color: #000;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+            opacity: 0;
+            transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+          }
+          .builder-add-divider:hover .builder-add-btn {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+          }
+        `;
+        doc.head.appendChild(style);
+
+        // Map section elements
+        Object.keys(sectionSelectors).forEach(key => {
+          const sel = sectionSelectors[key];
+          const el = doc.querySelector(sel);
+          if (el) {
+            el.classList.add('builder-section-highlight');
+            
+            const btn = doc.createElement('button');
+            btn.className = 'builder-section-btn';
+            btn.innerHTML = `<i class="ri-edit-2-line"></i> НАСТРОЙКИ СЕКЦИИ`;
+            btn.onclick = (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              // Call parent window function
+              window.parent.openSectionEditor(key);
+            };
+            el.appendChild(btn);
+          }
+        });
+
+        // Add section insert indicators between visible sections
+        const landingContent = doc.getElementById('landing-page-content') || doc.body;
+        const sections = Array.from(landingContent.children);
+        sections.forEach((sect, idx) => {
+          if (sect.tagName === 'SECTION' || sect.classList.contains('app-footer')) {
+            const div = doc.createElement('div');
+            div.className = 'builder-add-divider';
+            div.innerHTML = `
+              <div class="builder-add-line"></div>
+              <div class="builder-add-btn"><i class="ri-add-line"></i></div>
+            `;
+            div.onclick = (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              window.parent.openBlockLibraryModal(idx);
+            };
+            sect.parentNode.insertBefore(div, sect.nextSibling);
+          }
+        });
+
+      } catch(e) {
+        console.warn("Could not setup iframe elements (cross-origin or load timing issue):", e);
+      }
     }
 
-    function openHeroSettings() {
+    // Modal Control
+    function openSectionEditor(key) {
+      activeSection = key;
+      const sect = pageSections[key];
+      
+      document.getElementById('modal-section-title-display').innerText = sect.title;
       document.getElementById('settings-modal').classList.add('active');
+      
+      // Load tabs: if section supports media, show tab. Else default to text
+      const mediaTab = document.querySelectorAll('.mtab')[1];
+      if (sect.media) {
+        mediaTab.style.display = 'flex';
+      } else {
+        mediaTab.style.display = 'none';
+      }
+      
+      switchModalTab('text', document.querySelector('.mtab'));
+      renderTranslationFields();
+      
+      if (sect.media) {
+        // Load background values for media tab
+        try {
+          const doc = frame.contentDocument || frame.contentWindow.document;
+          const darkMaster = doc.querySelector('.hero-master-img.dark-only');
+          const lightMaster = doc.querySelector('.hero-master-img.light-only');
+          if (darkMaster) document.getElementById('media-url-input-1').value = darkMaster.getAttribute('src') || '';
+          if (lightMaster) document.getElementById('media-url-input-2').value = lightMaster.getAttribute('src') || '';
+          updateMediaPreview();
+        } catch(e) {}
+      }
     }
 
-    function closeHeroSettings() {
+    function closeSettings() {
       document.getElementById('settings-modal').classList.remove('active');
     }
 
-    function updatePreview(url) {
-      const box = document.getElementById('hero-img-preview');
+    function switchModalTab(tabId, btn) {
+      document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      
+      document.querySelectorAll('.tab-pane-content').forEach(pane => {
+        pane.style.display = 'none';
+      });
+      
+      const targetPane = document.getElementById('tab-' + tabId);
+      if (targetPane) {
+        targetPane.style.display = (tabId === 'media') ? 'flex' : 'block';
+      }
+    }
+
+    function switchLangTab(lang, btn) {
+      document.querySelectorAll('.ltab').forEach(l => l.classList.remove('active'));
+      btn.classList.add('active');
+      activeLang = lang;
+      
+      renderTranslationFields();
+    }
+
+    function renderTranslationFields() {
+      const container = document.getElementById('text-fields-container');
+      container.innerHTML = '';
+      
+      if (!activeSection) return;
+      const keys = pageSections[activeSection].keys;
+      
+      // Map 'KK' tab click to the 'KZ' key in our index.html translations dictionary
+      const internalLangKey = activeLang === 'KK' || activeLang === 'KZ' ? 'KZ' : activeLang;
+
+      if (!localTranslations[internalLangKey]) {
+        localTranslations[internalLangKey] = {};
+      }
+
+      keys.forEach(key => {
+        const originalVal = localTranslations[internalLangKey][key] || "";
+        const group = document.createElement('div');
+        group.className = 'field-group';
+        
+        const info = document.createElement('div');
+        info.className = 'field-info';
+        info.innerHTML = `
+          <span class="fm-label">${key.replace(/([A-Z])/g, ' $1').toUpperCase()}</span>
+          <span class="field-key">${key}</span>
+        `;
+        
+        let input;
+        if (originalVal.length > 60 || originalVal.includes('<br>') || originalVal.includes('<span')) {
+          input = document.createElement('textarea');
+          input.className = 'field-input field-textarea';
+        } else {
+          input = document.createElement('input');
+          input.type = 'text';
+          input.className = 'field-input';
+        }
+        
+        input.value = originalVal;
+        input.id = `input-key-${key}`;
+        input.oninput = () => {
+          localTranslations[internalLangKey][key] = input.value;
+        };
+        
+        group.appendChild(info);
+        group.appendChild(input);
+        container.appendChild(group);
+      });
+    }
+
+    // Media adjustments
+    function toggleMediaType(type) {
+      document.getElementById('media-type-image').classList.toggle('active', type === 'image');
+      document.getElementById('media-type-video').classList.toggle('active', type === 'video');
+      
+      if (type === 'video') {
+        document.getElementById('media-url-label-1').innerText = "Ссылка на фоновое видео (.mp4)";
+        document.getElementById('media-light-group').style.display = 'none';
+      } else {
+        document.getElementById('media-url-label-1').innerText = "Ссылка на темное изображение (Dark Master)";
+        document.getElementById('media-light-group').style.display = 'block';
+      }
+    }
+
+    function updateMediaPreview() {
+      const url = document.getElementById('media-url-input-1').value;
+      const box = document.getElementById('media-preview-box');
       if (url) {
         box.style.backgroundImage = `url('${url}')`;
         box.innerText = '';
@@ -464,57 +879,161 @@
       }
     }
 
-    function selectGalleryImg(url) {
-      document.getElementById('hero-bg-input').value = url;
-      updatePreview(url);
+    function selectGalleryImg(darkUrl, lightUrl) {
+      document.getElementById('media-url-input-1').value = darkUrl;
+      document.getElementById('media-url-input-2').value = lightUrl;
+      updateMediaPreview();
     }
 
-    function applyHeroChanges() {
-      const url = document.getElementById('hero-bg-input').value;
-      const iframe = document.getElementById('preview-frame');
+    function applySectionChanges() {
+      if (!activeSection) return;
       
-      // Live injection into the iframe if possible (same-origin works)
+      // 1. Inject values back into the iframe's global dictionaries
       try {
-        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-        // In index.html the new hero section uses class hero-container-consolidated or similar
-        const heroSection = iframeDoc.querySelector('.hero-left-new') || iframeDoc.querySelector('.hero-section');
-        if (heroSection) {
-           // For HubMaster, it's often a side image or full background depending on layout. 
-           // In index.html line 2542: ".hero-container-consolidated"
-           const imgElement = iframeDoc.querySelector('.hero-image-new');
-           if (imgElement) {
-               imgElement.src = url;
-           } else {
-               heroSection.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('${url}')`;
-               heroSection.style.backgroundSize = 'cover';
-               heroSection.style.backgroundPosition = 'center';
-           }
+        const internalLangKey = activeLang === 'KK' || activeLang === 'KZ' ? 'KZ' : activeLang;
+        
+        // Sync modified text values
+        Object.keys(localTranslations).forEach(lang => {
+          Object.keys(localTranslations[lang]).forEach(key => {
+            frame.contentWindow.translations[lang][key] = localTranslations[lang][key];
+          });
+        });
+
+        // 2. Trigger language switch in iframe to update DOM representation
+        if (typeof frame.contentWindow.switchLang === 'function') {
+          frame.contentWindow.switchLang(frame.contentWindow.currentLang || 'RU');
         }
+
+        // 3. Sync media values if section supports media
+        if (pageSections[activeSection].media) {
+          const doc = frame.contentDocument || frame.contentWindow.document;
+          const darkMaster = doc.querySelector('.hero-master-img.dark-only');
+          const lightMaster = doc.querySelector('.hero-master-img.light-only');
+          
+          const darkUrl = document.getElementById('media-url-input-1').value;
+          const lightUrl = document.getElementById('media-url-input-2').value;
+          
+          if (darkMaster && darkUrl) darkMaster.setAttribute('src', darkUrl);
+          if (lightMaster && lightUrl) lightMaster.setAttribute('src', lightUrl);
+        }
+
+        showToast('Изменения внесены', 'Изменения успешно применились в макете', 'ri-checkbox-circle-fill');
       } catch(e) {
-        console.warn("Cross-origin or iframe not fully loaded", e);
+        console.error("Failed to inject changes into live iframe context:", e);
       }
       
-      closeHeroSettings();
+      closeSettings();
     }
 
-    function publishChanges() {
+    // Mock section addition
+    function openBlockLibraryModal(index) {
+      showToast('Добавление блока', 'Выберите блок из левой библиотеки для добавления в позицию ' + index, 'ri-layout-masonry-line');
+    }
+
+    function addNewBlockMock(blockType) {
+      showToast('Добавлено', `Новый блок ${blockType.toUpperCase()} успешно вставлен в макет!`, 'ri-add-circle-line');
+      // Live append to iframe
+      try {
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        const content = doc.getElementById('landing-page-content') || doc.body;
+        
+        const sect = doc.createElement('section');
+        sect.className = 'new-added-block scroll-reveal active';
+        sect.style.padding = '80px 0';
+        sect.style.background = '#121318';
+        sect.style.borderTop = '1px solid #1f212a';
+        sect.innerHTML = `
+          <div class="max-width-wrap" style="text-align:center;">
+            <h2 style="font-size:32px; font-weight:800; color:#fff; margin-bottom:12px;">Новый блок ${blockType.toUpperCase()}</h2>
+            <p style="color:#94a3b8; font-size:14px;">Этот блок был добавлен в визуальном конструкторе.</p>
+          </div>
+        `;
+        content.insertBefore(sect, content.querySelector('.app-footer'));
+        setupIframeEditing();
+      } catch(e) {}
+    }
+
+    // Save/Publish Changes to Backend
+    async function publishChanges() {
       const btn = document.querySelector('.btn-publish');
       const originalHtml = btn.innerHTML;
-      btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> СОХРАНЕНИЕ...';
+      btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> PUBLISHING...';
+      btn.disabled = true;
+
+      try {
+        // Fetch raw HTML from server first
+        const rawResponse = await fetch('/' + activePage);
+        if (!rawResponse.ok) {
+          throw new Error('Could not fetch source code for ' + activePage);
+        }
+        let rawHtml = await rawResponse.text();
+
+        // Prepare translations string
+        const transString = `const translations = ${JSON.stringify(localTranslations, null, 2)};`;
+        const catTransString = `const catalogTranslations = ${JSON.stringify(localCatalogTranslations, null, 2)};`;
+
+        // Replace scripts
+        let updatedHtml = rawHtml;
+        updatedHtml = updatedHtml.replace(/const translations = \{[\s\S]*?\};/, transString);
+        updatedHtml = updatedHtml.replace(/const catalogTranslations = \{[\s\S]*?\};/, catTransString);
+
+        // If it's index.html or hubmaster.html, also sync changed hero background images if present
+        if (pageSections.hero) {
+          const darkUrl = document.getElementById('media-url-input-1').value;
+          const lightUrl = document.getElementById('media-url-input-2').value;
+          
+          if (darkUrl) {
+            updatedHtml = updatedHtml.replace(/src="[^"]+hero_master.webp[^"]*"/g, `src="${darkUrl}"`);
+          }
+          if (lightUrl) {
+            updatedHtml = updatedHtml.replace(/src="[^"]+hero_master_day.webp[^"]*"/g, `src="${lightUrl}"`);
+          }
+        }
+
+        // Send to backend
+        const saveResponse = await fetch('/api/admin/save-page-html', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + adminToken
+          },
+          body: JSON.stringify({
+            page: activePage,
+            html: updatedHtml
+          })
+        });
+
+        const result = await saveResponse.json();
+        if (result.status === 'success') {
+          showNotification('Публикация завершена', 'Все изменения были успешно сохранены на сервере!');
+        } else {
+          throw new Error(result.message || 'Unknown save error');
+        }
+
+      } catch(e) {
+        console.error("Error publishing changes:", e);
+        alert('Ошибка сохранения изменений: ' + e.message);
+      } finally {
+        btn.innerHTML = originalHtml;
+        btn.disabled = false;
+      }
+    }
+
+    // Helper notifications
+    function showToast(title, desc, iconClass = 'ri-checkbox-circle-fill') {
+      const notify = document.getElementById('publish-notify');
+      document.getElementById('notify-title').innerText = title;
+      document.getElementById('notify-desc').innerText = desc;
+      notify.querySelector('.pn-icon').innerHTML = `<i class="${iconClass}"></i>`;
       
+      notify.classList.add('show');
       setTimeout(() => {
-        btn.innerHTML = '<i class="ri-check-line"></i> УСПЕШНО';
-        btn.style.background = '#059669';
-        
-        const notify = document.getElementById('publish-notify');
-        notify.classList.add('show');
-        
-        setTimeout(() => {
-          btn.innerHTML = originalHtml;
-          btn.style.background = 'var(--primary)';
-          notify.classList.remove('show');
-        }, 3000);
-      }, 800);
+        notify.classList.remove('show');
+      }, 3000);
+    }
+
+    function showNotification(title, desc) {
+      showToast(title, desc, 'ri-check-line');
     }
   </script>
 </body>

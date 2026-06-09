@@ -983,12 +983,12 @@
     let catalogSortOrder = 'default';
 
     let catalogViewMode = 'list'; // 'list' or 'card'
-    function setCatalogViewMode(mode) {
+    window.setCatalogViewMode = function(mode) {
       catalogViewMode = mode;
       document.getElementById('btn-view-list').classList.toggle('active-view', mode === 'list');
       document.getElementById('btn-view-card').classList.toggle('active-view', mode === 'card');
       renderCatalogTabOnlyTable();
-    }
+    };
 
 
     window.switchCatalogSubTab = function(index) {
@@ -1363,78 +1363,7 @@
             } else {
               tableHTML += `
                 <tr>
-                  <td style="font-family: monospace; color: var(--text);">${s.id}</td>
-                  <td style="color: var(--text-muted);">${categoryLabel}</td>
-                  <td style="font-weight: 600;">${s.title}</td>
-                  <td>${s.price ? (s.price + ' ₸') : '<span style="color:#555">—</span>'}</td>
-                  <td style="text-align: right;">
-                    <div class="td-actions" style="justify-content: flex-end;">
-                      <button class="btn-icon blue" onclick="openCatalogEditModal('subcategory', '${s.categoryId}:${originalIndex}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
-                      <button class="btn-icon red" onclick="deleteCatalogItem('subcategory', '${s.categoryId}:${originalIndex}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-                    </div>
-                  </td>
-                </tr>
-              `;
-            }
-          });
-        } else {
-          if (catalogViewMode === 'list') tableHTML += `<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding:30px;">Услуги не найдены.</td></tr>`;
-          else tableHTML += `<div style="text-align:center; grid-column: 1/-1; padding:30px; color: var(--text-muted);">Услуги не найдены.</div>`;
-        }
-
-        if (catalogViewMode === 'card') {
-          tableHTML += `</div>`;
-        } else {
-          tableHTML += `</tbody></table>`;
-        }
-      }
-
-      tableContainer.innerHTML = tableHTML;
-    }
-
-    function getTabLabel(tabId) {
-      if (!catalogData.tabs) return tabId;
-      const tab = catalogData.tabs.find(t => t.id === tabId);
-      return tab ? tab.label : tabId;
-    }
-
-    function getCategoryLabel(catId) {
-      if (!catalogData.categories) return catId;
-      const cat = catalogData.categories.find(c => c.id === catId);
-      return cat ? cat.title : catId;
-    }
-
-    window.filterSubCatOptions = function(query) {
-      const select = document.getElementById('sub-cat-select');
-      if (!select) return;
-      const lower = query.toLowerCase();
-      let optionsHTML = '';
-      const categories = catalogData.categories || [];
-      const filteredAndSorted = categories
-        .filter(c => c.title.toLowerCase().includes(lower) || c.id.toLowerCase().includes(lower))
-        .sort((a, b) => a.title.localeCompare(b.title));
-      filteredAndSorted.forEach(c => {
-        optionsHTML += `<option value="${c.id}">${c.title}</option>`;
-      });
-      select.innerHTML = optionsHTML;
-    };
-
-    window.filterCatTabOptions = function(query) {
-      const select = document.getElementById('cat-tab-select');
-      if (!select) return;
-      const lower = query.toLowerCase();
-      let optionsHTML = '';
-      const tabs = catalogData.tabs || [];
-      const filteredAndSorted = tabs
-        .filter(t => t.label.toLowerCase().includes(lower) || t.id.toLowerCase().includes(lower))
-        .sort((a, b) => a.label.localeCompare(b.label));
-      filteredAndSorted.forEach(t => {
-        optionsHTML += `<option value="${t.id}">${t.label}</option>`;
-      });
-      select.innerHTML = optionsHTML;
-    };
-
-    function openCatalogEditModal(type, key) {
+                  <td style="font-family: monos    window.openCatalogEditModal = function(type, key) {
       editingItemType = type;
       editingItemKey = key;
 
@@ -1453,7 +1382,7 @@
             <input type="text" id="tab-id" class="admin-form-input" value="${tabData.id}" ${key !== null ? 'disabled' : ''}>
           </div>
           <div class="admin-form-group">
-            <label>Название раздела</label>
+            <label>Название раздела (RU)</label>
             <input type="text" id="tab-label" class="admin-form-input" value="${tabData.label}">
           </div>
         `;
@@ -1482,7 +1411,7 @@
             </select>
           </div>
           <div class="admin-form-group">
-            <label>Название категории</label>
+            <label>Название категории (RU)</label>
             <input type="text" id="cat-title" class="admin-form-input" value="${catData.title}">
           </div>
           <div class="admin-form-group">
@@ -1527,7 +1456,7 @@
           </div>
           
           <div class="admin-form-group">
-            <label><i class="ri-text"></i> Название услуги</label>
+            <label><i class="ri-text"></i> Название услуги (RU)</label>
             <input type="text" id="sub-title" class="admin-form-input" value="${subData.title}">
           </div>
           
@@ -1539,8 +1468,8 @@
                 <input type="text" id="detail-price" class="admin-form-input" placeholder="от 3 000 ₸" value="${detailData.price || ''}">
               </div>
               <div class="admin-form-group" style="margin-bottom: 0;">
-                <label>Срок работы</label>
-                <input type="text" id="detail-time" class="admin-form-input" placeholder="Срок: 1 час" value="${detailData.time || ''}">
+                <label>Срок работы / Выезд</label>
+                <input type="text" id="detail-time" class="admin-form-input" placeholder="Выезд: 45 мин" value="${detailData.time || ''}">
               </div>
               <div class="admin-form-group" style="margin-bottom: 0;">
                 <label>Гарантия</label>
@@ -1549,29 +1478,40 @@
             </div>
           </div>
           
-          <div style="display: grid; grid-template-columns: 1fr 160px; gap: 16px; margin-bottom: 16px;">
+          <div style="display: grid; grid-template-columns: 1fr 180px; gap: 16px; margin-bottom: 16px;">
             <div class="admin-form-group" style="margin-bottom: 0;">
               <label><i class="ri-image-add-line"></i> URL фото услуги</label>
               <input type="text" id="detail-image" class="admin-form-input" placeholder="https://..." value="${detailData.image || ''}" oninput="document.getElementById('cat-img-prev').style.backgroundImage = 'url(' + this.value + ')'">
+              
+              <!-- Image Presets -->
+              <div style="margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap;">
+                <span style="font-size: 10px; color: var(--text-muted); align-self: center; margin-right: 4px;">Быстрый выбор:</span>
+                <button type="button" class="admin-form-btn-sm" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Ремонт техники</button>
+                <button type="button" class="admin-form-btn-sm" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Уборка</button>
+                <button type="button" class="admin-form-btn-sm" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Электрика</button>
+                <button type="button" class="admin-form-btn-sm" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Сантехника</button>
+                <button type="button" class="admin-form-btn-sm" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Мебель</button>
+              </div>
+
               <div style="margin-top: 12px;">
-                <label><i class="ri-align-left"></i> Описание услуги</label>
-                <textarea id="detail-desc" class="admin-form-textarea" rows="4" placeholder="Подробное описание услуги...">${detailData.desc || ''}</textarea>
+                <label><i class="ri-align-left"></i> Описание услуги (RU)</label>
+                <textarea id="detail-desc" class="admin-form-textarea" rows="3" placeholder="Подробное описание услуги...">${detailData.desc || ''}</textarea>
               </div>
             </div>
             <div>
               <label style="font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px;">Предпросмотр фото</label>
-              <div id="cat-img-prev" style="width: 100%; height: 140px; border-radius: 8px; border: 1px dashed var(--border); background-size: cover; background-position: center; background-image: url('${detailData.image || ''}'); background-color: rgba(0,0,0,0.3);"></div>
+              <div id="cat-img-prev" style="width: 100%; height: 130px; border-radius: 8px; border: 1px dashed var(--border); background-size: cover; background-position: center; background-image: url('${detailData.image || ''}'); background-color: rgba(0,0,0,0.3);"></div>
             </div>
           </div>
         `;
       }
-    }
+    };
 
-    function closeCatalogEditModal() {
+    window.closeCatalogEditModal = function() {
       document.getElementById('catalog-edit-modal').classList.remove('active');
-    }
+    };
 
-    function saveCatalogItem() {
+    window.saveCatalogItem = function() {
       if (editingItemType === 'tab') {
         const id = document.getElementById('tab-id').value.trim();
         const label = document.getElementById('tab-label').value.trim();
@@ -1633,11 +1573,11 @@
         catalogData.details[id] = { title, desc, price, time, warr, image };
       }
 
-      closeCatalogEditModal();
+      window.closeCatalogEditModal();
       renderCatalogTab();
-    }
+    };
 
-    function deleteCatalogItem(type, key) {
+    window.deleteCatalogItem = function(type, key) {
       if (!confirm('Вы уверены, что хотите удалить этот элемент?')) return;
 
       if (type === 'tab') {
@@ -1656,15 +1596,17 @@
         }
       }
       renderCatalogTab();
-    }
+    };
 
-    async function saveCatalogToServer() {
+    window.saveCatalogToServer = async function() {
       const token = localStorage.getItem('admin_token');
-      const btn = document.querySelector('#tab-catalog .action-btns button:nth-child(3)');
+      const btn = document.querySelector('#tab-catalog .action-btns button:nth-child(3)') || document.querySelector('.btn-primary[onclick*="saveCatalogToServer"]');
       
-      const originalText = btn.innerHTML;
-      btn.innerHTML = `Сохранение...`;
-      btn.disabled = true;
+      const originalText = btn ? btn.innerHTML : 'Сохранить';
+      if (btn) {
+        btn.innerHTML = `Сохранение...`;
+        btn.disabled = true;
+      }
 
       try {
         const res = await fetch(API_BASE + '/api/catalog', {
@@ -1685,11 +1627,13 @@
         console.error(e);
         alert('Сетевая ошибка при соединении с сервером');
       } finally {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
+        if (btn) {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        }
         renderCatalogTab();
       }
-    }
+
 
     const defaultCatalogFallback = {
       "tabs": [
