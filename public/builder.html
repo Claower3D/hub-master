@@ -163,6 +163,192 @@
     .pn-icon { width: 32px; height: 32px; background: rgba(16, 185, 129, 0.2); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
     .pn-title { font-weight: 700; font-size: 14px; margin-bottom: 2px; color: #fff; }
     .pn-desc { font-size: 12px; color: var(--text-muted); }
+
+    /* INLINE QUICK EDIT PANEL (slides from right) */
+    .quick-edit-panel {
+      position: fixed;
+      top: 60px;
+      right: -400px;
+      width: 380px;
+      height: calc(100vh - 60px);
+      background: var(--bg-panel);
+      border-left: 1px solid var(--border);
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: -8px 0 30px rgba(0,0,0,0.4);
+      overflow: hidden;
+    }
+    .quick-edit-panel.open { right: 0; }
+    .qep-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .qep-title {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .qep-close {
+      background: rgba(255,255,255,0.05);
+      border: none;
+      color: var(--text-muted);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 16px;
+    }
+    .qep-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .qep-badge {
+      font-size: 9px;
+      font-weight: 800;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: var(--primary);
+      padding: 2px 7px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .qep-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .qep-body::-webkit-scrollbar { width: 5px; }
+    .qep-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .qep-element-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 8px 12px;
+      background: rgba(16, 185, 129, 0.06);
+      border-radius: 6px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .qep-element-name i { color: var(--primary); }
+    .qep-lang-row {
+      display: flex;
+      gap: 6px;
+    }
+    .qep-ltab {
+      flex: 1;
+      text-align: center;
+      padding: 7px 0;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .qep-ltab.active { background: rgba(16, 185, 129, 0.1); border-color: var(--primary); color: var(--primary); }
+    .qep-field-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+    }
+    .qep-input {
+      width: 100%;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 10px 13px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-family: var(--font-body);
+      outline: none;
+      transition: 0.2s;
+      resize: vertical;
+    }
+    .qep-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15); }
+    .qep-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+      background: rgba(0,0,0,0.15);
+    }
+    .qep-btn-apply {
+      flex: 1;
+      background: var(--primary);
+      color: #000;
+      border: none;
+      padding: 11px 0;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+    .qep-btn-apply:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    .qep-btn-all-langs {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: var(--primary);
+      padding: 11px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 11px;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .qep-btn-all-langs:hover { background: rgba(16, 185, 129, 0.2); }
+    .qep-all-lang-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .qep-info-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(16, 185, 129, 0.04);
+      border-radius: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .qep-info-row i { color: var(--primary); }
   </style>
 </head>
 <body>
@@ -421,12 +607,118 @@
     </div>
   </div>
 
+  <!-- CATALOG TRANSLATION MINI MODAL -->
+  <div class="modal-overlay" id="catalog-trans-modal">
+    <div class="modal-card" style="max-width:560px; width:100%;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span class="modal-sys-badge">КАТАЛОГ</span>
+          РЕДАКТИРОВАНИЕ ПЕРЕВОДА
+        </div>
+        <button class="modal-close" onclick="document.getElementById('catalog-trans-modal').classList.remove('active')"><i class="ri-close-line"></i></button>
+      </div>
+      <div class="modal-body" style="flex-direction:column; gap:16px;">
+        <div class="field-group">
+          <div class="field-info">
+            <span class="fm-label">Русский (RU)</span>
+            <span class="field-key">ru</span>
+          </div>
+          <input type="text" id="cat-trans-ru" class="field-input" placeholder="Название на русском">
+        </div>
+        <div class="field-group">
+          <div class="field-info">
+            <span class="fm-label">Казахский (KZ)</span>
+            <span class="field-key">kz</span>
+          </div>
+          <input type="text" id="cat-trans-kz" class="field-input" placeholder="Атауы қазақ тілінде">
+        </div>
+        <div class="field-group">
+          <div class="field-info">
+            <span class="fm-label">Английский (EN)</span>
+            <span class="field-key">en</span>
+          </div>
+          <input type="text" id="cat-trans-en" class="field-input" placeholder="Name in English">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-close" onclick="document.getElementById('catalog-trans-modal').classList.remove('active')">Отмена</button>
+        <button class="btn-save" id="btn-save-cat-trans">Сохранить перевод</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUILDER CONTROLS OVERLAY - injected by JS into iframe, rendered here for reference -->
+
+  <!-- QUICK EDIT PANEL (slides from right on element click) -->
+  <div class="quick-edit-panel" id="quick-edit-panel">
+    <div class="qep-header">
+      <div class="qep-title">
+        <i class="ri-edit-2-line"></i>
+        Редактирование элемента
+        <span class="qep-badge" id="qep-type-badge">ТЕКСТ</span>
+      </div>
+      <button class="qep-close" onclick="closeQuickEdit()"><i class="ri-close-line"></i></button>
+    </div>
+    <div class="qep-body">
+      <div class="qep-element-name" id="qep-element-name">
+        <i class="ri-cursor-line"></i>
+        <span id="qep-element-tag">Выбранный элемент</span>
+      </div>
+
+      <div class="qep-info-row">
+        <i class="ri-information-line"></i>
+        Нажмите «Применить» или Enter для применения изменений в реальном времени.
+      </div>
+
+      <!-- Language Tabs -->
+      <div class="qep-lang-row">
+        <div class="qep-ltab active" id="qepl-ru" onclick="switchQepLang('RU')">🇷🇺 RU</div>
+        <div class="qep-ltab" id="qepl-kz" onclick="switchQepLang('KZ')">🇰🇿 KZ</div>
+        <div class="qep-ltab" id="qepl-en" onclick="switchQepLang('EN')">🇬🇧 EN</div>
+      </div>
+
+      <!-- Current Language Input -->
+      <div>
+        <div class="qep-field-label" id="qep-lang-label">Русский (RU)</div>
+        <textarea class="qep-input" id="qep-main-input" rows="4" placeholder="Введите текст..."></textarea>
+      </div>
+
+      <!-- All Languages at once grid -->
+      <div id="qep-all-langs-section" style="display:none;">
+        <div class="qep-field-label" style="margin-bottom:12px;">Все языки сразу</div>
+        <div class="qep-all-lang-grid">
+          <div>
+            <div class="qep-field-label">🇷🇺 Русский</div>
+            <textarea class="qep-input" id="qep-ru-input" rows="2" placeholder="Русский текст..."></textarea>
+          </div>
+          <div>
+            <div class="qep-field-label">🇰🇿 Казахский</div>
+            <textarea class="qep-input" id="qep-kz-input" rows="2" placeholder="Қазақша мәтін..."></textarea>
+          </div>
+          <div>
+            <div class="qep-field-label">🇬🇧 English</div>
+            <textarea class="qep-input" id="qep-en-input" rows="2" placeholder="English text..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="qep-footer">
+      <button class="qep-btn-apply" onclick="applyQuickEdit()">
+        <i class="ri-check-line"></i> ПРИМЕНИТЬ
+      </button>
+      <button class="qep-btn-all-langs" id="qep-toggle-all-langs" onclick="toggleQepAllLangs()">
+        <i class="ri-translate-2"></i> Все языки
+      </button>
+    </div>
+  </div>
+
   <script>
     // Security check: Redirect if no admin token
     const adminToken = localStorage.getItem('admin_token');
     if (!adminToken) {
       window.location.href = '/admin.html';
     }
+
 
     // Config Mapping
     const sectionSelectors = {
@@ -517,6 +809,113 @@
     const frame = document.getElementById('preview-frame');
     const sectionsContainer = document.getElementById('sections-list-container');
 
+    // Helpers for HTML stripping and finding translation keys
+    function stripHtml(html) {
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      return doc.body.textContent || "";
+    }
+
+    window.findTranslationKey = function(text) {
+      if (!text) return null;
+      const t = text.trim().replace(/\s+/g, ' ');
+      
+      // Look in translations
+      for (const lang of ['RU', 'KZ', 'EN']) {
+        if (localTranslations[lang]) {
+          for (const key of Object.keys(localTranslations[lang])) {
+            const val = localTranslations[lang][key];
+            if (val) {
+              const cleanVal = stripHtml(val).trim().replace(/\s+/g, ' ');
+              if (cleanVal === t) {
+                return { type: 'static', key: key };
+              }
+            }
+          }
+        }
+      }
+      
+      // Look in catalogTranslations
+      if (localCatalogTranslations) {
+        for (const ruKey of Object.keys(localCatalogTranslations)) {
+          if (ruKey.trim().replace(/\s+/g, ' ') === t) {
+            return { type: 'catalog', key: ruKey };
+          }
+          const kzVal = localCatalogTranslations[ruKey].KZ;
+          const enVal = localCatalogTranslations[ruKey].EN;
+          if (kzVal && kzVal.trim().replace(/\s+/g, ' ') === t) {
+            return { type: 'catalog', key: ruKey };
+          }
+          if (enVal && enVal.trim().replace(/\s+/g, ' ') === t) {
+            return { type: 'catalog', key: ruKey };
+          }
+        }
+      }
+      return null;
+    };
+
+    window.openInlineEditor = function(type, key) {
+      if (type === 'static') {
+        let foundSection = null;
+        for (const sKey of Object.keys(pageSections)) {
+          if (pageSections[sKey].keys.includes(key)) {
+            foundSection = sKey;
+            break;
+          }
+        }
+        if (foundSection) {
+          openSectionEditor(foundSection);
+          setTimeout(() => {
+            const input = document.getElementById(`input-key-${key}`);
+            if (input) {
+              input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              input.focus();
+              input.style.borderColor = 'var(--primary)';
+              input.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.5)';
+              setTimeout(() => {
+                input.style.borderColor = '';
+                input.style.boxShadow = '';
+              }, 2000);
+            }
+          }, 350);
+        } else {
+          showToast('Поиск поля', `Поле ${key} найдено, но не привязано к секциям.`, 'ri-error-warning-line');
+        }
+      } else if (type === 'catalog') {
+        window.openCatalogTranslationEditor(key);
+      }
+    };
+
+    window.openCatalogTranslationEditor = function(ruKey) {
+      const item = localCatalogTranslations[ruKey] || { KZ: '', EN: '' };
+      const modal = document.getElementById('catalog-trans-modal');
+      modal.classList.add('active');
+      
+      document.getElementById('cat-trans-ru').value = ruKey;
+      document.getElementById('cat-trans-kz').value = item.KZ || '';
+      document.getElementById('cat-trans-en').value = item.EN || '';
+      
+      document.getElementById('btn-save-cat-trans').onclick = () => {
+        const newRu = document.getElementById('cat-trans-ru').value.trim();
+        const newKz = document.getElementById('cat-trans-kz').value.trim();
+        const newEn = document.getElementById('cat-trans-en').value.trim();
+        
+        if (!newRu) return;
+        
+        if (newRu !== ruKey) {
+          delete localCatalogTranslations[ruKey];
+        }
+        localCatalogTranslations[newRu] = { KZ: newKz, EN: newEn };
+        
+        frame.contentWindow.catalogTranslations = localCatalogTranslations;
+        if (typeof frame.contentWindow.switchLang === 'function') {
+          frame.contentWindow.switchLang(frame.contentWindow.currentLang || 'RU');
+        }
+        
+        modal.classList.remove('active');
+        showToast('Сохранено', 'Перевод каталога успешно обновлен!', 'ri-checkbox-circle-fill');
+      };
+    };
+
     // On Load
     window.addEventListener('DOMContentLoaded', () => {
       renderSectionsList();
@@ -561,10 +960,12 @@
       Object.keys(pageSections).forEach((key, index) => {
         const item = items[index];
         const name = pageSections[key].title.toLowerCase();
-        if (name.includes(q)) {
-          item.style.display = 'flex';
-        } else {
-          item.style.display = 'none';
+        if (item) {
+          if (name.includes(q)) {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
         }
       });
     }
@@ -582,7 +983,6 @@
       document.getElementById('current-width').innerText = width === '100%' ? window.innerWidth : parseInt(width);
     }
 
-    // Scroll & highlight in iframe
     function scrollToAndSelectSection(key) {
       try {
         const doc = frame.contentDocument || frame.contentWindow.document;
@@ -601,8 +1001,6 @@
         console.warn("Cannot interact with iframe DOM:", e);
       }
     }
-
-    // Setup visual borders and edit buttons inside the iframe
     function setupIframeEditing() {
       try {
         const doc = frame.contentDocument || frame.contentWindow.document;
@@ -699,6 +1097,18 @@
             opacity: 1;
             transform: translate(-50%, -50%) scale(1);
           }
+
+          /* INLINE EDITABLE ELEMENTS */
+          .builder-inline-editable {
+            outline: 1px dashed rgba(16, 185, 129, 0.45) !important;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer !important;
+          }
+          .builder-inline-editable:hover {
+            outline: 2px solid #10b981 !important;
+            background: rgba(16, 185, 129, 0.08) !important;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.2) !important;
+          }
         `;
         doc.head.appendChild(style);
 
@@ -721,6 +1131,35 @@
             el.appendChild(btn);
           }
         });
+
+        // Tag all text-containing elements for inline translation edits
+        const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author');
+        textElements.forEach(el => {
+          if (el.children.length === 0 || (el.children.length === 1 && el.firstElementChild.tagName === 'SPAN')) {
+            const text = el.innerText ? el.innerText.trim() : "";
+            if (text) {
+              const match = window.parent.findTranslationKey(text);
+              if (match) {
+                el.classList.add('builder-inline-editable');
+                el.setAttribute('data-trans-type', match.type);
+                el.setAttribute('data-trans-key', match.key);
+              }
+            }
+          }
+        });
+
+        // Intercept clicks to load editor
+        doc.addEventListener('click', (e) => {
+          const editable = e.target.closest('.builder-inline-editable');
+          if (editable) {
+            e.preventDefault();
+            e.stopPropagation();
+            const type = editable.getAttribute('data-trans-type');
+            const key = editable.getAttribute('data-trans-key');
+            const tag = editable.tagName || 'ELEMENT';
+            window.parent.openInlineEditor(type, key, tag);
+          }
+        }, true);
 
         // Add section insert indicators between visible sections
         const landingContent = doc.getElementById('landing-page-content') || doc.body;
@@ -1035,6 +1474,169 @@
     function showNotification(title, desc) {
       showToast(title, desc, 'ri-check-line');
     }
+
+    // ========================================
+    // QUICK EDIT PANEL (QEP) Logic
+    // ========================================
+    let qepState = {
+      transType: null,   // 'static' | 'catalog'
+      transKey: null,    // translation key
+      activeQepLang: 'RU',
+      showAllLangs: false,
+      catalogItem: null  // { ruKey, kzVal, enVal }
+    };
+
+    const langLabels = {
+      RU: '🇷🇺 Русский (RU)',
+      KZ: '🇰🇿 Казахский (KZ)',
+      EN: '🇬🇧 English (EN)'
+    };
+
+    window.openQuickEdit = function(transType, transKey, elementTagName, elementText) {
+      const panel = document.getElementById('quick-edit-panel');
+      qepState.transType = transType;
+      qepState.transKey = transKey;
+      qepState.activeQepLang = 'RU';
+      qepState.showAllLangs = false;
+
+      // Badge
+      document.getElementById('qep-type-badge').innerText = transType === 'catalog' ? 'КАТАЛОГ' : 'ТЕКСТ';
+      document.getElementById('qep-element-tag').innerText = `<${elementTagName.toLowerCase()}> → ${transKey}`;
+
+      // Fill inputs
+      if (transType === 'static') {
+        const ruVal = localTranslations.RU ? (localTranslations.RU[transKey] || '') : '';
+        const kzVal = localTranslations.KZ ? (localTranslations.KZ[transKey] || '') : '';
+        const enVal = localTranslations.EN ? (localTranslations.EN[transKey] || '') : '';
+        document.getElementById('qep-main-input').value = ruVal;
+        document.getElementById('qep-ru-input').value = ruVal;
+        document.getElementById('qep-kz-input').value = kzVal;
+        document.getElementById('qep-en-input').value = enVal;
+      } else if (transType === 'catalog') {
+        const item = localCatalogTranslations[transKey] || { KZ: '', EN: '' };
+        document.getElementById('qep-main-input').value = transKey;
+        document.getElementById('qep-ru-input').value = transKey;
+        document.getElementById('qep-kz-input').value = item.KZ || '';
+        document.getElementById('qep-en-input').value = item.EN || '';
+      }
+
+      // Reset lang tabs
+      switchQepLang('RU');
+      document.getElementById('qep-all-langs-section').style.display = 'none';
+
+      panel.classList.add('open');
+    };
+
+    function closeQuickEdit() {
+      document.getElementById('quick-edit-panel').classList.remove('open');
+    }
+
+    function switchQepLang(lang) {
+      qepState.activeQepLang = lang;
+      ['RU', 'KZ', 'EN'].forEach(l => {
+        document.getElementById(`qepl-${l.toLowerCase()}`).classList.toggle('active', l === lang);
+      });
+      document.getElementById('qep-lang-label').innerText = langLabels[lang];
+
+      // Sync current main input with the correct value
+      const { transType, transKey } = qepState;
+      let val = '';
+      if (transType === 'static') {
+        const internalLang = lang === 'KZ' ? 'KZ' : lang;
+        val = localTranslations[internalLang] ? (localTranslations[internalLang][transKey] || '') : '';
+      } else if (transType === 'catalog') {
+        if (lang === 'RU') {
+          val = transKey;
+        } else {
+          const item = localCatalogTranslations[transKey] || {};
+          val = item[lang] || '';
+        }
+      }
+      document.getElementById('qep-main-input').value = val;
+    }
+
+    function toggleQepAllLangs() {
+      qepState.showAllLangs = !qepState.showAllLangs;
+      const section = document.getElementById('qep-all-langs-section');
+      const btn = document.getElementById('qep-toggle-all-langs');
+      section.style.display = qepState.showAllLangs ? 'block' : 'none';
+      btn.style.background = qepState.showAllLangs ? 'rgba(16, 185, 129, 0.25)' : '';
+    }
+
+    function applyQuickEdit() {
+      const { transType, transKey, activeQepLang, showAllLangs } = qepState;
+      if (!transType || !transKey) return;
+
+      if (transType === 'static') {
+        if (showAllLangs) {
+          // Apply all 3 languages
+          const ruVal = document.getElementById('qep-ru-input').value;
+          const kzVal = document.getElementById('qep-kz-input').value;
+          const enVal = document.getElementById('qep-en-input').value;
+
+          if (!localTranslations.RU) localTranslations.RU = {};
+          if (!localTranslations.KZ) localTranslations.KZ = {};
+          if (!localTranslations.EN) localTranslations.EN = {};
+
+          localTranslations.RU[transKey] = ruVal;
+          localTranslations.KZ[transKey] = kzVal;
+          localTranslations.EN[transKey] = enVal;
+        } else {
+          const val = document.getElementById('qep-main-input').value;
+          if (!localTranslations[activeQepLang]) localTranslations[activeQepLang] = {};
+          localTranslations[activeQepLang][transKey] = val;
+        }
+
+        // Inject into iframe and refresh language
+        try {
+          Object.keys(localTranslations).forEach(lang => {
+            Object.keys(localTranslations[lang]).forEach(k => {
+              frame.contentWindow.translations[lang][k] = localTranslations[lang][k];
+            });
+          });
+          if (typeof frame.contentWindow.switchLang === 'function') {
+            frame.contentWindow.switchLang(frame.contentWindow.currentLang || 'RU');
+          }
+          showToast('Применено!', `"${transKey}" обновлено на ${activeQepLang}`, 'ri-check-double-line');
+        } catch(e) {
+          console.error('Failed to apply inline edit:', e);
+        }
+
+      } else if (transType === 'catalog') {
+        const ruVal = showAllLangs 
+          ? document.getElementById('qep-ru-input').value
+          : (activeQepLang === 'RU' ? document.getElementById('qep-main-input').value : transKey);
+        const kzVal = showAllLangs 
+          ? document.getElementById('qep-kz-input').value
+          : (activeQepLang === 'KZ' ? document.getElementById('qep-main-input').value : (localCatalogTranslations[transKey] || {}).KZ || '');
+        const enVal = showAllLangs 
+          ? document.getElementById('qep-en-input').value
+          : (activeQepLang === 'EN' ? document.getElementById('qep-main-input').value : (localCatalogTranslations[transKey] || {}).EN || '');
+
+        if (ruVal !== transKey) {
+          delete localCatalogTranslations[transKey];
+        }
+        localCatalogTranslations[ruVal] = { KZ: kzVal, EN: enVal };
+
+        try {
+          frame.contentWindow.catalogTranslations = localCatalogTranslations;
+          if (typeof frame.contentWindow.switchLang === 'function') {
+            frame.contentWindow.switchLang(frame.contentWindow.currentLang || 'RU');
+          }
+          showToast('Применено!', `Перевод каталога "${transKey}" обновлён`, 'ri-check-double-line');
+        } catch(e) {
+          console.error('Catalog apply failed:', e);
+        }
+
+        // Re-tag elements after catalog translation update
+        setTimeout(setupIframeEditing, 600);
+      }
+    }
+
+    // Override openInlineEditor to use the new Quick Edit Panel
+    window.openInlineEditor = function(type, key, elementTagName) {
+      openQuickEdit(type, key, elementTagName || 'element', key);
+    };
   </script>
 </body>
 </html>
