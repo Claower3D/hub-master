@@ -1363,7 +1363,36 @@
             } else {
               tableHTML += `
                 <tr>
-                  <td style="font-family: monos    window.openCatalogEditModal = function(type, key) {
+                  <td style="font-family: monospace; color: var(--text);">${s.id}</td>
+                  <td style="color: var(--text-muted);">${categoryLabel}</td>
+                  <td style="font-weight: 600;">${s.title}</td>
+                  <td style="color:#10b981; font-weight:700;">${(s.price || detailData && detailData.price) ? ((s.price || detailData.price) + ' ₸') : '—'}</td>
+                  <td style="text-align: right;">
+                    <div class="td-actions" style="justify-content: flex-end;">
+                      <button class="btn-icon blue" onclick="openCatalogEditModal('subcategory', '${s.categoryId}:${originalIndex}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
+                      <button class="btn-icon red" onclick="deleteCatalogItem('subcategory', '${s.categoryId}:${originalIndex}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }
+          });
+        } else {
+          if (catalogViewMode === 'list') tableHTML += `<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding:30px;">Услуги не найдены.</td></tr>`;
+          else tableHTML += `<div style="text-align:center; grid-column: 1/-1; padding:30px; color: var(--text-muted);">Услуги не найдены.</div>`;
+        }
+
+        if (catalogViewMode === 'card') {
+          tableHTML += `</div>`;
+        } else {
+          tableHTML += `</tbody></table>`;
+        }
+      }
+
+      document.getElementById('catalog-table-container').innerHTML = tableHTML;
+    }
+
+    window.openCatalogEditModal = function(type, key) {
       editingItemType = type;
       editingItemKey = key;
 
@@ -1483,14 +1512,13 @@
               <label><i class="ri-image-add-line"></i> URL фото услуги</label>
               <input type="text" id="detail-image" class="admin-form-input" placeholder="https://..." value="${detailData.image || ''}" oninput="document.getElementById('cat-img-prev').style.backgroundImage = 'url(' + this.value + ')'">
               
-              <!-- Image Presets -->
               <div style="margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap;">
                 <span style="font-size: 10px; color: var(--text-muted); align-self: center; margin-right: 4px;">Быстрый выбор:</span>
-                <button type="button" class="admin-form-btn-sm" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Ремонт техники</button>
-                <button type="button" class="admin-form-btn-sm" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Уборка</button>
-                <button type="button" class="admin-form-btn-sm" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Электрика</button>
-                <button type="button" class="admin-form-btn-sm" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Сантехника</button>
-                <button type="button" class="admin-form-btn-sm" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Мебель</button>
+                <button type="button" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Ремонт техники</button>
+                <button type="button" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Уборка</button>
+                <button type="button" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Электрика</button>
+                <button type="button" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Сантехника</button>
+                <button type="button" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Мебель</button>
               </div>
 
               <div style="margin-top: 12px;">
