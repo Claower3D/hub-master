@@ -9705,9 +9705,12 @@
             subItems.forEach(sub => {
               servicesHTML += `
                 <li>
-                  <a href="#" onclick="navigateThematic('${cat.id}', '${category.id}', '${sub.id}'); return false;">
-                    <i class="ri-arrow-right-s-line"></i>
-                    <span>${currentLang === 'RU' ? sub.name : sub.nameKz}</span>
+                  <a href="#" onclick="navigateThematic('${cat.id}', '${category.id}', '${sub.id}'); return false;" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <div>
+                      <i class="ri-arrow-right-s-line"></i>
+                      <span>${currentLang === 'RU' ? sub.name : sub.nameKz}</span>
+                    </div>
+                    <span style="font-size: 13px; font-weight: 600; color: var(--primary); white-space: nowrap; margin-left: 10px;">${sub.price || ''}</span>
                   </a>
                 </li>
               `;
@@ -9746,9 +9749,12 @@
             grouped[subId].items.forEach(item => {
               servicesHTML += `
                 <li>
-                  <a href="#" onclick="navigateThematic('${cat.id}', '${item.catId}', '${item.id}'); return false;">
-                    <i class="ri-arrow-right-s-line"></i>
-                    <span>${currentLang === 'RU' ? item.name : item.nameKz}</span>
+                  <a href="#" onclick="navigateThematic('${cat.id}', '${item.catId}', '${item.id}'); return false;" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <div>
+                      <i class="ri-arrow-right-s-line"></i>
+                      <span>${currentLang === 'RU' ? item.name : item.nameKz}</span>
+                    </div>
+                    <span style="font-size: 13px; font-weight: 600; color: var(--primary); white-space: nowrap; margin-left: 10px;">${item.price || ''}</span>
                   </a>
                 </li>
               `;
