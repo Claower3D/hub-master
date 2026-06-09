@@ -153,6 +153,24 @@
     .back-to-dash { cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 24px; transition: 0.2s; }
     .back-to-dash:hover { color: #fff; }
 
+    
+    /* View Toggle */
+    .view-toggle { display: inline-flex; background: rgba(255,255,255,0.05); border-radius: 8px; padding: 4px; margin-right: 12px; }
+    .view-btn { background: transparent; border: none; color: var(--text-muted); padding: 6px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; transition: 0.2s; }
+    .view-btn:hover { color: var(--text-white); }
+    .view-btn.active-view { background: var(--bg-card); color: var(--text-white); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    
+    /* Card View Grid */
+    .catalog-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; padding: 16px; }
+    .cat-item-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; transition: 0.2s; }
+    .cat-item-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    .cic-header { display: flex; justify-content: space-between; align-items: flex-start; }
+    .cic-icon { width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 18px; }
+    .cic-actions { display: flex; gap: 4px; }
+    .cic-title { font-family: var(--font-heading); font-size: 16px; font-weight: 800; color: #fff; line-height: 1.3; }
+    .cic-id { font-family: monospace; font-size: 11px; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px; align-self: flex-start; }
+    .cic-meta { font-size: 12px; color: var(--text); display: flex; align-items: center; gap: 6px; }
+
     /* CONTENT */
     .admin-content {
       flex: 1;
@@ -960,6 +978,15 @@
     let catalogFilterCategory = 'all';
     let catalogSortOrder = 'default';
 
+    let catalogViewMode = 'list'; // 'list' or 'card'
+    function setCatalogViewMode(mode) {
+      catalogViewMode = mode;
+      document.getElementById('btn-view-list').classList.toggle('active-view', mode === 'list');
+      document.getElementById('btn-view-card').classList.toggle('active-view', mode === 'card');
+      renderCatalogTabOnlyTable();
+    }
+
+
     window.switchCatalogSubTab = function(index) {
       currentCatalogSubTab = index;
       catalogFilterSearch = '';
@@ -1111,7 +1138,10 @@
 
       let tableHTML = '';
       if (currentCatalogSubTab === 0) {
-        tableHTML = `
+        if (catalogViewMode === 'card') {
+          tableHTML = `<div class="catalog-card-grid">`;
+        } else {
+          tableHTML = `
           <table class="table">
             <thead>
               <tr>
@@ -1121,7 +1151,8 @@
               </tr>
             </thead>
             <tbody>
-        `;
+          `;
+        }
 
         let items = [...(catalogData.tabs || [])];
         if (catalogFilterSearch) {
@@ -1136,26 +1167,51 @@
         if (items.length > 0) {
           items.forEach(t => {
             const originalIndex = catalogData.tabs.findIndex(origTab => origTab.id === t.id);
-            tableHTML += `
-              <tr>
-                <td style="font-family: monospace; color: var(--text);">${t.id}</td>
-                <td style="font-weight: 600;">${t.label}</td>
-                <td style="text-align: right;">
-                  <div class="td-actions" style="justify-content: flex-end;">
-                    <button class="btn-icon blue" onclick="openCatalogEditModal('tab', ${originalIndex})"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
-                    <button class="btn-icon red" onclick="deleteCatalogItem('tab', ${originalIndex})"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+            if (catalogViewMode === 'card') {
+              tableHTML += `
+                <div class="cat-item-card">
+                  <div class="cic-header">
+                    <div class="cic-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
+                    <div class="cic-actions">
+                      <button class="btn-icon blue" onclick="openCatalogEditModal('tab', ${originalIndex})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></button>
+                      <button class="btn-icon red" onclick="deleteCatalogItem('tab', ${originalIndex})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                    </div>
                   </div>
-                </td>
-              </tr>
-            `;
+                  <div class="cic-title">${t.label}</div>
+                  <div class="cic-id">${t.id}</div>
+                </div>
+              `;
+            } else {
+              tableHTML += `
+                <tr>
+                  <td style="font-family: monospace; color: var(--text);">${t.id}</td>
+                  <td style="font-weight: 600;">${t.label}</td>
+                  <td style="text-align: right;">
+                    <div class="td-actions" style="justify-content: flex-end;">
+                      <button class="btn-icon blue" onclick="openCatalogEditModal('tab', ${originalIndex})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
+                      <button class="btn-icon red" onclick="deleteCatalogItem('tab', ${originalIndex})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }
           });
         } else {
-          tableHTML += `<tr><td colspan="3" style="text-align:center; color: var(--text-muted); padding:30px;">Разделы не найдены или отсутствуют.</td></tr>`;
+          if (catalogViewMode === 'list') tableHTML += `<tr><td colspan="3" style="text-align:center; color: var(--text-muted); padding:30px;">Разделы не найдены.</td></tr>`;
+          else tableHTML += `<div style="text-align:center; grid-column: 1/-1; padding:30px; color: var(--text-muted);">Разделы не найдены.</div>`;
         }
-        tableHTML += `</tbody></table>`;
+        
+        if (catalogViewMode === 'card') {
+          tableHTML += `</div>`;
+        } else {
+          tableHTML += `</tbody></table>`;
+        }
 
       } else if (currentCatalogSubTab === 1) {
-        tableHTML = `
+        if (catalogViewMode === 'card') {
+          tableHTML = `<div class="catalog-card-grid">`;
+        } else {
+          tableHTML = `
           <table class="table">
             <thead>
               <tr>
@@ -1167,7 +1223,8 @@
               </tr>
             </thead>
             <tbody>
-        `;
+          `;
+        }
 
         let items = [...(catalogData.categories || [])];
         if (catalogFilterSection !== 'all') {
@@ -1186,96 +1243,146 @@
           items.forEach(c => {
             const originalIndex = catalogData.categories.findIndex(origCat => origCat.id === c.id);
             const sectionLabel = getTabLabel(c.tab);
-            tableHTML += `
-              <tr>
-                <td style="font-family: monospace; color: var(--text);">${c.id}</td>
-                <td style="color: var(--text-muted);">${sectionLabel} (<span style="font-family: monospace; font-size:11px;">${c.tab}</span>)</td>
-                <td style="font-weight: 600;">${c.title}</td>
-                <td style="font-family: monospace; font-size: 14px; color: var(--primary);"><i class="${c.icon || 'ri-tools-line'}"></i></td>
-                <td style="text-align: right;">
-                  <div class="td-actions" style="justify-content: flex-end;">
-                    <button class="btn-icon blue" onclick="openCatalogEditModal('category', ${originalIndex})"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
-                    <button class="btn-icon red" onclick="deleteCatalogItem('category', ${originalIndex})"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+            if (catalogViewMode === 'card') {
+              tableHTML += `
+                <div class="cat-item-card">
+                  <div class="cic-header">
+                    <div class="cic-icon"><i class="${c.icon || 'ri-tools-line'}"></i></div>
+                    <div class="cic-actions">
+                      <button class="btn-icon blue" onclick="openCatalogEditModal('category', ${originalIndex})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></button>
+                      <button class="btn-icon red" onclick="deleteCatalogItem('category', ${originalIndex})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                    </div>
                   </div>
-                </td>
-              </tr>
-            `;
+                  <div class="cic-title">${c.title}</div>
+                  <div class="cic-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> ${sectionLabel}</div>
+                  <div class="cic-id">${c.id}</div>
+                </div>
+              `;
+            } else {
+              tableHTML += `
+                <tr>
+                  <td style="font-family: monospace; color: var(--text);">${c.id}</td>
+                  <td style="color: var(--text-muted);">${sectionLabel} (<span style="font-family: monospace; font-size:11px;">${c.tab}</span>)</td>
+                  <td style="font-weight: 600;">${c.title}</td>
+                  <td style="font-family: monospace; font-size: 14px; color: var(--primary);"><i class="${c.icon || 'ri-tools-line'}"></i></td>
+                  <td style="text-align: right;">
+                    <div class="td-actions" style="justify-content: flex-end;">
+                      <button class="btn-icon blue" onclick="openCatalogEditModal('category', ${originalIndex})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
+                      <button class="btn-icon red" onclick="deleteCatalogItem('category', ${originalIndex})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }
           });
         } else {
-          tableHTML += `<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding:30px;">Категории не найдены или отсутствуют.</td></tr>`;
+          if (catalogViewMode === 'list') tableHTML += `<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding:30px;">Категории не найдены.</td></tr>`;
+          else tableHTML += `<div style="text-align:center; grid-column: 1/-1; padding:30px; color: var(--text-muted);">Категории не найдены.</div>`;
         }
-        tableHTML += `</tbody></table>`;
+        
+        if (catalogViewMode === 'card') {
+          tableHTML += `</div>`;
+        } else {
+          tableHTML += `</tbody></table>`;
+        }
 
-      } else {
-        tableHTML = `
+      } else if (currentCatalogSubTab === 2) {
+        if (catalogViewMode === 'card') {
+          tableHTML = `<div class="catalog-card-grid">`;
+        } else {
+          tableHTML = `
           <table class="table">
             <thead>
               <tr>
-                <th style="width: 15%">ID (КОД)</th>
-                <th style="width: 20%">КАТЕГОРИЯ</th>
-                <th style="width: 25%">НАЗВАНИЕ УСЛУГИ</th>
-                <th style="width: 15%">ЦЕНА</th>
-                <th style="width: 10%">СРОК</th>
+                <th style="width: 20%">ID (АНГЛ. КОД)</th>
+                <th style="width: 25%">КАТЕГОРИЯ</th>
+                <th style="width: 30%">НАЗВАНИЕ УСЛУГИ</th>
+                <th style="width: 10%">ЦЕНА</th>
                 <th style="width: 15%; text-align: right;">ДЕЙСТВИЯ</th>
               </tr>
             </thead>
             <tbody>
-        `;
+          `;
+        }
 
-        let rows = [];
+        let items = [];
         if (catalogData.subcategories) {
-          Object.keys(catalogData.subcategories).forEach(catId => {
-            const arr = catalogData.subcategories[catId];
-            if (Array.isArray(arr)) {
-              arr.forEach((sub, subIdx) => {
-                rows.push({ catId, sub, subIdx });
+          if (catalogFilterSection !== 'all') {
+            const allowedCats = (catalogData.categories || []).filter(c => c.tab === catalogFilterSection).map(c => c.id);
+            for (let catId of allowedCats) {
+              if (catalogData.subcategories[catId]) {
+                catalogData.subcategories[catId].forEach((sub, idx) => {
+                  items.push({ ...sub, categoryId: catId, originalIndex: idx });
+                });
+              }
+            }
+          } else {
+            for (let catId in catalogData.subcategories) {
+              catalogData.subcategories[catId].forEach((sub, idx) => {
+                items.push({ ...sub, categoryId: catId, originalIndex: idx });
               });
             }
-          });
+          }
         }
 
-        if (catalogFilterSection !== 'all') {
-          rows = rows.filter(row => {
-            const cat = catalogData.categories.find(c => c.id === row.catId);
-            return cat && cat.tab === catalogFilterSection;
-          });
-        }
-        if (catalogFilterCategory !== 'all') {
-          rows = rows.filter(row => row.catId === catalogFilterCategory);
-        }
         if (catalogFilterSearch) {
-          rows = rows.filter(row => row.sub.title.toLowerCase().includes(catalogFilterSearch) || row.sub.id.toLowerCase().includes(catalogFilterSearch));
-        }
-        if (catalogSortOrder === 'az') {
-          rows.sort((a, b) => a.sub.title.localeCompare(b.sub.title));
-        } else if (catalogSortOrder === 'za') {
-          rows.sort((a, b) => b.sub.title.localeCompare(a.sub.title));
+          items = items.filter(s => s.title.toLowerCase().includes(catalogFilterSearch) || s.id.toLowerCase().includes(catalogFilterSearch));
         }
 
-        if (rows.length > 0) {
-          rows.forEach(row => {
-            const catLabel = getCategoryLabel(row.catId);
-            const detail = catalogData.details && catalogData.details[row.sub.id] ? catalogData.details[row.sub.id] : { price: '-', time: '-', warr: '-', desc: '-' };
-            tableHTML += `
-              <tr>
-                <td style="font-family: monospace; color: var(--text);">${row.sub.id}</td>
-                <td style="color: var(--text-muted);">${catLabel}</td>
-                <td style="font-weight: 600;">${row.sub.title}</td>
-                <td style="color: var(--primary); font-weight:600;">${detail.price || '-'}</td>
-                <td>${detail.time || '-'}</td>
-                <td style="text-align: right;">
-                  <div class="td-actions" style="justify-content: flex-end;">
-                    <button class="btn-icon blue" onclick="openCatalogEditModal('subcategory', '${row.catId}:${row.subIdx}')"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
-                    <button class="btn-icon red" onclick="deleteCatalogItem('subcategory', '${row.catId}:${row.subIdx}')"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+        if (catalogSortOrder === 'az') {
+          items.sort((a, b) => a.title.localeCompare(b.title));
+        } else if (catalogSortOrder === 'za') {
+          items.sort((a, b) => b.title.localeCompare(a.title));
+        }
+
+        if (items.length > 0) {
+          items.forEach(s => {
+            const originalIndex = s.originalIndex;
+            const categoryLabel = getCategoryLabel(s.categoryId);
+            
+            if (catalogViewMode === 'card') {
+              tableHTML += `
+                <div class="cat-item-card">
+                  <div class="cic-header">
+                    <div class="cic-icon" style="color:#a855f7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+                    <div class="cic-actions">
+                      <button class="btn-icon blue" onclick="openCatalogEditModal('subcategory', ${originalIndex}, '${s.categoryId}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></button>
+                      <button class="btn-icon red" onclick="deleteCatalogItem('subcategory', ${originalIndex}, '${s.categoryId}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                    </div>
                   </div>
-                </td>
-              </tr>
-            `;
+                  <div class="cic-title">${s.title}</div>
+                  <div class="cic-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> ${categoryLabel}</div>
+                  <div class="cic-meta" style="color:#10b981; font-weight:700;">${s.price ? (s.price + ' ₸') : 'Договорная цена'}</div>
+                  <div class="cic-id">${s.id}</div>
+                </div>
+              `;
+            } else {
+              tableHTML += `
+                <tr>
+                  <td style="font-family: monospace; color: var(--text);">${s.id}</td>
+                  <td style="color: var(--text-muted);">${categoryLabel}</td>
+                  <td style="font-weight: 600;">${s.title}</td>
+                  <td>${s.price ? (s.price + ' ₸') : '<span style="color:#555">—</span>'}</td>
+                  <td style="text-align: right;">
+                    <div class="td-actions" style="justify-content: flex-end;">
+                      <button class="btn-icon blue" onclick="openCatalogEditModal('subcategory', ${originalIndex}, '${s.categoryId}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
+                      <button class="btn-icon red" onclick="deleteCatalogItem('subcategory', ${originalIndex}, '${s.categoryId}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }
           });
         } else {
-          tableHTML += `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding:30px;">Услуги не найдены или отсутствуют.</td></tr>`;
+          if (catalogViewMode === 'list') tableHTML += `<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding:30px;">Услуги не найдены.</td></tr>`;
+          else tableHTML += `<div style="text-align:center; grid-column: 1/-1; padding:30px; color: var(--text-muted);">Услуги не найдены.</div>`;
         }
-        tableHTML += `</tbody></table>`;
+
+        if (catalogViewMode === 'card') {
+          tableHTML += `</div>`;
+        } else {
+          tableHTML += `</tbody></table>`;
+        }
       }
 
       tableContainer.innerHTML = tableHTML;
