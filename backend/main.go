@@ -1283,12 +1283,7 @@ func main() {
 
 
 	// Serve Static Files from dist / root directory (needed for deployment)
-	staticDir := "."
-	if _, err := os.Stat("index.html"); os.IsNotExist(err) {
-		if _, err := os.Stat("../index.html"); err == nil {
-			staticDir = "../"
-		}
-	}
+	staticDir := "public"
 
 	mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/plain")
@@ -1298,12 +1293,12 @@ func main() {
 
 	mux.Handle("/sitemap.xml", corsMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/xml")
-		http.ServeFile(w, r, filepath.Join(staticDir, "sitemap.xml"))
+		http.ServeFile(w, r, "seo/sitemap.xml")
 	}))
 
 	mux.Handle("/robots.txt", corsMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/plain")
-		http.ServeFile(w, r, filepath.Join(staticDir, "robots.txt"))
+		http.ServeFile(w, r, "seo/robots.txt")
 	}))
 
 	fileServer := http.FileServer(http.Dir(staticDir))
