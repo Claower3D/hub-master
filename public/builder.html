@@ -1135,15 +1135,19 @@
 
         // Tag all text-containing elements for inline translation edits
         const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author');
-        textElements.forEach(el => {
-          if (el.children.length === 0 || (el.children.length === 1 && el.firstElementChild.tagName === 'SPAN')) {
+        textElements.forEach((el, index) => {
+          if (el.children.length === 0 || (el.children.length === 1 && (el.firstElementChild.tagName === 'SPAN' || el.firstElementChild.tagName === 'BR' || el.firstElementChild.tagName === 'I'))) {
             const text = el.innerText ? el.innerText.trim() : "";
-            if (text) {
+            if (text && text.length > 0) {
               const match = window.parent.findTranslationKey(text);
+              el.classList.add('builder-inline-editable');
+              el.setAttribute('data-el-idx', index);
               if (match) {
-                el.classList.add('builder-inline-editable');
                 el.setAttribute('data-trans-type', match.type);
                 el.setAttribute('data-trans-key', match.key);
+              } else {
+                el.setAttribute('data-trans-type', 'dom');
+                el.setAttribute('data-trans-key', 'direct_dom_edit');
               }
             }
           }
@@ -1157,8 +1161,9 @@
             e.stopPropagation();
             const type = editable.getAttribute('data-trans-type');
             const key = editable.getAttribute('data-trans-key');
+            const idx = editable.getAttribute('data-el-idx');
             const tag = editable.tagName || 'ELEMENT';
-            window.parent.openInlineEditor(type, key, tag);
+            window.parent.openInlineEditor(type, key, tag, editable.innerHTML, idx);
           }
         }, true);
 
@@ -1408,27 +1413,48 @@
         }
         let rawHtml = await rawResponse.text();
 
+        // Extract the live DOM from iframe
+        const frameDoc = frame.contentDocument || frame.contentWindow.document;
+        
+        // Reset to RU temporarily to save base HTML correctly
+        if (typeof frame.contentWindow.switchLang === 'function') {
+          frame.contentWindow.switchLang('RU');
+        }
+        await new Promise(r => setTimeout(r, 100)); // wait for DOM update
+
+        const docClone = frameDoc.documentElement.cloneNode(true);
+
+        // Clean up builder injected classes and styles
+        const styleTag = docClone.querySelector('#builder-styles');
+        if (styleTag) styleTag.remove();
+        docClone.querySelectorAll('.builder-add-divider').forEach(el => el.remove());
+        docClone.querySelectorAll('.builder-section-btn').forEach(el => el.remove());
+        docClone.querySelectorAll('.builder-inline-editable').forEach(el => {
+          el.classList.remove('builder-inline-editable');
+          if (el.className === '') el.removeAttribute('class');
+          el.removeAttribute('data-trans-type');
+          el.removeAttribute('data-trans-key');
+          el.removeAttribute('data-el-idx');
+        });
+        docClone.querySelectorAll('.builder-section-highlight').forEach(el => {
+          el.classList.remove('builder-section-highlight');
+          if (el.className === '') el.removeAttribute('class');
+        });
+
+        let updatedHtml = "<!DOCTYPE html>\n" + docClone.outerHTML;
+
+        // Restore language in iframe
+        if (typeof frame.contentWindow.switchLang === 'function') {
+          frame.contentWindow.switchLang(frame.contentWindow.currentLang || 'RU');
+        }
+
         // Prepare translations string
         const transString = `const translations = ${JSON.stringify(localTranslations, null, 2)};`;
         const catTransString = `const catalogTranslations = ${JSON.stringify(localCatalogTranslations, null, 2)};`;
 
-        // Replace scripts
-        let updatedHtml = rawHtml;
+        // Replace scripts in the live DOM string
         updatedHtml = updatedHtml.replace(/const translations = \{[\s\S]*?\};/, transString);
         updatedHtml = updatedHtml.replace(/const catalogTranslations = \{[\s\S]*?\};/, catTransString);
-
-        // If it's index.html or hubmaster.html, also sync changed hero background images if present
-        if (pageSections.hero) {
-          const darkUrl = document.getElementById('media-url-input-1').value;
-          const lightUrl = document.getElementById('media-url-input-2').value;
-          
-          if (darkUrl) {
-            updatedHtml = updatedHtml.replace(/src="[^"]+hero_master.webp[^"]*"/g, `src="${darkUrl}"`);
-          }
-          if (lightUrl) {
-            updatedHtml = updatedHtml.replace(/src="[^"]+hero_master_day.webp[^"]*"/g, `src="${lightUrl}"`);
-          }
-        }
 
         // Send to backend
         const saveResponse = await fetch('/api/admin/save-page-html', {
@@ -1493,16 +1519,23 @@
       EN: '🇬🇧 English (EN)'
     };
 
-    window.openQuickEdit = function(transType, transKey, elementTagName, elementText) {
+    window.openQuickEdit = function(transType, transKey, elementTagName, elementText, idx) {
       const panel = document.getElementById('quick-edit-panel');
       qepState.transType = transType;
       qepState.transKey = transKey;
+      qepState.elementIdx = idx;
       qepState.activeQepLang = 'RU';
       qepState.showAllLangs = false;
 
       // Badge
-      document.getElementById('qep-type-badge').innerText = transType === 'catalog' ? 'КАТАЛОГ' : 'ТЕКСТ';
-      document.getElementById('qep-element-tag').innerText = `<${elementTagName.toLowerCase()}> → ${transKey}`;
+      if (transType === 'catalog') {
+        document.getElementById('qep-type-badge').innerText = 'КАТАЛОГ';
+      } else if (transType === 'dom') {
+        document.getElementById('qep-type-badge').innerText = 'ТЕКСТ ЭЛЕМЕНТА';
+      } else {
+        document.getElementById('qep-type-badge').innerText = 'ТЕКСТ (ПЕРЕВОД)';
+      }
+      document.getElementById('qep-element-tag').innerText = `<${elementTagName.toLowerCase()}>`;
 
       // Fill inputs
       if (transType === 'static') {
@@ -1519,11 +1552,18 @@
         document.getElementById('qep-ru-input').value = transKey;
         document.getElementById('qep-kz-input').value = item.KZ || '';
         document.getElementById('qep-en-input').value = item.EN || '';
+      } else if (transType === 'dom') {
+        document.getElementById('qep-main-input').value = elementText;
       }
 
       // Reset lang tabs
       switchQepLang('RU');
       document.getElementById('qep-all-langs-section').style.display = 'none';
+      if (transType === 'dom') {
+        document.getElementById('qep-toggle-all-langs').style.display = 'none';
+      } else {
+        document.getElementById('qep-toggle-all-langs').style.display = 'block';
+      }
 
       panel.classList.add('open');
     };
@@ -1629,14 +1669,24 @@
           console.error('Catalog apply failed:', e);
         }
 
-        // Re-tag elements after catalog translation update
-        setTimeout(setupIframeEditing, 600);
+      } else if (transType === 'dom') {
+        const val = document.getElementById('qep-main-input').value;
+        try {
+          const doc = frame.contentDocument || frame.contentWindow.document;
+          const el = doc.querySelector(`.builder-inline-editable[data-el-idx="${qepState.elementIdx}"]`);
+          if (el) {
+            el.innerHTML = val;
+          }
+          showToast('Применено!', `Текст элемента изменён напрямую`, 'ri-check-double-line');
+        } catch(e) {
+          console.error('DOM apply failed:', e);
+        }
       }
     }
 
     // Override openInlineEditor to use the new Quick Edit Panel
-    window.openInlineEditor = function(type, key, elementTagName) {
-      openQuickEdit(type, key, elementTagName || 'element', key);
+    window.openInlineEditor = function(type, key, elementTagName, elementText, idx) {
+      openQuickEdit(type, key, elementTagName || 'element', elementText, idx);
     };
   </script>
 </body>
