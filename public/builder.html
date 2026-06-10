@@ -1167,6 +1167,31 @@
             transform: translate(-50%, -50%) scale(1);
           }
 
+          
+          /* SMART GUIDES */
+          .smart-guide-x, .smart-guide-y {
+            position: fixed;
+            background: #ff00ff;
+            z-index: 20000;
+            display: none;
+            pointer-events: none;
+          }
+          .smart-guide-x {
+            height: 1px;
+            left: 0;
+            right: 0;
+          }
+          .smart-guide-y {
+            width: 1px;
+            top: 0;
+            bottom: 0;
+          }
+          .builder-dragging {
+            opacity: 0.8;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3) !important;
+            z-index: 19999 !important;
+            cursor: grabbing !important;
+          }
           /* INLINE EDITABLE ELEMENTS */
           .builder-inline-editable {
             outline: 1px dashed rgba(16, 185, 129, 0.45) !important;
@@ -1247,8 +1272,94 @@
           }
         });
 
+
+        // SMART GUIDES & DRAG LOGIC
+        const guideX = doc.createElement('div'); guideX.className = 'smart-guide-x'; doc.body.appendChild(guideX);
+        const guideY = doc.createElement('div'); guideY.className = 'smart-guide-y'; doc.body.appendChild(guideY);
+        
+        let dragEl = null;
+        let isDragging = false;
+        let startMouseX = 0, startMouseY = 0;
+        let startLeft = 0, startTop = 0;
+        let clickStart = 0;
+
+        doc.addEventListener('mousedown', (e) => {
+          const editable = e.target.closest('.builder-inline-editable');
+          if (editable) {
+            dragEl = editable;
+            isDragging = false;
+            startMouseX = e.clientX;
+            startMouseY = e.clientY;
+            clickStart = Date.now();
+            
+            const comp = window.getComputedStyle(dragEl);
+            if (comp.position === 'static') {
+              dragEl.style.position = 'relative';
+            }
+            startLeft = parseFloat(dragEl.style.left) || 0;
+            startTop = parseFloat(dragEl.style.top) || 0;
+          }
+        }, true);
+
+        doc.addEventListener('mousemove', (e) => {
+          if (!dragEl) return;
+          const dx = e.clientX - startMouseX;
+          const dy = e.clientY - startMouseY;
+          
+          if (!isDragging && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) {
+            isDragging = true;
+            dragEl.classList.add('builder-dragging');
+          }
+          
+          if (isDragging) {
+            let newLeft = startLeft + dx;
+            let newTop = startTop + dy;
+            
+            // Basic snapping to center of parent
+            const parentRect = dragEl.parentElement.getBoundingClientRect();
+            const elRect = dragEl.getBoundingClientRect();
+            
+            const parentCenterX = parentRect.width / 2;
+            const elCenterX = newLeft + (elRect.width / 2);
+            
+            let snapped = false;
+            
+            // X Snap
+            if (Math.abs(elCenterX - parentCenterX) < 15) {
+               newLeft = parentCenterX - (elRect.width / 2);
+               guideY.style.display = 'block';
+               guideY.style.left = (parentRect.left + parentCenterX) + 'px';
+               snapped = true;
+            } else {
+               guideY.style.display = 'none';
+            }
+            
+            dragEl.style.left = newLeft + 'px';
+            dragEl.style.top = newTop + 'px';
+          }
+        }, true);
+
+        doc.addEventListener('mouseup', (e) => {
+          if (dragEl) {
+            if (isDragging) {
+              e.preventDefault();
+              e.stopPropagation();
+              dragEl.classList.remove('builder-dragging');
+              guideX.style.display = 'none';
+              guideY.style.display = 'none';
+              // Mark as edited for save
+              dragEl.setAttribute('data-pos-edited', 'true');
+            }
+            dragEl = null;
+            setTimeout(() => { isDragging = false; }, 50);
+          }
+        }, true);
+
         // Intercept clicks to load editor
         doc.addEventListener('click', (e) => {
+          if (isDragging) {
+            e.preventDefault(); e.stopPropagation(); return;
+          }
           const editable = e.target.closest('.builder-inline-editable');
           if (editable) {
             e.preventDefault();
@@ -1260,6 +1371,7 @@
             window.parent.openQuickEdit(type, key, tag, editable.innerHTML, idx);
           }
         }, true);
+
 
         // Add section insert indicators between visible sections
         const landingContent = doc.getElementById('landing-page-content') || doc.body;
@@ -1548,6 +1660,7 @@
         if (styleTag) styleTag.remove();
         docClone.querySelectorAll('.builder-add-divider').forEach(el => el.remove());
         docClone.querySelectorAll('.builder-section-toolbar').forEach(el => el.remove());
+        docClone.querySelectorAll('.smart-guide-x, .smart-guide-y').forEach(el => el.remove());
         docClone.querySelectorAll('.builder-inline-editable').forEach(el => {
           el.classList.remove('builder-inline-editable');
           if (el.className === '') el.removeAttribute('class');
