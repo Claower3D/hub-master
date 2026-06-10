@@ -695,7 +695,7 @@
       <!-- Current Language Input -->
       <div id="qep-main-input-group">
         <div class="qep-field-label" id="qep-lang-label">Русский (RU)</div>
-        <textarea class="qep-input" id="qep-main-input" rows="4" placeholder="Введите текст..."></textarea>
+        <textarea class="qep-input" id="qep-main-input" rows="4" oninput="liveUpdateElement()" placeholder="Введите текст..."></textarea>
       </div>
 
       <!-- All Languages at once grid -->
@@ -704,7 +704,7 @@
         <div class="qep-all-lang-grid">
           <div>
             <div class="qep-field-label">🇷🇺 Русский</div>
-            <textarea class="qep-input" id="qep-ru-input" rows="2" placeholder="Русский текст..."></textarea>
+            <textarea class="qep-input" id="qep-ru-input" rows="2" oninput="document.getElementById('qep-main-input').value=this.value; liveUpdateElement();" placeholder="Русский текст..."></textarea>
           </div>
           <div>
             <div class="qep-field-label">🇰🇿 Казахский</div>
@@ -723,18 +723,18 @@
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
           <div>
             <label style="font-size:10px; color:var(--text-muted); font-weight: 700;">Размер шрифта</label>
-            <input type="text" id="qep-style-fontsize" class="qep-input" placeholder="напр. 16px" style="padding: 6px 10px;">
+            <input type="text" id="qep-style-fontsize" class="qep-input" oninput="liveUpdateElement()" placeholder="напр. 16px" style="padding: 6px 10px;">
           </div>
           <div>
             <label style="font-size:10px; color:var(--text-muted); font-weight: 700;">Цвет текста</label>
             <div style="display:flex; gap: 4px;">
-              <input type="color" id="qep-style-color-picker" style="width: 24px; height: 24px; padding: 0; border: none; cursor: pointer; background: transparent;" oninput="document.getElementById('qep-style-color').value = this.value;">
-              <input type="text" id="qep-style-color" class="qep-input" placeholder="#fff" style="padding: 6px 10px; flex: 1;">
+              <input type="color" id="qep-style-color-picker" style="width: 24px; height: 24px; padding: 0; border: none; cursor: pointer; background: transparent;" oninput="document.getElementById('qep-style-color').value = this.value; liveUpdateElement();">
+              <input type="text" id="qep-style-color" class="qep-input" oninput="liveUpdateElement()" placeholder="#fff" style="padding: 6px 10px; flex: 1;">
             </div>
           </div>
           <div>
             <label style="font-size:10px; color:var(--text-muted); font-weight: 700;">Жирность (Weight)</label>
-            <select id="qep-style-fontweight" class="qep-input" style="padding: 6px 10px; height: auto;">
+            <select id="qep-style-fontweight" class="qep-input" onchange="liveUpdateElement()" style="padding: 6px 10px; height: auto;">
               <option value="">По умолчанию</option>
               <option value="400">400 (Обычный)</option>
               <option value="500">500 (Средний)</option>
@@ -745,7 +745,7 @@
           </div>
           <div>
             <label style="font-size:10px; color:var(--text-muted); font-weight: 700;">Выравнивание</label>
-            <select id="qep-style-textalign" class="qep-input" style="padding: 6px 10px; height: auto;">
+            <select id="qep-style-textalign" class="qep-input" onchange="liveUpdateElement()" style="padding: 6px 10px; height: auto;">
               <option value="">По умолчанию</option>
               <option value="left">Слева</option>
               <option value="center">По центру</option>
@@ -1754,7 +1754,46 @@
       btn.style.background = qepState.showAllLangs ? 'rgba(16, 185, 129, 0.25)' : '';
     }
 
+    
+    function liveUpdateElement() {
+      if (qepState.elementIdx == null) return;
+      try {
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img');
+        const el = textElements[qepState.elementIdx];
+        if (!el) return;
+
+        // Apply text if transType === 'dom' OR if it's text-based
+        // For static/catalog we don't live-update text perfectly due to switchLang resetting, 
+        // but we CAN update its innerHTML temporarily for real-time feel!
+        if (qepState.transType === 'dom') {
+          if (el.tagName !== 'IMG' && !el.classList.contains('catalog-card') && !el.classList.contains('cat-card-img')) {
+             el.innerHTML = document.getElementById('qep-main-input').value;
+          }
+        } else {
+           // Temporarily update visual text so they see it typing real-time (it will be finalized on Apply)
+           if (el.tagName !== 'IMG' && el.children.length === 0) {
+             el.innerHTML = document.getElementById('qep-main-input').value;
+           }
+        }
+
+        // Apply styles
+        const fSize = document.getElementById('qep-style-fontsize').value;
+        const fColor = document.getElementById('qep-style-color').value;
+        const fWeight = document.getElementById('qep-style-fontweight').value;
+        const fAlign = document.getElementById('qep-style-textalign').value;
+        
+        if (fSize) el.style.setProperty('font-size', fSize, 'important'); else el.style.removeProperty('font-size');
+        if (fColor) el.style.setProperty('color', fColor, 'important'); else el.style.removeProperty('color');
+        if (fWeight) el.style.setProperty('font-weight', fWeight, 'important'); else el.style.removeProperty('font-weight');
+        if (fAlign) el.style.setProperty('text-align', fAlign, 'important'); else el.style.removeProperty('text-align');
+      } catch(e) {
+        // silent fail on live typing
+      }
+    }
+
     function applyQuickEdit() {
+
       const { transType, transKey, activeQepLang, showAllLangs } = qepState;
       if (!transType || !transKey) return;
 
