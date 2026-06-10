@@ -1805,9 +1805,19 @@
           : (activeQepLang === 'EN' ? document.getElementById('qep-main-input').value : (localCatalogTranslations[transKey] || {}).EN || '');
 
         if (ruVal !== transKey) {
-          delete localCatalogTranslations[transKey];
+          // Rebuild object to preserve insertion order for catalog items so they don't jump to the end
+          const newObj = {};
+          for (let k in localCatalogTranslations) {
+            if (k === transKey) {
+              newObj[ruVal] = { KZ: kzVal, EN: enVal };
+            } else {
+              newObj[k] = localCatalogTranslations[k];
+            }
+          }
+          localCatalogTranslations = newObj;
+        } else {
+          localCatalogTranslations[ruVal] = { KZ: kzVal, EN: enVal };
         }
-        localCatalogTranslations[ruVal] = { KZ: kzVal, EN: enVal };
 
         try {
           frame.contentWindow.catalogTranslations = localCatalogTranslations;
@@ -1851,24 +1861,51 @@
       // UNIVERSAL STYLE APPLICATION (Delayed to allow React/JS re-renders)
       setTimeout(() => {
         try {
-          const doc = frame.contentDocument || frame.contentWindow.document;
-          const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img');
-          const el = textElements[qepState.elementIdx];
+          const frameWin = frame.contentWindow;
+          const doc = frame.contentDocument || frameWin.document;
+          
+          // 1. Re-tag any newly rendered elements so they can be clicked again
+          if (typeof frameWin.setupIframeEditing === 'function') {
+            frameWin.setupIframeEditing();
+          } else if (typeof window.setupIframeEditing === 'function') {
+            window.setupIframeEditing();
+          }
+
+          // 2. Safely find the element
+          let el = null;
+          if (transType === 'catalog') {
+            const newRuVal = showAllLangs ? document.getElementById('qep-ru-input').value : (activeQepLang === 'RU' ? document.getElementById('qep-main-input').value : transKey);
+            el = doc.querySelector(`[data-trans-key="${newRuVal || transKey}"]`);
+          } else if (transType === 'static') {
+            el = doc.querySelector(`[data-trans-key="${transKey}"]`);
+          }
+
+          if (!el) {
+            const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img');
+            el = textElements[qepState.elementIdx];
+          }
+
+          // 3. Apply styles perfectly with !important
           if (el) {
             const fSize = document.getElementById('qep-style-fontsize').value;
             const fColor = document.getElementById('qep-style-color').value;
             const fWeight = document.getElementById('qep-style-fontweight').value;
             const fAlign = document.getElementById('qep-style-textalign').value;
             
-            if (fSize) el.style.fontSize = fSize; else el.style.removeProperty('font-size');
-            if (fColor) el.style.color = fColor; else el.style.removeProperty('color');
-            if (fWeight) el.style.fontWeight = fWeight; else el.style.removeProperty('font-weight');
-            if (fAlign) el.style.textAlign = fAlign; else el.style.removeProperty('text-align');
+            if (fSize) el.style.setProperty('font-size', fSize, 'important'); else el.style.removeProperty('font-size');
+            if (fColor) el.style.setProperty('color', fColor, 'important'); else el.style.removeProperty('color');
+            if (fWeight) el.style.setProperty('font-weight', fWeight, 'important'); else el.style.removeProperty('font-weight');
+            if (fAlign) el.style.setProperty('text-align', fAlign, 'important'); else el.style.removeProperty('text-align');
+
+            // Wow-effect: subtle animation to show it applied!
+            el.style.transition = 'transform 0.3s ease';
+            el.style.transform = 'scale(1.03)';
+            setTimeout(() => { el.style.transform = 'scale(1)'; }, 300);
           }
         } catch(e) {
           console.error('Style apply failed:', e);
         }
-      }, 150);
+      }, 200);
 
       closeQuickEdit();
     }
