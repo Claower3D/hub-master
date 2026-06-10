@@ -83,15 +83,13 @@ type ServiceCategory struct {
 // Global database instance
 var dbInstance DB
 
-func resolvePath(basePath string) string {
-	if _, err := os.Stat(basePath); err == nil {
-		return basePath
+func resolvePath(p string) string {
+	if _, err := os.Stat(p); os.IsNotExist(err) {
+		if _, err := os.Stat("../" + p); err == nil {
+			return "../" + p
+		}
 	}
-	parentPath := "../" + basePath
-	if _, err := os.Stat(parentPath); err == nil {
-		return parentPath
-	}
-	return basePath
+	return p
 }
 
 func main() {
@@ -102,6 +100,18 @@ func main() {
 	}
 	defer dbInstance.Close()
 
+	// Serve Static Files from dist / root directory (needed for deployment)
+	staticDir := "."
+	if _, err := os.Stat("public/index.html"); err == nil {
+		staticDir = "public"
+	} else if _, err := os.Stat("index.html"); err == nil {
+		staticDir = "."
+	} else if _, err := os.Stat("../public/index.html"); err == nil {
+		staticDir = "../public"
+	} else if _, err := os.Stat("../index.html"); err == nil {
+		staticDir = "../"
+	}
+
 	// Start Telegram bot notifications
 	StartTelegramBot(dbInstance)
 
@@ -110,8 +120,12 @@ func main() {
 	// Health check endpoint
 	mux.HandleFunc("/api/health", corsMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]string{"status": "ok", "time": time.Now().Format(time.RFC3339)})
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"status":"ok"}`))
 	}))
+
+	// Upload endpoint
+	mux.HandleFunc("/api/upload", corsMiddleware(handleUpload(dbInstance, staticDir)))
 
 	// Stats endpoint
 	mux.HandleFunc("/api/stats", corsMiddleware(func(w http.ResponseWriter, r *http.Request) {
@@ -144,7 +158,7 @@ func main() {
 			return
 		}
 
-		filePath := resolvePath("data/catalog_data.json")
+		filePath := "catalog_data.json"
 
 		if r.Method == http.MethodGet {
 			w.Header().Set("Content-Type", "application/json")
@@ -370,7 +384,7 @@ func main() {
 			return
 		}
 
-		filePath := resolvePath("data/assistant_config.json")
+		filePath := "assistant_config.json"
 
 		if r.Method == http.MethodGet {
 			w.Header().Set("Content-Type", "application/json")
@@ -1292,54 +1306,8 @@ func main() {
 		handleDeleteCustomPage(dbInstance)(w, r)
 	}))
 
-	// POST /api/admin/save-page-html (admin only)
-	mux.HandleFunc("/api/admin/save-page-html", corsMiddleware(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodOptions {
-			return
-		}
-		if r.Method != http.MethodPost {
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-			return
-		}
-		user, err := getAuthenticatedUser(r, dbInstance)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusUnauthorized)
-			return
-		}
-		if user.Role != "admin" {
-			http.Error(w, "Forbidden (Admin only)", http.StatusForbidden)
-			return
-		}
 
-		type SavePageRequest struct {
-			Page string `json:"page"`
-			HTML string `json:"html"`
-		}
-
-		var req SavePageRequest
-		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-			http.Error(w, "Invalid payload", http.StatusBadRequest)
-			return
-		}
-
-		if req.Page != "index.html" && req.Page != "hubmaster.html" {
-			http.Error(w, "Invalid page name: only index.html or hubmaster.html are allowed", http.StatusBadRequest)
-			return
-		}
-
-		filePath := filepath.Join(resolvePath("public"), req.Page)
-		err = os.WriteFile(filePath, []byte(req.HTML), 0644)
-		if err != nil {
-			http.Error(w, fmt.Sprintf("Failed to write file: %v", err), http.StatusInternalServerError)
-			return
-		}
-
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]string{"status": "success", "message": "Page updated successfully"})
-	}))
-
-	// Serve Static Files from dist / root directory (needed for deployment)
-	staticDir := resolvePath("public")
+	// staticDir is initialized at the start of main()
 
 	mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/plain")
@@ -1349,12 +1317,12 @@ func main() {
 
 	mux.Handle("/sitemap.xml", corsMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/xml")
-		http.ServeFile(w, r, resolvePath("seo/sitemap.xml"))
+		http.ServeFile(w, r, filepath.Join(staticDir, "sitemap.xml"))
 	}))
 
 	mux.Handle("/robots.txt", corsMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/plain")
-		http.ServeFile(w, r, resolvePath("seo/robots.txt"))
+		http.ServeFile(w, r, filepath.Join(staticDir, "robots.txt"))
 	}))
 
 	fileServer := http.FileServer(http.Dir(staticDir))
@@ -1420,5 +1388,123 @@ func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		next(w, r)
+	}
+}
+
+func handleUpload(db DB, staticDir string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if r.Method != http.MethodPost {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			json.NewEncoder(w).Encode(map[string]string{
+				"status":  "error",
+				"message": "Only POST requests are allowed",
+			})
+			return
+		}
+
+		// Auth check
+		authHeader := r.Header.Get("Authorization")
+		if !strings.HasPrefix(authHeader, "Bearer ") {
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(map[string]string{
+				"status":  "error",
+				"message": "Unauthorized",
+			})
+			return
+		}
+		token := strings.TrimPrefix(authHeader, "Bearer ")
+		sess, err := db.GetSession(token)
+		if err != nil {
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(map[string]string{
+				"status":  "error",
+				"message": "Unauthorized",
+			})
+			return
+		}
+		user, err := db.GetUserByID(sess.UserID)
+		if err != nil || user.Role != "admin" {
+			w.WriteHeader(http.StatusForbidden)
+			json.NewEncoder(w).Encode(map[string]string{
+				"status":  "error",
+				"message": "Forbidden",
+			})
+			return
+		}
+
+		// Parse multipart form, limit size to 10MB
+		err = r.ParseMultipartForm(10 << 20)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]string{
+				"status":  "error",
+				"message": "Failed to parse form: " + err.Error(),
+			})
+			return
+		}
+
+		file, header, err := r.FormFile("file")
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]string{
+				"status":  "error",
+				"message": "Failed to get file: " + err.Error(),
+			})
+			return
+		}
+		defer file.Close()
+
+		// Validate extension
+		ext := strings.ToLower(filepath.Ext(header.Filename))
+		if ext != ".jpg" && ext != ".jpeg" && ext != ".png" && ext != ".gif" && ext != ".webp" && ext != ".svg" {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]string{
+				"status":  "error",
+				"message": "Invalid file type. Only images are allowed.",
+			})
+			return
+		}
+
+		// Ensure upload directory exists
+		uploadDir := filepath.Join(staticDir, "uploads")
+		if err := os.MkdirAll(uploadDir, 0755); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{
+				"status":  "error",
+				"message": "Failed to create upload directory: " + err.Error(),
+			})
+			return
+		}
+
+		// Generate unique filename
+		filename := fmt.Sprintf("%d%s", time.Now().UnixNano(), ext)
+		destPath := filepath.Join(uploadDir, filename)
+
+		out, err := os.Create(destPath)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{
+				"status":  "error",
+				"message": "Failed to save file: " + err.Error(),
+			})
+			return
+		}
+		defer out.Close()
+
+		_, err = io.Copy(out, file)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{
+				"status":  "error",
+				"message": "Failed to write file: " + err.Error(),
+			})
+			return
+		}
+
+		json.NewEncoder(w).Encode(map[string]string{
+			"status": "success",
+			"url":    "/uploads/" + filename,
+		})
 	}
 }

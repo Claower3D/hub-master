@@ -11214,7 +11214,7 @@
       if (cat) {
         searchTitle = cat.title;
         if (itemId && cat.items) {
-          const item = cat.items.find(i => i.id === itemId);
+          item = cat.items.find(i => i.id === itemId);
           if (item) searchTitle = item.name;
         } else if (subcatId && cat.items) {
           const subItem = cat.items.find(i => i.catId === subcatId);
@@ -11339,6 +11339,7 @@
       let title = currentLang === 'RU' ? cat.title : (currentLang === 'KZ' ? cat.titleKz || cat.title : cat.titleEn || cat.title);
       let subtitle = currentLang === 'RU' ? `Профессиональный сервис услуг и товаров в категории "${cat.title}" по всему Казахстану.` : `Сапалы қызмет көрсету "${cat.titleKz || cat.title}" санаты бойынша.`;
       let itemsList = [];
+      let item = null;
 
       if (resolved.itemId) {
         const item = cat.items.find(i => i.id === resolved.itemId);

@@ -75,7 +75,7 @@
 
     /* MAIN NAV */
     .admin-nav {
-      display: none;
+      display: flex;
       justify-content: center;
       gap: 32px;
       padding: 0 32px;
@@ -97,79 +97,6 @@
       color: var(--text-white);
       border-bottom-color: var(--primary);
     }
-
-    /* DASHBOARD */
-    .dashboard-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
-    .dash-top-title { font-family: var(--font-heading); font-size: 32px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: -0.5px; margin-bottom: 8px; }
-    .dash-top-desc { font-size: 14px; color: var(--text-muted); }
-    .dash-btn-apply { background: #10b981; color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-family: var(--font-sans); transition: 0.2s; }
-    .dash-btn-apply:hover { opacity: 0.8; }
-    
-    .dash-section-sub { font-size: 11px; font-weight: 800; color: #10b981; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
-    .dash-section-title { font-family: var(--font-heading); font-size: 28px; font-weight: 800; color: #fff; text-transform: uppercase; margin-bottom: 8px; }
-    .dash-section-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 32px; }
-
-    .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    
-    .dash-card {
-      background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px;
-      cursor: pointer; position: relative; transition: all 0.3s ease; overflow: hidden;
-      display: flex; flex-direction: column; min-height: 220px;
-    }
-    .dash-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: transparent; transition: 0.3s;
-    }
-    .dash-card:hover { transform: translateY(-4px); background: var(--bg-card-hover); border-color: #444; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-    
-    .dc-green:hover::before { background: #10b981; }
-    .dc-blue:hover::before { background: #3b82f6; }
-    .dc-purple:hover::before { background: #a855f7; }
-    .dc-yellow:hover::before { background: #eab308; }
-    
-    .dc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
-    .dc-icon {
-      width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
-    }
-    .dc-green .dc-icon { color: #10b981; }
-    .dc-blue .dc-icon { color: #3b82f6; }
-    .dc-purple .dc-icon { color: #a855f7; }
-    .dc-yellow .dc-icon { color: #eab308; }
-    
-    .dc-count-box { text-align: right; }
-    .dc-count { font-size: 24px; font-weight: 800; color: #fff; font-family: var(--font-heading); line-height: 1; }
-    .dc-count-lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-top: 4px; }
-    
-    .dc-sub { font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-    .dc-title { font-family: var(--font-heading); font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 12px; }
-    .dc-desc { font-size: 13px; color: var(--text); line-height: 1.5; flex: 1; }
-    
-    .dc-action { font-size: 12px; font-weight: 700; margin-top: 24px; display: flex; align-items: center; gap: 4px; }
-    .dc-green .dc-action { color: #10b981; }
-    .dc-blue .dc-action { color: #3b82f6; }
-    .dc-purple .dc-action { color: #a855f7; }
-    .dc-yellow .dc-action { color: #eab308; }
-    
-    .back-to-dash { cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 24px; transition: 0.2s; }
-    .back-to-dash:hover { color: #fff; }
-
-    
-    /* View Toggle */
-    .view-toggle { display: inline-flex; background: rgba(255,255,255,0.05); border-radius: 8px; padding: 4px; margin-right: 12px; }
-    .view-btn { background: transparent; border: none; color: var(--text-muted); padding: 6px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; transition: 0.2s; }
-    .view-btn:hover { color: var(--text-white); }
-    .view-btn.active-view { background: var(--bg-card); color: var(--text-white); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-    
-    /* Card View Grid */
-    .catalog-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; padding: 16px; }
-    .cat-item-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; transition: 0.2s; }
-    .cat-item-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-    .cic-header { display: flex; justify-content: space-between; align-items: flex-start; }
-    .cic-icon { width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 18px; }
-    .cic-actions { display: flex; gap: 4px; }
-    .cic-title { font-family: var(--font-heading); font-size: 16px; font-weight: 800; color: #fff; line-height: 1.3; }
-    .cic-id { font-family: monospace; font-size: 11px; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px; align-self: flex-start; }
-    .cic-meta { font-size: 12px; color: var(--text); display: flex; align-items: center; gap: 6px; }
 
     /* CONTENT */
     .admin-content {
@@ -430,7 +357,7 @@
   <!-- HEADER -->
   <header class="admin-header">
     <div class="header-left">
-      <div class="logo-box" style="cursor:pointer;" onclick="openAdminTab('dashboard')">HM</div>
+      <div class="logo-box">HM</div>
       <div class="header-title-box">
         <span class="header-title">HUB MASTER Admin</span>
         <span class="header-subtitle">Панель мониторинга</span>
@@ -474,131 +401,8 @@
   <!-- CONTENT -->
   <div class="admin-content">
 
-    <!-- TAB 0: DASHBOARD -->
-    <div id="tab-dashboard" class="tab-content active">
-      <div class="dashboard-top">
-        <div>
-          <div class="dash-top-title">ПАНЕЛЬ УПРАВЛЕНИЯ</div>
-          <div class="dash-top-desc">Управление промышленной платформой HUB MASTER.</div>
-        </div>
-        <button class="dash-btn-apply" onclick="alert('Все изменения автоматически сохраняются на сервере!')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-          ПРИМЕНИТЬ ИЗМЕНЕНИЯ
-        </button>
-      </div>
-
-      <div class="dash-section-sub">ГЛАВНАЯ ПАНЕЛЬ</div>
-      <div class="dash-section-title">ВЫБЕРИТЕ РАЗДЕЛ ДЛЯ УПРАВЛЕНИЯ</div>
-      <div class="dash-section-desc">Нажмите на плитку чтобы открыть нужный раздел администрирования.</div>
-
-      <div class="dash-grid">
-        <!-- 1: ЗАЯВКИ -->
-        <div class="dash-card dc-green" onclick="openAdminTab('requests')">
-          <div class="dc-header">
-            <div class="dc-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            </div>
-            <div class="dc-count-box">
-              <div class="dc-count" id="dash-req-count">-</div>
-              <div class="dc-count-lbl">заявок</div>
-            </div>
-          </div>
-          <div class="dc-sub">КЛИЕНТСКАЯ БАЗА</div>
-          <div class="dc-title">Заявки и Лиды</div>
-          <div class="dc-desc">Обрабатывайте новые обращения клиентов, меняйте статусы и управляйте заказами.</div>
-          <div class="dc-action">Управление &rarr;</div>
-        </div>
-
-        <!-- 2: КАТАЛОГ -->
-        <div class="dash-card dc-blue" onclick="openAdminTab('catalog')">
-          <div class="dc-header">
-            <div class="dc-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            </div>
-            <div class="dc-count-box">
-              <div class="dc-count" id="dash-cat-count">-</div>
-              <div class="dc-count-lbl">услуг</div>
-            </div>
-          </div>
-          <div class="dc-sub">СПИСОК УСЛУГ</div>
-          <div class="dc-title">Услуги</div>
-          <div class="dc-desc">Управляйте описанием услуг, изображениями, видео и переводами.</div>
-          <div class="dc-action">Управление &rarr;</div>
-        </div>
-
-        <!-- 3: РЕДАКТОР -->
-        <div class="dash-card dc-purple" onclick="openAdminTab('editor')">
-          <div class="dc-header">
-            <div class="dc-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-            </div>
-            <div class="dc-count-box">
-              <div class="dc-count">7</div>
-              <div class="dc-count-lbl">страниц</div>
-            </div>
-          </div>
-          <div class="dc-sub">КОНСТРУКТОР СТРАНИЦ</div>
-          <div class="dc-title">Visual Builder</div>
-          <div class="dc-desc">Перетаскивайте блоки, добавляйте медиа и настраивайте каждую страницу сайта.</div>
-          <div class="dc-action">Открыть Builder &rarr;</div>
-        </div>
-
-        <!-- 4: КОНТЕНТ -->
-        <div class="dash-card dc-yellow" onclick="openAdminTab('editor')">
-          <div class="dc-header">
-            <div class="dc-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            </div>
-            <div class="dc-count-box">
-              <div class="dc-count">3</div>
-              <div class="dc-count-lbl">языка</div>
-            </div>
-          </div>
-          <div class="dc-sub">ТЕКСТЫ И ПЕРЕВОДЫ</div>
-          <div class="dc-title">Контент</div>
-          <div class="dc-desc">Редактируйте все тексты сайта на русском, казахском и английском языках.</div>
-          <div class="dc-action">Управление &rarr;</div>
-        </div>
-
-        <!-- 5: БОТ -->
-        <div class="dash-card dc-blue" onclick="openAdminTab('bot')">
-          <div class="dc-header">
-            <div class="dc-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
-            </div>
-            <div class="dc-count-box">
-              <div class="dc-count" id="dash-bot-count">-</div>
-              <div class="dc-count-lbl">сценариев</div>
-            </div>
-          </div>
-          <div class="dc-sub">АВТОМАТИЗАЦИЯ</div>
-          <div class="dc-title">Бот Иришка</div>
-          <div class="dc-desc">Редактируйте сценарии ответов, ключевые слова и стандартные реплики ассистента.</div>
-          <div class="dc-action">Управление &rarr;</div>
-        </div>
-
-        <!-- 6: НАСТРОЙКИ -->
-        <div class="dash-card" style="cursor:default;">
-          <div class="dc-header">
-            <div class="dc-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            </div>
-            <div class="dc-count-box">
-              <div class="dc-count" style="color:var(--text-muted)">—</div>
-            </div>
-          </div>
-          <div class="dc-sub">ГЛОБАЛЬНЫЕ ПАРАМЕТРЫ</div>
-          <div class="dc-title">Настройки</div>
-          <div class="dc-desc">Название компании, цвета, логотип, контактная информация и SEO.</div>
-          <div class="dc-action" style="color:var(--text-muted)">В разработке</div>
-        </div>
-
-      </div>
-    </div>
-
     <!-- TAB 1: ЗАЯВКИ -->
-    <div id="tab-requests" class="tab-content">
-      <div class="back-to-dash" onclick="openAdminTab('dashboard')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Вернуться на главную панель</div>
+    <div id="tab-requests" class="tab-content active">
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-header"><svg width="16" height="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Всего заявок</div>
@@ -650,17 +454,12 @@
     <!-- TAB 2: КАТАЛОГ -->
         <!-- TAB 2: КАТАЛОГ -->
     <div id="tab-catalog" class="tab-content">
-      <div class="back-to-dash" onclick="openAdminTab('dashboard')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Вернуться на главную панель</div>
       <div class="catalog-header-area">
         <div>
           <div class="page-title">Управление структурой каталога</div>
           <div class="page-desc">Редактируйте разделы, категории, подкатегории и их подробные описания</div>
         </div>
-        <div class="action-btns" style="display:flex; align-items:center; gap:8px;">
-          <div class="view-toggle">
-            <button id="btn-view-list" class="view-btn active-view" onclick="setCatalogViewMode('list')"><svg width="14" height="14" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Список</button>
-            <button id="btn-view-card" class="view-btn" onclick="setCatalogViewMode('card')"><svg width="14" height="14" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Карточки</button>
-          </div>
+        <div class="action-btns" style="display:flex; gap:8px;">
           <button class="btn-secondary" onclick="resetCatalogToDefault()"><svg width="14" height="14" style="margin-right:6px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><polyline points="3 3 3 8 8 8"/></svg> Сбросить по умолчанию</button>
           <button class="btn-primary" id="add-catalog-item-btn"><svg width="14" height="14" style="margin-right:6px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Добавить раздел</button>
           <button class="btn-primary" onclick="saveCatalogToServer()" style="background:#10b981;"><svg width="14" height="14" style="margin-right:6px"><polyline points="20 6 9 17 4 12"/></svg> Сохранить на сервере</button>
@@ -683,7 +482,6 @@
 
     <!-- TAB 3: БОТ -->
     <div id="tab-bot" class="tab-content">
-      <div class="back-to-dash" onclick="openAdminTab('dashboard')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Вернуться на главную панель</div>
       <div class="catalog-header-area">
         <div>
           <div class="page-title">Настройка ответов ассистента Иришка</div>
@@ -740,7 +538,6 @@
     </div>
     <!-- TAB 4: РЕДАКТОР -->
     <div id="tab-editor" class="tab-content">
-      <div class="back-to-dash" onclick="openAdminTab('dashboard')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Вернуться на главную панель</div>
       <div class="catalog-header-area">
         <div>
           <div class="page-title">Редактирование страниц и блоков</div>
@@ -939,18 +736,8 @@
       document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       
-      if(event && event.currentTarget) {
-        event.currentTarget.classList.add('active');
-      }
+      event.currentTarget.classList.add('active');
       document.getElementById('tab-' + tabId).classList.add('active');
-    }
-
-    function openAdminTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-      document.getElementById('tab-' + tabId).classList.add('active');
-      if (tabId === 'catalog') {
-        renderCatalogTab();
-      }
     }
   
     // Load catalog and manage operations
@@ -972,7 +759,6 @@
           if (!catalogData.subcategories) catalogData.subcategories = {};
           if (!catalogData.details) catalogData.details = {};
           renderCatalogTab();
-          if (document.getElementById('dash-cat-count')) document.getElementById('dash-cat-count').innerText = (catalogData.subcategories && Object.keys(catalogData.subcategories).reduce((acc, k) => acc + catalogData.subcategories[k].length, 0)) || 0;
         }
       } catch (e) {
         console.error("Failed to load catalog data:", e);
@@ -984,15 +770,6 @@
     let catalogFilterSection = 'all';
     let catalogFilterCategory = 'all';
     let catalogSortOrder = 'default';
-
-    let catalogViewMode = 'list'; // 'list' or 'card'
-    window.setCatalogViewMode = function(mode) {
-      catalogViewMode = mode;
-      document.getElementById('btn-view-list').classList.toggle('active-view', mode === 'list');
-      document.getElementById('btn-view-card').classList.toggle('active-view', mode === 'card');
-      renderCatalogTabOnlyTable();
-    };
-
 
     window.switchCatalogSubTab = function(index) {
       currentCatalogSubTab = index;
@@ -1023,18 +800,6 @@
       catalogSortOrder = val;
       renderCatalogTabOnlyTable();
     };
-
-    function getTabLabel(tabId) {
-      if (!catalogData || !catalogData.tabs) return tabId;
-      const tab = catalogData.tabs.find(t => t.id === tabId);
-      return tab ? tab.label : tabId;
-    }
-
-    function getCategoryLabel(catId) {
-      if (!catalogData || !catalogData.categories) return catId;
-      const cat = catalogData.categories.find(c => c.id === catId);
-      return cat ? cat.title : catId;
-    }
 
     function renderCatalogTab() {
       const tabsCount = catalogData.tabs ? catalogData.tabs.length : 0;
@@ -1077,7 +842,7 @@
           <div class="cat-tabs"></div>
         </div>
         <div class="filter-bar-container"></div>
-        <div class="table-container" id="catalog-table-container"></div>
+        <div class="table-container"></div>
       `;
 
       const newTabs = listContainer.querySelector('.cat-tabs');
@@ -1152,15 +917,12 @@
     }
 
     function renderCatalogTabOnlyTable() {
-      const tableContainer = document.getElementById('catalog-table-container') || document.querySelector('#tab-catalog .table-container');
-      if (!tableContainer) { console.warn('renderCatalogTabOnlyTable: table container not found'); return; }
+      const tableContainer = document.querySelector('#tab-catalog .table-container');
+      if (!tableContainer) return;
 
       let tableHTML = '';
       if (currentCatalogSubTab === 0) {
-        if (catalogViewMode === 'card') {
-          tableHTML = `<div class="catalog-card-grid">`;
-        } else {
-          tableHTML = `
+        tableHTML = `
           <table class="table">
             <thead>
               <tr>
@@ -1170,8 +932,7 @@
               </tr>
             </thead>
             <tbody>
-          `;
-        }
+        `;
 
         let items = [...(catalogData.tabs || [])];
         if (catalogFilterSearch) {
@@ -1186,51 +947,26 @@
         if (items.length > 0) {
           items.forEach(t => {
             const originalIndex = catalogData.tabs.findIndex(origTab => origTab.id === t.id);
-            if (catalogViewMode === 'card') {
-              tableHTML += `
-                <div class="cat-item-card">
-                  <div class="cic-header">
-                    <div class="cic-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
-                    <div class="cic-actions">
-                      <button class="btn-icon blue" onclick="openCatalogEditModal('tab', ${originalIndex})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></button>
-                      <button class="btn-icon red" onclick="deleteCatalogItem('tab', ${originalIndex})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-                    </div>
+            tableHTML += `
+              <tr>
+                <td style="font-family: monospace; color: var(--text);">${t.id}</td>
+                <td style="font-weight: 600;">${t.label}</td>
+                <td style="text-align: right;">
+                  <div class="td-actions" style="justify-content: flex-end;">
+                    <button class="btn-icon blue" onclick="openCatalogEditModal('tab', ${originalIndex})"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
+                    <button class="btn-icon red" onclick="deleteCatalogItem('tab', ${originalIndex})"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                   </div>
-                  <div class="cic-title">${t.label}</div>
-                  <div class="cic-id">${t.id}</div>
-                </div>
-              `;
-            } else {
-              tableHTML += `
-                <tr>
-                  <td style="font-family: monospace; color: var(--text);">${t.id}</td>
-                  <td style="font-weight: 600;">${t.label}</td>
-                  <td style="text-align: right;">
-                    <div class="td-actions" style="justify-content: flex-end;">
-                      <button class="btn-icon blue" onclick="openCatalogEditModal('tab', ${originalIndex})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
-                      <button class="btn-icon red" onclick="deleteCatalogItem('tab', ${originalIndex})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-                    </div>
-                  </td>
-                </tr>
-              `;
-            }
+                </td>
+              </tr>
+            `;
           });
         } else {
-          if (catalogViewMode === 'list') tableHTML += `<tr><td colspan="3" style="text-align:center; color: var(--text-muted); padding:30px;">Разделы не найдены.</td></tr>`;
-          else tableHTML += `<div style="text-align:center; grid-column: 1/-1; padding:30px; color: var(--text-muted);">Разделы не найдены.</div>`;
+          tableHTML += `<tr><td colspan="3" style="text-align:center; color: var(--text-muted); padding:30px;">Разделы не найдены или отсутствуют.</td></tr>`;
         }
-        
-        if (catalogViewMode === 'card') {
-          tableHTML += `</div>`;
-        } else {
-          tableHTML += `</tbody></table>`;
-        }
+        tableHTML += `</tbody></table>`;
 
       } else if (currentCatalogSubTab === 1) {
-        if (catalogViewMode === 'card') {
-          tableHTML = `<div class="catalog-card-grid">`;
-        } else {
-          tableHTML = `
+        tableHTML = `
           <table class="table">
             <thead>
               <tr>
@@ -1242,8 +978,7 @@
               </tr>
             </thead>
             <tbody>
-          `;
-        }
+        `;
 
         let items = [...(catalogData.categories || [])];
         if (catalogFilterSection !== 'all') {
@@ -1262,152 +997,144 @@
           items.forEach(c => {
             const originalIndex = catalogData.categories.findIndex(origCat => origCat.id === c.id);
             const sectionLabel = getTabLabel(c.tab);
-            if (catalogViewMode === 'card') {
-              tableHTML += `
-                <div class="cat-item-card">
-                  <div class="cic-header">
-                    <div class="cic-icon"><i class="${c.icon || 'ri-tools-line'}"></i></div>
-                    <div class="cic-actions">
-                      <button class="btn-icon blue" onclick="openCatalogEditModal('category', ${originalIndex})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></button>
-                      <button class="btn-icon red" onclick="deleteCatalogItem('category', ${originalIndex})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-                    </div>
+            tableHTML += `
+              <tr>
+                <td style="font-family: monospace; color: var(--text);">${c.id}</td>
+                <td style="color: var(--text-muted);">${sectionLabel} (<span style="font-family: monospace; font-size:11px;">${c.tab}</span>)</td>
+                <td style="font-weight: 600;">${c.title}</td>
+                <td style="font-family: monospace; font-size: 14px; color: var(--primary);"><i class="${c.icon || 'ri-tools-line'}"></i></td>
+                <td style="text-align: right;">
+                  <div class="td-actions" style="justify-content: flex-end;">
+                    <button class="btn-icon blue" onclick="openCatalogEditModal('category', ${originalIndex})"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
+                    <button class="btn-icon red" onclick="deleteCatalogItem('category', ${originalIndex})"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                   </div>
-                  <div class="cic-title">${c.title}</div>
-                  <div class="cic-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> ${sectionLabel}</div>
-                  <div class="cic-id">${c.id}</div>
-                </div>
-              `;
-            } else {
-              tableHTML += `
-                <tr>
-                  <td style="font-family: monospace; color: var(--text);">${c.id}</td>
-                  <td style="color: var(--text-muted);">${sectionLabel} (<span style="font-family: monospace; font-size:11px;">${c.tab}</span>)</td>
-                  <td style="font-weight: 600;">${c.title}</td>
-                  <td style="font-family: monospace; font-size: 14px; color: var(--primary);"><i class="${c.icon || 'ri-tools-line'}"></i></td>
-                  <td style="text-align: right;">
-                    <div class="td-actions" style="justify-content: flex-end;">
-                      <button class="btn-icon blue" onclick="openCatalogEditModal('category', ${originalIndex})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
-                      <button class="btn-icon red" onclick="deleteCatalogItem('category', ${originalIndex})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-                    </div>
-                  </td>
-                </tr>
-              `;
-            }
+                </td>
+              </tr>
+            `;
           });
         } else {
-          if (catalogViewMode === 'list') tableHTML += `<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding:30px;">Категории не найдены.</td></tr>`;
-          else tableHTML += `<div style="text-align:center; grid-column: 1/-1; padding:30px; color: var(--text-muted);">Категории не найдены.</div>`;
+          tableHTML += `<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding:30px;">Категории не найдены или отсутствуют.</td></tr>`;
         }
-        
-        if (catalogViewMode === 'card') {
-          tableHTML += `</div>`;
-        } else {
-          tableHTML += `</tbody></table>`;
-        }
+        tableHTML += `</tbody></table>`;
 
-      } else if (currentCatalogSubTab === 2) {
-        if (catalogViewMode === 'card') {
-          tableHTML = `<div class="catalog-card-grid">`;
-        } else {
-          tableHTML = `
+      } else {
+        tableHTML = `
           <table class="table">
             <thead>
               <tr>
-                <th style="width: 20%">ID (АНГЛ. КОД)</th>
-                <th style="width: 25%">КАТЕГОРИЯ</th>
-                <th style="width: 30%">НАЗВАНИЕ УСЛУГИ</th>
-                <th style="width: 10%">ЦЕНА</th>
+                <th style="width: 15%">ID (КОД)</th>
+                <th style="width: 20%">КАТЕГОРИЯ</th>
+                <th style="width: 25%">НАЗВАНИЕ УСЛУГИ</th>
+                <th style="width: 15%">ЦЕНА</th>
+                <th style="width: 10%">СРОК</th>
                 <th style="width: 15%; text-align: right;">ДЕЙСТВИЯ</th>
               </tr>
             </thead>
             <tbody>
-          `;
-        }
+        `;
 
-        let items = [];
+        let rows = [];
         if (catalogData.subcategories) {
-          if (catalogFilterSection !== 'all') {
-            const allowedCats = (catalogData.categories || []).filter(c => c.tab === catalogFilterSection).map(c => c.id);
-            for (let catId of allowedCats) {
-              if (catalogData.subcategories[catId]) {
-                catalogData.subcategories[catId].forEach((sub, idx) => {
-                  items.push({ ...sub, categoryId: catId, originalIndex: idx });
-                });
-              }
-            }
-          } else {
-            for (let catId in catalogData.subcategories) {
-              catalogData.subcategories[catId].forEach((sub, idx) => {
-                items.push({ ...sub, categoryId: catId, originalIndex: idx });
+          Object.keys(catalogData.subcategories).forEach(catId => {
+            const arr = catalogData.subcategories[catId];
+            if (Array.isArray(arr)) {
+              arr.forEach((sub, subIdx) => {
+                rows.push({ catId, sub, subIdx });
               });
             }
-          }
+          });
         }
 
+        if (catalogFilterSection !== 'all') {
+          rows = rows.filter(row => {
+            const cat = catalogData.categories.find(c => c.id === row.catId);
+            return cat && cat.tab === catalogFilterSection;
+          });
+        }
+        if (catalogFilterCategory !== 'all') {
+          rows = rows.filter(row => row.catId === catalogFilterCategory);
+        }
         if (catalogFilterSearch) {
-          items = items.filter(s => s.title.toLowerCase().includes(catalogFilterSearch) || s.id.toLowerCase().includes(catalogFilterSearch));
+          rows = rows.filter(row => row.sub.title.toLowerCase().includes(catalogFilterSearch) || row.sub.id.toLowerCase().includes(catalogFilterSearch));
         }
-
         if (catalogSortOrder === 'az') {
-          items.sort((a, b) => a.title.localeCompare(b.title));
+          rows.sort((a, b) => a.sub.title.localeCompare(b.sub.title));
         } else if (catalogSortOrder === 'za') {
-          items.sort((a, b) => b.title.localeCompare(a.title));
+          rows.sort((a, b) => b.sub.title.localeCompare(a.sub.title));
         }
 
-        if (items.length > 0) {
-          items.forEach(s => {
-            const originalIndex = s.originalIndex;
-            const categoryLabel = getCategoryLabel(s.categoryId);
-            
-            if (catalogViewMode === 'card') {
-              tableHTML += `
-                <div class="cat-item-card">
-                  <div class="cic-header">
-                    <div class="cic-icon" style="color:#a855f7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
-                    <div class="cic-actions">
-                      <button class="btn-icon blue" onclick="openCatalogEditModal('subcategory', '${s.categoryId}:${originalIndex}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></button>
-                      <button class="btn-icon red" onclick="deleteCatalogItem('subcategory', '${s.categoryId}:${originalIndex}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-                    </div>
+        if (rows.length > 0) {
+          rows.forEach(row => {
+            const catLabel = getCategoryLabel(row.catId);
+            const detail = catalogData.details && catalogData.details[row.sub.id] ? catalogData.details[row.sub.id] : { price: '-', time: '-', warr: '-', desc: '-' };
+            tableHTML += `
+              <tr>
+                <td style="font-family: monospace; color: var(--text);">${row.sub.id}</td>
+                <td style="color: var(--text-muted);">${catLabel}</td>
+                <td style="font-weight: 600;">${row.sub.title}</td>
+                <td style="color: var(--primary); font-weight:600;">${detail.price || '-'}</td>
+                <td>${detail.time || '-'}</td>
+                <td style="text-align: right;">
+                  <div class="td-actions" style="justify-content: flex-end;">
+                    <button class="btn-icon blue" onclick="openCatalogEditModal('subcategory', '${row.catId}:${row.subIdx}')"><svg width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
+                    <button class="btn-icon red" onclick="deleteCatalogItem('subcategory', '${row.catId}:${row.subIdx}')"><svg width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                   </div>
-                  <div class="cic-title">${s.title}</div>
-                  <div class="cic-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> ${categoryLabel}</div>
-                  <div class="cic-meta" style="color:#10b981; font-weight:700;">${s.price ? (s.price + ' ₸') : 'Договорная цена'}</div>
-                  <div class="cic-id">${s.id}</div>
-                </div>
-              `;
-            } else {
-              tableHTML += `
-                <tr>
-                  <td style="font-family: monospace; color: var(--text);">${s.id}</td>
-                  <td style="color: var(--text-muted);">${categoryLabel}</td>
-                  <td style="font-weight: 600;">${s.title}</td>
-                  <td style="color:#10b981; font-weight:700;">${s.price ? (s.price + ' ₸') : 'Договорная цена'}</td>
-                  <td style="text-align: right;">
-                    <div class="td-actions" style="justify-content: flex-end;">
-                      <button class="btn-icon blue" onclick="openCatalogEditModal('subcategory', '${s.categoryId}:${originalIndex}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Изменить</button>
-                      <button class="btn-icon red" onclick="deleteCatalogItem('subcategory', '${s.categoryId}:${originalIndex}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-                    </div>
-                  </td>
-                </tr>
-              `;
-            }
+                </td>
+              </tr>
+            `;
           });
         } else {
-          if (catalogViewMode === 'list') tableHTML += `<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding:30px;">Услуги не найдены.</td></tr>`;
-          else tableHTML += `<div style="text-align:center; grid-column: 1/-1; padding:30px; color: var(--text-muted);">Услуги не найдены.</div>`;
+          tableHTML += `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding:30px;">Услуги не найдены или отсутствуют.</td></tr>`;
         }
-
-        if (catalogViewMode === 'card') {
-          tableHTML += `</div>`;
-        } else {
-          tableHTML += `</tbody></table>`;
-        }
+        tableHTML += `</tbody></table>`;
       }
 
       tableContainer.innerHTML = tableHTML;
     }
 
-    window.openCatalogEditModal = function(type, key) {
+    function getTabLabel(tabId) {
+      if (!catalogData.tabs) return tabId;
+      const tab = catalogData.tabs.find(t => t.id === tabId);
+      return tab ? tab.label : tabId;
+    }
+
+    function getCategoryLabel(catId) {
+      if (!catalogData.categories) return catId;
+      const cat = catalogData.categories.find(c => c.id === catId);
+      return cat ? cat.title : catId;
+    }
+
+    window.filterSubCatOptions = function(query) {
+      const select = document.getElementById('sub-cat-select');
+      if (!select) return;
+      const lower = query.toLowerCase();
+      let optionsHTML = '';
+      const categories = catalogData.categories || [];
+      const filteredAndSorted = categories
+        .filter(c => c.title.toLowerCase().includes(lower) || c.id.toLowerCase().includes(lower))
+        .sort((a, b) => a.title.localeCompare(b.title));
+      filteredAndSorted.forEach(c => {
+        optionsHTML += `<option value="${c.id}">${c.title}</option>`;
+      });
+      select.innerHTML = optionsHTML;
+    };
+
+    window.filterCatTabOptions = function(query) {
+      const select = document.getElementById('cat-tab-select');
+      if (!select) return;
+      const lower = query.toLowerCase();
+      let optionsHTML = '';
+      const tabs = catalogData.tabs || [];
+      const filteredAndSorted = tabs
+        .filter(t => t.label.toLowerCase().includes(lower) || t.id.toLowerCase().includes(lower))
+        .sort((a, b) => a.label.localeCompare(b.label));
+      filteredAndSorted.forEach(t => {
+        optionsHTML += `<option value="${t.id}">${t.label}</option>`;
+      });
+      select.innerHTML = optionsHTML;
+    };
+
+    function openCatalogEditModal(type, key) {
       editingItemType = type;
       editingItemKey = key;
 
@@ -1426,7 +1153,7 @@
             <input type="text" id="tab-id" class="admin-form-input" value="${tabData.id}" ${key !== null ? 'disabled' : ''}>
           </div>
           <div class="admin-form-group">
-            <label>Название раздела (RU)</label>
+            <label>Название раздела</label>
             <input type="text" id="tab-label" class="admin-form-input" value="${tabData.label}">
           </div>
         `;
@@ -1455,7 +1182,7 @@
             </select>
           </div>
           <div class="admin-form-group">
-            <label>Название категории (RU)</label>
+            <label>Название категории</label>
             <input type="text" id="cat-title" class="admin-form-input" value="${catData.title}">
           </div>
           <div class="admin-form-group">
@@ -1469,7 +1196,7 @@
         let catId = '';
         let subIdx = null;
         let subData = { id: '', title: '' };
-        let detailData = { price: '', time: '', warr: '', desc: '', image: '' };
+        let detailData = { price: '', time: '', warr: '', desc: '' };
 
         if (key !== null) {
           const parts = String(key).split(':');
@@ -1495,12 +1222,13 @@
             </div>
             <div class="admin-form-group" style="margin-bottom: 0;">
               <label><i class="ri-folder-2-line"></i> Категория</label>
+              <input type="text" id="sub-cat-search" class="admin-form-input" placeholder="Поиск категории (А-Я)..." style="margin-bottom:6px;" oninput="filterSubCatOptions(this.value)">
               <select id="sub-cat-select" class="admin-form-select">${catOptions}</select>
             </div>
           </div>
           
           <div class="admin-form-group">
-            <label><i class="ri-text"></i> Название услуги (RU)</label>
+            <label><i class="ri-text"></i> Название услуги</label>
             <input type="text" id="sub-title" class="admin-form-input" value="${subData.title}">
           </div>
           
@@ -1512,8 +1240,8 @@
                 <input type="text" id="detail-price" class="admin-form-input" placeholder="от 3 000 ₸" value="${detailData.price || ''}">
               </div>
               <div class="admin-form-group" style="margin-bottom: 0;">
-                <label>Срок работы / Выезд</label>
-                <input type="text" id="detail-time" class="admin-form-input" placeholder="Выезд: 45 мин" value="${detailData.time || ''}">
+                <label>Срок работы</label>
+                <input type="text" id="detail-time" class="admin-form-input" placeholder="Срок: 1 час" value="${detailData.time || ''}">
               </div>
               <div class="admin-form-group" style="margin-bottom: 0;">
                 <label>Гарантия</label>
@@ -1522,39 +1250,106 @@
             </div>
           </div>
           
-          <div style="display: grid; grid-template-columns: 1fr 180px; gap: 16px; margin-bottom: 16px;">
+          <div style="display: grid; grid-template-columns: 1fr 160px; gap: 16px; margin-bottom: 16px;">
             <div class="admin-form-group" style="margin-bottom: 0;">
               <label><i class="ri-image-add-line"></i> URL фото услуги</label>
-              <input type="text" id="detail-image" class="admin-form-input" placeholder="https://..." value="${detailData.image || ''}" oninput="document.getElementById('cat-img-prev').style.backgroundImage = 'url(' + this.value + ')'">
-              
-              <div style="margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap;">
-                <span style="font-size: 10px; color: var(--text-muted); align-self: center; margin-right: 4px;">Быстрый выбор:</span>
-                <button type="button" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Ремонт техники</button>
-                <button type="button" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Уборка</button>
-                <button type="button" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Электрика</button>
-                <button type="button" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Сантехника</button>
-                <button type="button" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Мебель</button>
+              <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                <input type="text" id="detail-image" class="admin-form-input" placeholder="https://..." value="${detailData.image || ''}" oninput="document.getElementById('cat-img-prev').style.backgroundImage = 'url(' + this.value + ')'" style="flex: 1; margin-bottom: 0;">
+                <button type="button" class="btn-secondary" onclick="triggerDeviceUpload()" style="padding: 0 12px; height: 38px; display: flex; align-items: center; justify-content: center; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text-white); cursor: pointer;"><i class="ri-upload-2-line" style="font-size: 16px;"></i></button>
               </div>
-
-              <div style="margin-top: 12px;">
-                <label><i class="ri-align-left"></i> Описание услуги (RU)</label>
-                <textarea id="detail-desc" class="admin-form-textarea" rows="3" placeholder="Подробное описание услуги...">${detailData.desc || ''}</textarea>
+              <input type="file" id="device-upload-input" style="display: none;" accept="image/*" onchange="handleDeviceUpload(event)">
+              <div>
+                <label><i class="ri-align-left"></i> Описание услуги</label>
+                <textarea id="detail-desc" class="admin-form-textarea" rows="4" placeholder="Подробное описание услуги...">${detailData.desc || ''}</textarea>
               </div>
             </div>
             <div>
               <label style="font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px;">Предпросмотр фото</label>
-              <div id="cat-img-prev" style="width: 100%; height: 130px; border-radius: 8px; border: 1px dashed var(--border); background-size: cover; background-position: center; background-image: url('${detailData.image || ''}'); background-color: rgba(0,0,0,0.3);"></div>
+              <div id="cat-img-prev" style="width: 100%; height: 140px; border-radius: 8px; border: 1px dashed var(--border); background-size: cover; background-position: center; background-image: url('${detailData.image || ''}'); background-color: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden;" onclick="triggerDeviceUpload()">
+                <div id="upload-overlay-text" style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); color: #fff; font-size: 10px; text-align: center; padding: 4px 0; transition: opacity 0.2s;">Загрузить фото</div>
+              </div>
             </div>
           </div>
-        `;
+`;
       }
-    };
+    }
 
-    window.closeCatalogEditModal = function() {
+    function triggerDeviceUpload() {
+  document.getElementById('device-upload-input').click();
+}
+
+async function handleDeviceUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const prevEl = document.getElementById('cat-img-prev');
+  const urlEl = document.getElementById('detail-image');
+  const overlayText = document.getElementById('upload-overlay-text');
+
+  // Keep original state in case of failure
+  const originalBg = prevEl.style.backgroundImage;
+  const originalUrl = urlEl.value;
+
+  // Local preview immediately for responsive feeling
+  const localURL = URL.createObjectURL(file);
+  prevEl.style.backgroundImage = `url('${localURL}')`;
+  if (overlayText) {
+    overlayText.textContent = 'Загрузка...';
+    overlayText.style.opacity = '1';
+  }
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const token = localStorage.getItem('admin_token');
+
+  try {
+    const response = await fetch(API_BASE + '/api/upload', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      },
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    if (data.status === 'success' && data.url) {
+      urlEl.value = data.url;
+      prevEl.style.backgroundImage = `url('${data.url}')`;
+      if (overlayText) {
+        overlayText.textContent = 'Готово';
+        setTimeout(() => {
+          overlayText.textContent = 'Загрузить фото';
+          overlayText.style.opacity = '';
+        }, 1500);
+      }
+    } else {
+      throw new Error(data.message || 'Ошибка загрузки');
+    }
+  } catch (error) {
+    console.error('Upload failed:', error);
+    alert('Не удалось загрузить изображение: ' + error.message);
+    prevEl.style.backgroundImage = originalBg;
+    urlEl.value = originalUrl;
+    if (overlayText) {
+      overlayText.textContent = 'Загрузить фото';
+      overlayText.style.opacity = '';
+    }
+  } finally {
+    // Reset file input value so same file can be selected again
+    event.target.value = '';
+  }
+}
+
+function closeCatalogEditModal() {
       document.getElementById('catalog-edit-modal').classList.remove('active');
-    };
+    }
 
-    window.saveCatalogItem = function() {
+    function saveCatalogItem() {
       if (editingItemType === 'tab') {
         const id = document.getElementById('tab-id').value.trim();
         const label = document.getElementById('tab-label').value.trim();
@@ -1589,8 +1384,8 @@
         const price = document.getElementById('detail-price').value.trim();
         const time = document.getElementById('detail-time').value.trim();
         const warr = document.getElementById('detail-warr').value.trim();
-        const image = document.getElementById('detail-image').value.trim();
         const desc = document.getElementById('detail-desc').value.trim();
+        const image = document.getElementById('detail-image').value.trim();
 
         if (!id || !catId || !title) { alert('Заполните обязательные поля'); return; }
 
@@ -1616,11 +1411,11 @@
         catalogData.details[id] = { title, desc, price, time, warr, image };
       }
 
-      window.closeCatalogEditModal();
+      closeCatalogEditModal();
       renderCatalogTab();
-    };
+    }
 
-    window.deleteCatalogItem = function(type, key) {
+    function deleteCatalogItem(type, key) {
       if (!confirm('Вы уверены, что хотите удалить этот элемент?')) return;
 
       if (type === 'tab') {
@@ -1639,17 +1434,15 @@
         }
       }
       renderCatalogTab();
-    };
+    }
 
-    window.saveCatalogToServer = async function() {
+    async function saveCatalogToServer() {
       const token = localStorage.getItem('admin_token');
-      const btn = document.querySelector('#tab-catalog .action-btns button:nth-child(3)') || document.querySelector('.btn-primary[onclick*="saveCatalogToServer"]');
+      const btn = document.querySelector('#tab-catalog .action-btns button:nth-child(3)');
       
-      const originalText = btn ? btn.innerHTML : 'Сохранить';
-      if (btn) {
-        btn.innerHTML = `Сохранение...`;
-        btn.disabled = true;
-      }
+      const originalText = btn.innerHTML;
+      btn.innerHTML = `Сохранение...`;
+      btn.disabled = true;
 
       try {
         const res = await fetch(API_BASE + '/api/catalog', {
@@ -1670,17 +1463,13 @@
         console.error(e);
         alert('Сетевая ошибка при соединении с сервером');
       } finally {
-        if (btn) {
-          btn.innerHTML = originalText;
-          btn.disabled = false;
-        }
+        btn.innerHTML = originalText;
+        btn.disabled = false;
         renderCatalogTab();
       }
-    };  // end window.saveCatalogToServer
-
+    }
 
     const defaultCatalogFallback = {
-
       "tabs": [
         { "id": "okna", "label": "Окна" },
         { "id": "servis", "label": "Сервис" },
