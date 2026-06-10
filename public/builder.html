@@ -1191,7 +1191,7 @@
             const toolbar = doc.createElement('div');
             toolbar.className = 'builder-section-toolbar';
             
-            const sectTitle = window.parent.pageSections[key]?.title || key;
+            const sectTitle = (typeof pageSections !== 'undefined' && pageSections[key]) ? pageSections[key].title : key;
             
             toolbar.innerHTML = `
               <div class="toolbar-handle"><i class="ri-draggable"></i></div>
@@ -1257,7 +1257,7 @@
             const key = editable.getAttribute('data-trans-key');
             const idx = editable.getAttribute('data-el-idx');
             const tag = editable.tagName || 'ELEMENT';
-            window.parent.openInlineEditor(type, key, tag, editable.innerHTML, idx);
+            window.parent.openQuickEdit(type, key, tag, editable.innerHTML, idx);
           }
         }, true);
 
