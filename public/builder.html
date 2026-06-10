@@ -716,6 +716,45 @@
           </div>
         </div>
       </div>
+    
+      <!-- Appearance Section (Styles) -->
+      <div id="qep-appearance-section" style="margin-top: 15px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
+        <div class="qep-field-label" style="margin-bottom:10px;"><i class="ri-palette-line"></i> Внешний вид (Шрифт, Цвет и т.д.)</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div>
+            <label style="font-size:10px; color:var(--text-muted); font-weight: 700;">Размер шрифта</label>
+            <input type="text" id="qep-style-fontsize" class="qep-input" placeholder="напр. 16px" style="padding: 6px 10px;">
+          </div>
+          <div>
+            <label style="font-size:10px; color:var(--text-muted); font-weight: 700;">Цвет текста</label>
+            <div style="display:flex; gap: 4px;">
+              <input type="color" id="qep-style-color-picker" style="width: 24px; height: 24px; padding: 0; border: none; cursor: pointer; background: transparent;" oninput="document.getElementById('qep-style-color').value = this.value;">
+              <input type="text" id="qep-style-color" class="qep-input" placeholder="#fff" style="padding: 6px 10px; flex: 1;">
+            </div>
+          </div>
+          <div>
+            <label style="font-size:10px; color:var(--text-muted); font-weight: 700;">Жирность (Weight)</label>
+            <select id="qep-style-fontweight" class="qep-input" style="padding: 6px 10px; height: auto;">
+              <option value="">По умолчанию</option>
+              <option value="400">400 (Обычный)</option>
+              <option value="500">500 (Средний)</option>
+              <option value="600">600 (Полужирный)</option>
+              <option value="700">700 (Жирный)</option>
+              <option value="800">800 (Очень жирный)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:10px; color:var(--text-muted); font-weight: 700;">Выравнивание</label>
+            <select id="qep-style-textalign" class="qep-input" style="padding: 6px 10px; height: auto;">
+              <option value="">По умолчанию</option>
+              <option value="left">Слева</option>
+              <option value="center">По центру</option>
+              <option value="right">Справа</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
     </div>
     <div class="qep-footer">
       <button class="qep-btn-apply" onclick="applyQuickEdit()">
@@ -1600,6 +1639,24 @@
       }
 
       // Reset lang tabs
+      
+      // Fetch element styles
+      try {
+        const frameDoc = frame.contentDocument || frame.contentWindow.document;
+        const textEls = frameDoc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img');
+        const el = textEls[idx];
+        if (el) {
+          const comp = window.getComputedStyle(el);
+          document.getElementById('qep-style-fontsize').value = el.style.fontSize || '';
+          
+          let colorHex = el.style.color || '';
+          document.getElementById('qep-style-color').value = colorHex;
+          
+          document.getElementById('qep-style-fontweight').value = el.style.fontWeight || '';
+          document.getElementById('qep-style-textalign').value = el.style.textAlign || '';
+        }
+      } catch(e) {}
+
       switchQepLang('RU');
       document.getElementById('qep-all-langs-section').style.display = 'none';
       if (transType === 'dom') {
