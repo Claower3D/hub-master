@@ -169,8 +169,8 @@
     .quick-edit-panel {
       position: fixed;
       top: 60px;
-      right: -400px;
-      width: 380px;
+      right: -450px;
+      width: 420px;
       height: calc(100vh - 60px);
       background: var(--bg-panel);
       border-left: 1px solid var(--border);
@@ -678,8 +678,22 @@
         <div class="qep-ltab" id="qepl-en" onclick="switchQepLang('EN')">🇬🇧 EN</div>
       </div>
 
+      <!-- Image Upload Section -->
+      <div id="qep-image-upload-section" style="display:none;">
+        <div class="qep-field-label">Изображение</div>
+        <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; border:1px dashed var(--border); text-align:center;">
+          <img id="qep-current-img" src="" style="max-width:100%; max-height:120px; display:none; border-radius:6px; margin-bottom:10px;">
+          <div id="qep-no-img-text" style="font-size:11px; color:var(--text-muted); margin-bottom:10px;">Нет изображения</div>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="qep-image-url-input" class="qep-input" placeholder="URL изображения" style="flex:1;">
+            <button class="qep-btn-apply" onclick="document.getElementById('qep-device-upload').click()" style="flex:initial; padding:10px 12px;" title="Загрузить"><i class="ri-upload-2-line"></i></button>
+          </div>
+          <input type="file" id="qep-device-upload" style="display:none;" onchange="handleQepImageUpload(event)">
+        </div>
+      </div>
+      
       <!-- Current Language Input -->
-      <div>
+      <div id="qep-main-input-group">
         <div class="qep-field-label" id="qep-lang-label">Русский (RU)</div>
         <textarea class="qep-input" id="qep-main-input" rows="4" placeholder="Введите текст..."></textarea>
       </div>
@@ -1134,12 +1148,12 @@
         });
 
         // Tag all text-containing elements for inline translation edits
-        const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author');
+        const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img');
         textElements.forEach((el, index) => {
-          if (el.children.length === 0 || (el.children.length === 1 && (el.firstElementChild.tagName === 'SPAN' || el.firstElementChild.tagName === 'BR' || el.firstElementChild.tagName === 'I'))) {
-            const text = el.innerText ? el.innerText.trim() : "";
+          if (el.tagName === 'IMG' || el.children.length === 0 || (el.children.length === 1 && (el.firstElementChild.tagName === 'SPAN' || el.firstElementChild.tagName === 'BR' || el.firstElementChild.tagName === 'I'))) {
+            const text = el.tagName === 'IMG' ? el.src : (el.innerText ? el.innerText.trim() : "");
             if (text && text.length > 0) {
-              const match = window.parent.findTranslationKey(text);
+              const match = el.tagName === 'IMG' ? null : window.parent.findTranslationKey(text);
               el.classList.add('builder-inline-editable');
               el.setAttribute('data-el-idx', index);
               if (match) {
@@ -1553,7 +1567,36 @@
         document.getElementById('qep-kz-input').value = item.KZ || '';
         document.getElementById('qep-en-input').value = item.EN || '';
       } else if (transType === 'dom') {
-        document.getElementById('qep-main-input').value = elementText;
+        document.getElementById('qep-main-input').value = elementTagName.toUpperCase() === 'IMG' ? '' : elementText;
+        
+        // Image support
+        if (elementTagName.toUpperCase() === 'IMG' || elementTagName.toUpperCase() === 'DIV') {
+          document.getElementById('qep-image-upload-section').style.display = 'block';
+          if (elementTagName.toUpperCase() !== 'IMG') {
+            document.getElementById('qep-main-input-group').style.display = 'block'; // Show text input for DIVs
+            // Try to extract background image URL from elementText or rely on user to upload
+            const bgMatch = elementText && typeof elementText === 'string' ? elementText.match(/url\(['"]?([^'"]+)['"]?\)/) : null;
+            if (bgMatch) {
+              document.getElementById('qep-image-url-input').value = bgMatch[1];
+              document.getElementById('qep-current-img').src = bgMatch[1];
+              document.getElementById('qep-current-img').style.display = 'block';
+              document.getElementById('qep-no-img-text').style.display = 'none';
+            } else {
+              document.getElementById('qep-image-url-input').value = '';
+              document.getElementById('qep-current-img').style.display = 'none';
+              document.getElementById('qep-no-img-text').style.display = 'block';
+            }
+          } else {
+            document.getElementById('qep-main-input-group').style.display = 'none';
+            document.getElementById('qep-image-url-input').value = elementText;
+            document.getElementById('qep-current-img').src = elementText;
+            document.getElementById('qep-current-img').style.display = 'block';
+            document.getElementById('qep-no-img-text').style.display = 'none';
+          }
+        } else {
+          document.getElementById('qep-image-upload-section').style.display = 'none';
+          document.getElementById('qep-main-input-group').style.display = 'block';
+        }
       }
 
       // Reset lang tabs
@@ -1568,6 +1611,34 @@
       panel.classList.add('open');
     };
 
+    
+    window.handleQepImageUpload = async function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const formData = new FormData();
+      formData.append('file', file);
+      document.getElementById('qep-no-img-text').style.display = 'block';
+      document.getElementById('qep-no-img-text').textContent = 'Загрузка...';
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + adminToken },
+          body: formData
+        });
+        if (response.ok) {
+          const data = await response.json();
+          document.getElementById('qep-image-url-input').value = data.url;
+          document.getElementById('qep-current-img').src = data.url;
+          document.getElementById('qep-current-img').style.display = 'block';
+          document.getElementById('qep-no-img-text').style.display = 'none';
+        } else {
+          document.getElementById('qep-no-img-text').textContent = 'Ошибка загрузки';
+        }
+      } catch(err) {
+        document.getElementById('qep-no-img-text').textContent = 'Ошибка';
+      }
+    };
+    
     function closeQuickEdit() {
       document.getElementById('quick-edit-panel').classList.remove('open');
     }
@@ -1670,18 +1741,66 @@
         }
 
       } else if (transType === 'dom') {
-        const val = document.getElementById('qep-main-input').value;
         try {
           const doc = frame.contentDocument || frame.contentWindow.document;
           const el = doc.querySelector(`.builder-inline-editable[data-el-idx="${qepState.elementIdx}"]`);
           if (el) {
-            el.innerHTML = val;
+            if (el.tagName === 'IMG') {
+              const imgSrc = document.getElementById('qep-current-img').src;
+              el.src = imgSrc;
+              showToast('Изображение обновлено!', `Фотография была успешно заменена.`, 'ri-image-line');
+            } else {
+              const val = document.getElementById('qep-main-input').value;
+              el.innerHTML = val;
+              showToast('Применено!', `Текст элемента изменён напрямую`, 'ri-check-double-line');
+            }
           }
-          showToast('Применено!', `Текст элемента изменён напрямую`, 'ri-check-double-line');
         } catch(e) {
           console.error('DOM apply failed:', e);
         }
       }
+    }
+
+    // New Image Upload logic
+    async function handleQepImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      document.getElementById('qep-no-img-text').innerText = 'Загрузка...';
+      document.getElementById('qep-no-img-text').style.display = 'block';
+      document.getElementById('qep-current-img').style.display = 'none';
+
+      try {
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + adminToken },
+          body: formData
+        });
+        const data = await res.json();
+        if (data.url) {
+          document.getElementById('qep-current-img').src = data.url;
+          document.getElementById('qep-current-img').style.display = 'block';
+          document.getElementById('qep-no-img-text').style.display = 'none';
+        } else {
+          throw new Error('Upload failed');
+        }
+      } catch(err) {
+        console.error(err);
+        document.getElementById('qep-no-img-text').innerText = 'Ошибка загрузки';
+      }
+    }
+
+    // Page Selector Logic
+    function openPageSelector() { document.getElementById('page-selector-modal').style.display = 'flex'; }
+    function closePageSelector() { document.getElementById('page-selector-modal').style.display = 'none'; }
+    function switchEditorPage(pageUrl) {
+      activePage = pageUrl;
+      frame.src = '/' + pageUrl;
+      closePageSelector();
+      showToast('Страница изменена', `Теперь вы редактируете ${pageUrl}`);
     }
 
     // Override openInlineEditor to use the new Quick Edit Panel
