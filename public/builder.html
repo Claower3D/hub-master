@@ -1428,8 +1428,8 @@
       showToast('Добавление блока', 'Выберите блок из левой библиотеки для добавления в позицию ' + index, 'ri-layout-masonry-line');
     }
 
-    function addNewBlockMock(blockType) {
-      showToast('Добавлено', `Новый блок ${blockType.toUpperCase()} успешно вставлен в макет!`, 'ri-add-circle-line');
+        function addNewBlockMock(blockType) {
+      showToast('Модуль', `Блок типа ${blockType.toUpperCase()} успешно добавлен!`, 'ri-add-circle-line');
       // Live append to iframe
       try {
         const doc = frame.contentDocument || frame.contentWindow.document;
@@ -1440,10 +1440,35 @@
         sect.style.padding = '80px 0';
         sect.style.background = '#121318';
         sect.style.borderTop = '1px solid #1f212a';
+
+        // GENERATE UNIQUE KEY FOR THIS BLOCK
+        const uniqueId = 'customBlock_' + Date.now();
+        const titleKey = uniqueId + '_title';
+        const subKey = uniqueId + '_subtitle';
+
+        // Initialize translations so it has content
+        if (!localTranslations.RU) localTranslations.RU = {};
+        if (!localTranslations.KZ) localTranslations.KZ = {};
+        if (!localTranslations.EN) localTranslations.EN = {};
+        
+        localTranslations.RU[titleKey] = `НОВЫЙ БЛОК ${blockType.toUpperCase()}`;
+        localTranslations.RU[subKey] = `Тут будет контент нового блока.`;
+        localTranslations.KZ[titleKey] = `ЖАҢА БЛОК ${blockType.toUpperCase()}`;
+        localTranslations.KZ[subKey] = `Жаңа блоктың мазмұны осында болады.`;
+        localTranslations.EN[titleKey] = `NEW BLOCK ${blockType.toUpperCase()}`;
+        localTranslations.EN[subKey] = `Content for the new block will be here.`;
+        
+        // Add to pageSections so it can be edited!
+        pageSections[uniqueId] = {
+            title: `Новый блок (${blockType})`,
+            keys: [titleKey, subKey],
+            media: false
+        };
+
         sect.innerHTML = `
           <div class="max-width-wrap" style="text-align:center;">
-            <h2 style="font-size:32px; font-weight:800; color:#fff; margin-bottom:12px;">Новый блок ${blockType.toUpperCase()}</h2>
-            <p style="color:#94a3b8; font-size:14px;">Этот блок был добавлен в визуальном конструкторе.</p>
+            <h2 data-i18n="${titleKey}" style="font-size:32px; font-weight:800; color:#fff; margin-bottom:12px;">НОВЫЙ БЛОК ${blockType.toUpperCase()}</h2>
+            <p data-i18n="${subKey}" style="color:#94a3b8; font-size:14px;">Тут будет контент нового блока.</p>
           </div>
         `;
         content.insertBefore(sect, content.querySelector('.app-footer'));

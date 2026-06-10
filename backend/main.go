@@ -1306,6 +1306,52 @@ func main() {
 		handleDeleteCustomPage(dbInstance)(w, r)
 	}))
 
+	// POST /api/admin/save-page-html (admin only)
+	mux.HandleFunc("/api/admin/save-page-html", corsMiddleware(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodOptions {
+			return
+		}
+		if r.Method != http.MethodPost {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+		user, err := getAuthenticatedUser(r, dbInstance)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusUnauthorized)
+			return
+		}
+		if user.Role != "admin" {
+			http.Error(w, "Forbidden (Admin only)", http.StatusForbidden)
+			return
+		}
+
+		var input struct {
+			Page string `json:"page"`
+			HTML string `json:"html"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+			http.Error(w, "Bad request", http.StatusBadRequest)
+			return
+		}
+
+		// Ensure we don't save outside of static directory
+		cleanPage := filepath.Clean(input.Page)
+		if strings.Contains(cleanPage, "..") {
+			http.Error(w, "Invalid page path", http.StatusBadRequest)
+			return
+		}
+
+		targetPath := filepath.Join(staticDir, cleanPage)
+		err = os.WriteFile(targetPath, []byte(input.HTML), 0644)
+		if err != nil {
+			http.Error(w, "Failed to write file", http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]string{"status": "success"})
+	}))
+
 
 	// staticDir is initialized at the start of main()
 
