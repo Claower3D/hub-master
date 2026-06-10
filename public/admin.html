@@ -7,18 +7,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;800&family=Unbounded:wght@700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #e63333;
-      --primary-hover: #cc2222;
-      --bg-dark: #09090b;
-      --bg-card: #121215;
-      --bg-card-hover: #18181c;
-      --bg-nav: #0f0f12;
-      --border: #222226;
-      --border-hover: #33333b;
+      --primary: #f43f5e;
+      --primary-hover: #e11d48;
+      --bg-dark: #050508;
+      --bg-card: rgba(18, 18, 22, 0.65);
+      --bg-card-hover: rgba(28, 28, 34, 0.85);
+      --bg-nav: rgba(8, 8, 11, 0.85);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.15);
       --text: #a1a1aa;
-      --text-white: #ffffff;
-      --text-muted: #52525b;
-      --shadow: rgba(0, 0, 0, 0.4) 0px 10px 30px -10px;
+      --text-white: #fafafa;
+      --text-muted: #71717a;
+      --shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.7);
       
       --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
       --font-heading: 'Outfit', 'Unbounded', sans-serif;
@@ -252,8 +252,10 @@
     .page-title { font-size: 24px; font-family: var(--font-heading); font-weight: 800; color: var(--text-white); margin-bottom: 4px; }
     .page-desc { font-size: 13px; color: var(--text); }
     .action-btns { display: flex; gap: 12px; }
-    .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text-white); padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
-    .btn-primary { background: var(--primary); border: none; color: #fff; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .btn-secondary { background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text-white); padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+    .btn-secondary:hover { background: rgba(255,255,255,0.08); border-color: var(--border-hover); }
+    .btn-primary { background: var(--primary); border: none; color: #fff; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; box-shadow: 0 4px 14px 0 var(--primary-glow); }
+    .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(244, 63, 94, 0.6); }
     
     .cat-tabs { display: flex; gap: 32px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
     .cat-tab { padding: 12px 0; color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; }
@@ -374,30 +376,32 @@
     }
     .admin-modal-card {
       background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 30px; width: 500px; max-width: 90%;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+      border-radius: 20px; padding: 40px; width: 800px; max-width: 95%;
+      box-shadow: var(--shadow);
       transform: scale(0.95);
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
     .admin-modal-overlay.active .admin-modal-card {
       transform: scale(1);
     }
     .admin-modal-title {
-      font-family: var(--font-heading); font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 20px;
+      font-family: var(--font-heading); font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 24px; text-transform: uppercase; letter-spacing: -0.5px;
     }
     .admin-form-group {
-      margin-bottom: 16px;
+      margin-bottom: 20px;
       text-align: left;
     }
     .admin-form-group label {
-      display: block; font-size: 12px; font-weight: 600; color: #aaa; margin-bottom: 6px; text-transform: uppercase;
+      display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;
     }
     .admin-form-input, .admin-form-select, .admin-form-textarea {
-      width: 100%; background: #16161a; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-size: 14px;
-      transition: border-color 0.2s;
+      width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: #fff; padding: 14px; border-radius: 10px; font-size: 14px;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
     }
     .admin-form-input:focus, .admin-form-select:focus, .admin-form-textarea:focus {
-      border-color: var(--primary); outline: none;
+      border-color: var(--primary); background: rgba(255,255,255,0.05); outline: none; box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15);
     }
     .admin-modal-actions {
       display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;
@@ -1522,32 +1526,32 @@
             </div>
           </div>
           
-          <div style="display: grid; grid-template-columns: 1fr 180px; gap: 16px; margin-bottom: 16px;">
+          <div style="display: grid; grid-template-columns: 1fr 240px; gap: 24px; margin-bottom: 16px;">
             <div class="admin-form-group" style="margin-bottom: 0;">
               <label><i class="ri-image-add-line"></i> URL фото услуги</label>
               <div style="display: flex; gap: 8px;">
                 <input type="text" id="detail-image" class="admin-form-input" placeholder="https://..." value="${detailData.image || ''}" oninput="document.getElementById('cat-img-prev').style.backgroundImage = 'url(' + this.value + ')'" style="margin-bottom: 0;">
-                <button type="button" class="btn-primary" onclick="triggerDeviceUpload()" style="padding: 0 12px; margin-bottom: 0; background: var(--border); border-color: var(--border); flex-shrink: 0;" title="Загрузить файл"><i class="ri-upload-2-line"></i></button>
+                <button type="button" class="btn-primary" onclick="triggerDeviceUpload()" style="padding: 0 16px; margin-bottom: 0; background: var(--border); border-color: var(--border); flex-shrink: 0;" title="Загрузить файл"><i class="ri-upload-2-line"></i></button>
               </div>
               
-              <div style="margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap;">
-                <span style="font-size: 10px; color: var(--text-muted); align-self: center; margin-right: 4px;">Быстрый выбор:</span>
-                <button type="button" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Ремонт техники</button>
-                <button type="button" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Уборка</button>
-                <button type="button" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Электрика</button>
-                <button type="button" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Сантехника</button>
-                <button type="button" style="font-size: 9px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 4px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Мебель</button>
+              <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
+                <span style="font-size: 11px; font-weight: 600; color: var(--text-muted); align-self: center; margin-right: 4px;">Быстрый выбор:</span>
+                <button type="button" style="font-size: 10px; padding: 6px 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 6px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Ремонт техники</button>
+                <button type="button" style="font-size: 10px; padding: 6px 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 6px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Уборка</button>
+                <button type="button" style="font-size: 10px; padding: 6px 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 6px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Электрика</button>
+                <button type="button" style="font-size: 10px; padding: 6px 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 6px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Сантехника</button>
+                <button type="button" style="font-size: 10px; padding: 6px 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color:#fff; border-radius: 6px; cursor:pointer;" onclick="document.getElementById('detail-image').value='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=600'; document.getElementById('detail-image').dispatchEvent(new Event('input'));">Мебель</button>
               </div>
 
-              <div style="margin-top: 12px;">
+              <div style="margin-top: 16px;">
                 <label><i class="ri-align-left"></i> Описание услуги (RU)</label>
-                <textarea id="detail-desc" class="admin-form-textarea" rows="3" placeholder="Подробное описание услуги...">${detailData.desc || ''}</textarea>
+                <textarea id="detail-desc" class="admin-form-textarea" rows="4" placeholder="Подробное описание услуги...">${detailData.desc || ''}</textarea>
               </div>
             </div>
             <div>
-              <label style="font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px;">Предпросмотр фото</label>
-              <div id="cat-img-prev" onclick="triggerDeviceUpload()" style="width: 100%; height: 130px; border-radius: 8px; border: 1px dashed var(--border); background-size: cover; background-position: center; background-image: url('${detailData.image || ''}'); background-color: rgba(0,0,0,0.3); position: relative; cursor: pointer; overflow: hidden;" onmouseover="this.querySelector('#upload-overlay-text').style.opacity='1'" onmouseout="this.querySelector('#upload-overlay-text').style.opacity=''">
-                <div id="upload-overlay-text" style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); color: #fff; font-size: 10px; text-align: center; padding: 4px 0; transition: opacity 0.2s; opacity: 0;">Загрузить фото</div>
+              <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Предпросмотр фото</label>
+              <div id="cat-img-prev" onclick="triggerDeviceUpload()" style="width: 100%; height: 200px; border-radius: 10px; border: 2px dashed var(--border); background-size: cover; background-position: center; background-image: url('${detailData.image || ''}'); background-color: rgba(0,0,0,0.3); position: relative; cursor: pointer; overflow: hidden;" onmouseover="this.querySelector('#upload-overlay-text').style.opacity='1'" onmouseout="this.querySelector('#upload-overlay-text').style.opacity=''">
+                <div id="upload-overlay-text" style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.8); color: #fff; font-size: 12px; font-weight: 600; text-align: center; padding: 8px 0; transition: opacity 0.2s; opacity: 0;">Загрузить фото</div>
               </div>
             </div>
           </div>
