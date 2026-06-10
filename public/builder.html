@@ -1074,34 +1074,47 @@
             outline: 3px solid #10b981 !important;
             box-shadow: 0 0 20px rgba(16, 185, 129, 0.3) !important;
           }
-          .builder-section-btn {
+          .builder-section-toolbar {
             position: absolute;
-            top: 16px;
-            right: 16px;
-            background: #10b981;
+            top: 0;
+            left: 20px;
+            background: #00ff66;
             color: #000;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 6px;
+            border-radius: 0 0 8px 8px;
             font-family: 'Inter', sans-serif;
             font-size: 11px;
             font-weight: 800;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
             cursor: pointer;
             z-index: 10000;
             display: none;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            padding: 6px 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            transition: transform 0.2s;
           }
-          .builder-section-btn:hover {
-            transform: scale(1.05);
-          }
-          .builder-section-highlight:hover .builder-section-btn {
+          .builder-section-highlight:hover .builder-section-toolbar {
             display: flex;
           }
+          .toolbar-btn {
+            background: rgba(0,0,0,0.1);
+            border: none;
+            color: #000;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 14px;
+          }
+          .toolbar-btn:hover { background: rgba(0,0,0,0.2); }
+          .toolbar-btn.trash { color: #d32f2f; }
+          .toolbar-btn.trash:hover { background: rgba(211, 47, 47, 0.2); }
+          .toolbar-handle { font-size: 14px; color: #000; opacity: 0.5; cursor: grab; margin-right: 4px; }
+          .toolbar-title { font-size: 12px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase; margin-right: 8px; }
+
           .builder-add-divider {
             height: 10px;
             background: transparent;
@@ -1175,16 +1188,42 @@
           if (el) {
             el.classList.add('builder-section-highlight');
             
-            const btn = doc.createElement('button');
-            btn.className = 'builder-section-btn';
-            btn.innerHTML = `<i class="ri-edit-2-line"></i> НАСТРОЙКИ СЕКЦИИ`;
-            btn.onclick = (e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              // Call parent window function
+            const toolbar = doc.createElement('div');
+            toolbar.className = 'builder-section-toolbar';
+            
+            const sectTitle = window.parent.pageSections[key]?.title || key;
+            
+            toolbar.innerHTML = `
+              <div class="toolbar-handle"><i class="ri-draggable"></i></div>
+              <div class="toolbar-title">${sectTitle.toUpperCase()}</div>
+              <button class="toolbar-btn move-up" title="Переместить выше"><i class="ri-arrow-up-line"></i></button>
+              <button class="toolbar-btn move-down" title="Переместить ниже"><i class="ri-arrow-down-line"></i></button>
+              <button class="toolbar-btn edit-settings" title="Настройки секции"><i class="ri-settings-4-fill"></i></button>
+              <button class="toolbar-btn trash" title="Удалить блок"><i class="ri-delete-bin-line"></i></button>
+            `;
+            
+            // Events
+            toolbar.querySelector('.edit-settings').onclick = (e) => {
+              e.preventDefault(); e.stopPropagation();
               window.parent.openSectionEditor(key);
             };
-            el.appendChild(btn);
+            
+            toolbar.querySelector('.move-up').onclick = (e) => {
+              e.preventDefault(); e.stopPropagation();
+              if (el.previousElementSibling) { el.parentNode.insertBefore(el, el.previousElementSibling); }
+            };
+            
+            toolbar.querySelector('.move-down').onclick = (e) => {
+              e.preventDefault(); e.stopPropagation();
+              if (el.nextElementSibling) { el.parentNode.insertBefore(el.nextElementSibling, el); }
+            };
+            
+            toolbar.querySelector('.trash').onclick = (e) => {
+              e.preventDefault(); e.stopPropagation();
+              if(confirm('Точно удалить этот блок?')) { el.remove(); }
+            };
+            
+            el.appendChild(toolbar);
           }
         });
 
@@ -1508,7 +1547,7 @@
         const styleTag = docClone.querySelector('#builder-styles');
         if (styleTag) styleTag.remove();
         docClone.querySelectorAll('.builder-add-divider').forEach(el => el.remove());
-        docClone.querySelectorAll('.builder-section-btn').forEach(el => el.remove());
+        docClone.querySelectorAll('.builder-section-toolbar').forEach(el => el.remove());
         docClone.querySelectorAll('.builder-inline-editable').forEach(el => {
           el.classList.remove('builder-inline-editable');
           if (el.className === '') el.removeAttribute('class');
