@@ -1640,6 +1640,7 @@
 
       // Reset lang tabs
       
+      
       // Fetch element styles
       try {
         const frameDoc = frame.contentDocument || frame.contentWindow.document;
@@ -1647,15 +1648,32 @@
         const el = textEls[idx];
         if (el) {
           const comp = window.getComputedStyle(el);
-          document.getElementById('qep-style-fontsize').value = el.style.fontSize || '';
           
-          let colorHex = el.style.color || '';
+          document.getElementById('qep-style-fontsize').value = el.style.fontSize || comp.fontSize || '';
+          
+          // Helper to convert rgb to hex for color picker
+          function rgbToHex(rgb) {
+            if (!rgb || rgb === 'rgba(0, 0, 0, 0)') return '';
+            const match = rgb.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+            if (!match) return rgb;
+            return "#" + match.slice(1).map(n => parseInt(n, 10).toString(16).padStart(2, '0')).join('');
+          }
+          
+          let colorHex = el.style.color || rgbToHex(comp.color) || '';
           document.getElementById('qep-style-color').value = colorHex;
+          if (colorHex.startsWith('#')) {
+            document.getElementById('qep-style-color-picker').value = colorHex;
+          }
           
-          document.getElementById('qep-style-fontweight').value = el.style.fontWeight || '';
-          document.getElementById('qep-style-textalign').value = el.style.textAlign || '';
+          document.getElementById('qep-style-fontweight').value = el.style.fontWeight || comp.fontWeight || '';
+          
+          let align = el.style.textAlign || comp.textAlign || '';
+          if (align === 'start') align = 'left';
+          if (align === 'end') align = 'right';
+          document.getElementById('qep-style-textalign').value = ['left','center','right'].includes(align) ? align : '';
         }
       } catch(e) {}
+
 
       switchQepLang('RU');
       document.getElementById('qep-all-langs-section').style.display = 'none';
@@ -1709,10 +1727,12 @@
 
       // Sync current main input with the correct value
       const { transType, transKey } = qepState;
+      
       let val = '';
       if (transType === 'static') {
         const internalLang = lang === 'KZ' ? 'KZ' : lang;
         val = localTranslations[internalLang] ? (localTranslations[internalLang][transKey] || '') : '';
+        document.getElementById('qep-main-input').value = val;
       } else if (transType === 'catalog') {
         if (lang === 'RU') {
           val = transKey;
@@ -1720,8 +1740,10 @@
           const item = localCatalogTranslations[transKey] || {};
           val = item[lang] || '';
         }
+        document.getElementById('qep-main-input').value = val;
       }
-      document.getElementById('qep-main-input').value = val;
+      // For 'dom', we don't overwrite it here because it doesn't have languages.
+
     }
 
     function toggleQepAllLangs() {
