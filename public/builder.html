@@ -1583,251 +1583,25 @@
       // Badge
       if (transType === 'catalog') {
         document.getElementById('qep-type-badge').innerText = 'КАТАЛОГ';
-      } else if (transType === 'dom') {
-        document.getElementById('qep-type-badge').innerText = 'ТЕКСТ ЭЛЕМЕНТА';
-      } else {
-        document.getElementById('qep-type-badge').innerText = 'ТЕКСТ (ПЕРЕВОД)';
-      }
-      document.getElementById('qep-element-tag').innerText = `<${elementTagName.toLowerCase()}>`;
-
-      // Fill inputs
-      if (transType === 'static') {
-        const ruVal = localTranslations.RU ? (localTranslations.RU[transKey] || '') : '';
-        const kzVal = localTranslations.KZ ? (localTranslations.KZ[transKey] || '') : '';
-        const enVal = localTranslations.EN ? (localTranslations.EN[transKey] || '') : '';
-        document.getElementById('qep-main-input').value = ruVal;
-        document.getElementById('qep-ru-input').value = ruVal;
-        document.getElementById('qep-kz-input').value = kzVal;
-        document.getElementById('qep-en-input').value = enVal;
-      } else if (transType === 'catalog') {
-        const item = localCatalogTranslations[transKey] || { KZ: '', EN: '' };
-        document.getElementById('qep-main-input').value = transKey;
-        document.getElementById('qep-ru-input').value = transKey;
-        document.getElementById('qep-kz-input').value = item.KZ || '';
-        document.getElementById('qep-en-input').value = item.EN || '';
-      } else if (transType === 'dom') {
-        document.getElementById('qep-main-input').value = elementTagName.toUpperCase() === 'IMG' ? '' : elementText;
-        
-        // Image support
-        if (elementTagName.toUpperCase() === 'IMG' || elementTagName.toUpperCase() === 'DIV') {
-          document.getElementById('qep-image-upload-section').style.display = 'block';
-          if (elementTagName.toUpperCase() !== 'IMG') {
-            document.getElementById('qep-main-input-group').style.display = 'block'; // Show text input for DIVs
-            // Try to extract background image URL from elementText or rely on user to upload
-            const bgMatch = elementText && typeof elementText === 'string' ? elementText.match(/url\(['"]?([^'"]+)['"]?\)/) : null;
-            if (bgMatch) {
-              document.getElementById('qep-image-url-input').value = bgMatch[1];
-              document.getElementById('qep-current-img').src = bgMatch[1];
-              document.getElementById('qep-current-img').style.display = 'block';
-              document.getElementById('qep-no-img-text').style.display = 'none';
-            } else {
-              document.getElementById('qep-image-url-input').value = '';
-              document.getElementById('qep-current-img').style.display = 'none';
-              document.getElementById('qep-no-img-text').style.display = 'block';
-            }
-          } else {
-            document.getElementById('qep-main-input-group').style.display = 'none';
-            document.getElementById('qep-image-url-input').value = elementText;
-            document.getElementById('qep-current-img').src = elementText;
-            document.getElementById('qep-current-img').style.display = 'block';
-            document.getElementById('qep-no-img-text').style.display = 'none';
-          }
-        } else {
-          document.getElementById('qep-image-upload-section').style.display = 'none';
-          document.getElementById('qep-main-input-group').style.display = 'block';
-        }
-      }
-
-      // Reset lang tabs
-      
-      
-      // Fetch element styles
-      try {
-        const frameDoc = frame.contentDocument || frame.contentWindow.document;
-        const textEls = frameDoc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img');
-        const el = textEls[idx];
-        if (el) {
-          const comp = window.getComputedStyle(el);
-          
-          document.getElementById('qep-style-fontsize').value = el.style.fontSize || comp.fontSize || '';
-          
-          // Helper to convert rgb to hex for color picker
-          function rgbToHex(rgb) {
-            if (!rgb || rgb === 'rgba(0, 0, 0, 0)') return '';
-            const match = rgb.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-            if (!match) return rgb;
-            return "#" + match.slice(1).map(n => parseInt(n, 10).toString(16).padStart(2, '0')).join('');
-          }
-          
-          let colorHex = el.style.color || rgbToHex(comp.color) || '';
-          document.getElementById('qep-style-color').value = colorHex;
-          if (colorHex.startsWith('#')) {
-            document.getElementById('qep-style-color-picker').value = colorHex;
-          }
-          
-          document.getElementById('qep-style-fontweight').value = el.style.fontWeight || comp.fontWeight || '';
-          
-          let align = el.style.textAlign || comp.textAlign || '';
-          if (align === 'start') align = 'left';
-          if (align === 'end') align = 'right';
-          document.getElementById('qep-style-textalign').value = ['left','center','right'].includes(align) ? align : '';
-        }
-      } catch(e) {}
-
-
-      switchQepLang('RU');
-      document.getElementById('qep-all-langs-section').style.display = 'none';
-      if (transType === 'dom') {
-        document.getElementById('qep-toggle-all-langs').style.display = 'none';
-      } else {
-        document.getElementById('qep-toggle-all-langs').style.display = 'block';
-      }
-
-      panel.classList.add('open');
-    };
-
-    
-    window.handleQepImageUpload = async function(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const formData = new FormData();
-      formData.append('file', file);
-      document.getElementById('qep-no-img-text').style.display = 'block';
-      document.getElementById('qep-no-img-text').textContent = 'Загрузка...';
-      try {
-        const response = await fetch('/api/upload', {
-          method: 'POST',
-          headers: { 'Authorization': 'Bearer ' + adminToken },
-          body: formData
-        });
-        if (response.ok) {
-          const data = await response.json();
-          document.getElementById('qep-image-url-input').value = data.url;
-          document.getElementById('qep-current-img').src = data.url;
-          document.getElementById('qep-current-img').style.display = 'block';
-          document.getElementById('qep-no-img-text').style.display = 'none';
-        } else {
-          document.getElementById('qep-no-img-text').textContent = 'Ошибка загрузки';
-        }
-      } catch(err) {
-        document.getElementById('qep-no-img-text').textContent = 'Ошибка';
-      }
-    };
-    
-    function closeQuickEdit() {
-      document.getElementById('quick-edit-panel').classList.remove('open');
-    }
-
-    function switchQepLang(lang) {
-      qepState.activeQepLang = lang;
-      ['RU', 'KZ', 'EN'].forEach(l => {
-        document.getElementById(`qepl-${l.toLowerCase()}`).classList.toggle('active', l === lang);
-      });
-      document.getElementById('qep-lang-label').innerText = langLabels[lang];
-
-      // Sync current main input with the correct value
-      const { transType, transKey } = qepState;
-      
-      let val = '';
-      if (transType === 'static') {
-        const internalLang = lang === 'KZ' ? 'KZ' : lang;
-        val = localTranslations[internalLang] ? (localTranslations[internalLang][transKey] || '') : '';
-        document.getElementById('qep-main-input').value = val;
-      } else if (transType === 'catalog') {
-        if (lang === 'RU') {
-          val = transKey;
-        } else {
-          const item = localCatalogTranslations[transKey] || {};
-          val = item[lang] || '';
-        }
-        document.getElementById('qep-main-input').value = val;
-      }
-      // For 'dom', we don't overwrite it here because it doesn't have languages.
-
-    }
-
-    function toggleQepAllLangs() {
-      qepState.showAllLangs = !qepState.showAllLangs;
-      const section = document.getElementById('qep-all-langs-section');
-      const btn = document.getElementById('qep-toggle-all-langs');
-      section.style.display = qepState.showAllLangs ? 'block' : 'none';
-      btn.style.background = qepState.showAllLangs ? 'rgba(16, 185, 129, 0.25)' : '';
-    }
-
-    function applyQuickEdit() {
-      const { transType, transKey, activeQepLang, showAllLangs } = qepState;
-      if (!transType || !transKey) return;
-
-      if (transType === 'static') {
-        if (showAllLangs) {
-          // Apply all 3 languages
-          const ruVal = document.getElementById('qep-ru-input').value;
-          const kzVal = document.getElementById('qep-kz-input').value;
-          const enVal = document.getElementById('qep-en-input').value;
-
-          if (!localTranslations.RU) localTranslations.RU = {};
-          if (!localTranslations.KZ) localTranslations.KZ = {};
-          if (!localTranslations.EN) localTranslations.EN = {};
-
-          localTranslations.RU[transKey] = ruVal;
-          localTranslations.KZ[transKey] = kzVal;
-          localTranslations.EN[transKey] = enVal;
-        } else {
-          const val = document.getElementById('qep-main-input').value;
-          if (!localTranslations[activeQepLang]) localTranslations[activeQepLang] = {};
-          localTranslations[activeQepLang][transKey] = val;
-        }
-
-        // Inject into iframe and refresh language
-        try {
-          Object.keys(localTranslations).forEach(lang => {
-            Object.keys(localTranslations[lang]).forEach(k => {
-              frame.contentWindow.translations[lang][k] = localTranslations[lang][k];
-            });
-          });
-          if (typeof frame.contentWindow.switchLang === 'function') {
-            frame.contentWindow.switchLang(frame.contentWindow.currentLang || 'RU');
-          }
-          showToast('Применено!', `"${transKey}" обновлено на ${activeQepLang}`, 'ri-check-double-line');
-        } catch(e) {
-          console.error('Failed to apply inline edit:', e);
-        }
-
-      } else if (transType === 'catalog') {
-        const ruVal = showAllLangs 
-          ? document.getElementById('qep-ru-input').value
-          : (activeQepLang === 'RU' ? document.getElementById('qep-main-input').value : transKey);
-        const kzVal = showAllLangs 
-          ? document.getElementById('qep-kz-input').value
-          : (activeQepLang === 'KZ' ? document.getElementById('qep-main-input').value : (localCatalogTranslations[transKey] || {}).KZ || '');
-        const enVal = showAllLangs 
-          ? document.getElementById('qep-en-input').value
-          : (activeQepLang === 'EN' ? document.getElementById('qep-main-input').value : (localCatalogTranslations[transKey] || {}).EN || '');
-
-        if (ruVal !== transKey) {
-          delete localCatalogTranslations[transKey];
-        }
-        localCatalogTranslations[ruVal] = { KZ: kzVal, EN: enVal };
-
-        try {
-          frame.contentWindow.catalogTranslations = localCatalogTranslations;
-          if (typeof frame.contentWindow.switchLang === 'function') {
-            frame.contentWindow.switchLang(frame.contentWindow.currentLang || 'RU');
-          }
-          showToast('Применено!', `Перевод каталога "${transKey}" обновлён`, 'ri-check-double-line');
-        } catch(e) {
-          console.error('Catalog apply failed:', e);
-        }
-
-      } else if (transType === 'dom') {
+            } else if (transType === 'dom') {
         try {
           const doc = frame.contentDocument || frame.contentWindow.document;
-          const el = doc.querySelector(`.builder-inline-editable[data-el-idx="${qepState.elementIdx}"]`);
+          const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img');
+          const el = textElements[qepState.elementIdx];
           if (el) {
+            const imgUrl = document.getElementById('qep-image-url-input').value;
             if (el.tagName === 'IMG') {
-              const imgSrc = document.getElementById('qep-current-img').src;
-              el.src = imgSrc;
+              if (imgUrl) el.src = imgUrl;
               showToast('Изображение обновлено!', `Фотография была успешно заменена.`, 'ri-image-line');
+            } else if (el.classList.contains('catalog-card') || el.classList.contains('cat-card-img')) {
+              // Update background image
+              if (imgUrl) {
+                if (el.querySelector('.cat-card-img')) {
+                  el.querySelector('.cat-card-img').style.backgroundImage = `url('${imgUrl}')`;
+                } else {
+                  el.style.backgroundImage = `url('${imgUrl}')`;
+                }
+              }
             } else {
               const val = document.getElementById('qep-main-input').value;
               el.innerHTML = val;
@@ -1838,6 +1612,28 @@
           console.error('DOM apply failed:', e);
         }
       }
+
+      // UNIVERSAL STYLE APPLICATION
+      try {
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img');
+        const el = textElements[qepState.elementIdx];
+        if (el) {
+          const fSize = document.getElementById('qep-style-fontsize').value;
+          const fColor = document.getElementById('qep-style-color').value;
+          const fWeight = document.getElementById('qep-style-fontweight').value;
+          const fAlign = document.getElementById('qep-style-textalign').value;
+          
+          if (fSize) el.style.fontSize = fSize; else el.style.removeProperty('font-size');
+          if (fColor) el.style.color = fColor; else el.style.removeProperty('color');
+          if (fWeight) el.style.fontWeight = fWeight; else el.style.removeProperty('font-weight');
+          if (fAlign) el.style.textAlign = fAlign; else el.style.removeProperty('text-align');
+        }
+      } catch(e) {
+        console.error('Style apply failed:', e);
+      }
+
+      closeQuickEdit();
     }
 
     // New Image Upload logic
