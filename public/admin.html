@@ -1024,6 +1024,18 @@
       renderCatalogTabOnlyTable();
     };
 
+    function getTabLabel(tabId) {
+      if (!catalogData || !catalogData.tabs) return tabId;
+      const tab = catalogData.tabs.find(t => t.id === tabId);
+      return tab ? tab.label : tabId;
+    }
+
+    function getCategoryLabel(catId) {
+      if (!catalogData || !catalogData.categories) return catId;
+      const cat = catalogData.categories.find(c => c.id === catId);
+      return cat ? cat.title : catId;
+    }
+
     function renderCatalogTab() {
       const tabsCount = catalogData.tabs ? catalogData.tabs.length : 0;
       const categoriesCount = catalogData.categories ? catalogData.categories.length : 0;
