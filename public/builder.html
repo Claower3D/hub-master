@@ -1421,11 +1421,11 @@
              }
              
              if (activeResizeEl.tagName === 'IMG') {
-                 activeResizeEl.style.width = newWidth + 'px';
-                 activeResizeEl.style.height = 'auto'; 
+                 activeResizeEl.style.setProperty('width', newWidth + 'px', 'important');
+                 activeResizeEl.style.setProperty('height', 'auto', 'important');
              } else {
-                 activeResizeEl.style.width = newWidth + 'px';
-                 activeResizeEl.style.height = newHeight + 'px';
+                 activeResizeEl.style.setProperty('width', newWidth + 'px', 'important');
+                 activeResizeEl.style.setProperty('height', newHeight + 'px', 'important');
              }
              
              const rect = activeResizeEl.getBoundingClientRect();
