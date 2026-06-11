@@ -2089,7 +2089,7 @@
       if (qepState.elementIdx == null) return;
       try {
         const doc = frame.contentDocument || frame.contentWindow.document;
-        const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img');
+        const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, img.hero-master-img, div.showcase-master-placeholder');
         const el = textElements[qepState.elementIdx];
         if (!el) return;
 
@@ -2201,7 +2201,7 @@
       } else if (transType === 'dom') {
         try {
           const doc = frame.contentDocument || frame.contentWindow.document;
-          const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img');
+          const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, img.hero-master-img, div.showcase-master-placeholder');
           const el = textElements[qepState.elementIdx];
           if (el) {
             const imgUrl = document.getElementById('qep-image-url-input').value;
