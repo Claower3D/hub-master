@@ -1290,12 +1290,17 @@
         });
 
         // Tag all text-containing elements for inline translation edits
-        const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img');
+        const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, img.hero-master-img, div.showcase-master-placeholder');
         textElements.forEach((el, index) => {
-          if (el.tagName === 'IMG' || el.children.length === 0 || (el.children.length === 1 && (el.firstElementChild.tagName === 'SPAN' || el.firstElementChild.tagName === 'BR' || el.firstElementChild.tagName === 'I'))) {
-            const text = el.tagName === 'IMG' ? el.src : (el.innerText ? el.innerText.trim() : "");
-            if (text && text.length > 0) {
-              const match = el.tagName === 'IMG' ? null : window.parent.findTranslationKey(text);
+          const isImg = el.tagName === 'IMG';
+          const hasBg = el.style && el.style.backgroundImage && el.style.backgroundImage !== 'none' && el.style.backgroundImage !== '';
+          const isCatalogCard = el.classList.contains('catalog-card');
+          const isShowcasePlaceholder = el.classList.contains('showcase-master-placeholder');
+
+          if (isImg || isShowcasePlaceholder || isCatalogCard || el.children.length === 0 || (el.children.length === 1 && (el.firstElementChild.tagName === 'SPAN' || el.firstElementChild.tagName === 'BR' || el.firstElementChild.tagName === 'I'))) {
+            const text = isImg ? el.src : (el.innerText ? el.innerText.trim() : "");
+            if ((text && text.length > 0) || isShowcasePlaceholder || hasBg) {
+              const match = isImg ? null : window.parent.findTranslationKey(text);
               el.classList.add('builder-inline-editable');
               el.setAttribute('data-el-idx', index);
               if (match) {
