@@ -1383,6 +1383,10 @@
             }
             startLeft = parseFloat(dragEl.style.left) || 0;
             startTop = parseFloat(dragEl.style.top) || 0;
+            
+            if (editable.tagName === 'IMG') {
+               e.preventDefault();
+            }
           } else if (!e.target.closest('.builder-resize-overlay') && !e.target.closest('.builder-section-toolbar')) {
              resizeOverlay.style.display = 'none';
              activeResizeEl = null;
