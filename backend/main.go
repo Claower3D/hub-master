@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"compress/gzip"
 	"log"
 	"net/http"
 	"os"
@@ -1351,6 +1352,72 @@ func main() {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(map[string]string{"status": "success"})
 	}))
+
+	// POST /api/admin/save-page-html-gz (admin only) - for large payloads
+	mux.HandleFunc("/api/admin/save-page-html-gz", corsMiddleware(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodOptions {
+			return
+		}
+		if r.Method != http.MethodPost {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+		user, err := getAuthenticatedUser(r, dbInstance)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusUnauthorized)
+			return
+		}
+		if user.Role != "admin" {
+			http.Error(w, "Forbidden (Admin only)", http.StatusForbidden)
+			return
+		}
+
+		err = r.ParseMultipartForm(10 << 20) // 10 MB
+		if err != nil {
+			http.Error(w, "Failed to parse form", http.StatusBadRequest)
+			return
+		}
+
+		page := r.FormValue("page")
+		file, _, err := r.FormFile("html")
+		if err != nil {
+			http.Error(w, "Missing file", http.StatusBadRequest)
+			return
+		}
+		defer file.Close()
+
+		cleanPage := filepath.Clean(page)
+		if strings.Contains(cleanPage, "..") {
+			http.Error(w, "Invalid page path", http.StatusBadRequest)
+			return
+		}
+
+		// We need to decompress it!
+		gzReader, err := gzip.NewReader(file)
+		if err != nil {
+			http.Error(w, "Failed to initialize gzip reader: " + err.Error(), http.StatusBadRequest)
+			return
+		}
+		defer gzReader.Close()
+
+		targetPath := filepath.Join(staticDir, cleanPage)
+		out, err := os.Create(targetPath)
+		if err != nil {
+			http.Error(w, "Failed to create target file", http.StatusInternalServerError)
+			return
+		}
+		defer out.Close()
+
+		_, err = io.Copy(out, gzReader)
+		if err != nil {
+			http.Error(w, "Failed to write decompressed data", http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]string{"status": "success"})
+	}))
+
 
 
 	// staticDir is initialized at the start of main()

@@ -1839,17 +1839,21 @@
         updatedHtml = updatedHtml.replace(/const translations = \{[\s\S]*?\};/, transString);
         updatedHtml = updatedHtml.replace(/const catalogTranslations = \{[\s\S]*?\};/, catTransString);
 
-        // Send to backend
-        const saveResponse = await fetch('/api/admin/save-page-html', {
+        // Send to backend via GZIP to bypass Railway/Cloudflare body limits for large files
+        const stream = new Blob([updatedHtml]).stream().pipeThrough(new CompressionStream('gzip'));
+        const responseGz = new Response(stream);
+        const blobGz = await responseGz.blob();
+
+        const fd = new FormData();
+        fd.append('page', activePage);
+        fd.append('html', blobGz, activePage);
+
+        const saveResponse = await fetch('/api/admin/save-page-html-gz', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + adminToken
           },
-          body: JSON.stringify({
-            page: activePage,
-            html: updatedHtml
-          })
+          body: fd
         });
 
         const result = await saveResponse.json();
