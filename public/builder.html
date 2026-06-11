@@ -1130,6 +1130,28 @@
           .toolbar-handle { font-size: 14px; color: #000; opacity: 0.5; cursor: grab; margin-right: 4px; }
           .toolbar-title { font-size: 12px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase; margin-right: 8px; }
 
+          
+          .builder-resize-overlay {
+            position: absolute;
+            border: 2px dashed #10b981;
+            pointer-events: none;
+            display: none;
+            z-index: 100000;
+          }
+          .resize-handle {
+            position: absolute;
+            width: 14px; height: 14px;
+            background: #10b981;
+            border: 2px solid #fff;
+            pointer-events: auto;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+          }
+          .resize-handle.top-left { top: -7px; left: -7px; cursor: nwse-resize; }
+          .resize-handle.top-right { top: -7px; right: -7px; cursor: nesw-resize; }
+          .resize-handle.bottom-left { bottom: -7px; left: -7px; cursor: nesw-resize; }
+          .resize-handle.bottom-right { bottom: -7px; right: -7px; cursor: nwse-resize; }
+
           .builder-add-divider {
             height: 10px;
             background: transparent;
@@ -1296,11 +1318,54 @@
         let isDragging = false;
         let startMouseX = 0, startMouseY = 0;
         let startLeft = 0, startTop = 0;
+        
         let clickStart = 0;
 
+        // RESIZE OVERLAY
+        const resizeOverlay = doc.createElement('div');
+        resizeOverlay.className = 'builder-resize-overlay';
+        resizeOverlay.innerHTML = `
+           <div class="resize-handle top-left" data-dir="tl"></div>
+           <div class="resize-handle top-right" data-dir="tr"></div>
+           <div class="resize-handle bottom-left" data-dir="bl"></div>
+           <div class="resize-handle bottom-right" data-dir="br"></div>
+        `;
+        doc.body.appendChild(resizeOverlay);
+
+        let isResizing = false;
+        let activeResizeEl = null;
+        let resizeDir = '';
+        let startWidth = 0;
+        let startHeight = 0;
+
+
         doc.addEventListener('mousedown', (e) => {
+          if (e.target.classList.contains('resize-handle')) {
+             isResizing = true;
+             resizeDir = e.target.getAttribute('data-dir');
+             startMouseX = e.clientX;
+             startMouseY = e.clientY;
+             if (activeResizeEl) {
+                 startWidth = activeResizeEl.offsetWidth;
+                 startHeight = activeResizeEl.offsetHeight;
+                 isDragging = false;
+                 dragEl = null;
+             }
+             e.preventDefault();
+             e.stopPropagation();
+             return;
+          }
+
           const editable = e.target.closest('.builder-inline-editable');
           if (editable) {
+            activeResizeEl = editable;
+            const rect = editable.getBoundingClientRect();
+            resizeOverlay.style.display = 'block';
+            resizeOverlay.style.width = rect.width + 'px';
+            resizeOverlay.style.height = rect.height + 'px';
+            resizeOverlay.style.top = (rect.top + doc.defaultView.scrollY) + 'px';
+            resizeOverlay.style.left = (rect.left + doc.defaultView.scrollX) + 'px';
+
             dragEl = editable;
             isDragging = false;
             startMouseX = e.clientX;
@@ -1313,10 +1378,52 @@
             }
             startLeft = parseFloat(dragEl.style.left) || 0;
             startTop = parseFloat(dragEl.style.top) || 0;
+          } else if (!e.target.closest('.builder-resize-overlay') && !e.target.closest('.builder-section-toolbar')) {
+             resizeOverlay.style.display = 'none';
+             activeResizeEl = null;
           }
         }, true);
 
         doc.addEventListener('mousemove', (e) => {
+          if (isResizing && activeResizeEl) {
+             const dx = e.clientX - startMouseX;
+             const dy = e.clientY - startMouseY;
+             let newWidth = startWidth;
+             let newHeight = startHeight;
+             
+             if (resizeDir === 'br') {
+                newWidth = startWidth + dx;
+                newHeight = startHeight + dy;
+             } else if (resizeDir === 'tr') {
+                newWidth = startWidth + dx;
+                newHeight = startHeight - dy;
+             } else if (resizeDir === 'bl') {
+                newWidth = startWidth - dx;
+                newHeight = startHeight + dy;
+             } else if (resizeDir === 'tl') {
+                newWidth = startWidth - dx;
+                newHeight = startHeight - dy;
+             }
+             
+             if (activeResizeEl.tagName === 'IMG') {
+                 activeResizeEl.style.width = newWidth + 'px';
+                 activeResizeEl.style.height = 'auto'; 
+             } else {
+                 activeResizeEl.style.width = newWidth + 'px';
+                 activeResizeEl.style.height = newHeight + 'px';
+             }
+             
+             const rect = activeResizeEl.getBoundingClientRect();
+             resizeOverlay.style.width = rect.width + 'px';
+             resizeOverlay.style.height = rect.height + 'px';
+             resizeOverlay.style.top = (rect.top + doc.defaultView.scrollY) + 'px';
+             resizeOverlay.style.left = (rect.left + doc.defaultView.scrollX) + 'px';
+             
+             e.preventDefault();
+             e.stopPropagation();
+             return;
+          }
+
           if (!dragEl) return;
           const dx = e.clientX - startMouseX;
           const dy = e.clientY - startMouseY;
@@ -1351,10 +1458,22 @@
             
             dragEl.style.left = newLeft + 'px';
             dragEl.style.top = newTop + 'px';
+            
+            if (activeResizeEl === dragEl) {
+               const rect = activeResizeEl.getBoundingClientRect();
+               resizeOverlay.style.top = (rect.top + doc.defaultView.scrollY) + 'px';
+               resizeOverlay.style.left = (rect.left + doc.defaultView.scrollX) + 'px';
+            }
           }
         }, true);
 
         doc.addEventListener('mouseup', (e) => {
+          if (isResizing) {
+             isResizing = false;
+             if (activeResizeEl) activeResizeEl.setAttribute('data-pos-edited', 'true');
+             e.preventDefault(); e.stopPropagation();
+          }
+
           if (dragEl) {
             if (isDragging) {
               e.preventDefault();
