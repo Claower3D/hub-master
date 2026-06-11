@@ -1130,6 +1130,11 @@
           .toolbar-handle { font-size: 14px; color: #000; opacity: 0.5; cursor: grab; margin-right: 4px; }
           .toolbar-title { font-size: 12px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase; margin-right: 8px; }
 
+          .builder-inline-editable.hero-master-img, .builder-inline-editable.showcase-master-placeholder { 
+             z-index: 999999 !important; 
+             position: relative !important; 
+             pointer-events: auto !important; 
+          }
           
           .builder-resize-overlay {
             position: absolute;
@@ -1338,6 +1343,7 @@
         doc.body.appendChild(resizeOverlay);
 
         let isResizing = false;
+        let wasResizing = false;
         let activeResizeEl = null;
         let resizeDir = '';
         let startWidth = 0;
@@ -1479,6 +1485,8 @@
         doc.addEventListener('mouseup', (e) => {
           if (isResizing) {
              isResizing = false;
+             wasResizing = true;
+             setTimeout(() => { wasResizing = false; }, 100);
              if (activeResizeEl) activeResizeEl.setAttribute('data-pos-edited', 'true');
              e.preventDefault(); e.stopPropagation();
           }
@@ -1500,7 +1508,7 @@
 
         // Intercept clicks to load editor
         doc.addEventListener('click', (e) => {
-          if (isDragging) {
+          if (isDragging || wasResizing) {
             e.preventDefault(); e.stopPropagation(); return;
           }
           const editable = e.target.closest('.builder-inline-editable');
