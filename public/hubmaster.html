@@ -23,14 +23,14 @@
   <meta property="og:url" content="https://hubmaster.kz/">
   <meta property="og:title" content="HUB MASTER — Мультисервис услуг и товаров по всему Казахстану">
   <meta property="og:description" content="Профессиональные бытовые услуги в Казахстане. Вызов мастера за 45 минут. Гарантия до 1 года, прозрачные цены.">
-  <meta property="og:image" content="https://hubmaster.kz/public/og-image.jpg">
+  <meta property="og:image" content="https://hubmaster.kz/og-image.jpg">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://hubmaster.kz/">
   <meta name="twitter:title" content="HUB MASTER — Мультисервис услуг и товаров по всему Казахстану">
   <meta name="twitter:description" content="Бытовой сервис по всему Казахстану. Сборка мебели, ремонт техники, сантехника, электрика, клининг.">
-  <meta name="twitter:image" content="https://hubmaster.kz/public/og-image.jpg">
+  <meta name="twitter:image" content="https://hubmaster.kz/og-image.jpg">
 
   <!-- Alternate Languages (Hreflang) -->
   <link rel="alternate" hreflang="ru" href="https://hubmaster.kz/" />
@@ -50,7 +50,7 @@
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": "HUB MASTER",
-    "image": "https://hubmaster.kz/public/og-image.jpg",
+    "image": "https://hubmaster.kz/og-image.jpg",
     "@id": "https://hubmaster.kz/#localbusiness",
     "url": "https://hubmaster.kz/",
     "telephone": "+77058462749",
@@ -120,7 +120,7 @@
       --text-white: #09090b;
       --text-muted: #09090b;
       --shadow: rgba(9, 9, 11, 0.05) 0px 10px 30px -10px;
-      --showcase-img: url('/public/showcase_master_day.webp?v=2');
+      --showcase-img: url('/showcase_master_day.webp?v=2');
     }
 
     * {
@@ -5697,8 +5697,8 @@
       <div class="max-width-wrap">
         <div class="hero-v2-wrap" style="position: relative;">
           <div class="mobile-hero-master">
-            <img src="/public/hero_master.webp?v=2" class="hero-master-img dark-only" alt="Master">
-            <img src="/public/hero_master_day.webp?v=2" class="hero-master-img light-only" alt="Master">
+            <img src="/hero_master.webp?v=2" class="hero-master-img dark-only" alt="Master">
+            <img src="/hero_master_day.webp?v=2" class="hero-master-img light-only" alt="Master">
           </div>
 
           <!-- LEFT: Title + CTA -->
@@ -5769,8 +5769,8 @@
             <!-- CENTER: placeholder for future master image -->
             <div class="hero-v2-master">
               <div class="master-glow-bg"></div>
-              <img src="/public/hero_master.webp?v=2" class="hero-master-img dark-only" alt="Master">
-              <img src="/public/hero_master_day.webp?v=2" class="hero-master-img light-only" alt="Master">
+              <img src="/hero_master.webp?v=2" class="hero-master-img dark-only" alt="Master">
+              <img src="/hero_master_day.webp?v=2" class="hero-master-img light-only" alt="Master">
             </div>
 
             <!-- Right pills: LONG top → SHORT bottom (matching left column lengths) -->
@@ -6179,7 +6179,7 @@
 
           <div class="showcase-master">
             <div class="showcase-glow"></div>
-            <div class="showcase-master-placeholder" style="background: var(--showcase-img, url('/public/showcase_master.webp?v=2')) no-repeat center bottom; background-size: contain; border: none;"></div>
+            <div class="showcase-master-placeholder" style="background: var(--showcase-img, url('/showcase_master.webp?v=2')) no-repeat center bottom; background-size: contain; border: none;"></div>
 
             <!-- Floating Pills -->
             <div class="showcase-pill pill-1">
@@ -8816,8 +8816,8 @@
       const showcasePls = document.querySelectorAll('.showcase-master-placeholder');
       showcasePls.forEach(el => {
         el.style.backgroundImage = currentTheme === 'dark'
-          ? "url('/public/showcase_master.webp?v=2')"
-          : "url('/public/showcase_master_day.webp?v=2')";
+          ? "url('/showcase_master.webp?v=2')"
+          : "url('/showcase_master_day.webp?v=2')";
       });
     }
 
@@ -8841,8 +8841,8 @@
       const showcasePls = document.querySelectorAll('.showcase-master-placeholder');
       showcasePls.forEach(el => {
         el.style.backgroundImage = currentTheme === 'dark'
-          ? "url('/public/showcase_master.webp?v=2')"
-          : "url('/public/showcase_master_day.webp?v=2')";
+          ? "url('/showcase_master.webp?v=2')"
+          : "url('/showcase_master_day.webp?v=2')";
       });
     }
 
@@ -8936,7 +8936,7 @@
         role: { RU: "Реставратор мебели", KZ: "Жиһаз қалпына келтіруші", EN: "Furniture Restorer" },
         category: "furniture",
         rating: 5,
-        avatar: "/public/master_azamat.png",
+        avatar: "/master_azamat.png",
         experience: { RU: "Опыт 6 лет", KZ: "Тәжірибе 6 жыл", EN: "6 years exp" }
       },
       {
@@ -8944,7 +8944,7 @@
         role: { RU: "Сборщик мебели", KZ: "Жиһаз жинаушы", EN: "Furniture Assembler" },
         category: "furniture",
         rating: 5,
-        avatar: "/public/master_daniyar.png",
+        avatar: "/master_daniyar.png",
         experience: { RU: "Опыт 5 лет", KZ: "Тәжірибе 5 жыл", EN: "5 years exp" }
       },
       {
@@ -8952,7 +8952,7 @@
         role: { RU: "Мастер по перетяжке", KZ: "Қаптау шебері", EN: "Re-upholstery Master" },
         category: "furniture",
         rating: 5,
-        avatar: "/public/master_alibek.png",
+        avatar: "/master_alibek.png",
         experience: { RU: "Опыт 7 лет", KZ: "Тәжірибе 7 жыл", EN: "7 years exp" }
       },
       {
@@ -8960,7 +8960,7 @@
         role: { RU: "Электрик", KZ: "Электрик", EN: "Electrician" },
         category: "appliance",
         rating: 5,
-        avatar: "/public/master_ruslan.png",
+        avatar: "/master_ruslan.png",
         experience: { RU: "Опыт 8 лет", KZ: "Тәжірибе 8 жыл", EN: "8 years exp" }
       },
       {
@@ -8968,7 +8968,7 @@
         role: { RU: "Сантехник", KZ: "Сантехник", EN: "Plumber" },
         category: "appliance",
         rating: 5,
-        avatar: "/public/master_arman.png",
+        avatar: "/master_arman.png",
         experience: { RU: "Опыт 9 лет", KZ: "Тәжірибе 9 жыл", EN: "9 years exp" }
       },
       {
@@ -8976,7 +8976,7 @@
         role: { RU: "Мастер по окнам", KZ: "Терезе шебері", EN: "Window Specialist" },
         category: "windows",
         rating: 5,
-        avatar: "/public/master_azamat.png",
+        avatar: "/master_azamat.png",
         experience: { RU: "Опыт 5 лет", KZ: "Тәжірибе 5 жыл", EN: "5 years exp" }
       },
       {
@@ -8984,7 +8984,7 @@
         role: { RU: "Мастер по сварке", KZ: "Дәнекерлеу шебері", EN: "Welding Specialist" },
         category: "welding",
         rating: 5,
-        avatar: "/public/master_alibek.png",
+        avatar: "/master_alibek.png",
         experience: { RU: "Опыт 6 лет", KZ: "Тәжірибе 6 жыл", EN: "6 years exp" }
       },
       {
@@ -8992,7 +8992,7 @@
         role: { RU: "Мастер по ремонту техники", KZ: "Техника жөндеу шебері", EN: "Appliance Technician" },
         category: "appliance",
         rating: 5,
-        avatar: "/public/master_daniyar.png",
+        avatar: "/master_daniyar.png",
         experience: { RU: "Опыт 8 лет", KZ: "Тәжірибе 8 жыл", EN: "8 years exp" }
       }
     ];
