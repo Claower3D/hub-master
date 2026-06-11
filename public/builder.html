@@ -1812,6 +1812,8 @@
         docClone.querySelectorAll('.builder-add-divider').forEach(el => el.remove());
         docClone.querySelectorAll('.builder-section-toolbar').forEach(el => el.remove());
         docClone.querySelectorAll('.smart-guide-x, .smart-guide-y').forEach(el => el.remove());
+        docClone.querySelectorAll('.builder-resize-overlay').forEach(el => el.remove());
+        docClone.querySelectorAll('.builder-add-line').forEach(el => el.remove());
         docClone.querySelectorAll('.builder-inline-editable').forEach(el => {
           el.classList.remove('builder-inline-editable');
           if (el.className === '') el.removeAttribute('class');
