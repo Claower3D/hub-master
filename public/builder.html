@@ -1856,6 +1856,11 @@
           body: fd
         });
 
+        if (!saveResponse.ok) {
+          const text = await saveResponse.text();
+          throw new Error(text || 'Network error ' + saveResponse.status);
+        }
+
         const result = await saveResponse.json();
         if (result.status === 'success') {
           showNotification('Публикация завершена', 'Все изменения были успешно сохранены на сервере!');
