@@ -11230,6 +11230,7 @@
                   const detail = (apiCatalog.details && apiCatalog.details[sub.id]) || {};
                   return {
                     id: sub.id,
+                    tabId: tab.id,
                     catId: cat.id,
                     catTitle: cat.title,
                     catTitleKz: getCatalogText(cat.title, 'KZ'),
@@ -11252,6 +11253,7 @@
                 });
                 return {
                   id: cat.id,
+                  tabId: tab.id,
                   title: cat.title,
                   titleKz: getCatalogText(cat.title, 'KZ'),
                   titleEn: getCatalogText(cat.title, 'EN'),
@@ -11350,9 +11352,16 @@
       }
 
       if (resolvedTab || resolvedCat || resolvedItem) {
+        const tabId = resolvedTab
+          ? resolvedTab.id
+          : resolvedCat
+            ? (resolvedCat.tabId || null)
+            : resolvedItem
+              ? (resolvedItem.tabId || null)
+              : null;
         return {
-          tabId: resolvedTab ? resolvedTab.id : (resolvedCat ? resolvedCat.tabId : null),
-          catId: resolvedCat ? resolvedCat.id : null,
+          tabId: tabId,
+          catId: resolvedCat ? resolvedCat.id : (resolvedItem ? resolvedItem.catId : null),
           itemId: resolvedItem ? resolvedItem.id : null
         };
       }

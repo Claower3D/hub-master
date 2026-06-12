@@ -11247,6 +11247,7 @@
                   const detail = (apiCatalog.details && apiCatalog.details[sub.id]) || {};
                   return {
                     id: sub.id,
+                    tabId: tab.id,
                     catId: cat.id,
                     catTitle: cat.title,
                     catTitleKz: getCatalogText(cat.title, 'KZ'),
@@ -11269,6 +11270,7 @@
                 });
                 return {
                   id: cat.id,
+                  tabId: tab.id,
                   title: cat.title,
                   titleKz: getCatalogText(cat.title, 'KZ'),
                   titleEn: getCatalogText(cat.title, 'EN'),
@@ -11367,9 +11369,16 @@
       }
 
       if (resolvedTab || resolvedCat || resolvedItem) {
+        const tabId = resolvedTab
+          ? resolvedTab.id
+          : resolvedCat
+            ? (resolvedCat.tabId || null)
+            : resolvedItem
+              ? (resolvedItem.tabId || null)
+              : null;
         return {
-          tabId: resolvedTab ? resolvedTab.id : (resolvedCat ? resolvedCat.tabId : null),
-          catId: resolvedCat ? resolvedCat.id : null,
+          tabId: tabId,
+          catId: resolvedCat ? resolvedCat.id : (resolvedItem ? resolvedItem.catId : null),
           itemId: resolvedItem ? resolvedItem.id : null
         };
       }
@@ -11519,10 +11528,23 @@
           return;
         }
         resolved = {
-          tabId: catId,
+          tabId: fallbackCat.tabId || catId,
           catId: fallbackCat.id,
           itemId: itemId
         };
+      }
+
+      // Ensure tabId is resolved from catId if missing
+      if (!resolved.tabId && resolved.catId) {
+        for (const tab of servicesData) {
+          if (tab.categories && tab.categories.find(c => c.id === resolved.catId)) {
+            resolved.tabId = tab.id;
+            break;
+          }
+        }
+      }
+      if (!resolved.tabId) {
+        resolved.tabId = catId;
       }
 
       const tab = servicesData.find(t => t.id === resolved.tabId);
