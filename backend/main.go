@@ -102,6 +102,17 @@ func main() {
 	}
 	defer dbInstance.Close()
 
+	// Sync catalog from JSON to DB on startup to ensure git changes reflect on Railway
+	catData, catErr := os.ReadFile("catalog_data.json")
+	if catErr == nil {
+		dbInstance.SaveCatalog(string(catData))
+	} else {
+		catData, catErr = os.ReadFile("../catalog_data.json")
+		if catErr == nil {
+			dbInstance.SaveCatalog(string(catData))
+		}
+	}
+
 	// Serve Static Files from dist / root directory (needed for deployment)
 	staticDir := "."
 	if _, err := os.Stat("public/index.html"); err == nil {
