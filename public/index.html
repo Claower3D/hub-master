@@ -5827,40 +5827,100 @@
 
         </div>
 
-        <div class="hero-bottom-form-card">
-          <div class="form-card-left" style="display: flex; flex-direction: column; justify-content: center; gap: 12px;">
-            <h3 class="form-card-title" data-i18n="partnersTitle">Наши партнёры</h3>
-            <div class="partners-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; margin-top: 4px; width: 100%;">
-              <div class="partner-logo-item" style="background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--text-white); font-size: 13px; min-height: 42px;">Kaspi.kz</div>
-              <div class="partner-logo-item" style="background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--text-white); font-size: 13px; min-height: 42px;">Halyk Bank</div>
-              <div class="partner-logo-item" style="background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--text-white); font-size: 13px; min-height: 42px;">Technodom</div>
-              <div class="partner-logo-item" style="background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--text-white); font-size: 13px; min-height: 42px;">Sulpak</div>
-              <div class="partner-logo-item" style="background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--text-white); font-size: 13px; min-height: 42px;">Mechta.kz</div>
+        <style>
+          .partners-block {
+            grid-column: span 2;
+            padding: 24px 0;
+            margin-top: 16px;
+          }
+          .partners-main-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-white);
+            margin-bottom: 24px;
+            font-family: var(--font-heading);
+          }
+          .partners-category {
+            margin-bottom: 30px;
+          }
+          .partners-category:last-child {
+            margin-bottom: 0;
+          }
+          .partners-label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+          }
+          .partners-dev-card {
+            background: rgba(20, 20, 24, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 100%;
+          }
+          .partners-dev-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-white);
+            margin-bottom: 8px;
+          }
+          .partners-dev-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+          }
+          .partners-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+          }
+          .partners-tag {
+            background: rgba(20, 20, 24, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        </style>
+        <div class="partners-block">
+          <h2 class="partners-main-title">Нам доверяют</h2>
+          
+          <div class="partners-category">
+            <span class="partners-label">ЗАСТРОЙЩИК</span>
+            <div class="partners-dev-card">
+              <div class="partners-dev-title">Everest Development</div>
+              <div class="partners-dev-text">Выполняем работы на объектах застройщика: остекление и москитные сетки, электромонтажные работы, сварка и металлоконструкции.</div>
             </div>
           </div>
-          <div class="form-card-right">
-            <ul class="form-card-checklist">
-              <li>
-                <span class="chk-icon">✓</span>
-                <span class="chk-text">Без скрытых комиссий</span>
-              </li>
-              <li>
-                <span class="chk-icon">✓</span>
-                <span class="chk-text">Профессиональные инструменты</span>
-              </li>
-              <li>
-                <span class="chk-icon">✓</span>
-                <span class="chk-text">Гарантия на работу</span>
-              </li>
-              <li>
-                <span class="chk-icon">✓</span>
-                <span class="chk-text">Сертифицированные мастера</span>
-              </li>
-              <li>
-                <span class="chk-icon">✓</span>
-                <span class="chk-text">Фиксированная цена</span>
-              </li>
-            </ul>
+          
+          <div class="partners-category">
+            <span class="partners-label">ПРОФИЛЬ ДЛЯ ОКОН И СЕТОК</span>
+            <div class="partners-tags">
+              <div class="partners-tag">WUKO</div>
+              <div class="partners-tag">KAVI</div>
+              <div class="partners-tag">VEKA</div>
+              <div class="partners-tag">REHAU</div>
+              <div class="partners-tag">Euro Super Plast</div>
+            </div>
+          </div>
+          
+          <div class="partners-category">
+            <span class="partners-label">МАТЕРИАЛЫ И ФУРНИТУРА ДЛЯ МЕБЕЛИ</span>
+            <div class="partners-tags">
+              <div class="partners-tag">Blum</div>
+              <div class="partners-tag">Hettich</div>
+              <div class="partners-tag">Häfele</div>
+              <div class="partners-tag">Egger</div>
+              <div class="partners-tag">Kronospan</div>
+            </div>
           </div>
         </div>
 
