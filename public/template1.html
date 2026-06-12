@@ -11879,12 +11879,7 @@
         }
       }
       
-      const isMobile = window.innerWidth < 768;
-      if (isMobile && catId) {
-        window.open(path, '_blank');
-        closeMegaModal();
-        return;
-      }
+      
 
       if (window.location.pathname !== path) {
         history.pushState({ catId, subcatId, itemId }, '', path);
