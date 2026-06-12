@@ -1,55 +1,35 @@
 {
   "tabs": [
     {
-      "id": "okna",
-      "label": "Окна"
-    },
-    {
       "id": "servis",
-      "label": "Сервис"
+      "name": "Ремонт техники",
+      "nameKz": "Техника жөндеу",
+      "nameEn": "Appliance Repair",
+      "icon": "ri-tools-line"
     },
     {
       "id": "mebel",
-      "label": "Мебель"
-    }
-  ],
-  "categories": [
-    {
-      "id": "cat-okna-1",
-      "tab": "okna",
-      "title": "Защита от выпадения детей",
-      "icon": "ri-shield-check-line"
+      "name": "Мебель на заказ",
+      "nameKz": "Жиһаз жасау",
+      "nameEn": "Custom Furniture",
+      "icon": "ri-sofa-line"
     },
     {
-      "id": "cat-okna-2",
-      "tab": "okna",
-      "title": "Изготовление окон",
-      "icon": "ri-building-line"
-    },
-    {
-      "id": "cat-okna-3",
-      "tab": "okna",
-      "title": "Кованые решётки",
-      "icon": "ri-grid-line"
-    },
-    {
-      "id": "cat-okna-4",
-      "tab": "okna",
-      "title": "Москитные сетки",
+      "id": "okna",
+      "name": "Окна",
+      "nameKz": "Терезелер",
+      "nameEn": "Windows",
       "icon": "ri-window-line"
     },
     {
-      "id": "cat-okna-5",
-      "tab": "okna",
-      "title": "Плиссе",
-      "icon": "ri-layout-top-line"
-    },
-    {
-      "id": "cat-okna-6",
-      "tab": "okna",
-      "title": "Ремонт окон",
-      "icon": "ri-tools-line"
-    },
+      "id": "klining",
+      "name": "Клининг",
+      "nameKz": "Тазалау",
+      "nameEn": "Cleaning",
+      "icon": "ri-brush-line"
+    }
+  ],
+  "categories": [
     {
       "id": "cat-srv-1",
       "tab": "servis",
@@ -99,6 +79,42 @@
       "icon": "ri-lightbulb-flash-line"
     },
     {
+      "id": "cat-okna-1",
+      "tab": "okna",
+      "title": "Защита от выпадения детей",
+      "icon": "ri-shield-check-line"
+    },
+    {
+      "id": "cat-okna-2",
+      "tab": "okna",
+      "title": "Изготовление окон",
+      "icon": "ri-building-line"
+    },
+    {
+      "id": "cat-okna-3",
+      "tab": "okna",
+      "title": "Кованые решётки",
+      "icon": "ri-grid-line"
+    },
+    {
+      "id": "cat-okna-4",
+      "tab": "okna",
+      "title": "Москитные сетки",
+      "icon": "ri-window-line"
+    },
+    {
+      "id": "cat-okna-5",
+      "tab": "okna",
+      "title": "Плиссе",
+      "icon": "ri-layout-top-line"
+    },
+    {
+      "id": "cat-okna-6",
+      "tab": "okna",
+      "title": "Ремонт окон",
+      "icon": "ri-tools-line"
+    },
+    {
       "id": "cat-meb-1",
       "tab": "mebel",
       "title": "Сборка и разборка мебели",
@@ -139,6 +155,24 @@
       "tab": "mebel",
       "title": "Мебель для бизнеса",
       "icon": "ri-briefcase-4-line"
+    },
+    {
+      "id": "cat-klin-1",
+      "tab": "klining",
+      "title": "Генеральная уборка",
+      "icon": "ri-sparkling-line"
+    },
+    {
+      "id": "cat-klin-2",
+      "tab": "klining",
+      "title": "Уборка после ремонта",
+      "icon": "ri-paint-brush-line"
+    },
+    {
+      "id": "cat-klin-3",
+      "tab": "klining",
+      "title": "Химчистка мебели",
+      "icon": "ri-drop-line"
     }
   ],
   "subcategories": {
