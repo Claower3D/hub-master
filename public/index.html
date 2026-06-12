@@ -5827,7 +5827,7 @@
 
         </div>
 
-        <style>
+                <style>
           .hero-bottom-grid {
             grid-column: span 2;
             display: grid;
@@ -5848,6 +5848,31 @@
               padding: 24px 20px;
             }
           }
+          
+          /* Light Theme Adaptations */
+          [data-theme="light"] .hero-bottom-grid {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+          }
+          [data-theme="light"] .partners-dev-card,
+          [data-theme="light"] .partners-tag {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: #1a202c;
+          }
+          [data-theme="light"] .partners-main-title,
+          [data-theme="light"] .partners-dev-title,
+          [data-theme="light"] .why-us-title,
+          [data-theme="light"] .why-us-list li span.chk-text {
+            color: #1a202c;
+          }
+          [data-theme="light"] .partners-label,
+          [data-theme="light"] .partners-dev-text,
+          [data-theme="light"] .why-us-list li span.chk-subtext {
+            color: #64748b;
+          }
+
           .partners-block {
             display: flex;
             flex-direction: column;
@@ -5981,6 +6006,20 @@
             </div>
           </div>
         </div>
+
+        <div class="why-us-block">
+          <h2 class="why-us-title">Почему мы</h2>
+          <ul class="why-us-list">
+            <li><span class="chk-icon">✓</span><span class="chk-text">Гарантия от 12 месяцев на работы</span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Сертифицированные мастера</span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Бесплатный замер и выезд <span class="chk-subtext">— по окнам и сеткам</span></span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Договор на все работы</span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Выезд в день обращения</span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Работаем по всему Казахстану <span class="chk-subtext">— окна и сетки</span></span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Гарантия лучшей цены</span></li>
+          </ul>
+        </div>
+      </div>
 
         <div class="why-us-block">
           <h2 class="why-us-title">Почему мы</h2>
