@@ -9288,47 +9288,7 @@
     }
 
     
-    // Touch & Mouse swipe logic for masters carousel
-    let mastersTouchStartX = 0;
-    let mastersTouchEndX = 0;
-    let isMastersDragging = false;
-    
-    document.addEventListener('DOMContentLoaded', () => {
-      const mastersTrack = document.getElementById('masters-track');
-      if (mastersTrack) {
-        // Touch events
-        mastersTrack.addEventListener('touchstart', e => {
-          mastersTouchStartX = e.changedTouches[0].screenX;
-        }, {passive: true});
-        
-        mastersTrack.addEventListener('touchend', e => {
-          mastersTouchEndX = e.changedTouches[0].screenX;
-          handleMastersSwipe();
-        }, {passive: true});
 
-        // Mouse events
-        mastersTrack.addEventListener('mousedown', e => {
-          isMastersDragging = true;
-          mastersTouchStartX = e.screenX;
-        });
-        
-        document.addEventListener('mouseup', e => {
-          if (!isMastersDragging) return;
-          isMastersDragging = false;
-          mastersTouchEndX = e.screenX;
-          handleMastersSwipe();
-        });
-      }
-    });
-
-    function handleMastersSwipe() {
-      if (mastersTouchEndX < mastersTouchStartX - 40) {
-        moveCarousel(1); // swipe left -> next
-      }
-      if (mastersTouchEndX > mastersTouchStartX + 40) {
-        moveCarousel(-1); // swipe right -> prev
-      }
-    }
 
     // Initialize text slider auto-rotation
     document.addEventListener('DOMContentLoaded', () => {
@@ -9336,21 +9296,11 @@
     });
 
     function moveCarousel(direction) {
-      const track = document.getElementById('masters-track');
-      if (!track) return;
-
-      const filtered = selectedMastersCategory === 'all' 
-        ? mastersData 
-        : mastersData.filter(m => m.category === selectedMastersCategory);
-
+      const container = document.querySelector('.masters-carousel-container');
+      if (!container) return;
+      
       const cardWidth = 232; // card flex width (220) + gap (12)
-      const maxOffset = Math.max(0, filtered.length - 2);
-
-      currentCarouselOffset += direction;
-      if (currentCarouselOffset < 0) currentCarouselOffset = 0;
-      if (currentCarouselOffset > maxOffset) currentCarouselOffset = maxOffset;
-
-      track.style.transform = `translateX(-${currentCarouselOffset * cardWidth}px)`;
+      container.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
     }
 
     function handleHeroCategorySwitch(category, btnElement) {
