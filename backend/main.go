@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"os/exec"
 	"strconv"
 	"strings"
 	"time"
@@ -371,6 +372,24 @@ func main() {
 
 			// Save to file (as local copy/fallback)
 			_ = os.WriteFile(filePath, data, 0644)
+
+			// Automatically commit and push to Git so changes persist across redeploys
+			go func() {
+				// The app might be running in a subdirectory or root, but git commands will find the .git folder
+				cmdAdd := exec.Command("git", "add", filePath)
+				_ = cmdAdd.Run()
+				
+				cmdCommit := exec.Command("git", "commit", "-m", "chore(catalog): update catalog data via admin panel")
+				_ = cmdCommit.Run()
+				
+				cmdPush := exec.Command("git", "push")
+				err := cmdPush.Run()
+				if err != nil {
+					log.Printf("⚠️ Failed to push catalog changes to git: %v\n", err)
+				} else {
+					log.Println("✅ Successfully pushed catalog changes to git!")
+				}
+			}()
 
 			w.Header().Set("Content-Type", "application/json")
 			w.Write([]byte(`{"status":"success"}`))

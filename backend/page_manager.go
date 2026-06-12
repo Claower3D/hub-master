@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
@@ -140,6 +141,30 @@ func removeFileAndEmptyDirs(filePath string) error {
 		}
 	}
 	return nil
+}
+
+// pushToGit Automatically commits and pushes generated files to the repository
+func pushToGit() {
+	go func() {
+		// Add all changes related to pages
+		exec.Command("git", "add", "app/").Run()
+		exec.Command("git", "add", "public/sitemap.xml").Run()
+		exec.Command("git", "add", "sitemap.xml").Run()
+		exec.Command("git", "add", "redirects.json").Run()
+		exec.Command("git", "add", "next.config.js").Run()
+
+		// Commit
+		cmdCommit := exec.Command("git", "commit", "-m", "chore(pages): update dynamic pages (sections, categories, subcategories)")
+		_ = cmdCommit.Run()
+
+		// Push
+		err := exec.Command("git", "push").Run()
+		if err != nil {
+			log.Printf("⚠️ Failed to push page changes to git: %v\n", err)
+		} else {
+			log.Println("✅ Successfully pushed page changes to git!")
+		}
+	}()
 }
 
 // regenerateSitemap rebuilds sitemap.xml with dynamic page URLs and standard SEO priority values
@@ -678,6 +703,9 @@ func handleCreateCustomPage(db DB) http.HandlerFunc {
 			log.Printf("Page revalidated: /%s/%s", sectionSlug, parentSlug)
 		}
 
+		// Save physical files to Git repository
+		pushToGit()
+
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(savedPage)
 	}
@@ -811,6 +839,9 @@ func handleUpdateCustomPage(db DB) http.HandlerFunc {
 			log.Printf("Page revalidated: /%s/%s", existing.SectionSlug, existing.ParentSlug)
 		}
 
+		// Save physical files to Git repository
+		pushToGit()
+
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(existing)
 	}
@@ -871,6 +902,9 @@ func handleDeleteCustomPage(db DB) http.HandlerFunc {
 		} else if existing.Type == "subcategory" {
 			log.Printf("Page revalidated: /%s/%s", existing.SectionSlug, existing.ParentSlug)
 		}
+
+		// Save physical files to Git repository
+		pushToGit()
 
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(map[string]string{"status": "deleted", "id": fmt.Sprintf("%d", req.ID)})
