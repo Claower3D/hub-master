@@ -1,0 +1,67 @@
+function resolveCatalogRoute(parts) {
+      if (!parts || parts.length === 0) return null;
+      
+      let resolvedTab = null;
+      let resolvedCat = null;
+      let resolvedItem = null;
+
+      // 1. Search for item first (e.g. "sub-okna-1-1") in all parts
+      for (const part of parts) {
+        for (const tab of servicesData) {
+          if (tab.items) {
+            const foundItem = tab.items.find(i => i.id === part);
+            if (foundItem) {
+              resolvedItem = foundItem;
+              resolvedCat = (tab.categories || []).find(c => c.id === foundItem.catId);
+              resolvedTab = tab;
+              break;
+            }
+          }
+        }
+        if (resolvedItem) break;
+      }
+
+      // 2. Search for category (e.g. "cat-okna-1")
+      if (!resolvedItem) {
+        for (const part of parts) {
+          for (const tab of servicesData) {
+            if (tab.categories) {
+              const foundCat = tab.categories.find(c => c.id === part);
+              if (foundCat) {
+                resolvedCat = foundCat;
+                resolvedTab = tab;
+                break;
+              }
+            }
+            if (tab.id === part && (!tab.categories || tab.categories.length === 0)) {
+              resolvedCat = tab;
+              resolvedTab = tab;
+              break;
+            }
+          }
+          if (resolvedCat) break;
+        }
+      }
+
+      // 3. Search for tab (e.g. "okna")
+      if (!resolvedCat && !resolvedItem) {
+        for (const part of parts) {
+          const foundTab = servicesData.find(t => t.id === part);
+          if (foundTab) {
+            resolvedTab = foundTab;
+            break;
+          }
+        }
+      }
+
+      if (resolvedTab || resolvedCat || resolvedItem) {
+        return {
+          tabId: resolvedTab ? resolvedTab.id : (resolvedCat ? resolvedCat.tabId : null),
+          catId: resolvedCat ? resolvedCat.id : null,
+          itemId: resolvedItem ? resolvedItem.id : null
+        };
+      }
+      return null;
+    }
+
+    

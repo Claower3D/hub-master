@@ -1,0 +1,53 @@
+function renderCatalogItems() {
+      const grid = document.getElementById('catalog-items-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      function getCategoryImage(title) {
+        const t = (title || '').toLowerCase();
+        if (t.includes('крупн') || t.includes('стирал') || t.includes('холод')) {
+          return 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=600&q=80';
+        }
+        if (t.includes('мелк') || t.includes('пылесос') || t.includes('микроволн') || t.includes('кофема')) {
+          return 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=600&q=80';
+        }
+        if (t.includes('цифр') || t.includes('телевиз') || t.includes('телефо') || t.includes('планшет')) {
+          return 'https://images.unsplash.com/photo-1461151304267-38535e780c79?w=600&q=80';
+        }
+        if (t.includes('компь') || t.includes('ноутбук') || t.includes('macbook')) {
+          return 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80';
+        }
+        if (t.includes('авто') || t.includes('сто') || t.includes('эвакуа')) {
+          return 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=600&q=80';
+        }
+        if (t.includes('клини') || t.includes('уборк')) {
+          return 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80';
+        }
+        if (t.includes('санитар') || t.includes('дезинф') || t.includes('тарака') || t.includes('клоп')) {
+          return 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&q=80';
+        }
+        if (t.includes('химчист') || t.includes('стирк') || t.includes('ковр')) {
+          return 'https://images.unsplash.com/photo-1545189656-786ac2d77ef7?w=600&q=80';
+        }
+        if (t.includes('сантех') || t.includes('электри') || t.includes('проводк')) {
+          return 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&q=80';
+        }
+        if (t.includes('юрист') || t.includes('адвокат') || t.includes('закон')) {
+          return 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&q=80';
+        }
+        if (t.includes('жиһаз') || t.includes('мебе')) {
+          return 'https://images.unsplash.com/photo-1592078615290-033ee584e267?w=600&q=80';
+        }
+        if (t.includes('окн') || t.includes('витраж')) {
+          return 'https://images.unsplash.com/photo-1509644851169-2aba0855683d?w=600&q=80';
+        }
+        if (t.includes('здоров') || t.includes('врач') || t.includes('фитнес')) {
+          return 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&q=80';
+        }
+        if (t.includes('ремонт кварт') || t.includes('строител')) {
+          return 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&q=80';
+        }
+        if (t.includes('монтаж') || t.includes('установк')) {
+          return 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80';
+        }
+        return 'https://images.
