@@ -5,28 +5,40 @@
       "name": "Ремонт техники",
       "nameKz": "Техника жөндеу",
       "nameEn": "Appliance Repair",
-      "icon": "ri-tools-line"
+      "icon": "ri-tools-line",
+      "label": "Ремонт техники",
+      "labelKz": "Техника жөндеу",
+      "labelEn": "Appliance Repair"
     },
     {
       "id": "mebel",
       "name": "Мебель на заказ",
       "nameKz": "Жиһаз жасау",
       "nameEn": "Custom Furniture",
-      "icon": "ri-sofa-line"
+      "icon": "ri-sofa-line",
+      "label": "Мебель на заказ",
+      "labelKz": "Жиһаз жасау",
+      "labelEn": "Custom Furniture"
     },
     {
       "id": "okna",
       "name": "Окна",
       "nameKz": "Терезелер",
       "nameEn": "Windows",
-      "icon": "ri-window-line"
+      "icon": "ri-window-line",
+      "label": "Окна",
+      "labelKz": "Терезелер",
+      "labelEn": "Windows"
     },
     {
       "id": "klining",
       "name": "Клининг",
       "nameKz": "Тазалау",
       "nameEn": "Cleaning",
-      "icon": "ri-brush-line"
+      "icon": "ri-brush-line",
+      "label": "Клининг",
+      "labelKz": "Тазалау",
+      "labelEn": "Cleaning"
     }
   ],
   "categories": [

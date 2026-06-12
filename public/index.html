@@ -11285,9 +11285,9 @@
 
               return {
                 id: tab.id,
-                title: tab.label,
-                titleKz: getCatalogText(tab.label, 'KZ'),
-                titleEn: getCatalogText(tab.label, 'EN'),
+                title: tab.label || tab.name || '',
+                titleKz: getCatalogText(tab.label || tab.name || '', 'KZ') || tab.labelKz || tab.nameKz || '',
+                titleEn: getCatalogText(tab.label || tab.name || '', 'EN') || tab.labelEn || tab.nameEn || '',
                 iconName: iconMap[tab.id] || 'hammer',
                 categories: cats,
                 items: flatItems
