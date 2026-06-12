@@ -11312,6 +11312,27 @@
     function resolveCatalogRoute(parts) {
       if (!parts || parts.length === 0) return null;
       
+      // Map old/deprecated IDs to new catalog IDs
+      const mappedParts = parts.map(part => {
+        if (!part) return part;
+        let p = part.toLowerCase();
+        if (p === 'furniture') return 'mebel';
+        if (p === 'appliance' || p === 'appliances' || p === 'tech') return 'servis';
+        if (p === 'cleaning') return 'klining';
+        if (p === 'computer' || p === 'plumbing' || p === 'electrical' || p === 'movers') return 'servis';
+        
+        if (p.startsWith('cat-tech-')) return p.replace('cat-tech-', 'cat-srv-');
+        if (p.startsWith('cat-fur-')) return p.replace('cat-fur-', 'cat-meb-');
+        if (p.startsWith('cat-clean-')) return p.replace('cat-clean-', 'cat-klin-');
+        
+        if (p.startsWith('sub-tech-')) return p.replace('sub-tech-', 'sub-srv-');
+        if (p.startsWith('sub-fur-')) return p.replace('sub-fur-', 'sub-meb-');
+        if (p.startsWith('sub-clean-')) return p.replace('sub-clean-', 'sub-klin-');
+        
+        return p;
+      });
+      parts = mappedParts;
+
       let resolvedTab = null;
       let resolvedCat = null;
       let resolvedItem = null;
