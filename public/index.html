@@ -2725,6 +2725,31 @@
     }
 
     /* Carousel styling */
+    
+    @media (max-width: 768px) {
+      .carousel-btn-arrow {
+        display: none !important;
+      }
+      .masters-carousel-container {
+        padding: 0;
+        margin: 0 -20px; /* bleed edges */
+        width: calc(100% + 40px);
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+      }
+      .masters-carousel-container::-webkit-scrollbar {
+        display: none;
+      }
+      .masters-carousel-track {
+        padding: 0 20px;
+        transform: none !important; /* disable JS transform on mobile */
+      }
+      .master-card-new {
+        scroll-snap-align: start;
+      }
+    }
+
     .masters-carousel-wrap {
       display: flex;
       align-items: center;
@@ -9322,6 +9347,30 @@
           }
           if (maTouchEndX > maTouchStartX + 40) {
             if(window.prevMaSlide) window.prevMaSlide();
+          }
+        }, {passive: true});
+      }
+    });
+
+    
+    // Touch swipe logic for masters carousel
+    let mastersTouchStartX = 0;
+    let mastersTouchEndX = 0;
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      const mastersTrack = document.getElementById('masters-track');
+      if (mastersTrack) {
+        mastersTrack.addEventListener('touchstart', e => {
+          mastersTouchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+        
+        mastersTrack.addEventListener('touchend', e => {
+          mastersTouchEndX = e.changedTouches[0].screenX;
+          if (mastersTouchEndX < mastersTouchStartX - 40) {
+            moveCarousel(1); // swipe left -> next
+          }
+          if (mastersTouchEndX > mastersTouchStartX + 40) {
+            moveCarousel(-1); // swipe right -> prev
           }
         }, {passive: true});
       }
