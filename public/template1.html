@@ -10198,12 +10198,25 @@
         fetch(API_BASE + '/api/auth/me', {
           headers: { 'Authorization': 'Bearer ' + token }
         })
-          .then(r => r.ok ? r.json() : Promise.reject())
+          \.then(r => {
+            if (r.ok) return r.json();
+            if (r.status === 401 || r.status === 403) return Promise.reject('unauthorized');
+            return Promise.reject('server_error');
+          })
           .then(data => showDashboard(data.user, token))
-          .catch(() => {
-            localStorage.removeItem('cab_token');
-            localStorage.removeItem('cab_user');
-            showAuthContainer();
+          .catch((err) => {
+            if (err === 'unauthorized') {
+              localStorage.removeItem('cab_token');
+              localStorage.removeItem('cab_user');
+              showAuthContainer();
+            } else {
+              const cachedUser = JSON.parse(localStorage.getItem('cab_user') || '{}');
+              if (cachedUser.id) {
+                showDashboard(cachedUser, token);
+              } else {
+                showAuthContainer();
+              }
+            }
           });
       } else {
         showAuthContainer();
