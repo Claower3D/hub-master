@@ -1216,6 +1216,21 @@ func InitDB() (DB, error) {
 
 	var db DB
 	var err error
+
+	jsonDBPath := resolvePath("data/masterhub_db.json")
+	oldJsonDBPath := resolvePath("data/masterhub_data.json")
+
+	// Migration: if masterhub_db.json doesn't exist but masterhub_data.json does, copy it
+	if _, errStat := os.Stat(jsonDBPath); os.IsNotExist(errStat) {
+		if _, errStat := os.Stat(oldJsonDBPath); errStat == nil {
+			log.Println("🔄 Migrating old JSON DB to new un-tracked JSON DB (masterhub_db.json)...")
+			input, readErr := os.ReadFile(oldJsonDBPath)
+			if readErr == nil {
+				_ = os.WriteFile(jsonDBPath, input, 0644)
+			}
+		}
+	}
+
 	if dbURL != "" {
 		log.Println("🔌 Connecting to PostgreSQL database...")
 		db, err = NewPostgresDB(dbURL)
@@ -1223,11 +1238,11 @@ func InitDB() (DB, error) {
 			log.Println("✅ Connected to PostgreSQL successfully!")
 		} else {
 			log.Printf("⚠️ PostgreSQL connection failed: %v. Falling back to JSON storage.\n", err)
-			db, err = NewJsonDB(resolvePath("data/masterhub_data.json"))
+			db, err = NewJsonDB(jsonDBPath)
 		}
 	} else {
-		log.Println("📁 Using JSON local file storage (data/masterhub_data.json)...")
-		db, err = NewJsonDB(resolvePath("data/masterhub_data.json"))
+		log.Println("📁 Using JSON local file storage (masterhub_db.json)...")
+		db, err = NewJsonDB(jsonDBPath)
 	}
 
 	if err != nil {
