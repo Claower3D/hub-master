@@ -10198,7 +10198,7 @@
         fetch(API_BASE + '/api/auth/me', {
           headers: { 'Authorization': 'Bearer ' + token }
         })
-          \.then(r => {
+          .then(r => {
             if (r.ok) return r.json();
             if (r.status === 401 || r.status === 403) return Promise.reject('unauthorized');
             return Promise.reject('server_error');
