@@ -17,6 +17,9 @@ export const i18n = {
     footerDesc: 'Профессиональный мультисервис в Алматы и Астане. Работаем с 2018 года.',
     footerNav: 'Навигация', footerContacts: 'Контакты',
     copyRight: '© 2024 HUB MASTER. Все права защищены.',
+    partnersTitle: 'Нам доверяют', partnersDeveloper: 'ЗАСТРОЙЩИК',
+    partnersDeveloperText: 'Выполняем работы на объектах застройщика: остекление и москитные сетки, электромонтажные работы, сварка и металлоконструкции.',
+    partnersWindows: 'ПРОФИЛЬ ДЛЯ ОКОН И СЕТОК', partnersFurniture: 'МАТЕРИАЛЫ И ФУРНИТУРА ДЛЯ МЕБЕЛИ',
   },
   KZ: {
     navHome: 'Басты', navServices: 'Қызметтер', navMasters: 'Шеберлер', navReviews: 'Пікірлер',
@@ -36,6 +39,9 @@ export const i18n = {
     footerDesc: 'Алматы мен Астанадағы кәсіби мультисервис. 2018 жылдан бері жұмыс істейміз.',
     footerNav: 'Навигация', footerContacts: 'Байланыс',
     copyRight: '© 2024 HUB MASTER. Барлық құқықтар қорғалған.',
+    partnersTitle: 'Бізге сенеді', partnersDeveloper: 'ҚҰРЫЛЫС КОМПАНИЯСЫ',
+    partnersDeveloperText: 'Құрылыс компаниясының нысандарында жұмыстар жүргіземіз: әйнектеу және москит торлары, электр монтаждау жұмыстары, дәнекерлеу және металл конструкциялары.',
+    partnersWindows: 'ТЕРЕЗЕ МЕН ТОРЛАР ПРОФИЛІ', partnersFurniture: 'ЖИҺАЗ МАТЕРИАЛДАРЫ МЕН ФУРНИТУРАСЫ',
   },
   EN: {
     navHome: 'Home', navServices: 'Services', navMasters: 'Masters', navReviews: 'Reviews',
@@ -55,6 +61,9 @@ export const i18n = {
     footerDesc: 'Professional multiservice in Almaty and Astana. Working since 2018.',
     footerNav: 'Navigation', footerContacts: 'Contacts',
     copyRight: '© 2024 HUB MASTER. All rights reserved.',
+    partnersTitle: 'They trust us', partnersDeveloper: 'DEVELOPER',
+    partnersDeveloperText: 'We carry out work at the developer\'s facilities: glazing and mosquito nets, electrical work, welding and metal structures.',
+    partnersWindows: 'PROFILE FOR WINDOWS AND NETS', partnersFurniture: 'MATERIALS AND HARDWARE FOR FURNITURE',
   },
 };
 

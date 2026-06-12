@@ -4,6 +4,7 @@ import Catalog from './components/Catalog/Catalog';
 import Coverage from './components/Coverage/Coverage';
 import Reviews from './components/Reviews/Reviews';
 import Modal from './components/Modal/Modal';
+import Partners from './components/Partners/Partners';
 import { useLang } from './hooks/useLang';
 import { useTheme } from './hooks/useTheme';
 import { useModal } from './hooks/useModal';
@@ -55,6 +56,7 @@ function App() {
         </section>
 
         <Catalog lang={lang} t={t} onOpenModal={openModal} />
+        <Partners t={t} />
         <Coverage city={city} t={t} />
         <Reviews lang={lang} t={t} />
       </main>

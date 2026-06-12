@@ -1,0 +1,67 @@
+.section {
+  padding: 80px 0;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  font-family: var(--font-heading);
+}
+
+.category {
+  margin-bottom: 40px;
+}
+
+.category:last-child {
+  margin-bottom: 0;
+}
+
+.categoryLabel {
+  display: block;
+  font-size: 14px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  letter-spacing: 0.5px;
+}
+
+.developerCard {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 800px;
+}
+
+.developerTitle {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.developerText {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tag {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
