@@ -6223,15 +6223,11 @@
             </div>
 
             <!-- Pagination Dots -->
-            <div class="ma-slides-nav" style="display: flex; align-items: center; margin-bottom: 24px;">
-              <button class="carousel-btn-arrow prev-btn" onclick="prevMaSlide()" style="width: 36px; height: 36px; margin-right: 4px;">‹</button>
-              <div class="ma-slides-dots" style="margin: 0 16px;">
-                <span class="ma-dot active" onclick="setMaSlide(0)"></span>
-                <span class="ma-dot" onclick="setMaSlide(1)"></span>
-                <span class="ma-dot" onclick="setMaSlide(2)"></span>
-                <span class="ma-dot" onclick="setMaSlide(3)"></span>
-              </div>
-              <button class="carousel-btn-arrow next-btn" onclick="nextMaSlide()" style="width: 36px; height: 36px; margin-left: 4px;">›</button>
+            <div class="ma-slides-dots">
+              <span class="ma-dot active" onclick="setMaSlide(0)"></span>
+              <span class="ma-dot" onclick="setMaSlide(1)"></span>
+              <span class="ma-dot" onclick="setMaSlide(2)"></span>
+              <span class="ma-dot" onclick="setMaSlide(3)"></span>
             </div>
           </div>
 
@@ -9288,6 +9284,30 @@
       clearInterval(maInterval);
       maInterval = setInterval(window.nextMaSlide, 6000);
     }
+
+    
+    // Touch swipe logic for ma-slides
+    let maTouchStartX = 0;
+    let maTouchEndX = 0;
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      const maCol = document.querySelector('.ma-left-col');
+      if (maCol) {
+        maCol.addEventListener('touchstart', e => {
+          maTouchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+        
+        maCol.addEventListener('touchend', e => {
+          maTouchEndX = e.changedTouches[0].screenX;
+          if (maTouchEndX < maTouchStartX - 40) {
+            if(window.nextMaSlide) window.nextMaSlide();
+          }
+          if (maTouchEndX > maTouchStartX + 40) {
+            if(window.prevMaSlide) window.prevMaSlide();
+          }
+        }, {passive: true});
+      }
+    });
 
     // Initialize text slider auto-rotation
     document.addEventListener('DOMContentLoaded', () => {
