@@ -2740,9 +2740,19 @@
     }
 
     .masters-carousel-container {
-      overflow: hidden;
+      overflow-x: auto;
+      overflow-y: hidden;
       width: 100%;
       padding: 2px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE/Edge */
+      scroll-behavior: smooth;
+      /* Improve touch handling */
+      -webkit-overflow-scrolling: touch;
+    }
+    .masters-carousel-container::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
     }
 
     .masters-carousel-track {
@@ -2755,6 +2765,7 @@
     .master-card-new {
       flex: 0 0 220px;
       background: rgba(25, 25, 29, 0.55);
+      scroll-snap-align: start;
       border: 1px solid rgba(255, 255, 255, 0.04);
       border-radius: 16px;
       padding: 22px 16px;
