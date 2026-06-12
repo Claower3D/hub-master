@@ -5828,10 +5828,29 @@
         </div>
 
         <style>
-          .partners-block {
+          .hero-bottom-grid {
             grid-column: span 2;
-            padding: 24px 0;
+            display: grid;
+            grid-template-columns: 1.3fr 0.7fr;
+            gap: 32px;
             margin-top: 16px;
+            background: rgba(20, 20, 24, 0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px 32px;
+            align-items: start;
+          }
+          @media (max-width: 992px) {
+            .hero-bottom-grid {
+              grid-template-columns: 1fr;
+              padding: 24px 20px;
+            }
+          }
+          .partners-block {
+            display: flex;
+            flex-direction: column;
           }
           .partners-main-title {
             font-size: 24px;
@@ -5889,8 +5908,47 @@
             align-items: center;
             justify-content: center;
           }
+          
+          .why-us-block {
+            display: flex;
+            flex-direction: column;
+          }
+          .why-us-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-white);
+            margin-bottom: 24px;
+            font-family: var(--font-heading);
+          }
+          .why-us-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+          }
+          .why-us-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 15px;
+            color: var(--text-white);
+          }
+          .why-us-list li span.chk-icon {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 16px;
+            flex-shrink: 0;
+          }
+          .why-us-list li span.chk-subtext {
+            color: var(--text-muted);
+            font-size: 14px;
+          }
         </style>
-        <div class="partners-block">
+        
+        <div class="hero-bottom-grid">
+          <div class="partners-block">
           <h2 class="partners-main-title">Нам доверяют</h2>
           
           <div class="partners-category">
@@ -5923,6 +5981,20 @@
             </div>
           </div>
         </div>
+
+        <div class="why-us-block">
+          <h2 class="why-us-title">Почему мы</h2>
+          <ul class="why-us-list">
+            <li><span class="chk-icon">✓</span><span class="chk-text">Гарантия от 12 месяцев на работы</span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Сертифицированные мастера</span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Бесплатный замер и выезд <span class="chk-subtext">— по окнам и сеткам</span></span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Договор на все работы</span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Выезд в день обращения</span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Работаем по всему Казахстану <span class="chk-subtext">— окна и сетки</span></span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Гарантия лучшей цены</span></li>
+          </ul>
+        </div>
+      </div>
 
       </div>
     </section>
