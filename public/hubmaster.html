@@ -11857,24 +11857,24 @@
     }
 
     window.navigateThematic = function (catId, subcatId = '', itemId = '') {
-      let path = '/';
-      if (catId) {
-        path += catId;
-        if (subcatId) {
-          path += '/' + subcatId;
-          if (itemId) {
-            path += '/' + itemId;
-          }
+      // Empty catId = go home
+      if (!catId) {
+        closeMegaModal();
+        if (window.location.pathname !== '/') {
+          window.location.href = '/';
+        }
+        return;
+      }
+      let path = '/' + catId;
+      if (subcatId) {
+        path += '/' + subcatId;
+        if (itemId) {
+          path += '/' + itemId;
         }
       }
-      
-      
-
-      if (window.location.pathname !== path) {
-        history.pushState({ catId, subcatId, itemId }, '', path);
-      }
-      renderThematicPage(catId, subcatId, itemId);
+      // Always open service page as a fresh full-page navigation (new URL, NOT SPA overlay)
       closeMegaModal();
+      window.location.href = path;
     };
 
     function initRouter() {
