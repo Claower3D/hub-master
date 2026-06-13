@@ -157,7 +157,7 @@ func main() {
 
 	// Sync catalog from JSON to DB on startup if database catalog is empty or has old/incomplete schema
 	dbCatalog, dbErr := dbInstance.GetCatalog()
-	hasNewSchema := dbErr == nil && dbCatalog != "" && strings.Contains(dbCatalog, "okna")
+	hasNewSchema := dbErr == nil && dbCatalog != "" && strings.Contains(dbCatalog, "windows")
 
 	if !hasNewSchema {
 		log.Println("🔄 Database catalog is empty or has old schema. Initializing from catalog_data.json...")
