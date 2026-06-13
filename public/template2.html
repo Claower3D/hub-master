@@ -11316,18 +11316,40 @@
       const mappedParts = parts.map(part => {
         if (!part) return part;
         let p = part.toLowerCase();
-        if (p === 'furniture') return 'mebel';
-        if (p === 'appliance' || p === 'appliances' || p === 'tech') return 'servis';
-        if (p === 'cleaning') return 'klining';
-        if (p === 'computer' || p === 'plumbing' || p === 'electrical' || p === 'movers') return 'servis';
         
-        if (p.startsWith('cat-tech-')) return p.replace('cat-tech-', 'cat-srv-');
-        if (p.startsWith('cat-fur-')) return p.replace('cat-fur-', 'cat-meb-');
-        if (p.startsWith('cat-clean-')) return p.replace('cat-clean-', 'cat-klin-');
+        // Map tab IDs to the new english tab IDs
+        if (p === 'mebel') return 'furniture';
+        if (p === 'servis' || p === 'tech' || p === 'appliances' || p === 'computer' || p === 'plumbing' || p === 'electrical' || p === 'movers') return 'appliance';
+        if (p === 'klining') return 'cleaning';
+        if (p === 'okna') return 'windows';
         
-        if (p.startsWith('sub-tech-')) return p.replace('sub-tech-', 'sub-srv-');
-        if (p.startsWith('sub-fur-')) return p.replace('sub-fur-', 'sub-meb-');
-        if (p.startsWith('sub-clean-')) return p.replace('sub-clean-', 'sub-klin-');
+        // Map old category prefixes to new category prefixes
+        if (p.startsWith('cat-srv-') || p.startsWith('cat-tech-')) {
+          return p.replace('cat-srv-', 'cat-app-').replace('cat-tech-', 'cat-app-');
+        }
+        if (p.startsWith('cat-meb-') || p.startsWith('cat-fur-')) {
+          return p.replace('cat-meb-', 'cat-furn-').replace('cat-fur-', 'cat-furn-');
+        }
+        if (p.startsWith('cat-klin-') || p.startsWith('cat-clean-')) {
+          return p.replace('cat-klin-', 'cat-clean-');
+        }
+        if (p.startsWith('cat-okna-')) {
+          return p.replace('cat-okna-', 'cat-win-');
+        }
+        
+        // Map old subcategory prefixes to new subcategory prefixes
+        if (p.startsWith('sub-srv-') || p.startsWith('sub-tech-')) {
+          return p.replace('sub-srv-', 'sub-app-').replace('sub-tech-', 'sub-app-');
+        }
+        if (p.startsWith('sub-meb-') || p.startsWith('sub-fur-')) {
+          return p.replace('sub-meb-', 'sub-furn-').replace('sub-fur-', 'sub-furn-');
+        }
+        if (p.startsWith('sub-klin-') || p.startsWith('sub-clean-')) {
+          return p.replace('sub-klin-', 'sub-clean-');
+        }
+        if (p.startsWith('sub-okna-')) {
+          return p.replace('sub-okna-', 'sub-win-');
+        }
         
         return p;
       });
