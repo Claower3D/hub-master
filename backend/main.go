@@ -1579,7 +1579,7 @@ func main() {
 			if strings.Contains(dbMime, "text/html") {
 				htmlStr := string(dbData)
 				if !strings.Contains(htmlStr, "favicon.svg") {
-					htmlStr = strings.Replace(htmlStr, "<head>", "<head>\n  <link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\">", 1)
+					htmlStr = strings.Replace(htmlStr, "<head>", "<head>\n  <link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\">\n  <link rel=\"icon\" href=\"/favicon.svg\">\n  <link rel=\"apple-touch-icon\" href=\"/favicon.svg\">", 1)
 					dbData = []byte(htmlStr)
 				}
 			}
@@ -1601,7 +1601,7 @@ func main() {
 			if strings.Contains(dbIndexMime, "text/html") {
 				htmlStr := string(dbIndex)
 				if !strings.Contains(htmlStr, "favicon.svg") {
-					htmlStr = strings.Replace(htmlStr, "<head>", "<head>\n  <link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\">", 1)
+					htmlStr = strings.Replace(htmlStr, "<head>", "<head>\n  <link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\">\n  <link rel=\"icon\" href=\"/favicon.svg\">\n  <link rel=\"apple-touch-icon\" href=\"/favicon.svg\">", 1)
 					dbIndex = []byte(htmlStr)
 				}
 			}
