@@ -159,6 +159,7 @@ func main() {
 	dbCatalog, dbErr := dbInstance.GetCatalog()
 	hasNewSchema := dbErr == nil && dbCatalog != "" && strings.Contains(dbCatalog, "windows")
 
+
 	if !hasNewSchema {
 		log.Println("🔄 Database catalog is empty or has old schema. Initializing from catalog_data.json...")
 		catData, catErr := os.ReadFile("catalog_data.json")
@@ -190,6 +191,29 @@ func main() {
 	StartTelegramBot(dbInstance)
 
 	mux := http.NewServeMux()
+
+	// Add debugging endpoint
+	mux.HandleFunc("/api/db-status", corsMiddleware(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		dbType := "Unknown"
+		if _, ok := dbInstance.(*PostgresDB); ok {
+			dbType = "PostgreSQL"
+		} else if _, ok := dbInstance.(*JsonDB); ok {
+			dbType = "JSON (Local File)"
+		}
+		
+		catDataRaw, _ := dbInstance.GetCatalog()
+		hasNewSch := len(catDataRaw) > 0 && strings.Contains(catDataRaw, "windows")
+		
+		status := map[string]interface{}{
+			"database_type": dbType,
+			"has_new_schema": hasNewSch,
+			"catalog_length": len(catDataRaw),
+			"database_url_set": os.Getenv("DATABASE_URL") != "",
+		}
+		json.NewEncoder(w).Encode(status)
+	}))
+
 
 	// Health check endpoint
 	mux.HandleFunc("/api/health", corsMiddleware(func(w http.ResponseWriter, r *http.Request) {
