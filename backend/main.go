@@ -118,7 +118,7 @@ func syncSystemFiles() {
 			}
 		} else {
 			// For templates, only copy if they are corrupted or missing
-			content, err := ioutil.ReadFile(dst)
+			content, err := os.ReadFile(dst)
 			if err != nil || strings.Contains(string(content), "const transString = `const translations =") {
 				needsCopy = true
 			}
@@ -126,9 +126,9 @@ func syncSystemFiles() {
 		
 		if needsCopy {
 			log.Printf("syncSystemFiles: Copying %s to public/", f)
-			srcData, err := ioutil.ReadFile(src)
+			srcData, err := os.ReadFile(src)
 			if err == nil {
-				ioutil.WriteFile(dst, srcData, 0644)
+				os.WriteFile(dst, srcData, 0644)
 			}
 		}
 	}
