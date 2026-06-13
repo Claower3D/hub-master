@@ -1922,6 +1922,24 @@
 
         // Extract the live DOM from iframe
         const frameDoc = frame.contentDocument || frame.contentWindow.document;
+
+        // Extract custom catalog styles before switchLang destroys them!
+        const customCatStyles = Object.assign({}, frame.contentWindow.builderCustomCatalogStyles || {});
+        frameDoc.querySelectorAll('.catalog-card').forEach(card => {
+           const titleEl = card.querySelector('.cat-card-title');
+           const imgEl = card.querySelector('.cat-card-image') || card.querySelector('.cat-card-img');
+           if (titleEl && imgEl) {
+               const t = titleEl.innerText.trim();
+               if (imgEl.style.backgroundImage || imgEl.style.backgroundSize || imgEl.style.backgroundPosition) {
+                   customCatStyles[t] = Object.assign(customCatStyles[t] || {}, {
+                       backgroundImage: imgEl.style.backgroundImage,
+                       backgroundSize: imgEl.style.backgroundSize,
+                       backgroundPosition: imgEl.style.backgroundPosition
+                   });
+               }
+           }
+        });
+        
         
         // Reset to RU temporarily to save base HTML correctly
         if (typeof frame.contentWindow.switchLang === 'function') {
@@ -1965,6 +1983,14 @@
         // Replace scripts in the live DOM string
         updatedHtml = updatedHtml.replace(/const translations = \{[\s\S]*?\};/, transString);
         updatedHtml = updatedHtml.replace(/const catalogTranslations = \{[\s\S]*?\};/, catTransString);
+
+        // Inject custom catalog styles
+        const catStylesStr = `window.builderCustomCatalogStyles = ${JSON.stringify(customCatStyles, null, 2)};`;
+        if (updatedHtml.includes('window.builderCustomCatalogStyles =')) {
+           updatedHtml = updatedHtml.replace(/window\.builderCustomCatalogStyles\s*=\s*\{[\s\S]*?\};/, catStylesStr);
+        } else {
+           updatedHtml = updatedHtml.replace('</head>', `  <script>${catStylesStr}</script>\n</head>`);
+        }
 
         // Send to backend via GZIP to bypass Railway/Cloudflare body limits for large files
         const stream = new Blob([updatedHtml]).stream().pipeThrough(new CompressionStream('gzip'));

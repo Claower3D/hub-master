@@ -8808,6 +8808,14 @@
           `;
         }).join('');
 
+        let styleStr = `background-image: url('${imgUrl}');`;
+        if (window.builderCustomCatalogStyles && window.builderCustomCatalogStyles[cat.title]) {
+           const ccs = window.builderCustomCatalogStyles[cat.title];
+           if (ccs.backgroundImage) styleStr += ` background-image: ${ccs.backgroundImage};`;
+           if (ccs.backgroundSize) styleStr += ` background-size: ${ccs.backgroundSize};`;
+           if (ccs.backgroundPosition) styleStr += ` background-position: ${ccs.backgroundPosition};`;
+        }
+
         card.innerHTML = `
           <div class="cat-card-main-content">
             <h3 class="cat-card-title">${catTitle}</h3>
@@ -8815,7 +8823,7 @@
               ${itemsListHTML}
             </ul>
           </div>
-          <div class="cat-card-image" style="background-image: url('${imgUrl}');"></div>
+          <div class="cat-card-image" style="${styleStr}"></div>
         `;
         grid.appendChild(card);
       });
