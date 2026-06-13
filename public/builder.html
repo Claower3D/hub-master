@@ -800,6 +800,7 @@
   <script>
     // Security check: Redirect if no admin token
     const adminToken = localStorage.getItem('admin_token');
+    const API_BASE = window.location.hostname && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1') && window.location.protocol !== 'file:' ? 'https://hub-master-production.up.railway.app' : '';
     if (!adminToken) {
       window.location.href = '/admin.html';
     }
@@ -1023,7 +1024,6 @@
     async function loadBuilderCatalogRoutes() {
       try {
         const token = localStorage.getItem('admin_token');
-        const API_BASE = window.location.hostname && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1') && window.location.protocol !== 'file:' ? 'https://hub-master-production.up.railway.app' : '';
         const res = await fetch(API_BASE + '/api/catalog', { headers: { 'Authorization': 'Bearer ' + token } });
         if (res.ok) {
           const catalogData = await res.json();
@@ -1914,7 +1914,7 @@
         const physicalPage = getPhysicalPage(activePage);
 
         // Fetch raw HTML from server first
-        const rawResponse = await fetch('/' + physicalPage);
+        const rawResponse = await fetch(API_BASE + '/' + physicalPage);
         if (!rawResponse.ok) {
           throw new Error('Could not fetch source code for ' + physicalPage);
         }
@@ -1975,7 +1975,7 @@
         fd.append('page', physicalPage);
         fd.append('html', blobGz, physicalPage);
 
-        const saveResponse = await fetch('/api/admin/save-page-html-gz', {
+        const saveResponse = await fetch(API_BASE + '/api/admin/save-page-html-gz', {
           method: 'POST',
           headers: {
             'Authorization': 'Bearer ' + adminToken
