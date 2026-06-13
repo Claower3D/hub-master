@@ -114,6 +114,8 @@ type DB interface {
 	UpdateCustomPage(page CustomPage) error
 	DeleteCustomPage(id int) error
 	AddUserBonuses(id int, amount int) (*User, error)
+	SaveFile(filename string, data []byte, mimeType string) error
+	GetFile(filename string) ([]byte, string, error)
 }
 
 
@@ -211,6 +213,13 @@ func NewPostgresDB(connStr string) (*PostgresDB, error) {
 			description TEXT NOT NULL DEFAULT '',
 			image VARCHAR(255) NOT NULL DEFAULT '',
 			file_path VARCHAR(255) NOT NULL DEFAULT ''
+		);
+
+		CREATE TABLE IF NOT EXISTS files (
+			filename VARCHAR(255) PRIMARY KEY,
+			data BYTEA NOT NULL,
+			mime_type VARCHAR(100) NOT NULL,
+			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 		);
 	`)
 	if err != nil {
@@ -620,6 +629,29 @@ func (p *PostgresDB) SaveCatalog(catalogJSON string) error {
 	return err
 }
 
+func (p *PostgresDB) SaveFile(filename string, data []byte, mimeType string) error {
+	_, err := p.db.Exec(`
+		INSERT INTO files (filename, data, mime_type)
+		VALUES ($1, $2, $3)
+		ON CONFLICT (filename)
+		DO UPDATE SET data = EXCLUDED.data, mime_type = EXCLUDED.mime_type, created_at = CURRENT_TIMESTAMP
+	`, filename, data, mimeType)
+	return err
+}
+
+func (p *PostgresDB) GetFile(filename string) ([]byte, string, error) {
+	var data []byte
+	var mimeType string
+	err := p.db.QueryRow("SELECT data, mime_type FROM files WHERE filename = $1", filename).Scan(&data, &mimeType)
+	if err == sql.ErrNoRows {
+		return nil, "", errors.New("file not found")
+	}
+	if err != nil {
+		return nil, "", err
+	}
+	return data, mimeType, nil
+}
+
 func (p *PostgresDB) CreateCustomPage(page CustomPage) (*CustomPage, error) {
 	err := p.db.QueryRow(`
 		INSERT INTO custom_pages (name, type, parent_slug, section_slug, slug, description, image, file_path)
@@ -713,6 +745,10 @@ type JsonDB struct {
 		CategoryReviews []CategoryReviewRecord `json:"category_reviews"`
 		Catalog         string                 `json:"catalog,omitempty"`
 		Pages           []CustomPage           `json:"pages"`
+		Files           map[string]struct{
+			Data     []byte `json:"data"`
+			MimeType string `json:"mime_type"`
+		} `json:"files,omitempty"`
 	}
 }
 
@@ -766,6 +802,12 @@ func (j *JsonDB) load() error {
 	}
 	if j.Data.CategoryReviews == nil {
 		j.Data.CategoryReviews = []CategoryReviewRecord{}
+	}
+	if j.Data.Files == nil {
+		j.Data.Files = make(map[string]struct{
+			Data     []byte `json:"data"`
+			MimeType string `json:"mime_type"`
+		})
 	}
 	return nil
 }
@@ -1202,6 +1244,40 @@ func (j *JsonDB) DeleteCustomPage(id int) error {
 		}
 	}
 	return fmt.Errorf("page not found")
+}
+
+func (j *JsonDB) SaveFile(filename string, data []byte, mimeType string) error {
+	j.mu.Lock()
+	defer j.mu.Unlock()
+	if j.Data.Files == nil {
+		j.Data.Files = make(map[string]struct{
+			Data     []byte `json:"data"`
+			MimeType string `json:"mime_type"`
+		})
+	}
+	j.Data.Files[filename] = struct{
+		Data     []byte `json:"data"`
+		MimeType string `json:"mime_type"`
+	}{Data: data, MimeType: mimeType}
+	
+	bytes, err := json.MarshalIndent(j.Data, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(j.filePath, bytes, 0644)
+}
+
+func (j *JsonDB) GetFile(filename string) ([]byte, string, error) {
+	j.mu.Lock()
+	defer j.mu.Unlock()
+	if j.Data.Files == nil {
+		return nil, "", errors.New("file not found")
+	}
+	file, ok := j.Data.Files[filename]
+	if !ok {
+		return nil, "", errors.New("file not found")
+	}
+	return file.Data, file.MimeType, nil
 }
 
 

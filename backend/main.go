@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"os/exec"
 	"strconv"
 	"strings"
 	"regexp"
@@ -446,23 +445,7 @@ func main() {
 			// Save to file (as local copy/fallback)
 			_ = os.WriteFile(filePath, data, 0644)
 
-			// Automatically commit and push to Git so changes persist across redeploys
-			go func() {
-				// The app might be running in a subdirectory or root, but git commands will find the .git folder
-				cmdAdd := exec.Command("git", "add", filePath)
-				_ = cmdAdd.Run()
-				
-				cmdCommit := exec.Command("git", "commit", "-m", "chore(catalog): update catalog data via admin panel")
-				_ = cmdCommit.Run()
-				
-				cmdPush := exec.Command("git", "push")
-				err := cmdPush.Run()
-				if err != nil {
-					log.Printf("⚠️ Failed to push catalog changes to git: %v\n", err)
-				} else {
-					log.Println("✅ Successfully pushed catalog changes to git!")
-				}
-			}()
+			// Git push removed to prevent Railway from redeploying constantly
 
 			w.Header().Set("Content-Type", "application/json")
 			w.Write([]byte(`{"status":"success"}`))
@@ -1540,6 +1523,16 @@ func main() {
 			http.ServeFile(w, r, filepath.Join(staticDir, "admin.html"))
 			return
 		}
+		if strings.HasPrefix(r.URL.Path, "/uploads/") {
+			filename := strings.TrimPrefix(r.URL.Path, "/uploads/")
+			data, mimeType, err := dbInstance.GetFile(filename)
+			if err == nil {
+				w.Header().Set("Content-Type", mimeType)
+				w.Header().Set("Cache-Control", "public, max-age=31536000") // Cache for 1 year
+				w.Write(data)
+				return
+			}
+		}
 		// Check if file exists in static directory
 		cleanPath := filepath.Clean(r.URL.Path)
 		filePath := filepath.Join(staticDir, cleanPath)
@@ -1671,38 +1664,41 @@ func handleUpload(db DB, staticDir string) http.HandlerFunc {
 			return
 		}
 
-		// Ensure upload directory exists
-		uploadDir := filepath.Join(staticDir, "uploads")
-		if err := os.MkdirAll(uploadDir, 0755); err != nil {
+		// Read file data
+		fileData, err := io.ReadAll(file)
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(map[string]string{
 				"status":  "error",
-				"message": "Failed to create upload directory: " + err.Error(),
+				"message": "Failed to read file: " + err.Error(),
 			})
 			return
 		}
 
-		// Generate unique filename
+		// Determine mime type from extension
+		mimeType := "application/octet-stream"
+		switch ext {
+		case ".jpg", ".jpeg":
+			mimeType = "image/jpeg"
+		case ".png":
+			mimeType = "image/png"
+		case ".gif":
+			mimeType = "image/gif"
+		case ".webp":
+			mimeType = "image/webp"
+		case ".svg":
+			mimeType = "image/svg+xml"
+		}
+
 		filename := fmt.Sprintf("%d%s", time.Now().UnixNano(), ext)
-		destPath := filepath.Join(uploadDir, filename)
 
-		out, err := os.Create(destPath)
+		// Save to database
+		err = db.SaveFile(filename, fileData, mimeType)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(map[string]string{
 				"status":  "error",
-				"message": "Failed to save file: " + err.Error(),
-			})
-			return
-		}
-		defer out.Close()
-
-		_, err = io.Copy(out, file)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(map[string]string{
-				"status":  "error",
-				"message": "Failed to write file: " + err.Error(),
+				"message": "Failed to save file to database: " + err.Error(),
 			})
 			return
 		}
