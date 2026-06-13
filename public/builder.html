@@ -1989,7 +1989,7 @@
         if (updatedHtml.includes('window.builderCustomCatalogStyles =')) {
            updatedHtml = updatedHtml.replace(/window\.builderCustomCatalogStyles\s*=\s*\{[\s\S]*?\};/, catStylesStr);
         } else {
-           updatedHtml = updatedHtml.replace('</head>', `  <script>${catStylesStr}</script>\n</head>`);
+           updatedHtml = updatedHtml.replace('</head>', `  <script>${catStylesStr}<\\/script>\n</head>`);
         }
 
         // Send to backend via GZIP to bypass Railway/Cloudflare body limits for large files
