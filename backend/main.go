@@ -94,7 +94,50 @@ func resolvePath(p string) string {
 	return p
 }
 
+// syncSystemFiles copies essential files from system_public/ to public/ 
+// to bypass persistent volume cache issues and repair corrupted templates.
+func syncSystemFiles() {
+	filesToSync := []string{"builder.html", "template1.html", "template2.html", "index.html"}
+	
+	for _, f := range filesToSync {
+		src := filepath.Join("system_public", f)
+		dst := filepath.Join("public", f)
+		
+		srcInfo, err := os.Stat(src)
+		if err != nil {
+			continue // Skip if system_public file doesn't exist
+		}
+		
+		needsCopy := false
+		
+		if f == "builder.html" {
+			// Always copy builder.html if the one in public is older or missing
+			dstInfo, err := os.Stat(dst)
+			if err != nil || dstInfo.ModTime().Before(srcInfo.ModTime()) {
+				needsCopy = true
+			}
+		} else {
+			// For templates, only copy if they are corrupted or missing
+			content, err := ioutil.ReadFile(dst)
+			if err != nil || strings.Contains(string(content), "const transString = `const translations =") {
+				needsCopy = true
+			}
+		}
+		
+		if needsCopy {
+			log.Printf("syncSystemFiles: Copying %s to public/", f)
+			srcData, err := ioutil.ReadFile(src)
+			if err == nil {
+				ioutil.WriteFile(dst, srcData, 0644)
+			}
+		}
+	}
+}
+
+
 func main() {
+	syncSystemFiles()
+	
 	var err error
 	dbInstance, err = InitDB()
 	if err != nil {

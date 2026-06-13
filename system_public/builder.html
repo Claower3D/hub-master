@@ -1,0 +1,2529 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visual Builder | HubMaster</title>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #10b981;
+      --primary-hover: #059669;
+      --bg-dark: #0f1115;
+      --bg-panel: #16191f;
+      --bg-card: #1c2026;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2a313c;
+      --font-body: 'Inter', sans-serif;
+      --font-heading: 'Outfit', sans-serif;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-body); background: var(--bg-dark); color: var(--text); overflow: hidden; display: flex; flex-direction: column; height: 100vh; }
+    
+    /* TOP NAVIGATION */
+    .builder-nav { height: 60px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; justify-content: space-between; flex-shrink: 0; }
+    .nav-left { display: flex; align-items: center; gap: 12px; }
+    .nav-btn { background: transparent; border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; transition: 0.2s; }
+    .nav-btn:hover { background: rgba(255,255,255,0.05); }
+    .nav-btn.active { border-color: var(--primary); color: var(--primary); }
+    .badge-visual { background: var(--primary); color: #000; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; }
+    .nav-select { background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; outline: none; cursor: pointer; }
+    .nav-select option { background: #16191f; color: #e2e8f0; }
+    .nav-center { display: flex; align-items: center; gap: 16px; font-size: 12px; color: var(--text-muted); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .btn-publish { background: var(--primary); color: #000; padding: 8px 16px; border-radius: 6px; border: none; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+    .btn-publish:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+    /* WORKSPACE */
+    .workspace { display: flex; flex: 1; overflow: hidden; }
+    
+    /* SIDEBAR (LIBRARY) */
+    .sidebar { width: 320px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; transition: 0.3s; z-index: 20; }
+    .sidebar.collapsed { width: 0; border: none; overflow: hidden; }
+    .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .sidebar-title { font-family: var(--font-heading); font-size: 14px; font-weight: 800; letter-spacing: 1px; color: var(--primary); text-transform: uppercase; }
+    .sidebar-close { cursor: pointer; color: var(--text-muted); }
+    .sidebar-search { padding: 16px; }
+    .search-input { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: var(--text); padding: 10px 12px 10px 36px; border-radius: 6px; font-size: 13px; outline: none; }
+    .search-wrapper { position: relative; }
+    .search-icon { position: absolute; left: 12px; top: 10px; color: var(--text-muted); font-size: 14px; }
+    
+    .sidebar-content { flex: 1; overflow-y: auto; padding: 0 16px 20px 16px; }
+    .sidebar-content::-webkit-scrollbar { width: 6px; }
+    .sidebar-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    
+    .sec-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 15px 0 10px 0; }
+    
+    .section-list-item { background: rgba(255,255,255,0.01); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
+    .section-list-item:hover { border-color: var(--primary); background: rgba(16, 185, 129, 0.03); }
+    .section-list-info { display: flex; align-items: center; gap: 10px; }
+    .section-list-icon { color: var(--primary); font-size: 16px; }
+    .section-list-name { font-size: 13px; font-weight: 600; }
+    .section-list-edit { color: var(--text-muted); font-size: 14px; transition: 0.2s; }
+    .section-list-item:hover .section-list-edit { color: var(--primary); transform: scale(1.1); }
+
+    .block-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
+    .block-item:hover { border-color: var(--primary); background: rgba(16, 185, 129, 0.05); }
+    .block-info { display: flex; align-items: flex-start; gap: 10px; }
+    .block-icon { color: var(--primary); font-size: 18px; margin-top: 2px; }
+    .block-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .block-desc { font-size: 11px; color: var(--text-muted); }
+    .block-status { font-size: 10px; font-weight: 800; color: var(--primary); text-transform: uppercase; }
+    
+    .std-elements { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .std-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 16px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: 0.2s; text-align: center; }
+    .std-item:hover { border-color: var(--primary); background: rgba(16, 185, 129, 0.05); color: var(--primary); }
+    .std-item i { font-size: 20px; color: var(--primary); }
+    .std-item .name { font-size: 12px; font-weight: 700; }
+    .std-item .en-name { font-size: 10px; color: var(--text-muted); }
+
+    /* PREVIEW AREA */
+    .preview-area { flex: 1; display: flex; flex-direction: column; background: #07080a; position: relative; }
+    .preview-toolbar { height: 40px; background: rgba(22, 25, 31, 0.9); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; justify-content: space-between; font-size: 12px; z-index: 15; }
+    .screen-sizes { display: flex; gap: 16px; align-items: center; }
+    .sz-btn { background: none; border: none; color: var(--text-muted); font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+    .sz-btn:hover { color: var(--text); }
+    .sz-btn.active { color: var(--primary); }
+    .sz-btn.active i { color: var(--primary); }
+    
+    .iframe-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; overflow: hidden; position: relative; }
+    .preview-iframe { width: 1440px; height: 100%; background: #0f1015; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); transition: width 0.3s; position: relative; z-index: 1; }
+    
+    /* MODAL */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; backdrop-filter: blur(8px); }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-card { width: 880px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.6); transform: translateY(20px); transition: 0.3s; max-height: 85vh; }
+    .modal-overlay.active .modal-card { transform: translateY(0); }
+    
+    .modal-header { padding: 18px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); }
+    .modal-title { display: flex; align-items: center; gap: 12px; font-family: var(--font-heading); font-size: 14px; font-weight: 800; letter-spacing: 1px; color: #fff; text-transform: uppercase; }
+    .modal-sys-badge { border: 1px solid var(--primary); color: var(--primary); padding: 2px 6px; border-radius: 4px; font-size: 10px; }
+    .modal-close { background: rgba(255,255,255,0.05); border: none; color: var(--text-muted); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+    .modal-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    
+    .modal-tabs { display: flex; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.1); }
+    .mtab { flex: 1; text-align: center; padding: 14px 10px; font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; border-bottom: 2px solid transparent; transition: 0.2s; }
+    .mtab:hover { color: var(--text); background: rgba(255,255,255,0.02); }
+    .mtab.active { color: var(--primary); border-bottom-color: var(--primary); background: rgba(16, 185, 129, 0.05); }
+    .mtab i { font-size: 16px; }
+    
+    .modal-body { padding: 24px; display: flex; gap: 24px; overflow-y: auto; max-height: calc(85vh - 180px); }
+    .mb-left { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+    .mb-right { flex: 1; display: flex; flex-direction: column; gap: 20px; border-left: 1px solid var(--border); padding-left: 24px; }
+    
+    .fm-label { font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
+    
+    /* Translation Sub-tabs */
+    .lang-tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+    .ltab { background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: var(--text-muted); padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+    .ltab:hover { color: #fff; border-color: var(--text-muted); }
+    .ltab.active { background: rgba(16, 185, 129, 0.1); border-color: var(--primary); color: var(--primary); }
+
+    .fields-container { display: flex; flex-direction: column; gap: 16px; width: 100%; }
+    .field-group { display: flex; flex-direction: column; gap: 6px; }
+    .field-info { display: flex; justify-content: space-between; align-items: center; }
+    .field-key { font-size: 11px; color: var(--text-muted); font-family: monospace; }
+    .field-input { background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: #fff; padding: 10px 12px; border-radius: 6px; font-size: 13px; outline: none; width: 100%; transition: 0.2s; }
+    .field-input:focus { border-color: var(--primary); box-shadow: 0 0 8px rgba(16,185,129,0.2); }
+    .field-textarea { min-height: 80px; resize: vertical; }
+
+    .bg-type-toggles { display: flex; gap: 10px; }
+    .bg-tg { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+    .bg-tg.active { border-color: var(--primary); color: var(--primary); background: rgba(16, 185, 129, 0.05); }
+    
+    .url-input-group { display: flex; gap: 10px; }
+    .url-input { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-size: 13px; outline: none; }
+    .url-input:focus { border-color: var(--primary); }
+    .btn-upload { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 0 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+    .btn-upload:hover { background: rgba(255,255,255,0.1); border-color: var(--text-muted); }
+    
+    .preview-box { height: 160px; background: rgba(0,0,0,0.4); border: 1px dashed var(--border); border-radius: 8px; display: flex; justify-content: center; align-items: center; color: var(--text-muted); font-size: 12px; background-size: cover; background-position: center; position: relative; }
+    
+    .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-height: 250px; overflow-y: auto; padding-right: 8px; }
+    .gallery-grid::-webkit-scrollbar { width: 4px; }
+    .gallery-grid::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    
+    .gal-item { height: 80px; background: #222; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; position: relative; overflow: hidden; transition: 0.2s; }
+    .gal-item:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+    .gal-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.2s; }
+    .gal-item:hover .gal-img { opacity: 1; }
+    .gal-label { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.8); color: #fff; font-size: 10px; font-weight: 700; padding: 6px; text-align: center; }
+    
+    .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; background: rgba(0,0,0,0.2); }
+    .btn-close { background: transparent; border: 1px solid var(--border); color: var(--text); padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; transition: 0.2s; }
+    .btn-close:hover { background: rgba(255,255,255,0.05); }
+    .btn-save { background: var(--primary); color: #000; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: 0.2s; }
+    .btn-save:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+    /* Notification */
+    .publish-notify { position: fixed; top: 20px; right: 20px; background: var(--bg-card); border-left: 4px solid var(--primary); padding: 16px 20px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 2000; display: flex; align-items: center; gap: 12px; transform: translateX(120%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .publish-notify.show { transform: translateX(0); }
+    .pn-icon { width: 32px; height: 32px; background: rgba(16, 185, 129, 0.2); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .pn-title { font-weight: 700; font-size: 14px; margin-bottom: 2px; color: #fff; }
+    .pn-desc { font-size: 12px; color: var(--text-muted); }
+
+    /* INLINE QUICK EDIT PANEL (slides from right) */
+    .quick-edit-panel {
+      position: fixed;
+      top: 60px;
+      right: -450px;
+      width: 420px;
+      height: calc(100vh - 60px);
+      background: var(--bg-panel);
+      border-left: 1px solid var(--border);
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: -8px 0 30px rgba(0,0,0,0.4);
+      overflow: hidden;
+    }
+    .quick-edit-panel.open { right: 0; }
+    .qep-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .qep-title {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .qep-close {
+      background: rgba(255,255,255,0.05);
+      border: none;
+      color: var(--text-muted);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 16px;
+    }
+    .qep-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .qep-badge {
+      font-size: 9px;
+      font-weight: 800;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: var(--primary);
+      padding: 2px 7px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .qep-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .qep-body::-webkit-scrollbar { width: 5px; }
+    .qep-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .qep-element-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 8px 12px;
+      background: rgba(16, 185, 129, 0.06);
+      border-radius: 6px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .qep-element-name i { color: var(--primary); }
+    .qep-lang-row {
+      display: flex;
+      gap: 6px;
+    }
+    .qep-ltab {
+      flex: 1;
+      text-align: center;
+      padding: 7px 0;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .qep-ltab.active { background: rgba(16, 185, 129, 0.1); border-color: var(--primary); color: var(--primary); }
+    .qep-field-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+    }
+    .qep-input {
+      width: 100%;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 10px 13px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-family: var(--font-body);
+      outline: none;
+      transition: 0.2s;
+      resize: vertical;
+    }
+    .qep-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15); }
+    .qep-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+      background: rgba(0,0,0,0.15);
+    }
+    .qep-btn-apply {
+      flex: 1;
+      background: var(--primary);
+      color: #000;
+      border: none;
+      padding: 11px 0;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+    .qep-btn-apply:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    .qep-btn-all-langs {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: var(--primary);
+      padding: 11px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 11px;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .qep-btn-all-langs:hover { background: rgba(16, 185, 129, 0.2); }
+    .qep-all-lang-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .qep-info-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(16, 185, 129, 0.04);
+      border-radius: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .qep-info-row i { color: var(--primary); }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <header class="builder-nav">
+    <div class="nav-left">
+      <button class="nav-btn" style="padding: 8px; border: none;"><i class="ri-menu-line" style="font-size: 18px;"></i></button>
+      <div class="badge-visual">VISUAL BUILDER</div>
+      <button class="nav-btn"><i class="ri-palette-line" style="color: var(--primary);"></i> TEMA: EMERALD</button>
+      <select class="nav-select" id="page-selector" onchange="changePage(this.value)">
+        <option value="index.html">Главная (Home)</option>
+        <option value="template1.html">Шаблон 1 (Категории)</option>
+        <option value="template2.html">Шаблон 2 (Подкатегории)</option>
+        <option value="hubmaster.html">Кабинет (Dashboard)</option>
+      </select>
+      <div style="display:flex; align-items:center; gap:6px; background:rgba(0,0,0,0.3); border:1px solid var(--border); padding:2px 8px; border-radius:6px; height:36px;">
+        <span style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Путь:</span>
+        <input type="text" id="custom-path-input" placeholder="/okna или /servis" style="background:transparent; border:none; color:#fff; font-size:12px; outline:none; width:140px; font-family:var(--font-body); font-weight:500;" onkeydown="if(event.key==='Enter') navigateToCustomPath()">
+        <button class="nav-btn" onclick="navigateToCustomPath()" style="padding:4px 8px; font-size:11px; border:none; background:var(--primary); color:#000; font-weight:700; border-radius:4px; height:24px; display:flex; align-items:center; gap:4px; transition:0.2s;"><i class="ri-arrow-right-line" style="font-weight:bold;"></i> Перейти</button>
+      </div>
+    </div>
+    <div class="nav-center">
+      Выберите секцию на макете или кликните в списке слева для редактирования.
+    </div>
+    <div class="nav-right">
+      <button class="nav-btn" onclick="window.location.href='/admin.html'"><i class="ri-arrow-left-line"></i> НАЗАД</button>
+      <button class="btn-publish" onclick="publishChanges()"><i class="ri-save-3-line"></i> PUBLISH CHANGES</button>
+    </div>
+  </header>
+
+  <!-- WORKSPACE -->
+  <div class="workspace">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Структура и Блоки</div>
+      </div>
+      
+      <div class="sidebar-search">
+        <div class="sec-title" style="margin-top:0;">Навигация по разделам</div>
+        <div class="search-wrapper">
+          <i class="ri-search-line search-icon"></i>
+          <input type="text" class="search-input" id="sidebar-search-input" placeholder="Поиск блоков..." oninput="filterSidebar(this.value)">
+        </div>
+      </div>
+      
+      <div class="sidebar-content">
+        <div class="sec-title">Секции страницы</div>
+        <div id="sections-list-container">
+          <!-- Dynamic Sections List -->
+        </div>
+        
+        <div class="sec-title" style="margin-top:20px;">Библиотека новых блоков</div>
+        <div class="block-item" onclick="addNewBlockMock('hero')">
+          <div class="block-info">
+            <i class="ri-layout-top-line block-icon"></i>
+            <div>
+              <div class="block-name">Hero (Обложка)</div>
+              <div class="block-desc">Главный баннер, слайды и кнопки</div>
+            </div>
+          </div>
+          <div class="block-status"><i class="ri-add-line"></i></div>
+        </div>
+        <div class="block-item" onclick="addNewBlockMock('marquee')">
+          <div class="block-info">
+            <i class="ri-text-spacing block-icon"></i>
+            <div>
+              <div class="block-name">Marquee (Инфо-строка)</div>
+              <div class="block-desc">Бегущая строка с показателями</div>
+            </div>
+          </div>
+          <div class="block-status"><i class="ri-add-line"></i></div>
+        </div>
+        <div class="block-item" onclick="addNewBlockMock('catalog')">
+          <div class="block-info">
+            <i class="ri-dashboard-2-line block-icon"></i>
+            <div>
+              <div class="block-name">Catalog (Каталог)</div>
+              <div class="block-desc">Сетка продукции и оборудования</div>
+            </div>
+          </div>
+          <div class="block-status"><i class="ri-add-line"></i></div>
+        </div>
+        <div class="block-item" onclick="addNewBlockMock('masters')">
+          <div class="block-info">
+            <i class="ri-user-star-line block-icon"></i>
+            <div>
+              <div class="block-name">Masters (Наши специалисты)</div>
+              <div class="block-desc">Список сертифицированных мастеров</div>
+            </div>
+          </div>
+          <div class="block-status"><i class="ri-add-line"></i></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- PREVIEW AREA -->
+    <main class="preview-area">
+      <div class="preview-toolbar">
+        <div class="screen-sizes">
+          <span style="color:var(--text-muted); font-weight:700; margin-right:8px;">РАЗМЕР ЭКРАНА:</span>
+          <button class="sz-btn" onclick="setScreenSize('375px', this)"><i class="ri-smartphone-line"></i> Мобильный (375px)</button>
+          <button class="sz-btn" onclick="setScreenSize('768px', this)"><i class="ri-tablet-line"></i> Планшет (768px)</button>
+          <button class="sz-btn" onclick="setScreenSize('1280px', this)"><i class="ri-macbook-line"></i> Ноутбук (1280px)</button>
+          <button class="sz-btn active" onclick="setScreenSize('1440px', this)"><i class="ri-computer-line"></i> Десктоп (1440px)</button>
+          <button class="sz-btn" onclick="setScreenSize('100%', this)"><i class="ri-fullscreen-line"></i> На весь экран</button>
+        </div>
+        <div style="font-weight:700; color:var(--text); display:flex; gap:8px;">
+          <span id="current-width">1440</span> px
+        </div>
+      </div>
+      
+      <div class="iframe-wrapper">
+        <iframe src="/index.html" class="preview-iframe" id="preview-frame" style="width: 1440px;"></iframe>
+      </div>
+    </main>
+    
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span class="modal-sys-badge" id="modal-badge">СИСТЕМНЫЙ БЛОК</span>
+          НАСТРОЙКИ ЭЛЕМЕНТА: <span id="modal-section-title-display">HERO</span>
+        </div>
+        <button class="modal-close" onclick="closeSettings()"><i class="ri-close-line"></i></button>
+      </div>
+      
+      <div class="modal-tabs">
+        <div class="mtab active" onclick="switchModalTab('text', this)"><i class="ri-file-text-line"></i> Текст & Информация</div>
+        <div class="mtab" onclick="switchModalTab('media', this)"><i class="ri-image-line"></i> Изображения & Видео</div>
+        <div class="mtab" onclick="switchModalTab('grid', this)"><i class="ri-layout-masonry-fill"></i> Размеры & Сетка</div>
+        <div class="mtab" onclick="switchModalTab('effects', this)"><i class="ri-magic-line"></i> Эффекты & Фон</div>
+        <div class="mtab" onclick="switchModalTab('actions', this)"><i class="ri-flashlight-line"></i> Действия & Модалки</div>
+        <div class="mtab" onclick="switchModalTab('add', this)"><i class="ri-add-line"></i> Добавить элемент</div>
+      </div>
+      
+      <div class="modal-body">
+        <!-- TEXT TAB -->
+        <div class="tab-pane-content" id="tab-text" style="width: 100%; display: flex; flex-direction: column;">
+          <div class="lang-tabs">
+            <button class="ltab active" onclick="switchLangTab('RU', this)">RU (Русский)</button>
+            <button class="ltab" onclick="switchLangTab('KZ', this)">KK (Казахский)</button>
+            <button class="ltab" onclick="switchLangTab('EN', this)">EN (Английский)</button>
+          </div>
+          <div class="fields-container" id="text-fields-container">
+            <!-- Dynamic fields go here -->
+          </div>
+        </div>
+
+        <!-- MEDIA TAB -->
+        <div class="tab-pane-content" id="tab-media" style="width: 100%; display: none; gap: 24px;">
+          <div class="mb-left">
+            <div>
+              <span class="fm-label">Тип фонового контента</span>
+              <div class="bg-type-toggles">
+                <button class="bg-tg active" id="media-type-image" onclick="toggleMediaType('image')"><i class="ri-image-2-fill"></i> Фото / Изображение</button>
+                <button class="bg-tg" id="media-type-video" onclick="toggleMediaType('video')"><i class="ri-movie-fill"></i> Видеоролик (BG)</button>
+              </div>
+            </div>
+            
+            <div style="margin-top: 16px;">
+              <span class="fm-label" id="media-url-label-1">Ссылка на темное изображение (Dark Master)</span>
+              <div class="url-input-group">
+                <input type="text" class="url-input" id="media-url-input-1" value="/public/hero_master.webp?v=2" oninput="updateMediaPreview()">
+                <button class="btn-upload" onclick="alert('Для изменения изображения выберите файл или введите его URL в поле слева.')"><i class="ri-folder-upload-fill"></i> Загрузить</button>
+              </div>
+            </div>
+
+            <div style="margin-top: 16px;" id="media-light-group">
+              <span class="fm-label">Ссылка на светлое изображение (Light Master)</span>
+              <div class="url-input-group">
+                <input type="text" class="url-input" id="media-url-input-2" value="/public/hero_master_day.webp?v=2" oninput="updateMediaPreview()">
+                <button class="btn-upload" onclick="alert('Для изменения изображения выберите файл или введите его URL в поле слева.')"><i class="ri-folder-upload-fill"></i> Загрузить</button>
+              </div>
+            </div>
+            
+            <div style="margin-top: 16px;">
+              <span class="fm-label">Предпросмотр медиафайла</span>
+              <div class="preview-box" id="media-preview-box" style="background-image: url('/hero_master.webp?v=2');">
+              </div>
+            </div>
+          </div>
+          
+          <div class="mb-right">
+            <span class="fm-label">Быстрый выбор фото для HubMaster</span>
+            <div class="gallery-grid">
+              <div class="gal-item" onclick="selectGalleryImg('/public/hero_master.webp?v=2', '/public/hero_master_day.webp?v=2')">
+                <img src="/hero_master.webp?v=2" class="gal-img">
+                <div class="gal-label">Оригинальный Мастер</div>
+              </div>
+              <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=1200', 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=1200')">
+                <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=300" class="gal-img">
+                <div class="gal-label">Ремонт техники</div>
+              </div>
+              <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1486006920555-c77dce18193b?q=80&w=1200', 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?q=80&w=1200')">
+                <img src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?q=80&w=300" class="gal-img">
+                <div class="gal-label">Автосервис / СТО</div>
+              </div>
+              <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1200', 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1200')">
+                <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=300" class="gal-img">
+                <div class="gal-label">Уборка / Клининг</div>
+              </div>
+              <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=1200', 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=1200')">
+                <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=300" class="gal-img">
+                <div class="gal-label">Сантехника</div>
+              </div>
+              <div class="gal-item" onclick="selectGalleryImg('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1200', 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1200')">
+                <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=300" class="gal-img">
+                <div class="gal-label">Мебель</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PLACEHOLDER TABS -->
+        <div class="tab-pane-content" id="tab-grid" style="width: 100%; display: none;">
+          <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <i class="ri-layout-masonry-line" style="font-size: 48px; color: var(--primary); margin-bottom: 12px; display: block;"></i>
+            <h3>Настройки сетки и размеров</h3>
+            <p style="font-size: 13px; margin-top: 8px;">Данные параметры генерируются автоматически в соответствии с Premium Emerald дизайн-системой.</p>
+          </div>
+        </div>
+        <div class="tab-pane-content" id="tab-effects" style="width: 100%; display: none;">
+          <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <i class="ri-magic-line" style="font-size: 48px; color: var(--primary); margin-bottom: 12px; display: block;"></i>
+            <h3>Эффекты анимации и задний фон</h3>
+            <p style="font-size: 13px; margin-top: 8px;">Все секции имеют плавную анимацию появления ScrollReveal и адаптивные задние фоны.</p>
+          </div>
+        </div>
+        <div class="tab-pane-content" id="tab-actions" style="width: 100%; display: none;">
+          <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <i class="ri-flashlight-line" style="font-size: 48px; color: var(--primary); margin-bottom: 12px; display: block;"></i>
+            <h3>Интерактивные Действия и Модальные окна</h3>
+            <p style="font-size: 13px; margin-top: 8px;">Кнопки вызывают встроенную форму быстрого заказа услуг или открывают окно чата с оператором.</p>
+          </div>
+        </div>
+        <div class="tab-pane-content" id="tab-add" style="width: 100%; display: none;">
+          <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <i class="ri-add-line" style="font-size: 48px; color: var(--primary); margin-bottom: 12px; display: block;"></i>
+            <h3>Добавление новых элементов</h3>
+            <p style="font-size: 13px; margin-top: 8px;">Используйте левую панель "Библиотека новых блоков" для добавления целых блоков в DOM макета.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn-close" onclick="closeSettings()">Закрыть</button>
+        <button class="btn-save" onclick="applySectionChanges()">Применить изменения</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="publish-notify" id="publish-notify">
+    <div class="pn-icon"><i class="ri-check-line"></i></div>
+    <div>
+      <div class="pn-title" id="notify-title">Изменения опубликованы</div>
+      <div class="pn-desc" id="notify-desc">Сайт успешно обновлен для всех пользователей</div>
+    </div>
+  </div>
+
+  <!-- CATALOG TRANSLATION MINI MODAL -->
+  <div class="modal-overlay" id="catalog-trans-modal">
+    <div class="modal-card" style="max-width:560px; width:100%;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span class="modal-sys-badge">КАТАЛОГ</span>
+          РЕДАКТИРОВАНИЕ ПЕРЕВОДА
+        </div>
+        <button class="modal-close" onclick="document.getElementById('catalog-trans-modal').classList.remove('active')"><i class="ri-close-line"></i></button>
+      </div>
+      <div class="modal-body" style="flex-direction:column; gap:16px;">
+        <div class="field-group">
+          <div class="field-info">
+            <span class="fm-label">Русский (RU)</span>
+            <span class="field-key">ru</span>
+          </div>
+          <input type="text" id="cat-trans-ru" class="field-input" placeholder="Название на русском">
+        </div>
+        <div class="field-group">
+          <div class="field-info">
+            <span class="fm-label">Казахский (KZ)</span>
+            <span class="field-key">kz</span>
+          </div>
+          <input type="text" id="cat-trans-kz" class="field-input" placeholder="Атауы қазақ тілінде">
+        </div>
+        <div class="field-group">
+          <div class="field-info">
+            <span class="fm-label">Английский (EN)</span>
+            <span class="field-key">en</span>
+          </div>
+          <input type="text" id="cat-trans-en" class="field-input" placeholder="Name in English">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-close" onclick="document.getElementById('catalog-trans-modal').classList.remove('active')">Отмена</button>
+        <button class="btn-save" id="btn-save-cat-trans">Сохранить перевод</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUILDER CONTROLS OVERLAY - injected by JS into iframe, rendered here for reference -->
+
+  <!-- QUICK EDIT PANEL (slides from right on element click) -->
+  <div class="quick-edit-panel" id="quick-edit-panel">
+    <div class="qep-header">
+      <div class="qep-title">
+        <i class="ri-edit-2-line"></i>
+        Редактирование элемента
+        <span class="qep-badge" id="qep-type-badge">ТЕКСТ</span>
+      </div>
+      <button class="qep-close" onclick="closeQuickEdit()"><i class="ri-close-line"></i></button>
+    </div>
+    <div class="qep-body">
+      <div class="qep-element-name" id="qep-element-name">
+        <i class="ri-cursor-line"></i>
+        <span id="qep-element-tag">Выбранный элемент</span>
+      </div>
+
+      <div class="qep-info-row">
+        <i class="ri-information-line"></i>
+        Нажмите «Применить» или Enter для применения изменений в реальном времени.
+      </div>
+
+      <!-- Language Tabs -->
+      <div class="qep-lang-row">
+        <div class="qep-ltab active" id="qepl-ru" onclick="switchQepLang('RU')">🇷🇺 RU</div>
+        <div class="qep-ltab" id="qepl-kz" onclick="switchQepLang('KZ')">🇰🇿 KZ</div>
+        <div class="qep-ltab" id="qepl-en" onclick="switchQepLang('EN')">🇬🇧 EN</div>
+      </div>
+
+      <!-- Image Upload Section -->
+      <div id="qep-image-upload-section" style="display:none;">
+        <div class="qep-field-label">Изображение</div>
+        <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; border:1px dashed var(--border); text-align:center;">
+          <img id="qep-current-img" src="" style="max-width:100%; max-height:120px; display:none; border-radius:6px; margin-bottom:10px;">
+          <div id="qep-no-img-text" style="font-size:11px; color:var(--text-muted); margin-bottom:10px;">Нет изображения</div>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="qep-image-url-input" class="qep-input" placeholder="URL изображения" style="flex:1;">
+            <button class="qep-btn-apply" onclick="document.getElementById('qep-device-upload').click()" style="flex:initial; padding:10px 12px;" title="Загрузить"><i class="ri-upload-2-line"></i></button>
+          </div>
+          <input type="file" id="qep-device-upload" style="display:none;" onchange="handleQepImageUpload(event)">
+        </div>
+      </div>
+      
+      <!-- Image Background Setup Section -->
+      <div id="qep-image-setup-section" style="display:none; margin-top: 10px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
+        <div class="qep-field-label" style="margin-bottom:10px;"><i class="ri-crop-line"></i> Настройка масштаба и позиции</div>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 8px;">
+          <div>
+            <label style="font-size: 10px; color: var(--text-muted);">Масштаб (Size)</label>
+            <select class="qep-input" id="qep-bg-size" onchange="liveUpdateImage()">
+              <option value="cover">Заполнить (Cover)</option>
+              <option value="contain">Вместить (Contain)</option>
+              <option value="auto">Оригинал (Auto)</option>
+              <option value="100% 100%">Растянуть (100% 100%)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 10px; color: var(--text-muted); display:flex; justify-content:space-between;"><span>Горизонтально (X)</span><span id="qep-bg-pos-x-val">50%</span></label>
+            <input type="range" id="qep-bg-pos-x" min="0" max="100" value="50" oninput="document.getElementById('qep-bg-pos-x-val').innerText = this.value + '%'; liveUpdateImage();" style="width:100%; cursor:pointer;">
+          </div>
+          <div>
+            <label style="font-size: 10px; color: var(--text-muted); display:flex; justify-content:space-between;"><span>Вертикально (Y)</span><span id="qep-bg-pos-y-val">50%</span></label>
+            <input type="range" id="qep-bg-pos-y" min="0" max="100" value="50" oninput="document.getElementById('qep-bg-pos-y-val').innerText = this.value + '%'; liveUpdateImage();" style="width:100%; cursor:pointer;">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Current Language Input -->
+      <div id="qep-main-input-group">
+        <div class="qep-field-label" id="qep-lang-label">Русский (RU)</div>
+        <textarea class="qep-input" id="qep-main-input" rows="4" oninput="liveUpdateElement()" placeholder="Введите текст..."></textarea>
+      </div>
+
+      <!-- All Languages at once grid -->
+      <div id="qep-all-langs-section" style="display:none;">
+        <div class="qep-field-label" style="margin-bottom:12px;">Все языки сразу</div>
+        <div class="qep-all-lang-grid">
+          <div>
+            <div class="qep-field-label">🇷🇺 Русский</div>
+            <textarea class="qep-input" id="qep-ru-input" rows="2" oninput="document.getElementById('qep-main-input').value=this.value; liveUpdateElement();" placeholder="Русский текст..."></textarea>
+          </div>
+          <div>
+            <div class="qep-field-label">🇰🇿 Казахский</div>
+            <textarea class="qep-input" id="qep-kz-input" rows="2" placeholder="Қазақша мәтін..."></textarea>
+          </div>
+          <div>
+            <div class="qep-field-label">🇬🇧 English</div>
+            <textarea class="qep-input" id="qep-en-input" rows="2" placeholder="English text..."></textarea>
+          </div>
+        </div>
+      </div>
+    
+      <!-- Appearance Section (Styles) -->
+      <div id="qep-appearance-section" style="margin-top: 15px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
+        <div class="qep-field-label" style="margin-bottom:10px;"><i class="ri-palette-line"></i> Внешний вид (Шрифт, Цвет и т.д.)</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div>
+            <label style="font-size:10px; color:var(--text-muted); font-weight: 700;">Размер шрифта</label>
+            <input type="text" id="qep-style-fontsize" class="qep-input" oninput="liveUpdateElement()" placeholder="напр. 16px" style="padding: 6px 10px;">
+          </div>
+          <div>
+            <label style="font-size:10px; color:var(--text-muted); font-weight: 700;">Цвет текста</label>
+            <div style="display:flex; gap: 4px;">
+              <input type="color" id="qep-style-color-picker" style="width: 24px; height: 24px; padding: 0; border: none; cursor: pointer; background: transparent;" oninput="document.getElementById('qep-style-color').value = this.value; liveUpdateElement();">
+              <input type="text" id="qep-style-color" class="qep-input" oninput="liveUpdateElement()" placeholder="#fff" style="padding: 6px 10px; flex: 1;">
+            </div>
+          </div>
+          <div>
+            <label style="font-size:10px; color:var(--text-muted); font-weight: 700;">Жирность (Weight)</label>
+            <select id="qep-style-fontweight" class="qep-input" onchange="liveUpdateElement()" style="padding: 6px 10px; height: auto;">
+              <option value="">По умолчанию</option>
+              <option value="400">400 (Обычный)</option>
+              <option value="500">500 (Средний)</option>
+              <option value="600">600 (Полужирный)</option>
+              <option value="700">700 (Жирный)</option>
+              <option value="800">800 (Очень жирный)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:10px; color:var(--text-muted); font-weight: 700;">Выравнивание</label>
+            <select id="qep-style-textalign" class="qep-input" onchange="liveUpdateElement()" style="padding: 6px 10px; height: auto;">
+              <option value="">По умолчанию</option>
+              <option value="left">Слева</option>
+              <option value="center">По центру</option>
+              <option value="right">Справа</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="qep-footer">
+      <button class="qep-btn-apply" onclick="applyQuickEdit()">
+        <i class="ri-check-line"></i> ПРИМЕНИТЬ
+      </button>
+      <button class="qep-btn-all-langs" id="qep-toggle-all-langs" onclick="toggleQepAllLangs()">
+        <i class="ri-translate-2"></i> Все языки
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Security check: Redirect if no admin token
+    const adminToken = localStorage.getItem('admin_token');
+    const API_BASE = window.location.hostname && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1') && window.location.protocol !== 'file:' ? 'https://hub-master-production.up.railway.app' : '';
+    if (!adminToken) {
+      window.location.href = '/admin.html';
+    }
+
+
+    // Config Mapping
+    const sectionSelectors = {
+      header: '.navbar',
+      hero: '.hero-section',
+      marquee: '.stats-section',
+      showcase: '.showcase-combo-section',
+      catalog: '.catalog-section',
+      masters: '.masters-advantages-section',
+      whyChooseUs: '.why-section',
+      reviews: '.reviews-section',
+      footer: '.app-footer'
+    };
+
+    const pageSections = {
+      header: {
+        title: "Header (Шапка)",
+        icon: "ri-window-line",
+        keys: ["navSubtitle", "cabinet", "contacts"]
+      },
+      hero: {
+        title: "Hero (Главный баннер)",
+        icon: "ri-layout-top-line",
+        keys: [
+          "heroTitle", "heroSubtextText", "btnCallFurniture", "btnCallMe",
+          "slideWinTitle", "slideWinSub", "btnCallWin",
+          "slideWeldTitle", "slideWeldSub", "btnCallWeld",
+          "slideApplTitle", "slideApplSub", "btnCallAppl",
+          "heroFormTitle", "heroFormDesc", "btnLeaveAnketa"
+        ],
+        media: true
+      },
+      marquee: {
+        title: "Marquee (Инфо-строка)",
+        icon: "ri-text-spacing",
+        keys: ["pill1Text", "pill1Sub", "pill2Text", "pill2Sub", "pill3Text", "pill3Sub"]
+      },
+      showcase: {
+        title: "Showcase (Приветствие)",
+        icon: "ri-shake-hands-line",
+        keys: ["showcaseTitle", "showcaseDesc", "showcasePrimaryBtn", "showcaseOutlineBtn"]
+      },
+      catalog: {
+        title: "Catalog (Каталог)",
+        icon: "ri-dashboard-2-line",
+        keys: ["catalogPretitle", "catalogTitle", "catalogSub", "orderBtn"]
+      },
+      masters: {
+        title: "Masters (Наши специалисты)",
+        icon: "ri-user-star-line",
+        keys: ["ourMastersTitle", "ourMastersPretitle", "ourMastersTitleMain", "ourMastersSubMain", "availableLabel", "ordersCount", "ratingAvg", "arrivalTime", "warrantyLabel"]
+      },
+      whyChooseUs: {
+        title: "Why Choose Us (Преимущества)",
+        icon: "ri-shield-check-line",
+        keys: [
+          "whyChooseTitle",
+          "whyTitle1", "whyDesc1",
+          "whyTitle2", "whyDesc2",
+          "whyTitle3", "whyDesc3",
+          "whyTitle4", "whyDesc4",
+          "whyTitle5", "whyDesc5",
+          "whyTitle6", "whyDesc6",
+          "whyTitle7", "whyDesc7",
+          "whyTitle8", "whyDesc8",
+          "whyTitle9", "whyDesc9"
+        ]
+      },
+      reviews: {
+        title: "Reviews (Отзывы клиентов)",
+        icon: "ri-message-3-line",
+        keys: ["reviewsTitle", "reviewsSub", "writeReview", "yourName", "yourPhone", "selectService", "reviewText", "submitReview"]
+      },
+      footer: {
+        title: "Footer (Подвал)",
+        icon: "ri-menu-5-line",
+        keys: ["partnersTitle", "otherServicesTitle", "footerDesc", "copyright"]
+      }
+    };
+
+    let activePage = 'index.html';
+    let activeSection = null;
+    let activeLang = 'RU';
+    let localTranslations = {}; 
+    let localCatalogTranslations = {};
+
+    // DOM Elements
+    const frame = document.getElementById('preview-frame');
+    const sectionsContainer = document.getElementById('sections-list-container');
+
+    // Helpers for HTML stripping and finding translation keys
+    function stripHtml(html) {
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      return doc.body.textContent || "";
+    }
+
+    window.findTranslationKey = function(text) {
+      if (!text) return null;
+      const t = text.trim().replace(/\s+/g, ' ');
+      
+      // Look in translations
+      for (const lang of ['RU', 'KZ', 'EN']) {
+        if (localTranslations[lang]) {
+          for (const key of Object.keys(localTranslations[lang])) {
+            const val = localTranslations[lang][key];
+            if (val) {
+              const cleanVal = stripHtml(val).trim().replace(/\s+/g, ' ');
+              if (cleanVal === t) {
+                return { type: 'static', key: key };
+              }
+            }
+          }
+        }
+      }
+      
+      // Look in catalogTranslations
+      if (localCatalogTranslations) {
+        for (const ruKey of Object.keys(localCatalogTranslations)) {
+          if (ruKey.trim().replace(/\s+/g, ' ') === t) {
+            return { type: 'catalog', key: ruKey };
+          }
+          const kzVal = localCatalogTranslations[ruKey].KZ;
+          const enVal = localCatalogTranslations[ruKey].EN;
+          if (kzVal && kzVal.trim().replace(/\s+/g, ' ') === t) {
+            return { type: 'catalog', key: ruKey };
+          }
+          if (enVal && enVal.trim().replace(/\s+/g, ' ') === t) {
+            return { type: 'catalog', key: ruKey };
+          }
+        }
+      }
+      return null;
+    };
+
+    window.openInlineEditor = function(type, key) {
+      if (type === 'static') {
+        let foundSection = null;
+        for (const sKey of Object.keys(pageSections)) {
+          if (pageSections[sKey].keys.includes(key)) {
+            foundSection = sKey;
+            break;
+          }
+        }
+        if (foundSection) {
+          openSectionEditor(foundSection);
+          setTimeout(() => {
+            const input = document.getElementById(`input-key-${key}`);
+            if (input) {
+              input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              input.focus();
+              input.style.borderColor = 'var(--primary)';
+              input.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.5)';
+              setTimeout(() => {
+                input.style.borderColor = '';
+                input.style.boxShadow = '';
+              }, 2000);
+            }
+          }, 350);
+        } else {
+          showToast('Поиск поля', `Поле ${key} найдено, но не привязано к секциям.`, 'ri-error-warning-line');
+        }
+      } else if (type === 'catalog') {
+        window.openCatalogTranslationEditor(key);
+      }
+    };
+
+    window.openCatalogTranslationEditor = function(ruKey) {
+      const item = localCatalogTranslations[ruKey] || { KZ: '', EN: '' };
+      const modal = document.getElementById('catalog-trans-modal');
+      modal.classList.add('active');
+      
+      document.getElementById('cat-trans-ru').value = ruKey;
+      document.getElementById('cat-trans-kz').value = item.KZ || '';
+      document.getElementById('cat-trans-en').value = item.EN || '';
+      
+      document.getElementById('btn-save-cat-trans').onclick = () => {
+        const newRu = document.getElementById('cat-trans-ru').value.trim();
+        const newKz = document.getElementById('cat-trans-kz').value.trim();
+        const newEn = document.getElementById('cat-trans-en').value.trim();
+        
+        if (!newRu) return;
+        
+        if (newRu !== ruKey) {
+          delete localCatalogTranslations[ruKey];
+        }
+        localCatalogTranslations[newRu] = { KZ: newKz, EN: newEn };
+        
+        frame.contentWindow.catalogTranslations = localCatalogTranslations;
+        if (typeof frame.contentWindow.switchLang === 'function') {
+          frame.contentWindow.switchLang(frame.contentWindow.currentLang || 'RU');
+        }
+        
+        modal.classList.remove('active');
+        showToast('Сохранено', 'Перевод каталога успешно обновлен!', 'ri-checkbox-circle-fill');
+      };
+    };
+
+    window.getPhysicalPage = function(page) {
+      if (!page) return 'index.html';
+      if (page.includes('template1.html')) return 'template1.html';
+      if (page.includes('template2.html')) return 'template2.html';
+      if (page.includes('hubmaster.html')) return 'hubmaster.html';
+      return 'index.html';
+    };
+
+    window.navigateToCustomPath = function() {
+      let path = document.getElementById('custom-path-input').value.trim();
+      if (!path) return;
+      if (!path.startsWith('/')) {
+        path = '/' + path;
+      }
+      activePage = path.substring(1) || 'index.html';
+      frame.src = path;
+      showToast('Загрузка пути', `Загрузка страницы ${path}...`, 'ri-loader-4-line');
+    };
+
+    async function loadBuilderCatalogRoutes() {
+      try {
+        const token = localStorage.getItem('admin_token');
+        const res = await fetch(API_BASE + '/api/catalog', { headers: { 'Authorization': 'Bearer ' + token } });
+        if (res.ok) {
+          const catalogData = await res.json();
+          const selector = document.getElementById('page-selector');
+          
+          let html = `
+            <option value="index.html">Главная (Home)</option>
+            <option value="hubmaster.html">Кабинет (Dashboard)</option>
+          `;
+          
+          if (catalogData.tabs && catalogData.tabs.length > 0) {
+            html += `<optgroup label="--- РАЗДЕЛЫ ---">`;
+            catalogData.tabs.forEach(tab => {
+              html += `<option value="${tab.id}">${tab.label} (Раздел)</option>`;
+            });
+            html += `</optgroup>`;
+          }
+          
+          if (catalogData.categories && catalogData.categories.length > 0) {
+            html += `<optgroup label="--- КАТЕГОРИИ ---">`;
+            catalogData.categories.forEach(cat => {
+              html += `<option value="${cat.tab}/${cat.id}">${cat.title} (Категория)</option>`;
+            });
+            html += `</optgroup>`;
+          }
+          
+          if (catalogData.subcategories) {
+            html += `<optgroup label="--- ПОДКАТЕГОРИИ / УСЛУГИ ---">`;
+            Object.keys(catalogData.subcategories).forEach(catId => {
+              const cat = catalogData.categories.find(c => c.id === catId);
+              const tabId = cat ? cat.tab : 'unknown';
+              catalogData.subcategories[catId].forEach(sub => {
+                html += `<option value="${tabId}/${catId}/${sub.id}">${sub.title}</option>`;
+              });
+            });
+            html += `</optgroup>`;
+          }
+          
+          const currentVal = selector.value;
+          selector.innerHTML = html;
+          
+          if(Array.from(selector.options).some(opt => opt.value === currentVal)) {
+              selector.value = currentVal;
+          }
+        }
+      } catch (e) {
+        console.error("Failed to load catalog routes for builder:", e);
+      }
+    }
+
+    // On Load
+    window.addEventListener('DOMContentLoaded', () => {
+      loadBuilderCatalogRoutes();
+      renderSectionsList();
+      
+      frame.onload = () => {
+        setupIframeEditing();
+
+        // Dynamic path detection within iframe
+        try {
+          const iframePath = frame.contentWindow.location.pathname;
+          const cleanPath = iframePath.startsWith('/') ? iframePath.substring(1) : iframePath;
+          activePage = cleanPath || 'index.html';
+          document.getElementById('custom-path-input').value = iframePath;
+          
+          const pageSelector = document.getElementById('page-selector');
+          const matchedPage = getPhysicalPage(activePage);
+          if (activePage === 'index.html' || activePage === 'template1.html' || activePage === 'template2.html' || activePage === 'hubmaster.html') {
+            pageSelector.value = activePage;
+          } else {
+            pageSelector.value = 'index.html';
+          }
+        } catch(err) {
+          console.warn("Could not read iframe path:", err);
+        }
+        
+        // Load initial translation values from the iframe environment
+        try {
+          const frameHtml = frame.contentDocument.documentElement.innerHTML;
+          
+          const tMatch = frameHtml.match(/const translations = (\{[\s\S]*?\});/);
+          if (tMatch) {
+            localTranslations = (new Function('return ' + tMatch[1]))();
+          } else if (frame.contentWindow.translations) {
+            localTranslations = JSON.parse(JSON.stringify(frame.contentWindow.translations));
+          }
+          
+          const cMatch = frameHtml.match(/const catalogTranslations = (\{[\s\S]*?\});/);
+          if (cMatch) {
+            localCatalogTranslations = (new Function('return ' + cMatch[1]))();
+          } else if (frame.contentWindow.catalogTranslations) {
+            localCatalogTranslations = JSON.parse(JSON.stringify(frame.contentWindow.catalogTranslations));
+          }
+        } catch(e) {
+          console.error("Failed to parse initial translations from iframe HTML:", e);
+        }
+      };
+    });
+
+    function renderSectionsList() {
+      sectionsContainer.innerHTML = '';
+      Object.keys(pageSections).forEach(key => {
+        const sect = pageSections[key];
+        const div = document.createElement('div');
+        div.className = 'section-list-item';
+        div.onclick = () => scrollToAndSelectSection(key);
+        div.innerHTML = `
+          <div class="section-list-info">
+            <i class="${sect.icon} section-list-icon"></i>
+            <span class="section-list-name">${sect.title}</span>
+          </div>
+          <i class="ri-edit-line section-list-edit" onclick="event.stopPropagation(); openSectionEditor('${key}')"></i>
+        `;
+        sectionsContainer.appendChild(div);
+      });
+    }
+
+    function filterSidebar(query) {
+      const q = query.toLowerCase();
+      const items = document.querySelectorAll('.section-list-item');
+      Object.keys(pageSections).forEach((key, index) => {
+        const item = items[index];
+        const name = pageSections[key].title.toLowerCase();
+        if (item) {
+          if (name.includes(q)) {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
+        }
+      });
+    }
+
+    function changePage(page) {
+      activePage = page;
+      frame.src = '/' + page;
+      document.getElementById('custom-path-input').value = '/' + (page === 'index.html' ? '' : page);
+      showToast('Загрузка страницы', `Переключение на ${page}...`, 'ri-loader-4-line');
+    }
+
+    function setScreenSize(width, btn) {
+      document.querySelectorAll('.sz-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      frame.style.width = width;
+      document.getElementById('current-width').innerText = width === '100%' ? window.innerWidth : parseInt(width);
+    }
+
+    function scrollToAndSelectSection(key) {
+      try {
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        const selector = sectionSelectors[key];
+        const element = doc.querySelector(selector);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          element.style.outline = '4px solid #10b981';
+          element.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.4)';
+          setTimeout(() => {
+            element.style.outline = '';
+            element.style.boxShadow = '';
+          }, 1500);
+        }
+      } catch(e) {
+        console.warn("Cannot interact with iframe DOM:", e);
+      }
+    }
+    function setupIframeEditing() {
+      try {
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        
+        // Inject Remixicon
+        const remixIcon = doc.createElement('link');
+        remixIcon.rel = 'stylesheet';
+        remixIcon.href = 'https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css';
+        doc.head.appendChild(remixIcon);
+        
+        // Inject custom CSS styling
+        const style = doc.createElement('style');
+        style.id = 'builder-styles';
+        style.innerHTML = `
+          .builder-section-highlight {
+            position: relative !important;
+            outline: 2px dashed rgba(16, 185, 129, 0.4) !important;
+            transition: all 0.2s ease-in-out;
+          }
+          .builder-section-highlight:hover {
+            outline: 3px solid #10b981 !important;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3) !important;
+          }
+          .builder-section-toolbar {
+            position: absolute;
+            top: 0;
+            left: 20px;
+            background: #00ff66;
+            color: #000;
+            border-radius: 0 0 8px 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+          }
+          .builder-section-highlight:hover .builder-section-toolbar {
+            display: flex;
+          }
+          .toolbar-btn {
+            background: rgba(0,0,0,0.1);
+            border: none;
+            color: #000;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 14px;
+          }
+          .toolbar-btn:hover { background: rgba(0,0,0,0.2); }
+          .toolbar-btn.trash { color: #d32f2f; }
+          .toolbar-btn.trash:hover { background: rgba(211, 47, 47, 0.2); }
+          .toolbar-handle { font-size: 14px; color: #000; opacity: 0.5; cursor: grab; margin-right: 4px; }
+          .toolbar-title { font-size: 12px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase; margin-right: 8px; }
+
+          .builder-inline-editable.hero-master-img, .builder-inline-editable.showcase-master-placeholder { 
+             z-index: 999999 !important; 
+             position: relative !important; 
+             pointer-events: auto !important; 
+          }
+          
+          .builder-resize-overlay {
+            position: absolute;
+            border: 2px dashed #10b981;
+            pointer-events: none;
+            display: none;
+            z-index: 100000;
+          }
+          .resize-handle {
+            position: absolute;
+            width: 14px; height: 14px;
+            background: #10b981;
+            border: 2px solid #fff;
+            pointer-events: auto;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+          }
+          .resize-handle.top-left { top: -7px; left: -7px; cursor: nwse-resize; }
+          .resize-handle.top-right { top: -7px; right: -7px; cursor: nesw-resize; }
+          .resize-handle.bottom-left { bottom: -7px; left: -7px; cursor: nesw-resize; }
+          .resize-handle.bottom-right { bottom: -7px; right: -7px; cursor: nwse-resize; }
+
+          .builder-add-divider {
+            height: 10px;
+            background: transparent;
+            position: relative;
+            margin: -5px 0;
+            z-index: 9999;
+            cursor: pointer;
+            transition: all 0.2s;
+          }
+          .builder-add-divider:hover {
+            height: 30px;
+            background: rgba(16, 185, 129, 0.15);
+            margin: -15px 0;
+          }
+          .builder-add-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 2px;
+            background: #10b981;
+            opacity: 0;
+            transition: 0.2s;
+            transform: translateY(-50%);
+          }
+          .builder-add-divider:hover .builder-add-line {
+            opacity: 1;
+          }
+          .builder-add-btn {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: #10b981;
+            color: #000;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+            opacity: 0;
+            transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+          }
+          .builder-add-divider:hover .builder-add-btn {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+          }
+
+          
+          /* SMART GUIDES */
+          .smart-guide-x, .smart-guide-y {
+            position: fixed;
+            background: #ff00ff;
+            z-index: 20000;
+            display: none;
+            pointer-events: none;
+          }
+          .smart-guide-x {
+            height: 1px;
+            left: 0;
+            right: 0;
+          }
+          .smart-guide-y {
+            width: 1px;
+            top: 0;
+            bottom: 0;
+          }
+          .builder-dragging {
+            opacity: 0.8;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3) !important;
+            z-index: 19999 !important;
+            cursor: grabbing !important;
+          }
+          /* INLINE EDITABLE ELEMENTS */
+          .builder-inline-editable {
+            outline: 1px dashed rgba(16, 185, 129, 0.45) !important;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer !important;
+          }
+          .builder-inline-editable:hover {
+            outline: 2px solid #10b981 !important;
+            background: rgba(16, 185, 129, 0.08) !important;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.2) !important;
+          }
+        `;
+        doc.head.appendChild(style);
+
+        // Map section elements
+        Object.keys(sectionSelectors).forEach(key => {
+          const sel = sectionSelectors[key];
+          const el = doc.querySelector(sel);
+          if (el) {
+            el.classList.add('builder-section-highlight');
+            
+            const toolbar = doc.createElement('div');
+            toolbar.className = 'builder-section-toolbar';
+            
+            const sectTitle = (typeof pageSections !== 'undefined' && pageSections[key]) ? pageSections[key].title : key;
+            
+            toolbar.innerHTML = `
+              <div class="toolbar-handle"><i class="ri-draggable"></i></div>
+              <div class="toolbar-title">${sectTitle.toUpperCase()}</div>
+              <button class="toolbar-btn move-up" title="Переместить выше"><i class="ri-arrow-up-line"></i></button>
+              <button class="toolbar-btn move-down" title="Переместить ниже"><i class="ri-arrow-down-line"></i></button>
+              <button class="toolbar-btn edit-settings" title="Настройки секции"><i class="ri-settings-4-fill"></i></button>
+              <button class="toolbar-btn trash" title="Удалить блок"><i class="ri-delete-bin-line"></i></button>
+            `;
+            
+            // Events
+            toolbar.querySelector('.edit-settings').onclick = (e) => {
+              e.preventDefault(); e.stopPropagation();
+              window.parent.openSectionEditor(key);
+            };
+            
+            toolbar.querySelector('.move-up').onclick = (e) => {
+              e.preventDefault(); e.stopPropagation();
+              if (el.previousElementSibling) { el.parentNode.insertBefore(el, el.previousElementSibling); }
+            };
+            
+            toolbar.querySelector('.move-down').onclick = (e) => {
+              e.preventDefault(); e.stopPropagation();
+              if (el.nextElementSibling) { el.parentNode.insertBefore(el.nextElementSibling, el); }
+            };
+            
+            toolbar.querySelector('.trash').onclick = (e) => {
+              e.preventDefault(); e.stopPropagation();
+              if(confirm('Точно удалить этот блок?')) { el.remove(); }
+            };
+            
+            el.appendChild(toolbar);
+          }
+        });
+
+        // Tag all text-containing elements for inline translation edits
+        const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, div.cat-card-image, img.hero-master-img, div.showcase-master-placeholder');
+        textElements.forEach((el, index) => {
+          const isImg = el.tagName === 'IMG';
+          const hasBg = el.style && el.style.backgroundImage && el.style.backgroundImage !== 'none' && el.style.backgroundImage !== '';
+          const isCatalogCard = el.classList.contains('catalog-card');
+          const isShowcasePlaceholder = el.classList.contains('showcase-master-placeholder');
+
+          if (isImg || isShowcasePlaceholder || isCatalogCard || el.children.length === 0 || (el.children.length === 1 && (el.firstElementChild.tagName === 'SPAN' || el.firstElementChild.tagName === 'BR' || el.firstElementChild.tagName === 'I'))) {
+            const text = isImg ? el.src : (el.innerText ? el.innerText.trim() : "");
+            if ((text && text.length > 0) || isShowcasePlaceholder || hasBg) {
+              const match = isImg ? null : window.parent.findTranslationKey(text);
+              el.classList.add('builder-inline-editable');
+              el.setAttribute('data-el-idx', index);
+              if (match) {
+                el.setAttribute('data-trans-type', match.type);
+                el.setAttribute('data-trans-key', match.key);
+              } else {
+                el.setAttribute('data-trans-type', 'dom');
+                el.setAttribute('data-trans-key', 'direct_dom_edit');
+              }
+            }
+          }
+        });
+
+
+        // SMART GUIDES & DRAG LOGIC
+        const guideX = doc.createElement('div'); guideX.className = 'smart-guide-x'; doc.body.appendChild(guideX);
+        const guideY = doc.createElement('div'); guideY.className = 'smart-guide-y'; doc.body.appendChild(guideY);
+        
+        let dragEl = null;
+        let isDragging = false;
+        let startMouseX = 0, startMouseY = 0;
+        let startLeft = 0, startTop = 0;
+        
+        let clickStart = 0;
+
+        // RESIZE OVERLAY
+        const resizeOverlay = doc.createElement('div');
+        resizeOverlay.className = 'builder-resize-overlay';
+        resizeOverlay.innerHTML = `
+           <div class="resize-handle top-left" data-dir="tl"></div>
+           <div class="resize-handle top-right" data-dir="tr"></div>
+           <div class="resize-handle bottom-left" data-dir="bl"></div>
+           <div class="resize-handle bottom-right" data-dir="br"></div>
+        `;
+        doc.body.appendChild(resizeOverlay);
+
+        let isResizing = false;
+        let wasResizing = false;
+        let activeResizeEl = null;
+        let resizeDir = '';
+        let startWidth = 0;
+        let startHeight = 0;
+
+
+        doc.addEventListener('mousedown', (e) => {
+          if (e.target.classList.contains('resize-handle')) {
+             isResizing = true;
+             resizeDir = e.target.getAttribute('data-dir');
+             startMouseX = e.clientX;
+             startMouseY = e.clientY;
+             if (activeResizeEl) {
+                 startWidth = activeResizeEl.offsetWidth;
+                 startHeight = activeResizeEl.offsetHeight;
+                 isDragging = false;
+                 dragEl = null;
+             }
+             e.preventDefault();
+             e.stopPropagation();
+             return;
+          }
+
+          const editable = e.target.closest('.builder-inline-editable');
+          if (editable) {
+            activeResizeEl = editable;
+            const rect = editable.getBoundingClientRect();
+            resizeOverlay.style.display = 'block';
+            resizeOverlay.style.width = rect.width + 'px';
+            resizeOverlay.style.height = rect.height + 'px';
+            resizeOverlay.style.top = (rect.top + doc.defaultView.scrollY) + 'px';
+            resizeOverlay.style.left = (rect.left + doc.defaultView.scrollX) + 'px';
+
+            dragEl = editable;
+            isDragging = false;
+            startMouseX = e.clientX;
+            startMouseY = e.clientY;
+            clickStart = Date.now();
+            
+            const comp = window.getComputedStyle(dragEl);
+            if (comp.position === 'static') {
+              dragEl.style.position = 'relative';
+            }
+            startLeft = parseFloat(dragEl.style.left) || 0;
+            startTop = parseFloat(dragEl.style.top) || 0;
+            
+            if (editable.tagName === 'IMG') {
+               e.preventDefault();
+            }
+          } else if (!e.target.closest('.builder-resize-overlay') && !e.target.closest('.builder-section-toolbar')) {
+             resizeOverlay.style.display = 'none';
+             activeResizeEl = null;
+          }
+        }, true);
+
+        doc.addEventListener('mousemove', (e) => {
+          if (isResizing && activeResizeEl) {
+             const dx = e.clientX - startMouseX;
+             const dy = e.clientY - startMouseY;
+             let newWidth = startWidth;
+             let newHeight = startHeight;
+             
+             if (resizeDir === 'br') {
+                newWidth = startWidth + dx;
+                newHeight = startHeight + dy;
+             } else if (resizeDir === 'tr') {
+                newWidth = startWidth + dx;
+                newHeight = startHeight - dy;
+             } else if (resizeDir === 'bl') {
+                newWidth = startWidth - dx;
+                newHeight = startHeight + dy;
+             } else if (resizeDir === 'tl') {
+                newWidth = startWidth - dx;
+                newHeight = startHeight - dy;
+             }
+             
+             if (activeResizeEl.tagName === 'IMG') {
+                 activeResizeEl.style.setProperty('width', newWidth + 'px', 'important');
+                 activeResizeEl.style.setProperty('height', 'auto', 'important');
+             } else {
+                 activeResizeEl.style.setProperty('width', newWidth + 'px', 'important');
+                 activeResizeEl.style.setProperty('height', newHeight + 'px', 'important');
+             }
+             
+             const rect = activeResizeEl.getBoundingClientRect();
+             resizeOverlay.style.width = rect.width + 'px';
+             resizeOverlay.style.height = rect.height + 'px';
+             resizeOverlay.style.top = (rect.top + doc.defaultView.scrollY) + 'px';
+             resizeOverlay.style.left = (rect.left + doc.defaultView.scrollX) + 'px';
+             
+             e.preventDefault();
+             e.stopPropagation();
+             return;
+          }
+
+          if (!dragEl) return;
+          const dx = e.clientX - startMouseX;
+          const dy = e.clientY - startMouseY;
+          
+          if (!isDragging && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) {
+            isDragging = true;
+            dragEl.classList.add('builder-dragging');
+          }
+          
+          if (isDragging) {
+            let newLeft = startLeft + dx;
+            let newTop = startTop + dy;
+            
+            // Basic snapping to center of parent
+            const parentRect = dragEl.parentElement.getBoundingClientRect();
+            const elRect = dragEl.getBoundingClientRect();
+            
+            const parentCenterX = parentRect.width / 2;
+            const elCenterX = newLeft + (elRect.width / 2);
+            
+            let snapped = false;
+            
+            // X Snap
+            if (Math.abs(elCenterX - parentCenterX) < 15) {
+               newLeft = parentCenterX - (elRect.width / 2);
+               guideY.style.display = 'block';
+               guideY.style.left = (parentRect.left + parentCenterX) + 'px';
+               snapped = true;
+            } else {
+               guideY.style.display = 'none';
+            }
+            
+            dragEl.style.left = newLeft + 'px';
+            dragEl.style.top = newTop + 'px';
+            
+            if (activeResizeEl === dragEl) {
+               const rect = activeResizeEl.getBoundingClientRect();
+               resizeOverlay.style.top = (rect.top + doc.defaultView.scrollY) + 'px';
+               resizeOverlay.style.left = (rect.left + doc.defaultView.scrollX) + 'px';
+            }
+          }
+        }, true);
+
+        doc.addEventListener('mouseup', (e) => {
+          if (isResizing) {
+             isResizing = false;
+             wasResizing = true;
+             setTimeout(() => { wasResizing = false; }, 100);
+             if (activeResizeEl) activeResizeEl.setAttribute('data-pos-edited', 'true');
+             e.preventDefault(); e.stopPropagation();
+          }
+
+          if (dragEl) {
+            if (isDragging) {
+              e.preventDefault();
+              e.stopPropagation();
+              dragEl.classList.remove('builder-dragging');
+              guideX.style.display = 'none';
+              guideY.style.display = 'none';
+              // Mark as edited for save
+              dragEl.setAttribute('data-pos-edited', 'true');
+            }
+            dragEl = null;
+            setTimeout(() => { isDragging = false; }, 50);
+          }
+        }, true);
+
+        // Intercept clicks to load editor
+        doc.addEventListener('click', (e) => {
+          if (isDragging || wasResizing) {
+            e.preventDefault(); e.stopPropagation(); return;
+          }
+          const editable = e.target.closest('.builder-inline-editable');
+          if (editable) {
+            e.preventDefault();
+            e.stopPropagation();
+            const type = editable.getAttribute('data-trans-type');
+            const key = editable.getAttribute('data-trans-key');
+            const idx = editable.getAttribute('data-el-idx');
+            const tag = editable.tagName || 'ELEMENT';
+            window.parent.openQuickEdit(type, key, tag, editable.innerHTML, idx);
+          }
+        }, true);
+
+
+        // Add section insert indicators between visible sections
+        const landingContent = doc.getElementById('landing-page-content') || doc.body;
+        const sections = Array.from(landingContent.children);
+        sections.forEach((sect, idx) => {
+          if (sect.tagName === 'SECTION' || sect.classList.contains('app-footer')) {
+            const div = doc.createElement('div');
+            div.className = 'builder-add-divider';
+            div.innerHTML = `
+              <div class="builder-add-line"></div>
+              <div class="builder-add-btn"><i class="ri-add-line"></i></div>
+            `;
+            div.onclick = (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              window.parent.openBlockLibraryModal(idx);
+            };
+            sect.parentNode.insertBefore(div, sect.nextSibling);
+          }
+        });
+
+      } catch(e) {
+        console.warn("Could not setup iframe elements (cross-origin or load timing issue):", e);
+      }
+    }
+
+    // Modal Control
+    function openSectionEditor(key) {
+      activeSection = key;
+      const sect = pageSections[key];
+      
+      document.getElementById('modal-section-title-display').innerText = sect.title;
+      document.getElementById('settings-modal').classList.add('active');
+      
+      // Load tabs: if section supports media, show tab. Else default to text
+      const mediaTab = document.querySelectorAll('.mtab')[1];
+      if (sect.media) {
+        mediaTab.style.display = 'flex';
+      } else {
+        mediaTab.style.display = 'none';
+      }
+      
+      switchModalTab('text', document.querySelector('.mtab'));
+      renderTranslationFields();
+      
+      if (sect.media) {
+        // Load background values for media tab
+        try {
+          const doc = frame.contentDocument || frame.contentWindow.document;
+          const darkMaster = doc.querySelector('.hero-master-img.dark-only');
+          const lightMaster = doc.querySelector('.hero-master-img.light-only');
+          if (darkMaster) document.getElementById('media-url-input-1').value = darkMaster.getAttribute('src') || '';
+          if (lightMaster) document.getElementById('media-url-input-2').value = lightMaster.getAttribute('src') || '';
+          updateMediaPreview();
+        } catch(e) {}
+      }
+    }
+
+    function closeSettings() {
+      document.getElementById('settings-modal').classList.remove('active');
+    }
+
+    function switchModalTab(tabId, btn) {
+      document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      
+      document.querySelectorAll('.tab-pane-content').forEach(pane => {
+        pane.style.display = 'none';
+      });
+      
+      const targetPane = document.getElementById('tab-' + tabId);
+      if (targetPane) {
+        targetPane.style.display = (tabId === 'media') ? 'flex' : 'block';
+      }
+    }
+
+    function switchLangTab(lang, btn) {
+      document.querySelectorAll('.ltab').forEach(l => l.classList.remove('active'));
+      btn.classList.add('active');
+      activeLang = lang;
+      
+      renderTranslationFields();
+    }
+
+    function renderTranslationFields() {
+      const container = document.getElementById('text-fields-container');
+      container.innerHTML = '';
+      
+      if (!activeSection) return;
+      const keys = pageSections[activeSection].keys;
+      
+      // Map 'KK' tab click to the 'KZ' key in our index.html translations dictionary
+      const internalLangKey = activeLang === 'KK' || activeLang === 'KZ' ? 'KZ' : activeLang;
+
+      if (!localTranslations[internalLangKey]) {
+        localTranslations[internalLangKey] = {};
+      }
+
+      keys.forEach(key => {
+        const originalVal = localTranslations[internalLangKey][key] || "";
+        const group = document.createElement('div');
+        group.className = 'field-group';
+        
+        const info = document.createElement('div');
+        info.className = 'field-info';
+        info.innerHTML = `
+          <span class="fm-label">${key.replace(/([A-Z])/g, ' $1').toUpperCase()}</span>
+          <span class="field-key">${key}</span>
+        `;
+        
+        let input;
+        if (originalVal.length > 60 || originalVal.includes('<br>') || originalVal.includes('<span')) {
+          input = document.createElement('textarea');
+          input.className = 'field-input field-textarea';
+        } else {
+          input = document.createElement('input');
+          input.type = 'text';
+          input.className = 'field-input';
+        }
+        
+        input.value = originalVal;
+        input.id = `input-key-${key}`;
+        input.oninput = () => {
+          localTranslations[internalLangKey][key] = input.value;
+        };
+        
+        group.appendChild(info);
+        group.appendChild(input);
+        container.appendChild(group);
+      });
+    }
+
+    // Media adjustments
+    function toggleMediaType(type) {
+      document.getElementById('media-type-image').classList.toggle('active', type === 'image');
+      document.getElementById('media-type-video').classList.toggle('active', type === 'video');
+      
+      if (type === 'video') {
+        document.getElementById('media-url-label-1').innerText = "Ссылка на фоновое видео (.mp4)";
+        document.getElementById('media-light-group').style.display = 'none';
+      } else {
+        document.getElementById('media-url-label-1').innerText = "Ссылка на темное изображение (Dark Master)";
+        document.getElementById('media-light-group').style.display = 'block';
+      }
+    }
+
+    function updateMediaPreview() {
+      const url = document.getElementById('media-url-input-1').value;
+      const box = document.getElementById('media-preview-box');
+      if (url) {
+        box.style.backgroundImage = `url('${url}')`;
+        box.innerText = '';
+      } else {
+        box.style.backgroundImage = 'none';
+        box.innerText = 'Изображение не выбрано';
+      }
+    }
+
+    function selectGalleryImg(darkUrl, lightUrl) {
+      document.getElementById('media-url-input-1').value = darkUrl;
+      document.getElementById('media-url-input-2').value = lightUrl;
+      updateMediaPreview();
+    }
+
+    function applySectionChanges() {
+      if (!activeSection) return;
+      
+      // 1. Inject values back into the iframe's global dictionaries
+      try {
+        const internalLangKey = activeLang === 'KK' || activeLang === 'KZ' ? 'KZ' : activeLang;
+        
+        // Sync modified text values
+        Object.keys(localTranslations).forEach(lang => {
+          Object.keys(localTranslations[lang]).forEach(key => {
+            frame.contentWindow.translations[lang][key] = localTranslations[lang][key];
+          });
+        });
+
+        // 2. Trigger language switch in iframe to update DOM representation
+        if (typeof frame.contentWindow.switchLang === 'function') {
+          frame.contentWindow.switchLang(frame.contentWindow.currentLang || 'RU');
+        }
+
+        // 3. Sync media values if section supports media
+        if (pageSections[activeSection].media) {
+          const doc = frame.contentDocument || frame.contentWindow.document;
+          const darkMaster = doc.querySelector('.hero-master-img.dark-only');
+          const lightMaster = doc.querySelector('.hero-master-img.light-only');
+          
+          const darkUrl = document.getElementById('media-url-input-1').value;
+          const lightUrl = document.getElementById('media-url-input-2').value;
+          
+          if (darkMaster && darkUrl) darkMaster.setAttribute('src', darkUrl);
+          if (lightMaster && lightUrl) lightMaster.setAttribute('src', lightUrl);
+        }
+
+        showToast('Изменения внесены', 'Изменения успешно применились в макете', 'ri-checkbox-circle-fill');
+      } catch(e) {
+        console.error("Failed to inject changes into live iframe context:", e);
+      }
+      
+      closeSettings();
+    }
+
+    // Mock section addition
+    function openBlockLibraryModal(index) {
+      showToast('Добавление блока', 'Выберите блок из левой библиотеки для добавления в позицию ' + index, 'ri-layout-masonry-line');
+    }
+
+        function addNewBlockMock(blockType) {
+      showToast('Модуль', `Блок типа ${blockType.toUpperCase()} успешно добавлен!`, 'ri-add-circle-line');
+      // Live append to iframe
+      try {
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        const content = doc.getElementById('landing-page-content') || doc.body;
+        
+        const sect = doc.createElement('section');
+        sect.className = 'new-added-block scroll-reveal active';
+        sect.style.padding = '80px 0';
+        sect.style.background = '#121318';
+        sect.style.borderTop = '1px solid #1f212a';
+
+        // GENERATE UNIQUE KEY FOR THIS BLOCK
+        const uniqueId = 'customBlock_' + Date.now();
+        const titleKey = uniqueId + '_title';
+        const subKey = uniqueId + '_subtitle';
+
+        // Initialize translations so it has content
+        if (!localTranslations.RU) localTranslations.RU = {};
+        if (!localTranslations.KZ) localTranslations.KZ = {};
+        if (!localTranslations.EN) localTranslations.EN = {};
+        
+        localTranslations.RU[titleKey] = `НОВЫЙ БЛОК ${blockType.toUpperCase()}`;
+        localTranslations.RU[subKey] = `Тут будет контент нового блока.`;
+        localTranslations.KZ[titleKey] = `ЖАҢА БЛОК ${blockType.toUpperCase()}`;
+        localTranslations.KZ[subKey] = `Жаңа блоктың мазмұны осында болады.`;
+        localTranslations.EN[titleKey] = `NEW BLOCK ${blockType.toUpperCase()}`;
+        localTranslations.EN[subKey] = `Content for the new block will be here.`;
+        
+        // Add to pageSections so it can be edited!
+        pageSections[uniqueId] = {
+            title: `Новый блок (${blockType})`,
+            keys: [titleKey, subKey],
+            media: false
+        };
+
+        sect.innerHTML = `
+          <div class="max-width-wrap" style="text-align:center;">
+            <h2 data-i18n="${titleKey}" style="font-size:32px; font-weight:800; color:#fff; margin-bottom:12px;">НОВЫЙ БЛОК ${blockType.toUpperCase()}</h2>
+            <p data-i18n="${subKey}" style="color:#94a3b8; font-size:14px;">Тут будет контент нового блока.</p>
+          </div>
+        `;
+        content.insertBefore(sect, content.querySelector('.app-footer'));
+        setupIframeEditing();
+      } catch(e) {}
+    }
+
+    // Save/Publish Changes to Backend
+    async function publishChanges() {
+      const btn = document.querySelector('.btn-publish');
+      const originalHtml = btn.innerHTML;
+      btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> PUBLISHING...';
+      btn.disabled = true;
+
+      try {
+        const physicalPage = getPhysicalPage(activePage);
+
+        // Fetch raw HTML from server first
+        const rawResponse = await fetch(API_BASE + '/' + physicalPage);
+        if (!rawResponse.ok) {
+          throw new Error('Could not fetch source code for ' + physicalPage);
+        }
+        let rawHtml = await rawResponse.text();
+
+        // Extract the live DOM from iframe
+        const frameDoc = frame.contentDocument || frame.contentWindow.document;
+
+        // Extract custom catalog styles before switchLang destroys them!
+        const customCatStyles = Object.assign({}, frame.contentWindow.builderCustomCatalogStyles || {});
+        frameDoc.querySelectorAll('.catalog-card').forEach(card => {
+           const titleEl = card.querySelector('.cat-card-title');
+           const imgEl = card.querySelector('.cat-card-image') || card.querySelector('.cat-card-img');
+           if (titleEl && imgEl) {
+               const t = titleEl.innerText.trim();
+               if (imgEl.style.backgroundImage || imgEl.style.backgroundSize || imgEl.style.backgroundPosition) {
+                   customCatStyles[t] = Object.assign(customCatStyles[t] || {}, {
+                       backgroundImage: imgEl.style.backgroundImage,
+                       backgroundSize: imgEl.style.backgroundSize,
+                       backgroundPosition: imgEl.style.backgroundPosition
+                   });
+               }
+           }
+        });
+        
+        
+        // Reset to RU temporarily to save base HTML correctly
+        if (typeof frame.contentWindow.switchLang === 'function') {
+          frame.contentWindow.switchLang('RU');
+        }
+        await new Promise(r => setTimeout(r, 100)); // wait for DOM update
+
+        const docClone = frameDoc.documentElement.cloneNode(true);
+
+        // Clean up builder injected classes and styles
+        const styleTag = docClone.querySelector('#builder-styles');
+        if (styleTag) styleTag.remove();
+        docClone.querySelectorAll('.builder-add-divider').forEach(el => el.remove());
+        docClone.querySelectorAll('.builder-section-toolbar').forEach(el => el.remove());
+        docClone.querySelectorAll('.smart-guide-x, .smart-guide-y').forEach(el => el.remove());
+        docClone.querySelectorAll('.builder-resize-overlay').forEach(el => el.remove());
+        docClone.querySelectorAll('.builder-add-line').forEach(el => el.remove());
+        docClone.querySelectorAll('.builder-inline-editable').forEach(el => {
+          el.classList.remove('builder-inline-editable');
+          if (el.className === '') el.removeAttribute('class');
+          el.removeAttribute('data-trans-type');
+          el.removeAttribute('data-trans-key');
+          el.removeAttribute('data-el-idx');
+        });
+        docClone.querySelectorAll('.builder-section-highlight').forEach(el => {
+          el.classList.remove('builder-section-highlight');
+          if (el.className === '') el.removeAttribute('class');
+        });
+
+        let updatedHtml = "<!DOCTYPE html>\n" + docClone.outerHTML;
+
+        // Restore language in iframe
+        if (typeof frame.contentWindow.switchLang === 'function') {
+          frame.contentWindow.switchLang(frame.contentWindow.currentLang || 'RU');
+        }
+
+        // Prepare translations string
+        const transString = `const translations = ${JSON.stringify(localTranslations, null, 2)};`;
+        const catTransString = `const catalogTranslations = ${JSON.stringify(localCatalogTranslations, null, 2)};`;
+
+        // Replace scripts in the live DOM string
+        updatedHtml = updatedHtml.replace(/const translations = \{[\s\S]*?\};/, transString);
+        updatedHtml = updatedHtml.replace(/const catalogTranslations = \{[\s\S]*?\};/, catTransString);
+
+        // Inject custom catalog styles
+        const catStylesStr = `window.builderCustomCatalogStyles = ${JSON.stringify(customCatStyles, null, 2)};`;
+        if (updatedHtml.includes('window.builderCustomCatalogStyles =')) {
+           updatedHtml = updatedHtml.replace(/window\.builderCustomCatalogStyles\s*=\s*\{[\s\S]*?\};/, catStylesStr);
+        } else {
+           updatedHtml = updatedHtml.replace(/<\/body>/i, `  <script>${catStylesStr}<` + `/script>\n</body>`);
+        }
+
+        // Send to backend via GZIP to bypass Railway/Cloudflare body limits for large files
+        const stream = new Blob([updatedHtml]).stream().pipeThrough(new CompressionStream('gzip'));
+        const responseGz = new Response(stream);
+        const blobGz = await responseGz.blob();
+
+        const fd = new FormData();
+        fd.append('page', physicalPage);
+        fd.append('html', blobGz, physicalPage);
+
+        const saveResponse = await fetch(API_BASE + '/api/admin/save-page-html-gz', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + adminToken
+          },
+          body: fd
+        });
+
+        if (!saveResponse.ok) {
+          const text = await saveResponse.text();
+          throw new Error(text || 'Network error ' + saveResponse.status);
+        }
+
+        const result = await saveResponse.json();
+        if (result.status === 'success') {
+          showNotification('Публикация завершена', 'Все изменения были успешно сохранены на сервере!');
+        } else {
+          throw new Error(result.message || 'Unknown save error');
+        }
+
+      } catch(e) {
+        console.error("Error publishing changes:", e);
+        alert('Ошибка сохранения изменений: ' + e.message);
+      } finally {
+        btn.innerHTML = originalHtml;
+        btn.disabled = false;
+      }
+    }
+
+    // Helper notifications
+    function showToast(title, desc, iconClass = 'ri-checkbox-circle-fill') {
+      const notify = document.getElementById('publish-notify');
+      document.getElementById('notify-title').innerText = title;
+      document.getElementById('notify-desc').innerText = desc;
+      notify.querySelector('.pn-icon').innerHTML = `<i class="${iconClass}"></i>`;
+      
+      notify.classList.add('show');
+      setTimeout(() => {
+        notify.classList.remove('show');
+      }, 3000);
+    }
+
+    function showNotification(title, desc) {
+      showToast(title, desc, 'ri-check-line');
+    }
+
+    // ========================================
+    // QUICK EDIT PANEL (QEP) Logic
+    // ========================================
+    let qepState = {
+      transType: null,   // 'static' | 'catalog'
+      transKey: null,    // translation key
+      activeQepLang: 'RU',
+      showAllLangs: false,
+      catalogItem: null  // { ruKey, kzVal, enVal }
+    };
+
+    const langLabels = {
+      RU: '🇷🇺 Русский (RU)',
+      KZ: '🇰🇿 Казахский (KZ)',
+      EN: '🇬🇧 English (EN)'
+    };
+
+    window.openQuickEdit = function(transType, transKey, elementTagName, elementText, idx) {
+      const panel = document.getElementById('quick-edit-panel');
+      qepState.transType = transType;
+      qepState.transKey = transKey;
+      qepState.elementIdx = idx;
+      qepState.activeQepLang = 'RU';
+      qepState.showAllLangs = false;
+
+      // Badge
+      if (transType === 'catalog') {
+        document.getElementById('qep-type-badge').innerText = 'КАТАЛОГ';
+      } else if (transType === 'dom') {
+        document.getElementById('qep-type-badge').innerText = 'ТЕКСТ ЭЛЕМЕНТА';
+      } else {
+        document.getElementById('qep-type-badge').innerText = 'ТЕКСТ (ПЕРЕВОД)';
+      }
+      document.getElementById('qep-element-tag').innerText = `<${elementTagName.toLowerCase()}>`;
+
+      // Fill inputs
+      if (transType === 'static') {
+        const ruVal = localTranslations.RU ? (localTranslations.RU[transKey] || '') : '';
+        const kzVal = localTranslations.KZ ? (localTranslations.KZ[transKey] || '') : '';
+        const enVal = localTranslations.EN ? (localTranslations.EN[transKey] || '') : '';
+        document.getElementById('qep-main-input').value = ruVal;
+        document.getElementById('qep-ru-input').value = ruVal;
+        document.getElementById('qep-kz-input').value = kzVal;
+        document.getElementById('qep-en-input').value = enVal;
+      } else if (transType === 'catalog') {
+        const item = localCatalogTranslations[transKey] || { KZ: '', EN: '' };
+        document.getElementById('qep-main-input').value = transKey;
+        document.getElementById('qep-ru-input').value = transKey;
+        document.getElementById('qep-kz-input').value = item.KZ || '';
+        document.getElementById('qep-en-input').value = item.EN || '';
+      } else if (transType === 'dom') {
+        document.getElementById('qep-main-input').value = elementTagName.toUpperCase() === 'IMG' ? '' : elementText;
+        
+        // Image support
+        if (elementTagName.toUpperCase() === 'IMG' || elementTagName.toUpperCase() === 'DIV') {
+          document.getElementById('qep-image-upload-section').style.display = 'block';
+          if (elementTagName.toUpperCase() !== 'IMG') {
+            document.getElementById('qep-main-input-group').style.display = 'block'; // Show text input for DIVs
+            document.getElementById('qep-image-setup-section').style.display = 'block';
+            // Try to extract background image URL from elementText or rely on user to upload
+            const bgMatch = elementText && typeof elementText === 'string' ? elementText.match(/url\(['"]?([^'"]+)['"]?\)/) : null;
+            if (bgMatch) {
+              document.getElementById('qep-image-url-input').value = bgMatch[1];
+              document.getElementById('qep-current-img').src = bgMatch[1];
+              document.getElementById('qep-current-img').style.display = 'block';
+              document.getElementById('qep-no-img-text').style.display = 'none';
+            } else {
+              document.getElementById('qep-image-url-input').value = '';
+              document.getElementById('qep-current-img').style.display = 'none';
+              document.getElementById('qep-no-img-text').style.display = 'block';
+            }
+          } else {
+            document.getElementById('qep-main-input-group').style.display = 'none';
+            document.getElementById('qep-image-setup-section').style.display = 'none';
+            document.getElementById('qep-image-url-input').value = elementText;
+            document.getElementById('qep-current-img').src = elementText;
+            document.getElementById('qep-current-img').style.display = 'block';
+            document.getElementById('qep-no-img-text').style.display = 'none';
+          }
+        } else {
+          document.getElementById('qep-image-upload-section').style.display = 'none';
+          document.getElementById('qep-image-setup-section').style.display = 'none';
+          document.getElementById('qep-main-input-group').style.display = 'block';
+        }
+      }
+
+      // Reset lang tabs
+      
+      
+      // Fetch element styles
+      try {
+        const frameDoc = frame.contentDocument || frame.contentWindow.document;
+        const textEls = frameDoc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, div.cat-card-image');
+        const el = textEls[idx];
+        if (el) {
+          const comp = window.getComputedStyle(el);
+          
+          document.getElementById('qep-style-fontsize').value = el.style.fontSize || comp.fontSize || '';
+          
+          // Helper to convert rgb to hex for color picker
+          function rgbToHex(rgb) {
+            if (!rgb || rgb === 'rgba(0, 0, 0, 0)') return '';
+            const match = rgb.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+            if (!match) return rgb;
+            return "#" + match.slice(1).map(n => parseInt(n, 10).toString(16).padStart(2, '0')).join('');
+          }
+          
+          let colorHex = el.style.color || rgbToHex(comp.color) || '';
+          document.getElementById('qep-style-color').value = colorHex;
+          if (colorHex.startsWith('#')) {
+            document.getElementById('qep-style-color-picker').value = colorHex;
+          }
+          
+          document.getElementById('qep-style-fontweight').value = el.style.fontWeight || comp.fontWeight || '';
+          
+          let align = el.style.textAlign || comp.textAlign || '';
+          if (align === 'start') align = 'left';
+          if (align === 'end') align = 'right';
+          document.getElementById('qep-style-textalign').value = ['left','center','right'].includes(align) ? align : '';
+        }
+      } catch(e) {}
+
+
+      switchQepLang('RU');
+      document.getElementById('qep-all-langs-section').style.display = 'none';
+      if (transType === 'dom') {
+        document.getElementById('qep-toggle-all-langs').style.display = 'none';
+      } else {
+        document.getElementById('qep-toggle-all-langs').style.display = 'block';
+      }
+
+      panel.classList.add('open');
+    };
+
+    
+    window.handleQepImageUpload = async function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const formData = new FormData();
+      formData.append('file', file);
+      document.getElementById('qep-no-img-text').style.display = 'block';
+      document.getElementById('qep-no-img-text').textContent = 'Загрузка...';
+      try {
+        const response = await fetch(API_BASE + '/api/upload', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + adminToken },
+          body: formData
+        });
+        if (response.ok) {
+          const data = await response.json();
+          document.getElementById('qep-image-url-input').value = data.url;
+          document.getElementById('qep-current-img').src = data.url;
+          document.getElementById('qep-current-img').style.display = 'block';
+          document.getElementById('qep-no-img-text').style.display = 'none';
+        } else {
+          document.getElementById('qep-no-img-text').textContent = 'Ошибка загрузки';
+        }
+      } catch(err) {
+        document.getElementById('qep-no-img-text').textContent = 'Ошибка';
+      }
+    };
+    
+    function closeQuickEdit() {
+      document.getElementById('quick-edit-panel').classList.remove('open');
+    }
+
+    function switchQepLang(lang) {
+      qepState.activeQepLang = lang;
+      ['RU', 'KZ', 'EN'].forEach(l => {
+        document.getElementById(`qepl-${l.toLowerCase()}`).classList.toggle('active', l === lang);
+      });
+      document.getElementById('qep-lang-label').innerText = langLabels[lang];
+
+      // Sync current main input with the correct value
+      const { transType, transKey } = qepState;
+      
+      let val = '';
+      if (transType === 'static') {
+        const internalLang = lang === 'KZ' ? 'KZ' : lang;
+        val = localTranslations[internalLang] ? (localTranslations[internalLang][transKey] || '') : '';
+        document.getElementById('qep-main-input').value = val;
+      } else if (transType === 'catalog') {
+        if (lang === 'RU') {
+          val = transKey;
+        } else {
+          const item = localCatalogTranslations[transKey] || {};
+          val = item[lang] || '';
+        }
+        document.getElementById('qep-main-input').value = val;
+      }
+      // For 'dom', we don't overwrite it here because it doesn't have languages.
+
+    }
+
+    function toggleQepAllLangs() {
+      qepState.showAllLangs = !qepState.showAllLangs;
+      const section = document.getElementById('qep-all-langs-section');
+      const btn = document.getElementById('qep-toggle-all-langs');
+      section.style.display = qepState.showAllLangs ? 'block' : 'none';
+      btn.style.background = qepState.showAllLangs ? 'rgba(16, 185, 129, 0.25)' : '';
+    }
+
+    
+    function liveUpdateElement() {
+      if (qepState.elementIdx == null) return;
+      try {
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, div.cat-card-image, img.hero-master-img, div.showcase-master-placeholder');
+        const el = textElements[qepState.elementIdx];
+        if (!el) return;
+
+        // Apply text if transType === 'dom' OR if it's text-based
+        // For static/catalog we don't live-update text perfectly due to switchLang resetting, 
+        // but we CAN update its innerHTML temporarily for real-time feel!
+        if (qepState.transType === 'dom') {
+          if (el.tagName !== 'IMG' && !el.classList.contains('catalog-card') && !el.classList.contains('cat-card-img')) {
+             el.innerHTML = document.getElementById('qep-main-input').value;
+          }
+        } else {
+           // Temporarily update visual text so they see it typing real-time (it will be finalized on Apply)
+           if (el.tagName !== 'IMG' && el.children.length === 0) {
+             el.innerHTML = document.getElementById('qep-main-input').value;
+           }
+        }
+
+        // Apply styles
+        const fSize = document.getElementById('qep-style-fontsize').value;
+        const fColor = document.getElementById('qep-style-color').value;
+        const fWeight = document.getElementById('qep-style-fontweight').value;
+        const fAlign = document.getElementById('qep-style-textalign').value;
+        
+        if (fSize) el.style.setProperty('font-size', fSize, 'important'); else el.style.removeProperty('font-size');
+        if (fColor) el.style.setProperty('color', fColor, 'important'); else el.style.removeProperty('color');
+        if (fWeight) el.style.setProperty('font-weight', fWeight, 'important'); else el.style.removeProperty('font-weight');
+        if (fAlign) el.style.setProperty('text-align', fAlign, 'important'); else el.style.removeProperty('text-align');
+      } catch(e) {
+        // silent fail on live typing
+      }
+    }
+
+    function liveUpdateImage() {
+      if (qepState.elementIdx == null) return;
+      try {
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, div.cat-card-image, img.hero-master-img, div.showcase-master-placeholder');
+        let el = textElements[qepState.elementIdx];
+        if (!el) return;
+
+        if (el.classList.contains('catalog-card') || el.classList.contains('cat-card-img') || el.classList.contains('cat-card-image')) {
+          const imgChild = el.querySelector('.cat-card-img') || el.querySelector('.cat-card-image');
+          if (imgChild) el = imgChild;
+        }
+        
+        if (el.tagName !== 'IMG') {
+          const bgSize = document.getElementById('qep-bg-size').value;
+          const posX = document.getElementById('qep-bg-pos-x').value + '%';
+          const posY = document.getElementById('qep-bg-pos-y').value + '%';
+          
+          el.style.setProperty('background-size', bgSize, 'important');
+          el.style.setProperty('background-position', `${posX} ${posY}`, 'important');
+          el.style.setProperty('background-repeat', 'no-repeat', 'important');
+        }
+      } catch(e) {}
+    }
+
+    function applyQuickEdit() {
+
+      const { transType, transKey, activeQepLang, showAllLangs } = qepState;
+      if (!transType || !transKey) return;
+
+      if (transType === 'static') {
+        if (showAllLangs) {
+          // Apply all 3 languages
+          const ruVal = document.getElementById('qep-ru-input').value;
+          const kzVal = document.getElementById('qep-kz-input').value;
+          const enVal = document.getElementById('qep-en-input').value;
+
+          if (!localTranslations.RU) localTranslations.RU = {};
+          if (!localTranslations.KZ) localTranslations.KZ = {};
+          if (!localTranslations.EN) localTranslations.EN = {};
+
+          localTranslations.RU[transKey] = ruVal;
+          localTranslations.KZ[transKey] = kzVal;
+          localTranslations.EN[transKey] = enVal;
+        } else {
+          const val = document.getElementById('qep-main-input').value;
+          if (!localTranslations[activeQepLang]) localTranslations[activeQepLang] = {};
+          localTranslations[activeQepLang][transKey] = val;
+        }
+
+        // Inject into iframe and refresh language
+        try {
+          Object.keys(localTranslations).forEach(lang => {
+            Object.keys(localTranslations[lang]).forEach(k => {
+              frame.contentWindow.translations[lang][k] = localTranslations[lang][k];
+            });
+          });
+          if (typeof frame.contentWindow.switchLang === 'function') {
+            frame.contentWindow.switchLang(frame.contentWindow.currentLang || 'RU');
+          }
+          showToast('Применено!', `"${transKey}" обновлено на ${activeQepLang}`, 'ri-check-double-line');
+        } catch(e) {
+          console.error('Failed to apply inline edit:', e);
+        }
+
+      } else if (transType === 'catalog') {
+        const ruVal = showAllLangs 
+          ? document.getElementById('qep-ru-input').value
+          : (activeQepLang === 'RU' ? document.getElementById('qep-main-input').value : transKey);
+        const kzVal = showAllLangs 
+          ? document.getElementById('qep-kz-input').value
+          : (activeQepLang === 'KZ' ? document.getElementById('qep-main-input').value : (localCatalogTranslations[transKey] || {}).KZ || '');
+        const enVal = showAllLangs 
+          ? document.getElementById('qep-en-input').value
+          : (activeQepLang === 'EN' ? document.getElementById('qep-main-input').value : (localCatalogTranslations[transKey] || {}).EN || '');
+
+        if (ruVal !== transKey) {
+          // Rebuild object to preserve insertion order for catalog items so they don't jump to the end
+          const newObj = {};
+          for (let k in localCatalogTranslations) {
+            if (k === transKey) {
+              newObj[ruVal] = { KZ: kzVal, EN: enVal };
+            } else {
+              newObj[k] = localCatalogTranslations[k];
+            }
+          }
+          localCatalogTranslations = newObj;
+        } else {
+          localCatalogTranslations[ruVal] = { KZ: kzVal, EN: enVal };
+        }
+
+        try {
+          frame.contentWindow.catalogTranslations = localCatalogTranslations;
+          if (typeof frame.contentWindow.switchLang === 'function') {
+            frame.contentWindow.switchLang(frame.contentWindow.currentLang || 'RU');
+          }
+          showToast('Применено!', `Перевод каталога "${transKey}" обновлён`, 'ri-check-double-line');
+        } catch(e) {
+          console.error('Catalog apply failed:', e);
+        }
+
+      } else if (transType === 'dom') {
+        try {
+          const doc = frame.contentDocument || frame.contentWindow.document;
+          const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, div.cat-card-image, img.hero-master-img, div.showcase-master-placeholder');
+          const el = textElements[qepState.elementIdx];
+          if (el) {
+            const imgUrl = document.getElementById('qep-image-url-input').value;
+            if (el.tagName === 'IMG') {
+              if (imgUrl) el.src = imgUrl;
+              showToast('Изображение обновлено!', `Фотография была успешно заменена.`, 'ri-image-line');
+            } else if (el.classList.contains('catalog-card') || el.classList.contains('cat-card-img') || el.classList.contains('cat-card-image')) {
+              if (imgUrl) {
+                const imgChild = el.querySelector('.cat-card-img') || el.querySelector('.cat-card-image');
+                let targetEl = el;
+                if (imgChild) {
+                  targetEl = imgChild;
+                }
+                
+                targetEl.style.backgroundImage = `url('${imgUrl}')`;
+                const bgSize = document.getElementById('qep-bg-size').value;
+                const posX = document.getElementById('qep-bg-pos-x').value + '%';
+                const posY = document.getElementById('qep-bg-pos-y').value + '%';
+                targetEl.style.backgroundSize = bgSize;
+                targetEl.style.backgroundPosition = `${posX} ${posY}`;
+                targetEl.style.backgroundRepeat = 'no-repeat';
+              }
+            } else {
+              const val = document.getElementById('qep-main-input').value;
+              el.innerHTML = val;
+              showToast('Применено!', `Текст элемента изменён напрямую`, 'ri-check-double-line');
+            }
+          }
+        } catch(e) {
+          console.error('DOM apply failed:', e);
+        }
+      }
+
+      // UNIVERSAL STYLE APPLICATION (Delayed to allow React/JS re-renders)
+      setTimeout(() => {
+        try {
+          const frameWin = frame.contentWindow;
+          const doc = frame.contentDocument || frameWin.document;
+          
+          // 1. Re-tag any newly rendered elements so they can be clicked again
+          if (typeof frameWin.setupIframeEditing === 'function') {
+            frameWin.setupIframeEditing();
+          } else if (typeof window.setupIframeEditing === 'function') {
+            window.setupIframeEditing();
+          }
+
+          // 2. Safely find the element
+          let el = null;
+          if (transType === 'catalog') {
+            const newRuVal = showAllLangs ? document.getElementById('qep-ru-input').value : (activeQepLang === 'RU' ? document.getElementById('qep-main-input').value : transKey);
+            el = doc.querySelector(`[data-trans-key="${newRuVal || transKey}"]`);
+          } else if (transType === 'static') {
+            el = doc.querySelector(`[data-trans-key="${transKey}"]`);
+          }
+
+          if (!el) {
+            const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, div.cat-card-image');
+            el = textElements[qepState.elementIdx];
+          }
+
+          // 3. Apply styles perfectly with !important
+          if (el) {
+            const fSize = document.getElementById('qep-style-fontsize').value;
+            const fColor = document.getElementById('qep-style-color').value;
+            const fWeight = document.getElementById('qep-style-fontweight').value;
+            const fAlign = document.getElementById('qep-style-textalign').value;
+            
+            if (fSize) el.style.setProperty('font-size', fSize, 'important'); else el.style.removeProperty('font-size');
+            if (fColor) el.style.setProperty('color', fColor, 'important'); else el.style.removeProperty('color');
+            if (fWeight) el.style.setProperty('font-weight', fWeight, 'important'); else el.style.removeProperty('font-weight');
+            if (fAlign) el.style.setProperty('text-align', fAlign, 'important'); else el.style.removeProperty('text-align');
+
+            // Wow-effect: subtle animation to show it applied!
+            el.style.transition = 'transform 0.3s ease';
+            el.style.transform = 'scale(1.03)';
+            setTimeout(() => { el.style.transform = 'scale(1)'; }, 300);
+          }
+        } catch(e) {
+          console.error('Style apply failed:', e);
+        }
+      }, 200);
+
+      closeQuickEdit();
+    }
+
+    // New Image Upload logic
+    async function handleQepImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      document.getElementById('qep-no-img-text').innerText = 'Загрузка...';
+      document.getElementById('qep-no-img-text').style.display = 'block';
+      document.getElementById('qep-current-img').style.display = 'none';
+
+      try {
+        const res = await fetch(API_BASE + '/api/upload', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + adminToken },
+          body: formData
+        });
+        const data = await res.json();
+        if (data.url) {
+          document.getElementById('qep-image-url-input').value = data.url;
+          document.getElementById('qep-current-img').src = data.url;
+          document.getElementById('qep-current-img').style.display = 'block';
+          document.getElementById('qep-no-img-text').style.display = 'none';
+        } else {
+          throw new Error('Upload failed');
+        }
+      } catch(err) {
+        console.error(err);
+        document.getElementById('qep-no-img-text').innerText = 'Ошибка загрузки';
+      }
+    }
+
+    // Page Selector Logic
+    function openPageSelector() { document.getElementById('page-selector-modal').style.display = 'flex'; }
+    function closePageSelector() { document.getElementById('page-selector-modal').style.display = 'none'; }
+    function switchEditorPage(pageUrl) {
+      activePage = pageUrl;
+      frame.src = '/' + pageUrl;
+      closePageSelector();
+      showToast('Страница изменена', `Теперь вы редактируете ${pageUrl}`);
+    }
+
+    // Override openInlineEditor to use the new Quick Edit Panel
+    window.openInlineEditor = function(type, key, elementTagName, elementText, idx) {
+      openQuickEdit(type, key, elementTagName || 'element', elementText, idx);
+    };
+  </script>
+</body>
+</html>
