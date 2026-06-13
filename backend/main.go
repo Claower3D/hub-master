@@ -1500,17 +1500,23 @@ func main() {
 		defer gzReader.Close()
 
 		targetPath := filepath.Join(staticDir, cleanPage)
-		out, err := os.Create(targetPath)
+		
+		htmlData, err := io.ReadAll(gzReader)
 		if err != nil {
-			http.Error(w, "Failed to create target file", http.StatusInternalServerError)
+			http.Error(w, "Failed to read decompressed data", http.StatusInternalServerError)
 			return
 		}
-		defer out.Close()
 
-		_, err = io.Copy(out, gzReader)
+		err = os.WriteFile(targetPath, htmlData, 0644)
 		if err != nil {
-			http.Error(w, "Failed to write decompressed data", http.StatusInternalServerError)
+			http.Error(w, "Failed to write target file", http.StatusInternalServerError)
 			return
+		}
+
+		// Save the HTML to the DB files table so it persists across Railway deployments
+		err = dbInstance.SaveFile(cleanPage, htmlData, "text/html; charset=utf-8")
+		if err != nil {
+			log.Printf("⚠️ Failed to save %s to db: %v\n", cleanPage, err)
 		}
 
 		w.Header().Set("Content-Type", "application/json")
@@ -1557,15 +1563,37 @@ func main() {
 				return
 			}
 		}
+		
 		// Check if file exists in static directory
 		cleanPath := filepath.Clean(r.URL.Path)
+		
+		// First check if the page exists in the DB (from visual builder)
+		if cleanPath == "/" || cleanPath == "." || cleanPath == "" {
+			cleanPath = "index.html"
+		} else if strings.HasPrefix(cleanPath, "/") {
+			cleanPath = cleanPath[1:]
+		}
+		dbData, dbMime, dbErr := dbInstance.GetFile(cleanPath)
+		if dbErr == nil {
+			w.Header().Set("Content-Type", dbMime)
+			w.Write(dbData)
+			return
+		}
+
 		filePath := filepath.Join(staticDir, cleanPath)
 		fi, err := os.Stat(filePath)
 		if err == nil && !fi.IsDir() {
 			fileServer.ServeHTTP(w, r)
 			return
 		}
-		// If file doesn't exist, serve index.html for client-side routing
+		
+		// If page wasn't found in DB or disk, serve index.html from DB if it exists, otherwise from disk
+		dbIndex, dbIndexMime, err := dbInstance.GetFile("index.html")
+		if err == nil {
+			w.Header().Set("Content-Type", dbIndexMime)
+			w.Write(dbIndex)
+			return
+		}
 		http.ServeFile(w, r, filepath.Join(staticDir, "index.html"))
 	}))
 
