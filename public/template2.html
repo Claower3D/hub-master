@@ -9997,7 +9997,9 @@
         "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=600&q=80",
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80"
       ];
-      const img = megaActiveSubcategory.image || imgs[megaActiveSubcategory.name.length % imgs.length];
+      let img = megaActiveSubcategory.image;
+      if (!img && megaActiveSection && megaActiveSection.image) img = megaActiveSection.image;
+      if (!img) img = imgs[megaActiveSubcategory.name.length % imgs.length];
 
       col4.style.display = 'block';
       col4.innerHTML = `
