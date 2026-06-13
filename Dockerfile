@@ -31,6 +31,8 @@ COPY --from=builder /app/server .
 COPY public/ ./public/
 COPY data/ ./data/
 COPY seo/ ./seo/
+COPY catalog_data.json .
+
 
 # Optional: Add an environment variable for the port
 ENV PORT=3030
