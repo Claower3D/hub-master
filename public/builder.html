@@ -1394,7 +1394,7 @@
         });
 
         // Tag all text-containing elements for inline translation edits
-        const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, img.hero-master-img, div.showcase-master-placeholder');
+        const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, div.cat-card-image, img.hero-master-img, div.showcase-master-placeholder');
         textElements.forEach((el, index) => {
           const isImg = el.tagName === 'IMG';
           const hasBg = el.style && el.style.backgroundImage && el.style.backgroundImage !== 'none' && el.style.backgroundImage !== '';
@@ -2086,7 +2086,7 @@
       // Fetch element styles
       try {
         const frameDoc = frame.contentDocument || frame.contentWindow.document;
-        const textEls = frameDoc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img');
+        const textEls = frameDoc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, div.cat-card-image');
         const el = textEls[idx];
         if (el) {
           const comp = window.getComputedStyle(el);
@@ -2137,7 +2137,7 @@
       document.getElementById('qep-no-img-text').style.display = 'block';
       document.getElementById('qep-no-img-text').textContent = 'Загрузка...';
       try {
-        const response = await fetch('/api/upload', {
+        const response = await fetch(API_BASE + '/api/upload', {
           method: 'POST',
           headers: { 'Authorization': 'Bearer ' + adminToken },
           body: formData
@@ -2201,7 +2201,7 @@
       if (qepState.elementIdx == null) return;
       try {
         const doc = frame.contentDocument || frame.contentWindow.document;
-        const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, img.hero-master-img, div.showcase-master-placeholder');
+        const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, div.cat-card-image, img.hero-master-img, div.showcase-master-placeholder');
         const el = textElements[qepState.elementIdx];
         if (!el) return;
 
@@ -2313,19 +2313,23 @@
       } else if (transType === 'dom') {
         try {
           const doc = frame.contentDocument || frame.contentWindow.document;
-          const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, img.hero-master-img, div.showcase-master-placeholder');
+          const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, div.cat-card-image, img.hero-master-img, div.showcase-master-placeholder');
           const el = textElements[qepState.elementIdx];
           if (el) {
             const imgUrl = document.getElementById('qep-image-url-input').value;
             if (el.tagName === 'IMG') {
               if (imgUrl) el.src = imgUrl;
               showToast('Изображение обновлено!', `Фотография была успешно заменена.`, 'ri-image-line');
-            } else if (el.classList.contains('catalog-card') || el.classList.contains('cat-card-img')) {
+            } else if (el.classList.contains('catalog-card') || el.classList.contains('cat-card-img') || el.classList.contains('cat-card-image')) {
               if (imgUrl) {
-                if (el.querySelector('.cat-card-img')) {
-                  el.querySelector('.cat-card-img').style.backgroundImage = `url('${imgUrl}')`;
+                const imgChild = el.querySelector('.cat-card-img') || el.querySelector('.cat-card-image');
+                if (imgChild) {
+                  imgChild.style.backgroundImage = `url('${imgUrl}')`;
                 } else {
                   el.style.backgroundImage = `url('${imgUrl}')`;
+                  el.style.backgroundSize = 'cover';
+                  el.style.backgroundPosition = 'center';
+                  el.style.backgroundRepeat = 'no-repeat';
                 }
               }
             } else {
@@ -2362,7 +2366,7 @@
           }
 
           if (!el) {
-            const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img');
+            const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, div.cat-card-image');
             el = textElements[qepState.elementIdx];
           }
 
@@ -2404,13 +2408,14 @@
       document.getElementById('qep-current-img').style.display = 'none';
 
       try {
-        const res = await fetch('/api/upload', {
+        const res = await fetch(API_BASE + '/api/upload', {
           method: 'POST',
           headers: { 'Authorization': 'Bearer ' + adminToken },
           body: formData
         });
         const data = await res.json();
         if (data.url) {
+          document.getElementById('qep-image-url-input').value = data.url;
           document.getElementById('qep-current-img').src = data.url;
           document.getElementById('qep-current-img').style.display = 'block';
           document.getElementById('qep-no-img-text').style.display = 'none';
