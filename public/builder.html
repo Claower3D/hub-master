@@ -996,8 +996,63 @@
       showToast('Загрузка пути', `Загрузка страницы ${path}...`, 'ri-loader-4-line');
     };
 
+    async function loadBuilderCatalogRoutes() {
+      try {
+        const token = localStorage.getItem('admin_token');
+        const API_BASE = window.location.hostname && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1') && window.location.protocol !== 'file:' ? 'https://hub-master-production.up.railway.app' : '';
+        const res = await fetch(API_BASE + '/api/catalog', { headers: { 'Authorization': 'Bearer ' + token } });
+        if (res.ok) {
+          const catalogData = await res.json();
+          const selector = document.getElementById('page-selector');
+          
+          let html = `
+            <option value="index.html">Главная (Home)</option>
+            <option value="hubmaster.html">Кабинет (Dashboard)</option>
+          `;
+          
+          if (catalogData.tabs && catalogData.tabs.length > 0) {
+            html += `<optgroup label="--- РАЗДЕЛЫ ---">`;
+            catalogData.tabs.forEach(tab => {
+              html += `<option value="${tab.id}">${tab.label} (Раздел)</option>`;
+            });
+            html += `</optgroup>`;
+          }
+          
+          if (catalogData.categories && catalogData.categories.length > 0) {
+            html += `<optgroup label="--- КАТЕГОРИИ ---">`;
+            catalogData.categories.forEach(cat => {
+              html += `<option value="${cat.tab}/${cat.id}">${cat.title} (Категория)</option>`;
+            });
+            html += `</optgroup>`;
+          }
+          
+          if (catalogData.subcategories) {
+            html += `<optgroup label="--- ПОДКАТЕГОРИИ / УСЛУГИ ---">`;
+            Object.keys(catalogData.subcategories).forEach(catId => {
+              const cat = catalogData.categories.find(c => c.id === catId);
+              const tabId = cat ? cat.tab : 'unknown';
+              catalogData.subcategories[catId].forEach(sub => {
+                html += `<option value="${tabId}/${catId}/${sub.id}">${sub.title}</option>`;
+              });
+            });
+            html += `</optgroup>`;
+          }
+          
+          const currentVal = selector.value;
+          selector.innerHTML = html;
+          
+          if(Array.from(selector.options).some(opt => opt.value === currentVal)) {
+              selector.value = currentVal;
+          }
+        }
+      } catch (e) {
+        console.error("Failed to load catalog routes for builder:", e);
+      }
+    }
+
     // On Load
     window.addEventListener('DOMContentLoaded', () => {
+      loadBuilderCatalogRoutes();
       renderSectionsList();
       
       frame.onload = () => {
