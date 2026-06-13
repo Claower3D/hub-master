@@ -1838,18 +1838,66 @@
       }
     };  // end window.saveCatalogToServer
 
-    window.downloadCatalogAsFile = function() {
+    window.downloadCatalogAsFile = async function() {
       try {
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(catalogData, null, 2));
+        // Show loading state
+        const btn = document.querySelector('.btn-primary[onclick*="downloadCatalogAsFile"]');
+        const originalText = btn ? btn.innerHTML : 'Скачать';
+        if (btn) { btn.innerHTML = 'Подготовка (может занять время)...'; btn.disabled = true; }
+
+        // Helper to convert URL to Base64
+        const urlToBase64 = async (url) => {
+          if (!url || url.startsWith('data:')) return url;
+          try {
+            const res = await fetch(url);
+            const blob = await res.blob();
+            return await new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result);
+              reader.onerror = reject;
+              reader.readAsDataURL(blob);
+            });
+          } catch(e) {
+            console.warn('Failed to convert image to base64:', url);
+            return url; // fallback to original URL
+          }
+        };
+
+        // Create a deep copy to avoid modifying live data
+        let exportData = JSON.parse(JSON.stringify(catalogData));
+
+        // Convert tab images
+        if (exportData.tabs) {
+          for (let i = 0; i < exportData.tabs.length; i++) {
+            if (exportData.tabs[i].image) {
+              exportData.tabs[i].image = await urlToBase64(exportData.tabs[i].image);
+            }
+          }
+        }
+
+        // Convert detail images
+        if (exportData.details) {
+          for (const key in exportData.details) {
+            if (exportData.details[key].image) {
+              exportData.details[key].image = await urlToBase64(exportData.details[key].image);
+            }
+          }
+        }
+
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
         const downloadAnchor = document.createElement('a');
         downloadAnchor.setAttribute("href", dataStr);
         downloadAnchor.setAttribute("download", "masterhub_catalog_backup.json");
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();
+
+        if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
       } catch (e) {
         console.error(e);
         alert('Ошибка при экспорте в файл: ' + e.message);
+        const btn = document.querySelector('.btn-primary[onclick*="downloadCatalogAsFile"]');
+        if (btn) { btn.innerHTML = 'Скачать файл (JSON)'; btn.disabled = false; }
       }
     };
 
