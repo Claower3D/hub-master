@@ -366,6 +366,11 @@
         <option value="template2.html">Шаблон 2 (Подкатегории)</option>
         <option value="hubmaster.html">Кабинет (Dashboard)</option>
       </select>
+      <div style="display:flex; align-items:center; gap:6px; background:rgba(0,0,0,0.3); border:1px solid var(--border); padding:2px 8px; border-radius:6px; height:36px;">
+        <span style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Путь:</span>
+        <input type="text" id="custom-path-input" placeholder="/okna или /servis" style="background:transparent; border:none; color:#fff; font-size:12px; outline:none; width:140px; font-family:var(--font-body); font-weight:500;" onkeydown="if(event.key==='Enter') navigateToCustomPath()">
+        <button class="nav-btn" onclick="navigateToCustomPath()" style="padding:4px 8px; font-size:11px; border:none; background:var(--primary); color:#000; font-weight:700; border-radius:4px; height:24px; display:flex; align-items:center; gap:4px; transition:0.2s;"><i class="ri-arrow-right-line" style="font-weight:bold;"></i> Перейти</button>
+      </div>
     </div>
     <div class="nav-center">
       Выберите секцию на макете или кликните в списке слева для редактирования.
@@ -972,12 +977,50 @@
       };
     };
 
+    window.getPhysicalPage = function(page) {
+      if (!page) return 'index.html';
+      if (page.includes('template1.html')) return 'template1.html';
+      if (page.includes('template2.html')) return 'template2.html';
+      if (page.includes('hubmaster.html')) return 'hubmaster.html';
+      return 'index.html';
+    };
+
+    window.navigateToCustomPath = function() {
+      let path = document.getElementById('custom-path-input').value.trim();
+      if (!path) return;
+      if (!path.startsWith('/')) {
+        path = '/' + path;
+      }
+      activePage = path.substring(1) || 'index.html';
+      frame.src = path;
+      showToast('Загрузка пути', `Загрузка страницы ${path}...`, 'ri-loader-4-line');
+    };
+
     // On Load
     window.addEventListener('DOMContentLoaded', () => {
       renderSectionsList();
       
       frame.onload = () => {
         setupIframeEditing();
+
+        // Dynamic path detection within iframe
+        try {
+          const iframePath = frame.contentWindow.location.pathname;
+          const cleanPath = iframePath.startsWith('/') ? iframePath.substring(1) : iframePath;
+          activePage = cleanPath || 'index.html';
+          document.getElementById('custom-path-input').value = iframePath;
+          
+          const pageSelector = document.getElementById('page-selector');
+          const matchedPage = getPhysicalPage(activePage);
+          if (activePage === 'index.html' || activePage === 'template1.html' || activePage === 'template2.html' || activePage === 'hubmaster.html') {
+            pageSelector.value = activePage;
+          } else {
+            pageSelector.value = 'index.html';
+          }
+        } catch(err) {
+          console.warn("Could not read iframe path:", err);
+        }
+        
         // Load initial translation values from the iframe environment
         try {
           const frameHtml = frame.contentDocument.documentElement.innerHTML;
@@ -1038,6 +1081,7 @@
     function changePage(page) {
       activePage = page;
       frame.src = '/' + page;
+      document.getElementById('custom-path-input').value = '/' + (page === 'index.html' ? '' : page);
       showToast('Загрузка страницы', `Переключение на ${page}...`, 'ri-loader-4-line');
     }
 
@@ -1788,10 +1832,12 @@
       btn.disabled = true;
 
       try {
+        const physicalPage = getPhysicalPage(activePage);
+
         // Fetch raw HTML from server first
-        const rawResponse = await fetch('/' + activePage);
+        const rawResponse = await fetch('/' + physicalPage);
         if (!rawResponse.ok) {
-          throw new Error('Could not fetch source code for ' + activePage);
+          throw new Error('Could not fetch source code for ' + physicalPage);
         }
         let rawHtml = await rawResponse.text();
 
@@ -1847,8 +1893,8 @@
         const blobGz = await responseGz.blob();
 
         const fd = new FormData();
-        fd.append('page', activePage);
-        fd.append('html', blobGz, activePage);
+        fd.append('page', physicalPage);
+        fd.append('html', blobGz, physicalPage);
 
         const saveResponse = await fetch('/api/admin/save-page-html-gz', {
           method: 'POST',
