@@ -11772,45 +11772,6 @@
       }
 
       let pricesTableHTML = '';
-      if ((resolved.catId && resolved.catId !== resolved.tabId) || resolved.itemId) {
-        const currentCategory = resolved.catId || (itemsList[0] && itemsList[0].catId);
-        const pricingItems = (cat.items || []).filter(i => i.catId === currentCategory);
-        if (pricingItems.length > 0) {
-          pricesTableHTML = `
-            <div class="prices-section animate-fade-in">
-              <h2 class="prices-title">${currentLang === 'RU' ? 'Цены на популярные услуги' : 'Танымал қызметтердің бағалары'}</h2>
-              <div class="prices-table-wrapper">
-                <table class="prices-table">
-                  <thead>
-                    <tr>
-                      <th>${currentLang === 'RU' ? 'Услуга' : 'Қызмет'}</th>
-                      <th>${currentLang === 'RU' ? 'Стоимость (KZT)' : 'Құны (KZT)'}</th>
-                      <th>${currentLang === 'RU' ? 'Срок выполнения' : 'Орындау мерзімі'}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-          `;
-          pricingItems.forEach(item => {
-            const name = currentLang === 'RU' ? item.name : item.nameKz || item.name;
-            pricesTableHTML += `
-              <tr>
-                <td>${name}</td>
-                <td class="price-cell">${item.price}</td>
-                <td class="time-cell">${item.time}</td>
-              </tr>
-            `;
-          });
-          pricesTableHTML += `
-                  </tbody>
-                </table>
-              </div>
-              <p style="font-size: 12px; color: var(--text-muted); margin-top: 15px; font-style: italic;">
-                * ${currentLang === 'RU' ? 'Точная стоимость определяется мастером после диагностики.' : 'Нақты құны диагностикадан кейін шебермен анықталады.'}
-              </p>
-            </div>
-          `;
-        }
-      }
 
       let activeImgEntity = null;
       if (item && item.image) activeImgEntity = item;
