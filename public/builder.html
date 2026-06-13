@@ -699,6 +699,30 @@
         </div>
       </div>
       
+      <!-- Image Background Setup Section -->
+      <div id="qep-image-setup-section" style="display:none; margin-top: 10px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
+        <div class="qep-field-label" style="margin-bottom:10px;"><i class="ri-crop-line"></i> Настройка масштаба и позиции</div>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 8px;">
+          <div>
+            <label style="font-size: 10px; color: var(--text-muted);">Масштаб (Size)</label>
+            <select class="qep-input" id="qep-bg-size" onchange="liveUpdateImage()">
+              <option value="cover">Заполнить (Cover)</option>
+              <option value="contain">Вместить (Contain)</option>
+              <option value="auto">Оригинал (Auto)</option>
+              <option value="100% 100%">Растянуть (100% 100%)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 10px; color: var(--text-muted); display:flex; justify-content:space-between;"><span>Горизонтально (X)</span><span id="qep-bg-pos-x-val">50%</span></label>
+            <input type="range" id="qep-bg-pos-x" min="0" max="100" value="50" oninput="document.getElementById('qep-bg-pos-x-val').innerText = this.value + '%'; liveUpdateImage();" style="width:100%; cursor:pointer;">
+          </div>
+          <div>
+            <label style="font-size: 10px; color: var(--text-muted); display:flex; justify-content:space-between;"><span>Вертикально (Y)</span><span id="qep-bg-pos-y-val">50%</span></label>
+            <input type="range" id="qep-bg-pos-y" min="0" max="100" value="50" oninput="document.getElementById('qep-bg-pos-y-val').innerText = this.value + '%'; liveUpdateImage();" style="width:100%; cursor:pointer;">
+          </div>
+        </div>
+      </div>
+      
       <!-- Current Language Input -->
       <div id="qep-main-input-group">
         <div class="qep-field-label" id="qep-lang-label">Русский (RU)</div>
@@ -2055,6 +2079,7 @@
           document.getElementById('qep-image-upload-section').style.display = 'block';
           if (elementTagName.toUpperCase() !== 'IMG') {
             document.getElementById('qep-main-input-group').style.display = 'block'; // Show text input for DIVs
+            document.getElementById('qep-image-setup-section').style.display = 'block';
             // Try to extract background image URL from elementText or rely on user to upload
             const bgMatch = elementText && typeof elementText === 'string' ? elementText.match(/url\(['"]?([^'"]+)['"]?\)/) : null;
             if (bgMatch) {
@@ -2069,6 +2094,7 @@
             }
           } else {
             document.getElementById('qep-main-input-group').style.display = 'none';
+            document.getElementById('qep-image-setup-section').style.display = 'none';
             document.getElementById('qep-image-url-input').value = elementText;
             document.getElementById('qep-current-img').src = elementText;
             document.getElementById('qep-current-img').style.display = 'block';
@@ -2076,6 +2102,7 @@
           }
         } else {
           document.getElementById('qep-image-upload-section').style.display = 'none';
+          document.getElementById('qep-image-setup-section').style.display = 'none';
           document.getElementById('qep-main-input-group').style.display = 'block';
         }
       }
@@ -2234,6 +2261,31 @@
       }
     }
 
+    function liveUpdateImage() {
+      if (qepState.elementIdx == null) return;
+      try {
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        const textElements = doc.querySelectorAll('p, span, h1, h2, h3, h4, h5, h6, a, button, label, div.stats-num, div.stats-label, div.pill-text, div.pill-sub, div.master-name, div.master-exp, div.review-author, div.catalog-card, div.cat-card-img, div.cat-card-image, img.hero-master-img, div.showcase-master-placeholder');
+        let el = textElements[qepState.elementIdx];
+        if (!el) return;
+
+        if (el.classList.contains('catalog-card') || el.classList.contains('cat-card-img') || el.classList.contains('cat-card-image')) {
+          const imgChild = el.querySelector('.cat-card-img') || el.querySelector('.cat-card-image');
+          if (imgChild) el = imgChild;
+        }
+        
+        if (el.tagName !== 'IMG') {
+          const bgSize = document.getElementById('qep-bg-size').value;
+          const posX = document.getElementById('qep-bg-pos-x').value + '%';
+          const posY = document.getElementById('qep-bg-pos-y').value + '%';
+          
+          el.style.setProperty('background-size', bgSize, 'important');
+          el.style.setProperty('background-position', `${posX} ${posY}`, 'important');
+          el.style.setProperty('background-repeat', 'no-repeat', 'important');
+        }
+      } catch(e) {}
+    }
+
     function applyQuickEdit() {
 
       const { transType, transKey, activeQepLang, showAllLangs } = qepState;
@@ -2323,14 +2375,18 @@
             } else if (el.classList.contains('catalog-card') || el.classList.contains('cat-card-img') || el.classList.contains('cat-card-image')) {
               if (imgUrl) {
                 const imgChild = el.querySelector('.cat-card-img') || el.querySelector('.cat-card-image');
+                let targetEl = el;
                 if (imgChild) {
-                  imgChild.style.backgroundImage = `url('${imgUrl}')`;
-                } else {
-                  el.style.backgroundImage = `url('${imgUrl}')`;
-                  el.style.backgroundSize = 'cover';
-                  el.style.backgroundPosition = 'center';
-                  el.style.backgroundRepeat = 'no-repeat';
+                  targetEl = imgChild;
                 }
+                
+                targetEl.style.backgroundImage = `url('${imgUrl}')`;
+                const bgSize = document.getElementById('qep-bg-size').value;
+                const posX = document.getElementById('qep-bg-pos-x').value + '%';
+                const posY = document.getElementById('qep-bg-pos-y').value + '%';
+                targetEl.style.backgroundSize = bgSize;
+                targetEl.style.backgroundPosition = `${posX} ${posY}`;
+                targetEl.style.backgroundRepeat = 'no-repeat';
               }
             } else {
               const val = document.getElementById('qep-main-input').value;
