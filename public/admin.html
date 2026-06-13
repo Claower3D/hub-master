@@ -1430,15 +1430,54 @@
 
       if (type === 'tab') {
         titleEl.innerText = key === null ? 'Добавить раздел' : 'Редактировать раздел';
-        const tabData = key === null ? { id: '', label: '' } : catalogData.tabs[key];
+        const tabData = key === null ? { id: '', label: '', image: '', bgSize: 'cover', bgPosX: '50', bgPosY: '50' } : catalogData.tabs[key];
         formFields.innerHTML = `
-          <div class="admin-form-group">
-            <label>ID / Код раздела (напр. "okna")</label>
-            <input type="text" id="tab-id" class="admin-form-input" value="${tabData.id}" ${key !== null ? 'disabled' : ''}>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+            <div class="admin-form-group" style="margin-bottom: 0;">
+              <label>ID / Код раздела (напр. "okna")</label>
+              <input type="text" id="tab-id" class="admin-form-input" value="${tabData.id}" ${key !== null ? 'disabled' : ''}>
+            </div>
+            <div class="admin-form-group" style="margin-bottom: 0;">
+              <label>Название раздела (RU)</label>
+              <input type="text" id="tab-label" class="admin-form-input" value="${tabData.label}">
+            </div>
           </div>
-          <div class="admin-form-group">
-            <label>Название раздела (RU)</label>
-            <input type="text" id="tab-label" class="admin-form-input" value="${tabData.label}">
+          
+          <div style="display: grid; grid-template-columns: 1fr 240px; gap: 24px; margin-bottom: 16px;">
+            <div class="admin-form-group" style="margin-bottom: 0;">
+              <label><i class="ri-image-add-line"></i> URL фото раздела</label>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" id="detail-image" class="admin-form-input" placeholder="https://..." value="${tabData.image || ''}" oninput="document.getElementById('cat-img-prev').style.backgroundImage = 'url(' + this.value + ')'" style="margin-bottom: 0;">
+                <button type="button" class="btn-primary" onclick="triggerDeviceUpload()" style="padding: 0 16px; margin-bottom: 0; background: var(--border); border-color: var(--border); flex-shrink: 0;" title="Загрузить файл"><i class="ri-upload-2-line"></i></button>
+              </div>
+            </div>
+            <div>
+              <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Предпросмотр фото</label>
+              <div id="cat-img-prev" onclick="triggerDeviceUpload()" style="width: 100%; height: 120px; border-radius: 10px; border: 2px dashed var(--border); background-size: ${tabData.bgSize || 'cover'}; background-position: ${tabData.bgPosX || '50'}% ${tabData.bgPosY || '50'}%; background-image: url('${tabData.image || ''}'); background-color: rgba(0,0,0,0.3); position: relative; cursor: pointer; overflow: hidden;" onmouseover="this.querySelector('#upload-overlay-text').style.opacity='1'" onmouseout="this.querySelector('#upload-overlay-text').style.opacity=''">
+                <div id="upload-overlay-text" style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.8); color: #fff; font-size: 12px; font-weight: 600; text-align: center; padding: 8px 0; transition: opacity 0.2s; opacity: 0;">Загрузить фото</div>
+              </div>
+              <!-- IMAGE SETTINGS -->
+              <div style="margin-top:16px; display:grid; gap:12px;">
+                <div class="admin-form-group" style="margin-bottom:0;">
+                  <label style="font-size:11px;">Размер (background-size)</label>
+                  <select id="detail-bg-size" class="admin-form-select" onchange="document.getElementById('cat-img-prev').style.backgroundSize = this.value">
+                    <option value="cover" ${(!tabData.bgSize || tabData.bgSize==='cover')?'selected':''}>Заполнение (cover)</option>
+                    <option value="contain" ${(tabData.bgSize==='contain')?'selected':''}>Вместить (contain)</option>
+                    <option value="100% 100%" ${(tabData.bgSize==='100% 100%')?'selected':''}>Растянуть (100% 100%)</option>
+                  </select>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                  <div class="admin-form-group" style="margin-bottom:0;">
+                    <label style="font-size:11px;">Позиция X (%)</label>
+                    <input type="range" id="detail-bg-x" min="0" max="100" value="${tabData.bgPosX || 50}" style="width:100%" oninput="document.getElementById('cat-img-prev').style.backgroundPositionX = this.value + '%'">
+                  </div>
+                  <div class="admin-form-group" style="margin-bottom:0;">
+                    <label style="font-size:11px;">Позиция Y (%)</label>
+                    <input type="range" id="detail-bg-y" min="0" max="100" value="${tabData.bgPosY || 50}" style="width:100%" oninput="document.getElementById('cat-img-prev').style.backgroundPositionY = this.value + '%'">
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         `;
       } else if (type === 'category') {
@@ -1663,13 +1702,22 @@
       if (editingItemType === 'tab') {
         const id = document.getElementById('tab-id').value.trim();
         const label = document.getElementById('tab-label').value.trim();
+        const image = document.getElementById('detail-image').value.trim();
+        const bgSize = document.getElementById('detail-bg-size').value;
+        const bgPosX = document.getElementById('detail-bg-x').value;
+        const bgPosY = document.getElementById('detail-bg-y').value;
+
         if (!id || !label) { alert('Заполните все поля'); return; }
 
         if (editingItemKey === null) {
           if (catalogData.tabs.some(t => t.id === id)) { alert('Раздел с таким кодом уже существует'); return; }
-          catalogData.tabs.push({ id, label });
+          catalogData.tabs.push({ id, label, image, bgSize, bgPosX, bgPosY });
         } else {
           catalogData.tabs[editingItemKey].label = label;
+          catalogData.tabs[editingItemKey].image = image;
+          catalogData.tabs[editingItemKey].bgSize = bgSize;
+          catalogData.tabs[editingItemKey].bgPosX = bgPosX;
+          catalogData.tabs[editingItemKey].bgPosY = bgPosY;
         }
       } else if (editingItemType === 'category') {
         const id = document.getElementById('cat-id').value.trim();

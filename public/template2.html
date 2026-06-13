@@ -11312,6 +11312,10 @@
                 titleKz: getCatalogText(tab.label || tab.name || '', 'KZ') || tab.labelKz || tab.nameKz || '',
                 titleEn: getCatalogText(tab.label || tab.name || '', 'EN') || tab.labelEn || tab.nameEn || '',
                 iconName: iconMap[tab.id] || 'hammer',
+                image: tab.image || null,
+                bgSize: tab.bgSize || 'cover',
+                bgPosX: tab.bgPosX || '50',
+                bgPosY: tab.bgPosY || '50',
                 categories: cats,
                 items: flatItems
               };
@@ -11452,6 +11456,8 @@
     function getThematicImage(catId, subcatId, itemId) {
       if (typeof servicesData !== 'undefined' && servicesData) {
         for (const tab of servicesData) {
+          if (tab.id === catId && tab.image) return tab.image;
+          
           if (tab.categories) {
             for (const cat of tab.categories) {
               if (itemId && cat.items) {
@@ -11804,7 +11810,25 @@
         }
       }
 
-      const heroImageSrc = (item && item.image) ? item.image : getThematicImage(resolved.tabId, resolved.catId, resolved.itemId);
+      let activeImgEntity = null;
+      if (item && item.image) activeImgEntity = item;
+      else if (cat && cat.image) activeImgEntity = cat;
+      else if (tab && tab.image) activeImgEntity = tab;
+
+      const heroImageSrc = activeImgEntity ? activeImgEntity.image : getThematicImage(resolved.tabId, resolved.catId, resolved.itemId);
+      
+      let objFit = 'cover';
+      let objPosX = 50;
+      let objPosY = 50;
+
+      if (activeImgEntity) {
+         if (activeImgEntity.bgSize === 'contain') objFit = 'contain';
+         else if (activeImgEntity.bgSize === '100% 100%') objFit = 'fill';
+         
+         if (activeImgEntity.bgPosX !== undefined) objPosX = activeImgEntity.bgPosX;
+         if (activeImgEntity.bgPosY !== undefined) objPosY = activeImgEntity.bgPosY;
+      }
+
       const isQuickRepairBadge = resolved.itemId && (resolved.itemId.includes('tech-1-2') || resolved.itemId.includes('fridge'));
       const badgeText = isQuickRepairBadge ? (currentLang === 'RU' ? 'Быстрый выезд мастера' : 'Шебердің жедел келуі') : 'Premium Service';
 
@@ -11839,7 +11863,7 @@
             </div>
           </div>
           <div class="thematic-hero-image-wrapper">
-            <img class="thematic-hero-image" src="${heroImageSrc}" alt="${title}" style="object-fit: ${(item && item.bgSize === 'contain') ? 'contain' : ((item && item.bgSize === '100% 100%') ? 'fill' : 'cover')}; object-position: ${item && item.bgPosX !== undefined ? item.bgPosX : 50}% ${item && item.bgPosY !== undefined ? item.bgPosY : 50}%">
+            <img class="thematic-hero-image" src="${heroImageSrc}" alt="${title}" style="object-fit: ${objFit}; object-position: ${objPosX}% ${objPosY}%">
           </div>
         </div>
       `;
