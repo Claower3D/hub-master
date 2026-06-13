@@ -1557,8 +1557,29 @@
             </div>
             <div>
               <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Предпросмотр фото</label>
-              <div id="cat-img-prev" onclick="triggerDeviceUpload()" style="width: 100%; height: 200px; border-radius: 10px; border: 2px dashed var(--border); background-size: cover; background-position: center; background-image: url('${detailData.image || ''}'); background-color: rgba(0,0,0,0.3); position: relative; cursor: pointer; overflow: hidden;" onmouseover="this.querySelector('#upload-overlay-text').style.opacity='1'" onmouseout="this.querySelector('#upload-overlay-text').style.opacity=''">
+              <div id="cat-img-prev" onclick="triggerDeviceUpload()" style="width: 100%; height: 200px; border-radius: 10px; border: 2px dashed var(--border); background-size: ${detailData.bgSize || 'cover'}; background-position: ${detailData.bgPosX || '50'}% ${detailData.bgPosY || '50'}%; background-image: url('${detailData.image || ''}'); background-color: rgba(0,0,0,0.3); position: relative; cursor: pointer; overflow: hidden;" onmouseover="this.querySelector('#upload-overlay-text').style.opacity='1'" onmouseout="this.querySelector('#upload-overlay-text').style.opacity=''">
                 <div id="upload-overlay-text" style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.8); color: #fff; font-size: 12px; font-weight: 600; text-align: center; padding: 8px 0; transition: opacity 0.2s; opacity: 0;">Загрузить фото</div>
+              </div>
+              <!-- IMAGE SETTINGS -->
+              <div style="margin-top:16px; display:grid; gap:12px;">
+                <div class="admin-form-group" style="margin-bottom:0;">
+                  <label style="font-size:11px;">Размер (background-size)</label>
+                  <select id="detail-bg-size" class="admin-form-select" onchange="document.getElementById('cat-img-prev').style.backgroundSize = this.value">
+                    <option value="cover" ${(!detailData.bgSize || detailData.bgSize==='cover')?'selected':''}>Заполнение (cover)</option>
+                    <option value="contain" ${(detailData.bgSize==='contain')?'selected':''}>Вместить (contain)</option>
+                    <option value="100% 100%" ${(detailData.bgSize==='100% 100%')?'selected':''}>Растянуть (100% 100%)</option>
+                  </select>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                  <div class="admin-form-group" style="margin-bottom:0;">
+                    <label style="font-size:11px;">Позиция X (%)</label>
+                    <input type="range" id="detail-bg-x" min="0" max="100" value="${detailData.bgPosX || 50}" style="width:100%" oninput="document.getElementById('cat-img-prev').style.backgroundPositionX = this.value + '%'">
+                  </div>
+                  <div class="admin-form-group" style="margin-bottom:0;">
+                    <label style="font-size:11px;">Позиция Y (%)</label>
+                    <input type="range" id="detail-bg-y" min="0" max="100" value="${detailData.bgPosY || 50}" style="width:100%" oninput="document.getElementById('cat-img-prev').style.backgroundPositionY = this.value + '%'">
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1675,6 +1696,9 @@
         const warr = document.getElementById('detail-warr').value.trim();
         const image = document.getElementById('detail-image').value.trim();
         const desc = document.getElementById('detail-desc').value.trim();
+        const bgSize = document.getElementById('detail-bg-size').value;
+        const bgPosX = document.getElementById('detail-bg-x').value;
+        const bgPosY = document.getElementById('detail-bg-y').value;
 
         if (!id || !catId || !title) { alert('Заполните обязательные поля'); return; }
 
@@ -1697,11 +1721,15 @@
         }
 
         if (!catalogData.details) catalogData.details = {};
-        catalogData.details[id] = { title, desc, price, time, warr, image };
+        catalogData.details[id] = { title, desc, price, time, warr, image, bgSize, bgPosX, bgPosY };
       }
 
       window.closeCatalogEditModal();
       renderCatalogTab();
+      // Auto-save to server to prevent data loss
+      if (typeof window.saveCatalogToServer === 'function') {
+        window.saveCatalogToServer();
+      }
     };
 
     window.deleteCatalogItem = function(type, key) {

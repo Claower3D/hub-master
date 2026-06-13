@@ -11839,7 +11839,7 @@
             </div>
           </div>
           <div class="thematic-hero-image-wrapper">
-            <img class="thematic-hero-image" src="${heroImageSrc}" alt="${title}">
+            <img class="thematic-hero-image" src="${heroImageSrc}" alt="${title}" style="object-fit: ${(item && item.bgSize === 'contain') ? 'contain' : ((item && item.bgSize === '100% 100%') ? 'fill' : 'cover')}; object-position: ${item && item.bgPosX !== undefined ? item.bgPosX : 50}% ${item && item.bgPosY !== undefined ? item.bgPosY : 50}%">
           </div>
         </div>
       `;
