@@ -102,10 +102,12 @@ func main() {
 	}
 	defer dbInstance.Close()
 
-	// Sync catalog from JSON to DB on startup ONLY if database catalog is empty
+	// Sync catalog from JSON to DB on startup if database catalog is empty or has old/incomplete schema
 	dbCatalog, dbErr := dbInstance.GetCatalog()
-	if dbErr != nil || dbCatalog == "" {
-		log.Println("🔄 Database catalog is empty. Initializing from catalog_data.json...")
+	hasNewSchema := dbErr == nil && dbCatalog != "" && strings.Contains(dbCatalog, "sub-win-1-1") && strings.Count(dbCatalog, "\"id\": \"sub-") >= 100
+
+	if !hasNewSchema {
+		log.Println("🔄 Database catalog is empty or has old schema. Initializing from catalog_data.json...")
 		catData, catErr := os.ReadFile("catalog_data.json")
 		if catErr == nil {
 			dbInstance.SaveCatalog(string(catData))
@@ -116,7 +118,7 @@ func main() {
 			}
 		}
 	} else {
-		log.Println("✅ Database catalog is already initialized. Skipping overwrite.")
+		log.Println("✅ Database catalog is already initialized with new schema. Skipping overwrite.")
 	}
 
 	// Serve Static Files from dist / root directory (needed for deployment)
