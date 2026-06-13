@@ -8808,7 +8808,7 @@
         let styleStr = `background-image: url('${imgUrl}');`;
         if (window.builderCustomCatalogStyles && window.builderCustomCatalogStyles[cat.title]) {
            const ccs = window.builderCustomCatalogStyles[cat.title];
-           if (ccs.backgroundImage) styleStr += ` background-image: ${ccs.backgroundImage};`;
+           if (ccs.backgroundImage) styleStr += ` background-image: ${ccs.backgroundImage.replace(/"/g, "'")};`;
            if (ccs.backgroundSize) styleStr += ` background-size: ${ccs.backgroundSize};`;
            if (ccs.backgroundPosition) styleStr += ` background-position: ${ccs.backgroundPosition};`;
         }
