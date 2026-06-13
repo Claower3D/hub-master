@@ -13,6 +13,7 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"regexp"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -97,7 +98,7 @@ func resolvePath(p string) string {
 // syncSystemFiles copies essential files from system_public/ to public/ 
 // to bypass persistent volume cache issues and repair corrupted templates.
 func syncSystemFiles() {
-	filesToSync := []string{"builder.html", "template1.html", "template2.html", "index.html"}
+	filesToSync := []string{"builder.html"}
 	
 	for _, f := range filesToSync {
 		src := filepath.Join("system_public", f)
@@ -116,12 +117,6 @@ func syncSystemFiles() {
 			if err != nil || dstInfo.ModTime().Before(srcInfo.ModTime()) {
 				needsCopy = true
 			}
-		} else {
-			// For templates, only copy if they are corrupted or missing
-			content, err := os.ReadFile(dst)
-			if err != nil || strings.Contains(string(content), "const transString = `const translations =") {
-				needsCopy = true
-			}
 		}
 		
 		if needsCopy {
@@ -129,6 +124,22 @@ func syncSystemFiles() {
 			srcData, err := os.ReadFile(src)
 			if err == nil {
 				os.WriteFile(dst, srcData, 0644)
+			}
+		}
+	}
+
+	// Repair corrupted templates on persistent volume
+	templates := []string{"template1.html", "template2.html", "index.html"}
+	badScriptRegex := regexp.MustCompile(`(?s)[ \t]*<script>window\.builderCustomCatalogStyles = \{.*?\};</script>\s*</body>`)
+	
+	for _, t := range templates {
+		dst := filepath.Join("public", t)
+		content, err := os.ReadFile(dst)
+		if err == nil {
+			if badScriptRegex.Match(content) {
+				log.Printf("syncSystemFiles: Repairing corrupted %s", t)
+				cleaned := badScriptRegex.ReplaceAll(content, []byte("\n</body>"))
+				os.WriteFile(dst, cleaned, 0644)
 			}
 		}
 	}

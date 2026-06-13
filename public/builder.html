@@ -1989,7 +1989,13 @@
         if (updatedHtml.includes('window.builderCustomCatalogStyles =')) {
            updatedHtml = updatedHtml.replace(/window\.builderCustomCatalogStyles\s*=\s*\{[\s\S]*?\};/, catStylesStr);
         } else {
-           updatedHtml = updatedHtml.replace(/<\/body>/i, `  <script>${catStylesStr}<` + `/script>\n</body>`);
+           const lowerHtml = updatedHtml.toLowerCase();
+           let bodyIdx = lowerHtml.lastIndexOf('</body>');
+           if (bodyIdx !== -1) {
+              updatedHtml = updatedHtml.substring(0, bodyIdx) + `  <script>${catStylesStr}<` + `/script>\n` + updatedHtml.substring(bodyIdx);
+           } else {
+              updatedHtml += `\n<script>${catStylesStr}<` + `/script>`;
+           }
         }
 
         // Send to backend via GZIP to bypass Railway/Cloudflare body limits for large files
