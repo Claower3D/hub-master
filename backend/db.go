@@ -1288,6 +1288,12 @@ func InitDB() (DB, error) {
 		if os.Getenv("PGPASSWORD") != "" {
 			dbURL = fmt.Sprintf("postgres://postgres:%s@localhost:5432/masterhub?sslmode=disable", os.Getenv("PGPASSWORD"))
 		}
+	} else if !strings.Contains(dbURL, "sslmode=") {
+		if strings.Contains(dbURL, "?") {
+			dbURL += "&sslmode=disable"
+		} else {
+			dbURL += "?sslmode=disable"
+		}
 	}
 
 	var db DB
