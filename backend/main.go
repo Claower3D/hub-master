@@ -1576,6 +1576,13 @@ func main() {
 		dbData, dbMime, dbErr := dbInstance.GetFile(cleanPath)
 		if dbErr == nil {
 			w.Header().Set("Content-Type", dbMime)
+			if strings.Contains(dbMime, "text/html") {
+				htmlStr := string(dbData)
+				if !strings.Contains(htmlStr, "favicon.svg") {
+					htmlStr = strings.Replace(htmlStr, "<head>", "<head>\n  <link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\">", 1)
+					dbData = []byte(htmlStr)
+				}
+			}
 			w.Write(dbData)
 			return
 		}
@@ -1591,6 +1598,13 @@ func main() {
 		dbIndex, dbIndexMime, err := dbInstance.GetFile("index.html")
 		if err == nil {
 			w.Header().Set("Content-Type", dbIndexMime)
+			if strings.Contains(dbIndexMime, "text/html") {
+				htmlStr := string(dbIndex)
+				if !strings.Contains(htmlStr, "favicon.svg") {
+					htmlStr = strings.Replace(htmlStr, "<head>", "<head>\n  <link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\">", 1)
+					dbIndex = []byte(htmlStr)
+				}
+			}
 			w.Write(dbIndex)
 			return
 		}
