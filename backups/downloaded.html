@@ -5215,91 +5215,199 @@
 
         </div>
 
-        <div class="hero-bottom-form-card">
-          <div class="form-card-left">
-            <div id="hero-form-actual">
-              <h3 class="form-card-title">Оставить заявку на сервис</h3>
-              <form onsubmit="handleHeroLeadSubmit(event)" style="margin-top: 14px;">
-                <div class="form-card-inputs-row">
-                  <div class="input-wrap">
-                    <input type="text" class="card-input-field" placeholder="ФИО" required id="hero-lead-name">
-                  </div>
-                  <div class="input-wrap phone-input-wrap">
-                    <span class="phone-prefix">+7</span>
-                    <input type="tel" class="card-input-field phone-field" placeholder="Телефон" required
-                      id="hero-lead-phone">
-                  </div>
-                </div>
+                <style>
+          .hero-bottom-grid {
+            grid-column: span 2;
+            display: grid;
+            grid-template-columns: 1.3fr 0.7fr;
+            gap: 32px;
+            margin-top: 16px;
+            background: rgba(20, 20, 24, 0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px 32px;
+            align-items: start;
+          }
+          @media (max-width: 992px) {
+            .hero-bottom-grid {
+              grid-template-columns: 1fr;
+              padding: 24px 20px;
+            }
+          }
+          
+          /* Light Theme Adaptations */
+          [data-theme="light"] .hero-bottom-grid {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+          }
+          [data-theme="light"] .partners-dev-card,
+          [data-theme="light"] .partners-tag {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: #1a202c;
+          }
+          [data-theme="light"] .partners-main-title,
+          [data-theme="light"] .partners-dev-title,
+          [data-theme="light"] .why-us-title,
+          [data-theme="light"] .why-us-list li span.chk-text {
+            color: #1a202c;
+          }
+          [data-theme="light"] .partners-label,
+          [data-theme="light"] .partners-dev-text,
+          [data-theme="light"] .why-us-list li span.chk-subtext {
+            color: #64748b;
+          }
 
-
-                <div class="form-card-action-row" style="margin-top: 14px;">
-                  <div class="select-wrap">
-                    <select class="card-select-field" id="hero-lead-service">
-                      <option value="furniture">Сборка мебели</option>
-                      <option value="appliance">Ремонт бытовой техники</option>
-                      <option value="computer">Компьютерная помощь</option>
-                      <option value="plumbing">Сантехник</option>
-                      <option value="electrician">Электрик</option>
-                      <option value="cleaning">Клининг</option>
-                    </select>
-                  </div>
-
-                  <div class="action-buttons-wrap">
-                    <span class="time-label">Удобное время</span>
-                    <button type="submit" class="form-submit-red-btn">Оставить заявку</button>
-                    <a href="https://wa.me/77058462749" target="_blank" rel="noopener noreferrer"
-                      class="form-whatsapp-green-btn">
-                      <svg viewBox="0 0 24 24" width="16" height="16">
-                        <path fill="currentColor"
-                          d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.96 9.96 0 001.37 5.016L2 22l5.13-1.346a9.92 9.92 0 004.882 1.28h.005c5.507 0 9.99-4.478 9.99-9.986 0-2.67-1.037-5.178-2.923-7.065A9.925 9.925 0 0012.012 2zm5.72 14.103c-.235.662-1.362 1.224-1.879 1.285-.466.056-.918.23-2.986-.583-2.645-1.04-4.327-3.738-4.46-3.914-.131-.176-1.077-1.433-1.077-2.731a2.8 2.8 0 01.854-2.074c.264-.265.578-.332.772-.332.193 0 .386.002.553.01.173.008.406-.065.636.488.235.568.805 1.961.875 2.1.07.142.118.307.022.493-.095.187-.142.307-.283.473-.142.167-.29.351-.414.47-.142.138-.29.288-.125.572.167.283.74 1.22 1.585 1.97.1.09.286.257.48.337.195.08.388.082.533-.082.146-.166.627-.728.794-.977.167-.249.333-.207.562-.123.23.084 1.455.686 1.705.811.25.124.417.187.478.293.063.107.063.621-.172 1.283z" />
-                      </svg>
-                      WhatsApp
-                    </a>
-                  </div>
-                </div>
-              </form>
-            </div>
-
-            <div id="hero-form-success"
-              style="display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; padding: 20px 0;">
-              <div
-                style="background: rgba(37, 211, 102, 0.1); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="#25d366" fill="none" stroke-width="2.5">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              </div>
-              <h4 style="font-family: var(--font-heading); font-size: 18px; font-weight: 800; color: var(--text-white);"
-                data-i18n="successTitle">Заявка успешно принята!</h4>
-              <p style="font-size: 13px; color: var(--text);" data-i18n="successDesc">Мы свяжемся с вами в течение 10
-                минут. Спасибо!</p>
+          .partners-block {
+            display: flex;
+            flex-direction: column;
+          }
+          .partners-main-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-white);
+            margin-bottom: 24px;
+            font-family: var(--font-heading);
+          }
+          .partners-category {
+            margin-bottom: 30px;
+          }
+          .partners-category:last-child {
+            margin-bottom: 0;
+          }
+          .partners-label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+          }
+          .partners-dev-card {
+            background: rgba(20, 20, 24, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 100%;
+          }
+          .partners-dev-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-white);
+            margin-bottom: 8px;
+          }
+          .partners-dev-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+          }
+          .partners-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+          }
+          .partners-tag {
+            background: rgba(20, 20, 24, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          
+          .why-us-block {
+            display: flex;
+            flex-direction: column;
+          }
+          .why-us-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-white);
+            margin-bottom: 24px;
+            font-family: var(--font-heading);
+          }
+          .why-us-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+          }
+          .why-us-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 15px;
+            color: var(--text-white);
+          }
+          .why-us-list li span.chk-icon {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 16px;
+            flex-shrink: 0;
+          }
+          .why-us-list li span.chk-subtext {
+            color: var(--text-muted);
+            font-size: 14px;
+          }
+        </style>
+        
+        <div class="hero-bottom-grid">
+          <div class="partners-block">
+          <h2 class="partners-main-title">Нам доверяют</h2>
+          
+          <div class="partners-category">
+            <span class="partners-label">ЗАСТРОЙЩИК</span>
+            <div class="partners-dev-card">
+              <div class="partners-dev-title">Everest Development</div>
+              <div class="partners-dev-text">Выполняем работы на объектах застройщика: остекление и москитные сетки, электромонтажные работы, сварка и металлоконструкции.</div>
             </div>
           </div>
-
-          <div class="form-card-right">
-            <ul class="form-card-checklist">
-              <li>
-                <span class="chk-icon">✓</span>
-                <span class="chk-text">Выезд за 45 минут</span>
-              </li>
-              <li>
-                <span class="chk-icon">✓</span>
-                <span class="chk-text">Профессиональные мастера</span>
-              </li>
-              <li>
-                <span class="chk-icon">✓</span>
-                <span class="chk-text">Гарантия на работы</span>
-              </li>
-              <li>
-                <span class="chk-icon">✓</span>
-                <span class="chk-text">Огромный выбор услуг</span>
-              </li>
-              <li>
-                <span class="chk-icon">✓</span>
-                <span class="chk-text">Точность по времени</span>
-              </li>
-            </ul>
+          
+          <div class="partners-category">
+            <span class="partners-label">ПРОФИЛЬ ДЛЯ ОКОН И СЕТОК</span>
+            <div class="partners-tags">
+              <div class="partners-tag">WUKO</div>
+              <div class="partners-tag">KAVI</div>
+              <div class="partners-tag">VEKA</div>
+              <div class="partners-tag">REHAU</div>
+              <div class="partners-tag">Euro Super Plast</div>
+            </div>
+          </div>
+          
+          <div class="partners-category">
+            <span class="partners-label">МАТЕРИАЛЫ И ФУРНИТУРА ДЛЯ МЕБЕЛИ</span>
+            <div class="partners-tags">
+              <div class="partners-tag">Blum</div>
+              <div class="partners-tag">Hettich</div>
+              <div class="partners-tag">Häfele</div>
+              <div class="partners-tag">Egger</div>
+              <div class="partners-tag">Kronospan</div>
+            </div>
           </div>
         </div>
+
+        <div class="why-us-block">
+          <h2 class="why-us-title">Почему мы</h2>
+          <ul class="why-us-list">
+            <li><span class="chk-icon">✓</span><span class="chk-text">Гарантия от 12 месяцев на работы</span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Сертифицированные мастера</span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Бесплатный замер и выезд <span class="chk-subtext">— по окнам и сеткам</span></span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Договор на все работы</span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Выезд в день обращения</span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Работаем по всему Казахстану <span class="chk-subtext">— окна и сетки</span></span></li>
+            <li><span class="chk-icon">✓</span><span class="chk-text">Гарантия лучшей цены</span></li>
+          </ul>
+        </div>
+      </div>
 
       </div>
     </section>
@@ -9771,9 +9879,12 @@
             subItems.forEach(sub => {
               servicesHTML += `
                 <li>
-                  <a href="#" onclick="navigateThematic('${cat.id}', '${category.id}', '${sub.id}'); return false;">
-                    <i class="ri-arrow-right-s-line"></i>
-                    <span>${currentLang === 'RU' ? sub.name : sub.nameKz}</span>
+                  <a href="#" onclick="navigateThematic('${cat.id}', '${category.id}', '${sub.id}'); return false;" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <div>
+                      <i class="ri-arrow-right-s-line"></i>
+                      <span>${currentLang === 'RU' ? sub.name : sub.nameKz}</span>
+                    </div>
+                    <span style="font-size: 13px; font-weight: 600; color: var(--primary); white-space: nowrap; margin-left: 10px;">${sub.price || ''}</span>
                   </a>
                 </li>
               `;
@@ -9812,9 +9923,12 @@
             grouped[subId].items.forEach(item => {
               servicesHTML += `
                 <li>
-                  <a href="#" onclick="navigateThematic('${cat.id}', '${item.catId}', '${item.id}'); return false;">
-                    <i class="ri-arrow-right-s-line"></i>
-                    <span>${currentLang === 'RU' ? item.name : item.nameKz}</span>
+                  <a href="#" onclick="navigateThematic('${cat.id}', '${item.catId}', '${item.id}'); return false;" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <div>
+                      <i class="ri-arrow-right-s-line"></i>
+                      <span>${currentLang === 'RU' ? item.name : item.nameKz}</span>
+                    </div>
+                    <span style="font-size: 13px; font-weight: 600; color: var(--primary); white-space: nowrap; margin-left: 10px;">${item.price || ''}</span>
                   </a>
                 </li>
               `;
